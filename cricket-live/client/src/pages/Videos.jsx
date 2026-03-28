@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchVideos } from "../api";
 import VideoPlayer from "../components/VideoPlayer";
 
-const SEARCH_PRESETS = [
-  { label: "🏆 Highlights", q: "cricket highlights 2025" },
-  { label: "🔴 IPL 2024", q: "IPL 2024 highlights" },
-  { label: "🌍 ICC 2025", q: "ICC cricket 2025 highlights" },
-  { label: "🏏 T20 World Cup", q: "T20 World Cup 2024 highlights" },
-  { label: "🎳 Best Wickets", q: "cricket best wickets 2024" },
-  { label: "💥 Big Sixes", q: "cricket biggOvers Collection" },
+const VIDEO_CATEGORIES = {
+  Highlights: [
+    { id: "Yd4XBXqFLAY", title: "ICC Cricket World Cup 2023 Final Highlights" },
+    { id: "9bZkp7q19f0", title: "IPL 2024 Best Moments" },
+    { id: "kJQP7kiw5Fk", title: "T20 World Cup 2024 Highlights" },
+    { id: "JGwWNGJdvx8", title: "Test Cricket Greatest Catches" },
+    { id: "RgKAFK5djSk", title: "ODI World Cup Classic Matches" },
+    { id: "fRh_vgS2dFE", title: "IPL Super Overs Collection" },
   ],
   "Live Streams": [
     { id: "jNQXAC9IVRw", title: "Live Cricket Stream - Today's Match" },
@@ -33,7 +32,7 @@ export default function Videos() {
     <div className="container" style={{ paddingBottom: 40 }}>
       <h1 className="page-title">📺 Cricket Videos</h1>
 
-      {/* Featured Player */}
+      {/* Featured */}
       <div style={{ marginBottom: 32 }}>
         <div style={{ fontSize: 13, color: "var(--text2)", marginBottom: 8 }}>Now Playing</div>
         <VideoPlayer videoId={featured.id} title={featured.title} />
@@ -43,7 +42,9 @@ export default function Videos() {
       {/* Category Tabs */}
       <div className="tab-bar" style={{ marginBottom: 20 }}>
         {Object.keys(VIDEO_CATEGORIES).map(c => (
-          <button key={c} className={`tab ${category === c ? "active" : ""}`} onClick={() => setCategory(c)}>{c}</button>
+          <button key={c} className={`tab ${category === c ? "active" : ""}`} onClick={() => setCategory(c)}>
+            {c}
+          </button>
         ))}
       </div>
 
@@ -62,11 +63,15 @@ export default function Videos() {
                 style={{ width: "100%", display: "block", aspectRatio: "16/9", objectFit: "cover" }}
               />
               <div style={{
-                position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                position: "absolute", inset: 0, display: "flex",
+                alignItems: "center", justifyContent: "center",
                 background: "rgba(0,0,0,0.3)"
               }}>
-                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(0,200,83,0.85)",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>▶</div>
+                <div style={{
+                  width: 40, height: 40, borderRadius: "50%",
+                  background: "rgba(0,200,83,0.85)",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16
+                }}>▶</div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 13, fontWeight: 600, lineHeight: 1.4 }}>{v.title}</div>
