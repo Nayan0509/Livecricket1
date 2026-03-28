@@ -4,10 +4,8 @@
   "outputDirectory": "client/build",
   "installCommand": "cd api && npm install",
   "functions": {
-    "api/**/*.js": {
-      "memory": 256,
-      "maxDuration": 15
-    }
+    "api/cricket.js": { "memory": 256, "maxDuration": 15 },
+    "api/static.js":  { "memory": 128, "maxDuration": 5 }
   },
   "redirects": [
     {
@@ -18,31 +16,32 @@
     }
   ],
   "rewrites": [
-    { "source": "/sitemap.xml",          "destination": "/api/sitemap.xml" },
-    { "source": "/robots.txt",           "destination": "/api/robots.txt" },
-    { "source": "/BingSiteAuth.xml",     "destination": "/api/BingSiteAuth.xml" },
-    { "source": "/ads.txt",              "destination": "/api/ads.txt" },
-    { "source": "/api/matches/live",     "destination": "/api/matches/live" },
-    { "source": "/api/matches/upcoming", "destination": "/api/matches/upcoming" },
-    { "source": "/api/matches/schedule", "destination": "/api/matches/schedule" },
-    { "source": "/api/matches/:id",      "destination": "/api/matches/[id]" },
-    { "source": "/api/series",           "destination": "/api/series/index" },
-    { "source": "/api/series/:id",       "destination": "/api/series/[id]" },
-    { "source": "/api/players",          "destination": "/api/players/index" },
-    { "source": "/api/players/:id",      "destination": "/api/players/[id]" },
-    { "source": "/api/news",             "destination": "/api/news" },
-    { "source": "/api/teams",            "destination": "/api/teams" },
-    { "source": "/api/rankings",         "destination": "/api/rankings" },
-    { "source": "/api/health",           "destination": "/api/health" },
-    { "source": "/(.*)",                 "destination": "/index.html" }
+    { "source": "/sitemap.xml",      "destination": "/api/static" },
+    { "source": "/robots.txt",       "destination": "/api/static" },
+    { "source": "/ads.txt",          "destination": "/api/static" },
+    { "source": "/BingSiteAuth.xml", "destination": "/api/static" },
+    { "source": "/api/health",               "destination": "/api/cricket" },
+    { "source": "/api/matches/live",         "destination": "/api/cricket" },
+    { "source": "/api/matches/upcoming",     "destination": "/api/cricket" },
+    { "source": "/api/matches/schedule",     "destination": "/api/cricket" },
+    { "source": "/api/matches/:id/scorecard","destination": "/api/cricket" },
+    { "source": "/api/matches/:id/score",    "destination": "/api/cricket" },
+    { "source": "/api/matches/:id",          "destination": "/api/cricket" },
+    { "source": "/api/series/:id",           "destination": "/api/cricket" },
+    { "source": "/api/series",               "destination": "/api/cricket" },
+    { "source": "/api/players/:id",          "destination": "/api/cricket" },
+    { "source": "/api/players",              "destination": "/api/cricket" },
+    { "source": "/api/news",                 "destination": "/api/cricket" },
+    { "source": "/api/teams",                "destination": "/api/cricket" },
+    { "source": "/api/rankings",             "destination": "/api/cricket" },
+    { "source": "/(.*)",                     "destination": "/index.html" }
   ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin",  "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS" }
       ]
     }
   ]
