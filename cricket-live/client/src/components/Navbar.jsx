@@ -11,7 +11,6 @@ const NAV = [
   { to: "/players", label: "Players" },
   { to: "/rankings", label: "Rankings" },
   { to: "/news", label: "News" },
-  { to: "/videos", label: "Videos" },
   { to: "/stats", label: "Stats" },
 ];
 

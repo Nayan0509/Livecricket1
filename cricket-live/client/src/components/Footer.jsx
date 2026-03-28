@@ -34,7 +34,7 @@ export default function Footer() {
           </div>
           <div>
             <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>More</div>
-            {[["News", "/news"], ["Videos", "/videos"], ["Stats", "/stats"], ["About", "/about"]].map(([l, h]) => (
+            {[["News", "/news"], ["Stats", "/stats"], ["About", "/about"]].map(([l, h]) => (
               <Link key={h} to={h} style={{ display: "block", color: "var(--text2)", fontSize: 13, marginBottom: 8 }}>{l}</Link>
             ))}
           </div>

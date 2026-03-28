@@ -21,7 +21,6 @@ import Rankings from "./pages/Rankings";
 import News from "./pages/News";
 import NewsDetail from "./pages/NewsDetail";
 import Schedule from "./pages/Schedule";
-import Videos from "./pages/Videos";
 import Stats from "./pages/Stats";
 import About from "./pages/About";
 import WatchLive from "./pages/WatchLive";
@@ -51,7 +50,6 @@ export default function App() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/videos" element={<Videos />} />
           <Route path="/stats" element={<Stats />} />
           <Route path="/about" element={<About />} />
           <Route path="/watch-live" element={<WatchLive />} />

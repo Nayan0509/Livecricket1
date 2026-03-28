@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMatchInfo } from "../api";
-import VideoPlayer from "../components/VideoPlayer";
 import AdBanner from "../components/AdBanner";
 
 export default function MatchDetail() {
@@ -77,7 +76,7 @@ export default function MatchDetail() {
       {/* Tabs */}
       <AdBanner type="responsive" slot="1234567896" style={{ marginBottom: 20 }} />
       <div className="tab-bar">
-        {[["info","📋 Info"], ["scorecard","📊 Scorecard"], ["videos","📺 Videos"]].map(([t, l]) => (
+        {[["info","📋 Info"], ["scorecard","📊 Scorecard"]].map(([t, l]) => (
           <button key={t} className={`tab ${tab === t ? "active" : ""}`} onClick={() => setTab(t)}>{l}</button>
         ))}
       </div>
@@ -105,13 +104,6 @@ export default function MatchDetail() {
       {tab === "scorecard" && (
         <div style={{ textAlign: "center", padding: 20 }}>
           <Link to={`/match/${id}/scorecard`} className="btn btn-primary">View Full Scorecard</Link>
-        </div>
-      )}
-
-      {tab === "videos" && (
-        <div>
-          <p style={{ color: "var(--text2)", marginBottom: 16, fontSize: 14 }}>Highlights for this match</p>
-          <VideoPlayer videoId="Yd4XBXqFLAY" title={`${match.name} — Highlights`} />
         </div>
       )}
     </div>
