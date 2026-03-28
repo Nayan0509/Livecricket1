@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUpcomingMatches } from "../api";
 import MatchCard from "../components/MatchCard";
+import SEO from "../components/SEO";
 
 const FORMATS = ["All", "test", "odi", "t20"];
 
@@ -18,6 +19,11 @@ export default function UpcomingMatches() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Upcoming Cricket Matches 2026 — Schedule & Fixtures"
+        description="Full list of upcoming cricket matches in 2026. IPL, T20 World Cup, ODI series and Test match fixtures with dates, venues and team info."
+        url="/upcoming"
+      />
       <h1 className="page-title">📅 Upcoming Matches</h1>
 
       <div className="tab-bar" style={{ maxWidth: 400, marginBottom: 24 }}>

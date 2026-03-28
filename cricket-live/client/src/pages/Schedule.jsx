@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchSchedule } from "../api";
 import AdBanner from "../components/AdBanner";
+import SEO from "../components/SEO";
 
 export default function Schedule() {
   const { data, isLoading, error } = useQuery({
@@ -19,6 +20,11 @@ export default function Schedule() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Cricket Match Schedule 2026 — Today's & This Week's Matches"
+        description="Complete cricket match schedule for 2026. Find today's cricket matches, this week's fixtures, IPL 2026 schedule, T20 and ODI series timetable."
+        url="/schedule"
+      />
       <h1 className="page-title">📅 Schedule</h1>
 
       {isLoading && <div className="spinner" />}

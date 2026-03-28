@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayerInfo } from "../api";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import SEO from "../components/SEO";
 
 export default function PlayerDetail() {
   const { id } = useParams();
@@ -21,6 +22,18 @@ export default function PlayerDetail() {
 
   if (isLoading) return <div className="container"><div className="spinner" /></div>;
   if (error || !player) return <div className="container"><div className="error-box">Player not found</div></div>;
+
+  const playerSD = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": player.name,
+    "nationality": player.country,
+    "birthDate": player.dateOfBirth?.split("T")[0],
+    "birthPlace": player.placeOfBirth,
+    "description": `${player.name} cricket stats — ${player.role}, ${player.battingStyle}, ${player.country}`,
+    "image": player.playerImg,
+    "url": `https://criclive.vercel.app/players/${id}`,
+  };
 
   // Convert flat stats array into grouped object: { batting: { test: {m,inn,runs,...}, odi:{...} }, bowling:{...} }
   const grouped = {};
@@ -43,6 +56,14 @@ export default function PlayerDetail() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title={`${player.name} Cricket Stats — Batting, Bowling & Career Records`}
+        description={`${player.name} cricket career stats. ${player.role} from ${player.country}. Batting average, bowling figures, centuries, wickets across Test, ODI and T20 formats.`}
+        url={`/players/${id}`}
+        image={player.playerImg}
+        type="profile"
+        structuredData={playerSD}
+      />
       <button onClick={() => navigate(-1)} className="btn btn-outline" style={{ marginBottom: 16, fontSize: 13 }}>← Back</button>
 
       {/* Profile */}

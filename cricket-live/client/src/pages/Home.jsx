@@ -4,6 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { fetchLiveMatches, fetchUpcomingMatches, fetchSchedule } from "../api";
 import MatchCard from "../components/MatchCard";
 import AdBanner from "../components/AdBanner";
+import SEO from "../components/SEO";
+
+const SITE_SD = {
+  "@context": "https://schema.org",
+  "@type": "SportsEvent",
+  "name": "Live Cricket Matches",
+  "sport": "Cricket",
+  "url": "https://criclive.vercel.app"
+};
 
 function PlayMatchCard({ match }) {
   const navigate = useNavigate();
@@ -145,6 +154,12 @@ export default function Home() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Live Cricket Scores, IPL 2026, T20 & ODI Match Updates"
+        description="Get live cricket scores, ball-by-ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards, player stats and ICC rankings on CricLive."
+        url="/"
+        structuredData={SITE_SD}
+      />
 
       {/* Hero */}
       <div style={{

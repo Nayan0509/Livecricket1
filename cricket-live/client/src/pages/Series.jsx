@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchSeries } from "../api";
+import SEO from "../components/SEO";
 
 export default function Series() {
   const [search, setSearch] = useState("");
@@ -13,6 +14,11 @@ export default function Series() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Cricket Series 2026 — IPL, T20, ODI & Test Series"
+        description="All cricket series in 2026 including IPL 2026, T20 World Cup, ODI series and Test series. Match schedules, squads and results."
+        url="/series"
+      />
       <h1 className="page-title">🏆 Series</h1>
       <input value={search} onChange={e => setSearch(e.target.value)}
         placeholder="Search series..." style={{ maxWidth: 400, marginBottom: 24 }} />

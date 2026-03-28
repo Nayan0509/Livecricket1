@@ -4,14 +4,86 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#00c853" />
-    <meta name="description" content="CricLive - Live Cricket Scores, News & Videos" />
-    <title>CricLive 🏏 Live Cricket</title>
+
+    <!-- Primary SEO -->
+    <title>CricLive — Live Cricket Scores, IPL 2026, T20, ODI, Test Match Updates</title>
+    <meta name="description" content="CricLive delivers live cricket scores, ball-by-ball commentary, IPL 2026 updates, T20 World Cup, ODI & Test match scorecards, player stats, ICC rankings and cricket news." />
+    <meta name="keywords" content="live cricket score, cricket live score, IPL 2026 live, T20 World Cup 2024, cricket scorecard, ball by ball cricket, cricket news, ICC rankings, cricket schedule, cricket players stats, cricket match today" />
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large" />
+    <meta name="author" content="CricLive" />
+    <link rel="canonical" href="https://criclive.vercel.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CricLive — Live Cricket Scores & News" />
+    <meta property="og:description" content="Live cricket scores, IPL 2026, T20 World Cup, ODI & Test match updates, player stats and ICC rankings." />
+    <meta property="og:image" content="https://criclive.vercel.app/og-image.png" />
+    <meta property="og:url" content="https://criclive.vercel.app/" />
+    <meta property="og:site_name" content="CricLive" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CricLive — Live Cricket Scores & News" />
+    <meta name="twitter:description" content="Live cricket scores, IPL 2026, T20 World Cup, ball-by-ball updates and player stats." />
+    <meta name="twitter:image" content="https://criclive.vercel.app/og-image.png" />
+
+    <!-- Structured Data: WebSite -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "CricLive",
+      "url": "https://criclive.vercel.app",
+      "description": "Live cricket scores, ball-by-ball commentary, IPL, T20, ODI and Test match updates",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://criclive.vercel.app/players?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "CricLive",
+      "url": "https://criclive.vercel.app",
+      "logo": "https://criclive.vercel.app/logo192.png",
+      "sameAs": []
+    }
+    </script>
+
+    <!-- Structured Data: SportsOrganization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      "name": "CricLive",
+      "sport": "Cricket",
+      "url": "https://criclive.vercel.app"
+    }
+    </script>
+
+    <!-- Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://g.cricapi.com" />
+    <link rel="preconnect" href="https://static.cricbuzz.com" />
+    <link rel="dns-prefetch" href="https://api.cricapi.com" />
+    <link rel="dns-prefetch" href="https://free-cricbuzz-cricket-api.p.rapidapi.com" />
+
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8179151029580359" crossorigin="anonymous"></script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>CricLive — Live Cricket Scores, IPL 2026, T20 World Cup, ODI & Test Match Updates</noscript>
     <div id="root"></div>
   </body>
 </html>

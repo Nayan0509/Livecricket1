@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchTeams } from "../api";
 import { Link } from "react-router-dom";
+import SEO from "../components/SEO";
 
 export default function Rankings() {
   const { data, isLoading, error } = useQuery({ queryKey: ["teams"], queryFn: fetchTeams });
@@ -11,6 +12,11 @@ export default function Rankings() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="ICC Cricket Team Rankings 2026 — Test, ODI & T20"
+        description="Latest ICC cricket team rankings for Test, ODI and T20 formats. See which teams are ranked #1 in world cricket in 2026."
+        url="/rankings"
+      />
       <h1 className="page-title">🏆 ICC Teams</h1>
       <p style={{ color: "var(--text2)", marginBottom: 24, fontSize: 14 }}>
         All international cricket teams from Cricbuzz

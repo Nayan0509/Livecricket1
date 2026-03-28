@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchLiveMatches } from "../api";
 import MatchCard from "../components/MatchCard";
 import AdBanner from "../components/AdBanner";
+import SEO from "../components/SEO";
 
 export default function LiveMatches() {
   const { data, isLoading, error, refetch, dataUpdatedAt } = useQuery({
@@ -16,6 +17,11 @@ export default function LiveMatches() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Live Cricket Score Today — Ball by Ball Updates"
+        description="Watch live cricket scores ball by ball. Get real-time updates for all live cricket matches including IPL 2026, T20, ODI and Test matches."
+        url="/live"
+      />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>
           <span className="pulse" style={{ color: "var(--red)" }}>●</span> Live Matches

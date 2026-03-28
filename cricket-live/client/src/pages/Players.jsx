@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchPlayers } from "../api";
 import AdBanner from "../components/AdBanner";
+import SEO from "../components/SEO";
 
 export default function Players() {
   const [input, setInput] = useState("virat");
@@ -19,6 +20,11 @@ export default function Players() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Cricket Players Stats — Batting & Bowling Averages"
+        description="Search cricket player profiles, batting averages, bowling stats, centuries, wickets and career records across Test, ODI and T20 formats."
+        url="/players"
+      />
       <h1 className="page-title">🧑‍🤝‍🧑 Players</h1>
 
       <form onSubmit={e => { e.preventDefault(); setSearch(input); }}

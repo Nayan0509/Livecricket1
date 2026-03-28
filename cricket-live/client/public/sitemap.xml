@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+
+  <url>
+    <loc>https://criclive.vercel.app/</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/live</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/schedule</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/upcoming</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/results</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/series</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/teams</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/players</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/rankings</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/news</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/stats</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://criclive.vercel.app/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+</urlset>

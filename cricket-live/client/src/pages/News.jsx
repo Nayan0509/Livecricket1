@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchNews } from "../api";
+import SEO from "../components/SEO";
 
 export default function News() {
   const { data, isLoading, error } = useQuery({ queryKey: ["news"], queryFn: fetchNews });
@@ -11,6 +12,11 @@ export default function News() {
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
+      <SEO
+        title="Cricket News & Match Updates 2026"
+        description="Latest cricket news, match previews, results and updates. IPL 2026, T20 World Cup, ODI and Test match news from around the world."
+        url="/news"
+      />
       <h1 className="page-title">📰 Match Updates</h1>
       <p style={{ color: "var(--text2)", marginBottom: 24, fontSize: 14 }}>
         Latest upcoming matches and status updates

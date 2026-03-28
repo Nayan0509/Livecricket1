@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# High-value pages — crawl frequently
+Allow: /live
+Allow: /schedule
+Allow: /upcoming
+Allow: /results
+Allow: /series
+Allow: /players
+Allow: /rankings
+Allow: /news
+Allow: /stats
+Allow: /teams
+
+# Block non-content pages
+Disallow: /watch-live
+Disallow: /api/
+
+Sitemap: https://criclive.vercel.app/sitemap.xml
