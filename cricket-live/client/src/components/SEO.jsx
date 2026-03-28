@@ -2,7 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 
 const SITE_NAME = "CricLive";
-const SITE_URL = "https://criclive.vercel.app";
+const SITE_URL = "https://www.livecricketzone.com";
 const DEFAULT_DESC = "CricLive — Live cricket scores, ball-by-ball commentary, match schedules, player stats, ICC rankings and latest cricket news. IPL, T20 World Cup, ODI, Test matches.";
 const DEFAULT_IMG = `${SITE_URL}/og-image.png`;
 const KEYWORDS = "live cricket score, cricket live, IPL 2026, T20 World Cup, cricket scorecard, ball by ball, cricket news, ICC rankings, cricket schedule, cricket players stats";

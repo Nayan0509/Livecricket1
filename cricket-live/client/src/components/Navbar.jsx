@@ -43,7 +43,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <span style={{ fontSize: 28 }}>🏏</span>
-          <span style={{ fontWeight: 800, fontSize: 20, color: "var(--green)" }}>CricLive</span>
+          <span style={{ fontWeight: 800, fontSize: 20, color: "var(--green)" }}>CricketZone</span>
         </Link>
 
         {/* Desktop Nav */}

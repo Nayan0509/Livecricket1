@@ -168,7 +168,7 @@ export default function Home() {
         padding: "48px 32px", marginBottom: 32, textAlign: "center",
       }}>
         <div style={{ fontSize: 64, marginBottom: 12 }}>🏏</div>
-        <h1 style={{ fontSize: 42, fontWeight: 800, color: "var(--green)", marginBottom: 8 }}>CricLive</h1>
+        <h1 style={{ fontSize: 42, fontWeight: 800, color: "var(--green)", marginBottom: 8 }}>Live Cricket Zone</h1>
         <p style={{ color: "var(--text2)", fontSize: 18, marginBottom: 24 }}>
           Live scores • Ball-by-ball • News • Stats
         </p>

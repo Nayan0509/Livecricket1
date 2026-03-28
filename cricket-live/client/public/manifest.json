@@ -1,6 +1,6 @@
 {
-  "short_name": "CricLive",
-  "name": "CricLive — Live Cricket Scores",
+  "short_name": "CricketZone",
+  "name": "Live Cricket Zone — Live Scores & News",
   "description": "Live cricket scores, IPL 2026, T20 World Cup, ODI & Test match updates",
   "icons": [
     { "src": "favicon.ico", "sizes": "64x64 32x32 24x24 16x16", "type": "image/x-icon" },

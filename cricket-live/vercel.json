@@ -9,20 +9,28 @@
       "maxDuration": 15
     }
   },
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "livecricketzone.com" }],
+      "destination": "https://www.livecricketzone.com/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/api/matches/live",         "destination": "/api/matches/live" },
-    { "source": "/api/matches/upcoming",     "destination": "/api/matches/upcoming" },
-    { "source": "/api/matches/schedule",     "destination": "/api/matches/schedule" },
-    { "source": "/api/matches/:id",          "destination": "/api/matches/[id]" },
-    { "source": "/api/series",               "destination": "/api/series/index" },
-    { "source": "/api/series/:id",           "destination": "/api/series/[id]" },
-    { "source": "/api/players",              "destination": "/api/players/index" },
-    { "source": "/api/players/:id",          "destination": "/api/players/[id]" },
-    { "source": "/api/news",                 "destination": "/api/news" },
-    { "source": "/api/teams",                "destination": "/api/teams" },
-    { "source": "/api/rankings",             "destination": "/api/rankings" },
-    { "source": "/api/health",               "destination": "/api/health" },
-    { "source": "/(.*)",                     "destination": "/index.html" }
+    { "source": "/api/matches/live",     "destination": "/api/matches/live" },
+    { "source": "/api/matches/upcoming", "destination": "/api/matches/upcoming" },
+    { "source": "/api/matches/schedule", "destination": "/api/matches/schedule" },
+    { "source": "/api/matches/:id",      "destination": "/api/matches/[id]" },
+    { "source": "/api/series",           "destination": "/api/series/index" },
+    { "source": "/api/series/:id",       "destination": "/api/series/[id]" },
+    { "source": "/api/players",          "destination": "/api/players/index" },
+    { "source": "/api/players/:id",      "destination": "/api/players/[id]" },
+    { "source": "/api/news",             "destination": "/api/news" },
+    { "source": "/api/teams",            "destination": "/api/teams" },
+    { "source": "/api/rankings",         "destination": "/api/rankings" },
+    { "source": "/api/health",           "destination": "/api/health" },
+    { "source": "/(.*)",                 "destination": "/index.html" }
   ],
   "headers": [
     {
