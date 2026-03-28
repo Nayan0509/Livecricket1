@@ -18,6 +18,10 @@
     }
   ],
   "rewrites": [
+    { "source": "/sitemap.xml",          "destination": "/api/sitemap.xml" },
+    { "source": "/robots.txt",           "destination": "/api/robots.txt" },
+    { "source": "/BingSiteAuth.xml",     "destination": "/api/BingSiteAuth.xml" },
+    { "source": "/ads.txt",              "destination": "/api/ads.txt" },
     { "source": "/api/matches/live",     "destination": "/api/matches/live" },
     { "source": "/api/matches/upcoming", "destination": "/api/matches/upcoming" },
     { "source": "/api/matches/schedule", "destination": "/api/matches/schedule" },
