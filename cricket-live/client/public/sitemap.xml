@@ -1,76 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+  <!-- Homepage -->
   <url>
     <loc>https://www.livecricketzone.com/</loc>
     <changefreq>always</changefreq>
     <priority>1.0</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Live Matches - Highest Priority -->
   <url>
     <loc>https://www.livecricketzone.com/live</loc>
     <changefreq>always</changefreq>
     <priority>1.0</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Schedule -->
   <url>
     <loc>https://www.livecricketzone.com/schedule</loc>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Upcoming Matches -->
   <url>
     <loc>https://www.livecricketzone.com/upcoming</loc>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Results -->
   <url>
     <loc>https://www.livecricketzone.com/results</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Series -->
   <url>
     <loc>https://www.livecricketzone.com/series</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
-  <url>
-    <loc>https://www.livecricketzone.com/teams</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
+  <!-- Players -->
   <url>
     <loc>https://www.livecricketzone.com/players</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Teams -->
+  <url>
+    <loc>https://www.livecricketzone.com/teams</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-04-02</lastmod>
+  </url>
+
+  <!-- Rankings -->
   <url>
     <loc>https://www.livecricketzone.com/rankings</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- News -->
   <url>
     <loc>https://www.livecricketzone.com/news</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Stats -->
   <url>
     <loc>https://www.livecricketzone.com/stats</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
+  <!-- Videos -->
+  <url>
+    <loc>https://www.livecricketzone.com/videos</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2026-04-02</lastmod>
+  </url>
+
+  <!-- About -->
   <url>
     <loc>https://www.livecricketzone.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+    <lastmod>2026-04-02</lastmod>
   </url>
 
 </urlset>

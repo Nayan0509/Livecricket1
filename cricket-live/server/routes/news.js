@@ -3,23 +3,96 @@ const router = express.Router();
 const { cricGet } = require("../controllers/cricapi");
 
 // GET /api/news
-// No free news API available — we surface upcoming matches as news cards
-// Uses CricketData.org matches (tested ✓)
+// Fetches cricket news from multiple free sources
 router.get("/", async (req, res) => {
   try {
-    const data = await cricGet("matches", { offset: 0 });
-    // Shape matches into news-style items
-    const items = (data.data || []).map(m => ({
-      id: m.id,
-      title: m.name,
-      description: m.status,
-      date: m.date,
-      venue: m.venue,
-      matchType: m.matchType,
-      teams: m.teams,
-      teamInfo: m.teamInfo,
-    }));
-    res.json({ status: "success", data: items });
+    const newsItems = [];
+
+    // Option 1: Try free NewsAPI proxy (no API key needed)
+    try {
+      const proxyResponse = await fetch("https://saurav.tech/NewsAPI/top-headlines/category/sports/in.json");
+      if (proxyResponse.ok) {
+        const proxyData = await proxyResponse.json();
+        const cricketNews = (proxyData.articles || [])
+          .filter(article => {
+            const text = `${article.title} ${article.description}`.toLowerCase();
+            return text.includes("cricket") || text.includes("ipl") || 
+                   text.includes("t20") || text.includes("odi") || 
+                   text.includes("test match");
+          })
+          .slice(0, 10)
+          .map(article => ({
+            id: article.url,
+            title: article.title,
+            description: article.description || "",
+            date: new Date(article.publishedAt).toLocaleDateString(),
+            source: article.source?.name || "News",
+            url: article.url,
+            image: article.urlToImage,
+            author: article.author,
+            publishedAt: article.publishedAt,
+          }));
+        newsItems.push(...cricketNews);
+      }
+    } catch (proxyErr) {
+      console.log("NewsAPI proxy failed:", proxyErr.message);
+    }
+
+    // Option 2: If NewsAPI.org key is available (100 requests/day free)
+    if (process.env.NEWSAPI_KEY && newsItems.length < 5) {
+      try {
+        const newsApiResponse = await fetch(
+          `https://newsapi.org/v2/everything?q=cricket OR IPL OR "T20 World Cup"&language=en&sortBy=publishedAt&pageSize=15&apiKey=${process.env.NEWSAPI_KEY}`
+        );
+        if (newsApiResponse.ok) {
+          const newsApiData = await newsApiResponse.json();
+          const articles = (newsApiData.articles || [])
+            .slice(0, 15)
+            .map(article => ({
+              id: article.url,
+              title: article.title,
+              description: article.description || "",
+              date: new Date(article.publishedAt).toLocaleDateString(),
+              source: article.source?.name || "News",
+              url: article.url,
+              image: article.urlToImage,
+              author: article.author,
+              publishedAt: article.publishedAt,
+            }));
+          newsItems.push(...articles);
+        }
+      } catch (newsApiErr) {
+        console.log("NewsAPI.org failed:", newsApiErr.message);
+      }
+    }
+
+    // Option 3: Fallback to upcoming matches as news
+    if (newsItems.length === 0) {
+      const data = await cricGet("matches", { offset: 0 });
+      const matchNews = (data.data || []).slice(0, 12).map(m => ({
+        id: m.id,
+        title: m.name,
+        description: m.status,
+        date: m.date,
+        venue: m.venue,
+        matchType: m.matchType,
+        teams: m.teams,
+        teamInfo: m.teamInfo,
+        source: "Match Updates",
+      }));
+      newsItems.push(...matchNews);
+    }
+
+    // Remove duplicates by URL/ID
+    const uniqueNews = Array.from(
+      new Map(newsItems.map(item => [item.id, item])).values()
+    );
+
+    res.json({ 
+      status: "success", 
+      data: uniqueNews.slice(0, 20),
+      sources: newsItems.length > 0 ? "live" : "fallback"
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

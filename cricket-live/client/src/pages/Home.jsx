@@ -9,9 +9,21 @@ import SEO from "../components/SEO";
 const SITE_SD = {
   "@context": "https://schema.org",
   "@type": "SportsEvent",
-  "name": "Live Cricket Matches",
+  "name": "Live Cricket Matches - IPL 2026, T20 World Cup, ODI & Test",
   "sport": "Cricket",
-  "url": "https://criclive.vercel.app"
+  "url": "https://www.livecricketzone.com",
+  "description": "Watch live cricket matches, get real-time scores, ball-by-ball commentary for IPL 2026, T20 World Cup, ODI and Test cricket",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "location": {
+    "@type": "VirtualLocation",
+    "url": "https://www.livecricketzone.com"
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "Live Cricket Zone",
+    "url": "https://www.livecricketzone.com"
+  }
 };
 
 function PlayMatchCard({ match }) {
@@ -155,8 +167,9 @@ export default function Home() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="Live Cricket Scores, IPL 2026, T20 & ODI Match Updates"
-        description="Get live cricket scores, ball-by-ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards, player stats and ICC rankings on CricLive."
+        title="Live Cricket Scores, IPL 2026, T20 World Cup & ODI Match Updates Today"
+        description="Get live cricket scores, ball-by-ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards, player statistics, ICC rankings 2026 and cricket news today on Live Cricket Zone. Watch live cricket streaming and get instant score updates."
+        keywords="live cricket score, cricket live score today, IPL 2026 live score, T20 World Cup live, cricket scorecard, ball by ball cricket commentary, cricket news today, ICC rankings 2026, cricket schedule, cricket players stats, cricket match today live, live cricket streaming, cricket score update, cricket live match, ODI cricket live, Test cricket live"
         url="/"
         structuredData={SITE_SD}
       />
@@ -170,7 +183,7 @@ export default function Home() {
         <div style={{ fontSize: 64, marginBottom: 12 }}>🏏</div>
         <h1 style={{ fontSize: 42, fontWeight: 800, color: "var(--green)", marginBottom: 8 }}>Live Cricket Zone</h1>
         <p style={{ color: "var(--text2)", fontSize: 18, marginBottom: 24 }}>
-          Live scores • Ball-by-ball • News • Stats
+          Live Cricket Scores • Ball-by-Ball Commentary • IPL 2026 • T20 World Cup • ODI & Test Updates
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link to="/live" className="btn btn-primary">🔴 Live Matches</Link>
@@ -287,6 +300,46 @@ export default function Home() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* SEO Content Section */}
+      <section style={{ marginTop: 48, padding: "32px 24px", background: "var(--bg2)", borderRadius: 12, border: "1px solid var(--border)" }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16, color: "var(--green)" }}>
+          Live Cricket Zone - Your Ultimate Cricket Destination
+        </h2>
+        <div style={{ color: "var(--text2)", lineHeight: 1.8, fontSize: 15 }}>
+          <p style={{ marginBottom: 16 }}>
+            Welcome to <strong>Live Cricket Zone</strong>, your premier destination for <strong>live cricket scores</strong>, 
+            real-time ball-by-ball commentary, and comprehensive cricket coverage. Stay updated with <strong>IPL 2026 live scores</strong>, 
+            <strong>T20 World Cup</strong> updates, ODI matches, and Test cricket from around the world.
+          </p>
+          <p style={{ marginBottom: 16 }}>
+            Our platform provides instant <strong>cricket score updates</strong>, detailed scorecards, player statistics, 
+            <strong>ICC rankings 2026</strong>, team standings, and the latest cricket news. Whether you're following the 
+            Indian Premier League, international tournaments, or bilateral series, we've got you covered with live streaming 
+            links and match highlights.
+          </p>
+          <p style={{ marginBottom: 16 }}>
+            Get access to comprehensive <strong>cricket player stats</strong>, career records, match schedules, upcoming fixtures, 
+            results, and in-depth analysis. Follow your favorite teams and players with our detailed profiles, rankings, and 
+            performance metrics. Experience cricket like never before with our user-friendly interface and real-time updates.
+          </p>
+          <div style={{ marginTop: 20, padding: "16px", background: "var(--bg3)", borderRadius: 8, borderLeft: "4px solid var(--green)" }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12, color: "var(--green)" }}>
+              Key Features:
+            </h3>
+            <ul style={{ paddingLeft: 20, margin: 0 }}>
+              <li style={{ marginBottom: 8 }}>🔴 Live cricket scores with ball-by-ball commentary</li>
+              <li style={{ marginBottom: 8 }}>🏏 IPL 2026 live updates and scorecards</li>
+              <li style={{ marginBottom: 8 }}>🌍 T20 World Cup, ODI & Test match coverage</li>
+              <li style={{ marginBottom: 8 }}>📊 ICC rankings 2026 and player statistics</li>
+              <li style={{ marginBottom: 8 }}>📅 Complete cricket schedule and fixtures</li>
+              <li style={{ marginBottom: 8 }}>📺 Live cricket streaming links</li>
+              <li style={{ marginBottom: 8 }}>📰 Latest cricket news and updates</li>
+              <li style={{ marginBottom: 8 }}>🏆 Team and player profiles with career records</li>
+            </ul>
+          </div>
         </div>
       </section>
 

@@ -1,23 +1,29 @@
 # 🏏 CricLive — Live Cricket Scoring Platform
 
 ## Free APIs Used
-| API | Free Tier | Sign Up |
-|-----|-----------|---------|
-| [CricketData.org](https://cricketdata.org) | 100 req/day free | https://cricketdata.org |
-| [Free Cricbuzz via RapidAPI](https://rapidapi.com/Creativesdev/api/free-cricbuzz-cricket-api) | 500 req/month free | https://rapidapi.com |
-| YouTube IFrame API | Unlimited embeds | No key needed |
+| API | Free Tier | Sign Up | Status |
+|-----|-----------|---------|--------|
+| [CricketData.org](https://cricketdata.org) | 100 req/day | https://cricketdata.org | ✅ Required |
+| [Free Cricbuzz via RapidAPI](https://rapidapi.com/Creativesdev/api/free-cricbuzz-cricket-api) | 500 req/month | https://rapidapi.com | ✅ Required |
+| [NewsAPI Proxy](https://github.com/SauravKanchan/NewsAPI) | Unlimited | No signup needed | ✅ Auto-enabled |
+| [NewsAPI.org](https://newsapi.org) | 100 req/day | https://newsapi.org | 🔵 Optional |
+| YouTube IFrame API | Unlimited embeds | No key needed | ✅ Auto-enabled |
+
+**New**: Cricket news now works automatically with no API key needed! Optionally add NewsAPI.org key for more sources.
 
 ## Setup
 
 ### 1. Get API Keys (Free)
 - Go to https://cricketdata.org → Sign up → Copy your API key
 - Go to https://rapidapi.com → Sign up → Subscribe to "Free Cricbuzz Cricket API" → Copy key
+- **Optional**: Go to https://newsapi.org → Sign up → Get API key (for more news sources)
 
 ### 2. Configure Server
 ```bash
 cd server
 cp .env.example .env
 # Edit .env and paste your keys
+# NEWSAPI_KEY is optional - news works without it!
 ```
 
 ### 3. Install & Run
@@ -50,8 +56,8 @@ App runs at http://localhost:3000
 12. `/players` — Player Search
 13. `/players/:id` — Player Profile + Stats
 14. `/rankings` — ICC Rankings
-15. `/news` — Cricket News
-16. `/news/:id` — News Article
+15. `/news` — Cricket News (real-time from multiple sources)
+16. `/news/:id` — News Article Detail
 17. `/schedule` — Match Schedule (grouped by date)
 18. `/videos` — Video Gallery (YouTube embeds)
 19. `/stats` — Statistics + Charts
@@ -61,4 +67,12 @@ App runs at http://localhost:3000
 ## Tech Stack
 - **Backend**: Node.js + Express + node-cache + axios
 - **Frontend**: React 18 + React Query + Recharts + Framer Motion
-- **APIs**: CricketData.org, Cricbuzz (RapidAPI), YouTube IFrame
+- **APIs**: CricketData.org, Cricbuzz (RapidAPI), NewsAPI (free proxy), YouTube IFrame
+
+## 📰 News Integration
+The news feature uses a smart waterfall approach:
+1. Free NewsAPI proxy (no key needed) - works immediately
+2. NewsAPI.org (if key provided) - 100 extra requests/day
+3. Match updates fallback - always shows content
+
+See [FREE_APIs.md](./FREE_APIs.md) for detailed API documentation.

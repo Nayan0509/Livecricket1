@@ -13,8 +13,9 @@ export default function Rankings() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="ICC Cricket Team Rankings 2026 — Test, ODI & T20"
-        description="Latest ICC cricket team rankings for Test, ODI and T20 formats. See which teams are ranked #1 in world cricket in 2026."
+        title="ICC Cricket Rankings 2026 — Test, ODI & T20 Team Rankings"
+        description="Latest ICC cricket team rankings 2026 for Test, ODI and T20 formats. See current world cricket rankings, team standings and which teams are ranked #1 in international cricket."
+        keywords="ICC rankings 2026, cricket team rankings, Test cricket rankings, ODI rankings, T20 rankings, world cricket rankings, cricket standings, team rankings 2026"
         url="/rankings"
       />
       <h1 className="page-title">🏆 ICC Teams</h1>

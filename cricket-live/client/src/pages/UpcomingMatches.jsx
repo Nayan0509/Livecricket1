@@ -20,8 +20,9 @@ export default function UpcomingMatches() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="Upcoming Cricket Matches 2026 — Schedule & Fixtures"
-        description="Full list of upcoming cricket matches in 2026. IPL, T20 World Cup, ODI series and Test match fixtures with dates, venues and team info."
+        title="Upcoming Cricket Matches 2026 — Schedule, Fixtures & Match Calendar"
+        description="Complete list of upcoming cricket matches in 2026. IPL 2026 fixtures, T20 World Cup schedule, ODI series and Test match fixtures with dates, venues, team info and match timings."
+        keywords="upcoming cricket matches, cricket fixtures 2026, IPL 2026 fixtures, T20 World Cup fixtures, cricket schedule, upcoming matches today, cricket calendar, future cricket matches"
         url="/upcoming"
       />
       <h1 className="page-title">📅 Upcoming Matches</h1>

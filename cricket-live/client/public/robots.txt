@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 
+# High Priority Pages
 Allow: /live
 Allow: /schedule
 Allow: /upcoming
@@ -11,8 +12,34 @@ Allow: /rankings
 Allow: /news
 Allow: /stats
 Allow: /teams
+Allow: /match/*
+Allow: /player/*
+Allow: /series/*
+Allow: /team/*
 
+# Disallow
 Disallow: /watch-live
 Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /*?*utm_source=
+Disallow: /*?*sessionid=
 
+# Crawl Delay
+Crawl-delay: 1
+
+# Sitemap
 Sitemap: https://www.livecricketzone.com/sitemap.xml
+
+# Specific Bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
