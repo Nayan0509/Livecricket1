@@ -25,6 +25,23 @@ import Stats from "./pages/Stats";
 import About from "./pages/About";
 import WatchLive from "./pages/WatchLive";
 import NotFound from "./pages/NotFound";
+import IPL from "./pages/IPL";
+import T20Cricket from "./pages/T20Cricket";
+import T20WorldCup from "./pages/T20WorldCup";
+import ODICricket from "./pages/ODICricket";
+import TestCricket from "./pages/TestCricket";
+import PSL from "./pages/PSL";
+import BBL from "./pages/BBL";
+import CPL from "./pages/CPL";
+import BPL from "./pages/BPL";
+import WorldCup from "./pages/WorldCup";
+import AsiaCup from "./pages/AsiaCup";
+import ChampionsTrophy from "./pages/ChampionsTrophy";
+import WomensCricket from "./pages/WomensCricket";
+import LiveCricketScore from "./pages/LiveCricketScore";
+import CricketScoreToday from "./pages/CricketScoreToday";
+import BallByBall from "./pages/BallByBall";
+import CricketWebsite from "./pages/CricketWebsite";
 
 export default function App() {
   return (
@@ -35,6 +52,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/live" element={<LiveMatches />} />
+          <Route path="/live-cricket-score" element={<LiveCricketScore />} />
+          <Route path="/cricket-score-today" element={<CricketScoreToday />} />
+          <Route path="/ball-by-ball" element={<BallByBall />} />
+          <Route path="/best-cricket-website" element={<CricketWebsite />} />
           <Route path="/match/:id" element={<MatchDetail />} />
           <Route path="/match/:id/scorecard" element={<Scorecard />} />
           <Route path="/match/:id/live-score" element={<LiveScore />} />
@@ -53,6 +74,22 @@ export default function App() {
           <Route path="/stats" element={<Stats />} />
           <Route path="/about" element={<About />} />
           <Route path="/watch-live" element={<WatchLive />} />
+          
+          {/* League Pages */}
+          <Route path="/ipl" element={<IPL />} />
+          <Route path="/t20" element={<T20Cricket />} />
+          <Route path="/t20-world-cup" element={<T20WorldCup />} />
+          <Route path="/odi" element={<ODICricket />} />
+          <Route path="/test" element={<TestCricket />} />
+          <Route path="/psl" element={<PSL />} />
+          <Route path="/bbl" element={<BBL />} />
+          <Route path="/cpl" element={<CPL />} />
+          <Route path="/bpl" element={<BPL />} />
+          <Route path="/world-cup" element={<WorldCup />} />
+          <Route path="/asia-cup" element={<AsiaCup />} />
+          <Route path="/champions-trophy" element={<ChampionsTrophy />} />
+          <Route path="/womens-cricket" element={<WomensCricket />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

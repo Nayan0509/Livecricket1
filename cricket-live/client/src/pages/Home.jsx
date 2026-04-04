@@ -197,6 +197,63 @@ export default function Home() {
 
       <AdBanner type="responsive" slot="1234567890" style={{ marginBottom: 32 }} />
 
+      {/* Popular Leagues & Tournaments */}
+      <section style={{ marginBottom: 40 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>🏆 Popular Leagues & Tournaments</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12 }}>
+          <Link to="/ipl" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🏏</div>
+            <div style={{ fontWeight: 700 }}>IPL 2026</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Indian Premier League</div>
+          </Link>
+          <Link to="/t20-world-cup" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🌍</div>
+            <div style={{ fontWeight: 700 }}>T20 World Cup</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>ICC T20 WC 2026</div>
+          </Link>
+          <Link to="/world-cup" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🏆</div>
+            <div style={{ fontWeight: 700 }}>World Cup</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>ODI World Cup</div>
+          </Link>
+          <Link to="/asia-cup" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #F97316 0%, #DC2626 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🌏</div>
+            <div style={{ fontWeight: 700 }}>Asia Cup</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Asia Cup 2026</div>
+          </Link>
+          <Link to="/champions-trophy" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #14B8A6 0%, #0891B2 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🏅</div>
+            <div style={{ fontWeight: 700 }}>Champions Trophy</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>ICC CT 2026</div>
+          </Link>
+          <Link to="/womens-cricket" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #EC4899 0%, #BE185D 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>👩</div>
+            <div style={{ fontWeight: 700 }}>Women's Cricket</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>All Women's Matches</div>
+          </Link>
+          <Link to="/psl" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #10B981 0%, #059669 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🇵🇰</div>
+            <div style={{ fontWeight: 700 }}>PSL</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Pakistan Super League</div>
+          </Link>
+          <Link to="/bbl" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🇦🇺</div>
+            <div style={{ fontWeight: 700 }}>BBL</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Big Bash League</div>
+          </Link>
+          <Link to="/cpl" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🏝️</div>
+            <div style={{ fontWeight: 700 }}>CPL</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Caribbean Premier League</div>
+          </Link>
+          <Link to="/bpl" className="card" style={{ padding: 16, textAlign: "center", background: "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)", color: "white", border: "none" }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🇧🇩</div>
+            <div style={{ fontWeight: 700 }}>BPL</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Bangladesh Premier League</div>
+          </Link>
+        </div>
+      </section>
+
       {/* Live Matches */}
       <section style={{ marginBottom: 40 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>

@@ -3,6 +3,22 @@ Allow: /
 
 # High Priority Pages
 Allow: /live
+Allow: /live-cricket-score
+Allow: /cricket-score-today
+Allow: /ball-by-ball
+Allow: /ipl
+Allow: /t20-world-cup
+Allow: /world-cup
+Allow: /asia-cup
+Allow: /champions-trophy
+Allow: /womens-cricket
+Allow: /t20
+Allow: /odi
+Allow: /test
+Allow: /psl
+Allow: /bbl
+Allow: /cpl
+Allow: /bpl
 Allow: /schedule
 Allow: /upcoming
 Allow: /results
