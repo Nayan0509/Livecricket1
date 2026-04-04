@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function BBL() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function BBL() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const bblMatches = data.filter(m => m.series?.includes("BBL") || m.name?.includes("Big Bash"));
+        const data = await fetchLiveMatches();
+        const bblMatches = (data?.data || []).filter(m => m.series?.includes("BBL") || m.name?.includes("Big Bash"));
         setMatches(bblMatches);
       } catch (error) {
         console.error("Error loading BBL matches:", error);

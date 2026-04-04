@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function IPL() {
   const [matches, setMatches] = useState([]);
@@ -10,9 +10,9 @@ export default function IPL() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
+        const data = await fetchLiveMatches();
         // Filter for IPL matches
-        const iplMatches = data.filter(m => m.series?.includes("IPL") || m.name?.includes("IPL"));
+        const iplMatches = (data?.data || []).filter(m => m.series?.includes("IPL") || m.name?.includes("IPL"));
         setMatches(iplMatches);
       } catch (error) {
         console.error("Error loading IPL matches:", error);

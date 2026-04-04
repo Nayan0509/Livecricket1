@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function BPL() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function BPL() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const bplMatches = data.filter(m => m.series?.includes("BPL") || m.name?.includes("Bangladesh Premier"));
+        const data = await fetchLiveMatches();
+        const bplMatches = (data?.data || []).filter(m => m.series?.includes("BPL") || m.name?.includes("Bangladesh Premier"));
         setMatches(bplMatches);
       } catch (error) {
         console.error("Error loading BPL matches:", error);

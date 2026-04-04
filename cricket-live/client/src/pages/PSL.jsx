@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function PSL() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function PSL() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const pslMatches = data.filter(m => m.series?.includes("PSL") || m.name?.includes("PSL"));
+        const data = await fetchLiveMatches();
+        const pslMatches = (data?.data || []).filter(m => m.series?.includes("PSL") || m.name?.includes("PSL"));
         setMatches(pslMatches);
       } catch (error) {
         console.error("Error loading PSL matches:", error);

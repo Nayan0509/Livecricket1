@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function TestCricket() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function TestCricket() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const testMatches = data.filter(m => m.format === "Test" || m.name?.includes("Test"));
+        const data = await fetchLiveMatches();
+        const testMatches = (data?.data || []).filter(m => m.format === "Test" || m.name?.includes("Test"));
         setMatches(testMatches);
       } catch (error) {
         console.error("Error loading Test matches:", error);

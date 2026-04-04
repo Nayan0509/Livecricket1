@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function T20WorldCup() {
   const [matches, setMatches] = useState([]);
@@ -10,9 +10,9 @@ export default function T20WorldCup() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
+        const data = await fetchLiveMatches();
         // Filter for T20 World Cup matches
-        const wcMatches = data.filter(m => m.series?.includes("T20 World Cup") || m.name?.includes("T20 World Cup"));
+        const wcMatches = (data?.data || []).filter(m => m.series?.includes("T20 World Cup") || m.name?.includes("T20 World Cup"));
         setMatches(wcMatches);
       } catch (error) {
         console.error("Error loading T20 World Cup matches:", error);

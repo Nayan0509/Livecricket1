@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function ODICricket() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function ODICricket() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const odiMatches = data.filter(m => m.format === "ODI" || m.name?.includes("ODI"));
+        const data = await fetchLiveMatches();
+        const odiMatches = (data?.data || []).filter(m => m.format === "ODI" || m.name?.includes("ODI"));
         setMatches(odiMatches);
       } catch (error) {
         console.error("Error loading ODI matches:", error);

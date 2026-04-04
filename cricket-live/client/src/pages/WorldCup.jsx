@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function WorldCup() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function WorldCup() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const wcMatches = data.filter(m => m.series?.includes("World Cup") || m.name?.includes("World Cup"));
+        const data = await fetchLiveMatches();
+        const wcMatches = (data?.data || []).filter(m => m.series?.includes("World Cup") || m.name?.includes("World Cup"));
         setMatches(wcMatches);
       } catch (error) {
         console.error("Error loading World Cup matches:", error);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function CPL() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function CPL() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const cplMatches = data.filter(m => m.series?.includes("CPL") || m.name?.includes("Caribbean"));
+        const data = await fetchLiveMatches();
+        const cplMatches = (data?.data || []).filter(m => m.series?.includes("CPL") || m.name?.includes("Caribbean"));
         setMatches(cplMatches);
       } catch (error) {
         console.error("Error loading CPL matches:", error);

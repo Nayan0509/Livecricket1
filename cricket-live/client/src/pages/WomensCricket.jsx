@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function WomensCricket() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function WomensCricket() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const womensMatches = data.filter(m => m.name?.includes("Women") || m.series?.includes("Women"));
+        const data = await fetchLiveMatches();
+        const womensMatches = (data?.data || []).filter(m => m.name?.includes("Women") || m.series?.includes("Women"));
         setMatches(womensMatches);
       } catch (error) {
         console.error("Error loading Women's matches:", error);

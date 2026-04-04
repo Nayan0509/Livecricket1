@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { fetchMatches } from "../api";
+import { fetchLiveMatches } from "../api";
 
 export default function AsiaCup() {
   const [matches, setMatches] = useState([]);
@@ -10,8 +10,8 @@ export default function AsiaCup() {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const data = await fetchMatches();
-        const asiaMatches = data.filter(m => m.series?.includes("Asia Cup") || m.name?.includes("Asia Cup"));
+        const data = await fetchLiveMatches();
+        const asiaMatches = (data?.data || []).filter(m => m.series?.includes("Asia Cup") || m.name?.includes("Asia Cup"));
         setMatches(asiaMatches);
       } catch (error) {
         console.error("Error loading Asia Cup matches:", error);
