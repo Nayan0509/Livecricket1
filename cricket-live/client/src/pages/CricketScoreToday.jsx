@@ -31,57 +31,63 @@ export default function CricketScoreToday() {
         keywords="cricket score today, today cricket score, cricket match today, cricket today, today cricket match, cricket live today, cricket score live today, today match score, cricket match score today, live cricket today, today cricket live score"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">Cricket Score Today</h1>
-          <p className="text-xl mb-2">{today}</p>
-          <p className="text-lg">All Live Cricket Matches • Real-Time Updates</p>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">Cricket Score Today</h1>
+          <p className="hero-subtitle">{today}</p>
+          <p style={{ fontSize: 18, position: "relative", zIndex: 1 }}>All Live Cricket Matches • Real-Time Updates</p>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Today's Cricket Matches</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Today's Cricket Matches</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading today's matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="font-bold text-xl mb-2">{match.name}</div>
-                      <div className="text-gray-600 text-sm mb-2">{match.venue}</div>
-                      <div className="text-gray-500 text-sm">{match.date}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-blue-600 font-bold">{match.status}</div>
-                      <Link to={`/match/${match.id}/live-score`} className="text-sm text-green-600 hover:underline mt-2 inline-block">
-                        Live Score →
-                      </Link>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 8, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)", marginBottom: 4 }}>📍 {match.venue}</div>
+                        <div style={{ fontSize: 12, color: "var(--text3)" }}>📅 {match.date}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "var(--primary-light)", fontWeight: 700, marginBottom: 8 }}>{match.status}</div>
+                        <Link to={`/match/${match.id}/live-score`} className="link-primary" style={{ fontSize: 13 }}>
+                          Live Score →
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center">
-              <div className="text-gray-600 mb-4">No matches scheduled for today</div>
-              <Link to="/upcoming" className="text-blue-600 hover:underline">View upcoming matches →</Link>
+            <div className="card" style={{ textAlign: "center", padding: 40 }}>
+              <div style={{ color: "var(--text2)", marginBottom: 16 }}>No matches scheduled for today</div>
+              <Link to="/upcoming" className="link-primary">View upcoming matches →</Link>
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 p-8 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">Today's Cricket Coverage</h2>
-          <p className="text-gray-700 mb-4">
+        <div className="card">
+          <div className="section-header">
+            <h2 className="section-title">Today's Cricket Coverage</h2>
+          </div>
+          <p style={{ color: "var(--text2)", marginBottom: 24, lineHeight: 1.6 }}>
             Get complete cricket score today for all live matches including IPL 2026, T20 World Cup, ODI World Cup, 
             Test cricket, PSL, BBL, CPL, BPL, Asia Cup, and Champions Trophy. Real-time ball-by-ball updates, 
             live scorecard, match statistics, and expert commentary.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Link to="/live" className="text-blue-600 hover:underline">Live Matches</Link>
-            <Link to="/upcoming" className="text-blue-600 hover:underline">Upcoming Today</Link>
-            <Link to="/schedule" className="text-blue-600 hover:underline">Full Schedule</Link>
-            <Link to="/results" className="text-blue-600 hover:underline">Recent Results</Link>
+          <div className="grid-4">
+            <Link to="/live" className="link-primary">Live Matches</Link>
+            <Link to="/upcoming" className="link-primary">Upcoming Today</Link>
+            <Link to="/schedule" className="link-primary">Full Schedule</Link>
+            <Link to="/results" className="link-primary">Recent Results</Link>
           </div>
         </div>
       </div>

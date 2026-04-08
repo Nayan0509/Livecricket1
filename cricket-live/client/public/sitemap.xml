@@ -225,7 +225,22 @@
     <loc>https://www.livecricketzone.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2026-04-04</lastmod>
+    <lastmod>2026-04-08</lastmod>
+  </url>
+
+  <!-- Fantasy & Betting Guides - UK/US/Australia Markets -->
+  <url>
+    <loc>https://www.livecricketzone.com/fantasy-cricket-guide</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <lastmod>2026-04-08</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.livecricketzone.com/cricket-betting-guide</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <lastmod>2026-04-08</lastmod>
   </url>
 
 </urlset>

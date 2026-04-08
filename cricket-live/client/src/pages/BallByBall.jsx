@@ -29,31 +29,50 @@ export default function BallByBall() {
         keywords="ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, ball by ball cricket score, cricket commentary live, live cricket commentary, ball by ball updates"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">Ball by Ball Cricket Commentary</h1>
-          <p className="text-xl mb-4">Live Ball-by-Ball Updates • Real-Time Commentary</p>
-          <div className="bg-white/20 p-4 rounded-lg">
-            <div className="text-sm">🎯 Every ball • Every run • Every wicket • Real-time updates</div>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">Ball by Ball Cricket Commentary</h1>
+          <p className="hero-subtitle">Live Ball-by-Ball Updates • Real-Time Commentary</p>
+          <div style={{ 
+            background: "rgba(255, 255, 255, 0.1)", 
+            padding: "16px", 
+            borderRadius: "var(--radius)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            position: "relative",
+            zIndex: 1
+          }}>
+            <div style={{ fontSize: 14 }}>🎯 Every ball • Every run • Every wicket • Real-time updates</div>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live Ball-by-Ball Commentary</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live Ball-by-Ball Commentary</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.map(match => (
-                <Link key={match.id} to={`/match/${match.id}/live-score`} className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="font-bold text-xl mb-2">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.venue}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-bold">
-                        Ball-by-Ball →
+                <Link key={match.id} to={`/match/${match.id}/live-score`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 8, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)" }}>📍 {match.venue}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ 
+                          background: "rgba(16, 185, 129, 0.15)", 
+                          color: "var(--accent-green)", 
+                          padding: "6px 12px", 
+                          borderRadius: "6px", 
+                          fontSize: 13, 
+                          fontWeight: 700,
+                          border: "1px solid rgba(16, 185, 129, 0.3)"
+                        }}>
+                          Ball-by-Ball →
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -61,31 +80,45 @@ export default function BallByBall() {
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center">
-              <div className="text-gray-600 mb-4">No live matches at the moment</div>
-              <Link to="/upcoming" className="text-blue-600 hover:underline">View upcoming matches →</Link>
+            <div className="card" style={{ textAlign: "center", padding: 40 }}>
+              <div style={{ color: "var(--text2)", marginBottom: 16 }}>No live matches at the moment</div>
+              <Link to="/upcoming" className="link-primary">View upcoming matches →</Link>
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 p-8 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">Ball-by-Ball Features</h2>
-          <ul className="space-y-3">
-            <li className="flex items-start gap-3">
-              <span className="text-green-600 text-xl">✓</span>
-              <div><strong>Every Ball Covered:</strong> Complete ball-by-ball commentary for every delivery</div>
+        <div className="card">
+          <div className="section-header">
+            <h2 className="section-title">Ball-by-Ball Features</h2>
+          </div>
+          <ul style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <li style={{ display: "flex", alignItems: "start", gap: 12 }}>
+              <span style={{ color: "var(--accent-green)", fontSize: 20, flexShrink: 0 }}>✓</span>
+              <div>
+                <strong style={{ color: "var(--text)" }}>Every Ball Covered:</strong>
+                <span style={{ color: "var(--text2)" }}> Complete ball-by-ball commentary for every delivery</span>
+              </div>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-green-600 text-xl">✓</span>
-              <div><strong>Real-Time Updates:</strong> Live updates within seconds of each ball</div>
+            <li style={{ display: "flex", alignItems: "start", gap: 12 }}>
+              <span style={{ color: "var(--accent-green)", fontSize: 20, flexShrink: 0 }}>✓</span>
+              <div>
+                <strong style={{ color: "var(--text)" }}>Real-Time Updates:</strong>
+                <span style={{ color: "var(--text2)" }}> Live updates within seconds of each ball</span>
+              </div>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-green-600 text-xl">✓</span>
-              <div><strong>Expert Commentary:</strong> Detailed analysis and insights for each delivery</div>
+            <li style={{ display: "flex", alignItems: "start", gap: 12 }}>
+              <span style={{ color: "var(--accent-green)", fontSize: 20, flexShrink: 0 }}>✓</span>
+              <div>
+                <strong style={{ color: "var(--text)" }}>Expert Commentary:</strong>
+                <span style={{ color: "var(--text2)" }}> Detailed analysis and insights for each delivery</span>
+              </div>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-green-600 text-xl">✓</span>
-              <div><strong>All Formats:</strong> IPL, T20, ODI, Test cricket ball-by-ball coverage</div>
+            <li style={{ display: "flex", alignItems: "start", gap: 12 }}>
+              <span style={{ color: "var(--accent-green)", fontSize: 20, flexShrink: 0 }}>✓</span>
+              <div>
+                <strong style={{ color: "var(--text)" }}>All Formats:</strong>
+                <span style={{ color: "var(--text2)" }}> IPL, T20, ODI, Test cricket ball-by-ball coverage</span>
+              </div>
             </li>
           </ul>
         </div>
