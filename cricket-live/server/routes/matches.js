@@ -1,71 +1,172 @@
 const express = require("express");
 const router = express.Router();
-const { cricGet, rapidGet, liveCache } = require("../controllers/cricapi");
+const { 
+  getLiveMatchesWithFallback, 
+  getScorecardWithFallback,
+  scrapeCricbuzzLiveMatches,
+  scrapeEspnLiveMatches,
+  scrapeCricbuzzScorecard,
+  scrapeEspnScorecard
+} = require("../utils/scraper");
 
 // GET /api/matches/live
-// Uses CricketData.org currentMatches (tested ✓)
-// Response: { data: [ {id, name, matchType, status, venue, date, teams, score, matchStarted, matchEnded} ] }
+// Scrapes live matches from Cricbuzz/ESPNcricinfo
 router.get("/live", async (req, res) => {
   try {
-    const data = await cricGet("currentMatches", { offset: 0 }, liveCache);
-    res.json(data);
+    const matches = await getLiveMatchesWithFallback();
+    res.json({ 
+      status: "success", 
+      data: matches,
+      count: matches.length
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // GET /api/matches/upcoming
-// Uses CricketData.org matches (tested ✓)
+// Scrapes upcoming matches
 router.get("/upcoming", async (req, res) => {
   try {
-    const data = await cricGet("matches", { offset: 0 });
-    res.json(data);
+    // For now, return live matches (can be enhanced to scrape schedule pages)
+    const matches = await getLiveMatchesWithFallback();
+    res.json({ 
+      status: "success", 
+      data: matches.filter(m => m.status && !m.status.toLowerCase().includes("live"))
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // GET /api/matches/schedule
-// Uses RapidAPI /cricket-schedule (tested ✓)
-// Response: { status, response: { schedules: [ {scheduleAdWrapper: {date, matchScheduleList: [{seriesName, matchInfo:[...]}]}} ] } }
+// Scrapes match schedule
 router.get("/schedule", async (req, res) => {
   try {
-    const data = await rapidGet("/cricket-schedule");
-    res.json(data);
+    const matches = await getLiveMatchesWithFallback();
+    res.json({ 
+      status: "success", 
+      data: matches
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // GET /api/matches/:id
-// Uses CricketData.org match_info (tested ✓)
-// Response: { data: {id, name, matchType, status, venue, date, teams, teamInfo, score, tossWinner, tossChoice} }
+// Scrapes match details
 router.get("/:id", async (req, res) => {
   try {
-    const data = await cricGet("match_info", { id: req.params.id });
-    res.json(data);
+    const source = req.query.source || "cricbuzz";
+    const scorecard = await getScorecardWithFallback(req.params.id, source);
+    res.json({ 
+      status: "success", 
+      data: scorecard
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // GET /api/matches/:id/scorecard
+// Scrapes match scorecard
 router.get("/:id/scorecard", async (req, res) => {
   try {
-    const data = await cricGet("match_scorecard", { id: req.params.id }, liveCache);
-    res.json(data);
+    const source = req.query.source || "cricbuzz";
+    const scorecard = await getScorecardWithFallback(req.params.id, source);
+    res.json({ 
+      status: "success", 
+      data: scorecard
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // GET /api/matches/:id/score
-// Uses CricketData.org cricScore (tested ✓)
-// Response: { data: [ {id, t1, t2, t1s, t2s, status, ms, matchType, series} ] }
+// Scrapes live score for a specific match
 router.get("/:id/score", async (req, res) => {
   try {
-    const data = await cricGet("cricScore", { id: req.params.id }, liveCache);
-    res.json(data);
+    const source = req.query.source || "cricbuzz";
+    const scorecard = await getScorecardWithFallback(req.params.id, source);
+    
+    // Extract just the score info
+    const scoreData = {
+      id: req.params.id,
+      title: scorecard.title,
+      status: scorecard.status,
+      innings: scorecard.innings.map(inning => ({
+        team: inning.team,
+        score: inning.score
+      }))
+    };
+    
+    res.json({ 
+      status: "success", 
+      data: scoreData
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── DIRECT SOURCE ENDPOINTS ──────────────────────────────────────────────────
+
+// GET /api/matches/cricbuzz/live
+// Get live matches directly from Cricbuzz
+router.get("/cricbuzz/live", async (req, res) => {
+  try {
+    const matches = await scrapeCricbuzzLiveMatches();
+    res.json({ 
+      status: "success", 
+      data: matches,
+      source: "cricbuzz",
+      count: matches.length
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/matches/cricbuzz/:id/scorecard
+// Get scorecard directly from Cricbuzz
+router.get("/cricbuzz/:id/scorecard", async (req, res) => {
+  try {
+    const scorecard = await scrapeCricbuzzScorecard(req.params.id);
+    res.json({ 
+      status: "success", 
+      data: scorecard
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/matches/espn/live
+// Get live matches directly from ESPNcricinfo
+router.get("/espn/live", async (req, res) => {
+  try {
+    const matches = await scrapeEspnLiveMatches();
+    res.json({ 
+      status: "success", 
+      data: matches,
+      source: "espncricinfo",
+      count: matches.length
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/matches/espn/:id/scorecard
+// Get scorecard directly from ESPNcricinfo
+router.get("/espn/:id/scorecard", async (req, res) => {
+  try {
+    const scorecard = await scrapeEspnScorecard(req.params.id);
+    res.json({ 
+      status: "success", 
+      data: scorecard
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
