@@ -48,58 +48,72 @@ import BettingGuide from "./pages/BettingGuide";
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Ticker />
-      <main style={{ minHeight: "calc(100vh - 140px)", paddingTop: "16px" }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/live" element={<LiveMatches />} />
-          <Route path="/live-cricket-score" element={<LiveCricketScore />} />
-          <Route path="/cricket-score-today" element={<CricketScoreToday />} />
-          <Route path="/ball-by-ball" element={<BallByBall />} />
-          <Route path="/best-cricket-website" element={<CricketWebsite />} />
-          <Route path="/match/:id" element={<MatchDetail />} />
-          <Route path="/match/:id/scorecard" element={<Scorecard />} />
-          <Route path="/match/:id/live-score" element={<LiveScore />} />
-          <Route path="/upcoming" element={<UpcomingMatches />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="/series" element={<Series />} />
-          <Route path="/series/:id" element={<SeriesDetail />} />
-          <Route path="/teams" element={<Teams />} />
-          <Route path="/teams/:id" element={<TeamDetail />} />
-          <Route path="/players" element={<Players />} />
-          <Route path="/players/:id" element={<PlayerDetail />} />
-          <Route path="/rankings" element={<Rankings />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/news/:id" element={<NewsDetail />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/stats" element={<Stats />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/watch-live" element={<WatchLive />} />
-          
-          {/* League Pages */}
-          <Route path="/ipl" element={<IPL />} />
-          <Route path="/t20" element={<T20Cricket />} />
-          <Route path="/t20-world-cup" element={<T20WorldCup />} />
-          <Route path="/odi" element={<ODICricket />} />
-          <Route path="/test" element={<TestCricket />} />
-          <Route path="/psl" element={<PSL />} />
-          <Route path="/bbl" element={<BBL />} />
-          <Route path="/cpl" element={<CPL />} />
-          <Route path="/bpl" element={<BPL />} />
-          <Route path="/world-cup" element={<WorldCup />} />
-          <Route path="/asia-cup" element={<AsiaCup />} />
-          <Route path="/champions-trophy" element={<ChampionsTrophy />} />
-          <Route path="/womens-cricket" element={<WomensCricket />} />
-          
-          {/* Guide Pages */}
-          <Route path="/fantasy-cricket-guide" element={<FantasyGuide />} />
-          <Route path="/cricket-betting-guide" element={<BettingGuide />} />
-          
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
+      <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
+        <Navbar />
+        <Ticker />
+        <main style={{ minHeight: "calc(100vh - 140px)", paddingTop: "16px" }} className="animate-fade-in">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/live" element={<LiveMatches />} />
+            <Route path="/live-cricket-score" element={<LiveCricketScore />} />
+            <Route path="/cricket-score-today" element={<CricketScoreToday />} />
+            <Route path="/ball-by-ball" element={<BallByBall />} />
+            <Route path="/best-cricket-website" element={<CricketWebsite />} />
+            <Route path="/match/:id" element={<MatchDetail />} />
+            <Route path="/match/:id/scorecard" element={<Scorecard />} />
+            <Route path="/match/:id/live-score" element={<LiveScore />} />
+            <Route path="/upcoming" element={<UpcomingMatches />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/series" element={<Series />} />
+            <Route path="/series/:id" element={<SeriesDetail />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/teams/:id" element={<TeamDetail />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/players/:id" element={<PlayerDetail />} />
+            <Route path="/rankings" element={<Rankings />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/stats" element={<Stats />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/watch-live" element={<WatchLive />} />
+            
+            <Route path="/ipl" element={<IPL />} />
+            <Route path="/t20" element={<T20Cricket />} />
+            <Route path="/t20-world-cup" element={<T20WorldCup />} />
+            <Route path="/odi" element={<ODICricket />} />
+            <Route path="/test" element={<TestCricket />} />
+            <Route path="/psl" element={<PSL />} />
+            <Route path="/bbl" element={<BBL />} />
+            <Route path="/cpl" element={<CPL />} />
+            <Route path="/bpl" element={<BPL />} />
+            <Route path="/world-cup" element={<WorldCup />} />
+            <Route path="/asia-cup" element={<AsiaCup />} />
+            <Route path="/champions-trophy" element={<ChampionsTrophy />} />
+            <Route path="/womens-cricket" element={<WomensCricket />} />
+            
+            <Route path="/fantasy-cricket-guide" element={<FantasyGuide />} />
+            <Route path="/cricket-betting-guide" element={<BettingGuide />} />
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <Footer />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "url": "https://www.livecricketzone.com/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.livecricketzone.com/players?search={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            }
+          `}
+        </script>
+      </div>
     </BrowserRouter>
   );
 }

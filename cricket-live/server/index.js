@@ -21,12 +21,13 @@ app.use("/api/indexnow", require("./routes/indexnow"));
 
 app.get("/api/health", (req, res) => res.json({
   status: "ok",
-  cricapi: !!process.env.CRICAPI_KEY,
-  rapidapi: !!process.env.RAPIDAPI_KEY,
+  mode: "Scale Up (Scraper Enabled)",
+  dependencyFree: true
 }));
 
 app.listen(PORT, () => {
   console.log(`\n🏏 Cricket server on port ${PORT}`);
-  console.log(`   CricketData.org : ${process.env.CRICAPI_KEY ? "✓" : "✗ MISSING"}`);
-  console.log(`   RapidAPI        : ${process.env.RAPIDAPI_KEY ? "✓" : "✗ MISSING"}\n`);
+  console.log(`   Mode            : SCALE UP (Independent Scraper)`);
+  console.log(`   Dependencies    : All API dependencies removed ✓\n`);
 });
+

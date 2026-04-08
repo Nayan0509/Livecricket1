@@ -12,59 +12,68 @@ export default function LiveMatches() {
     refetchInterval: 30000,
   });
 
-  // CricketData.org: { data: [{id, name, matchType, status, venue, date, teams, teamInfo, score, matchStarted, matchEnded}] }
   const matches = data?.data || [];
 
   return (
-    <div className="container" style={{ paddingBottom: 40 }}>
+    <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
       <SEO
-        title="Live Cricket Matches Now - Live Score Today, Watch Live Match Online"
-        description="Live cricket matches now with real-time ball-by-ball updates. Watch live cricket score today for all matches. Live streaming, instant score updates for IPL, T20 World Cup, ODI, Test cricket. Updated every 15 seconds."
-        keywords="live cricket, live cricket matches, live match, cricket live, live cricket score, live score cricket, cricket match live, live cricket today, watch live cricket, cricket live streaming, live cricket match today, live score today, cricket live now, live cricket score now, watch live match, cricket live match online"
+        title="Scalable Live Center - Real-time Cricket Analytics"
+        description="High-frequency live cricket analytics and scores."
         url="/live"
       />
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>
-          <span className="pulse" style={{ color: "var(--red)" }}>●</span> Live Matches
-        </h1>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {dataUpdatedAt > 0 && (
-            <span style={{ fontSize: 11, color: "var(--text3)" }}>
-              Updated {new Date(dataUpdatedAt).toLocaleTimeString()}
-            </span>
-          )}
-          <button className="btn btn-outline" onClick={refetch} style={{ fontSize: 13 }}>↻ Refresh</button>
+      
+      <div className="glass" style={{ padding: "40px", borderRadius: "var(--radius-xl)", marginBottom: 40, background: "linear-gradient(135deg, rgba(224, 45, 45, 0.1), transparent)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
+          <div>
+            <h1 className="page-title" style={{ marginBottom: 12 }}>
+              <span className="pulse" style={{ color: "var(--red)" }}>●</span> Live Center
+            </h1>
+            <p style={{ color: "var(--text2)", fontSize: 15 }}>Monitoring {matches.length} active engagements globally.</p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            {dataUpdatedAt > 0 && (
+              <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700 }}>
+                LAST HEARTBEAT: {new Date(dataUpdatedAt).toLocaleTimeString()}
+              </span>
+            )}
+            <button className="btn btn-primary" onClick={refetch} style={{ padding: "10px 20px", fontSize: 13 }}>↻ REFRESH PIPELINE</button>
+          </div>
         </div>
       </div>
 
       {isLoading && <div className="spinner" />}
+      
       {error && (
-        <div className="error-box">
-          Failed to load: {error.message}
-          <br /><small>Check CRICAPI_KEY in server/.env</small>
+        <div className="card glass" style={{ borderColor: "var(--error)", padding: 40, textAlign: "center" }}>
+          <h2 style={{ color: "var(--error)" }}>Data Link Failure</h2>
+          <p style={{ color: "var(--text2)", marginTop: 12 }}>{error.message}</p>
+          <button className="btn btn-primary" onClick={refetch} style={{ marginTop: 24 }}>Retry Connection</button>
         </div>
       )}
 
       {!isLoading && !error && (
         matches.length ? (
-          <>
-            <p style={{ color: "var(--text2)", marginBottom: 20, fontSize: 14 }}>
-              {matches.length} match{matches.length !== 1 ? "es" : ""} in progress • Auto-refreshes every 30s
-            </p>
-            {/* Ad above match list */}
-            <AdBanner type="responsive" slot="1234567895" style={{ marginBottom: 20 }} />
-            <div className="grid-2">
-              {matches.map(m => <MatchCard key={m.id} match={m} />)}
-            </div>
-          </>
+          <div className="grid-2">
+            {matches.map(m => (
+              <div key={m.id} className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                <MatchCard match={m} />
+              </div>
+            ))}
+          </div>
         ) : (
-          <div className="card" style={{ textAlign: "center", padding: 60 }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>😴</div>
-            <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>No live matches right now</div>
-            <div style={{ color: "var(--text2)" }}>Check back during match hours or see upcoming matches</div>
+          <div className="glass" style={{ textAlign: "center", padding: 80, borderRadius: "var(--radius-xl)" }}>
+            <div style={{ fontSize: 60, marginBottom: 20 }}>📊</div>
+            <h2 style={{ marginBottom: 16 }}>Market Neutral</h2>
+            <p style={{ color: "var(--text3)", maxWidth: 500, margin: "0 auto" }}>
+              No live matches are currently transmitting. All global nodes are on standby. 
+              Check the upcoming schedule for the next data stream.
+            </p>
+            <button className="btn btn-outline" style={{ marginTop: 32 }} onClick={() => window.location.href="/schedule"}>View Pipeline Schedule</button>
           </div>
         )
       )}
+
+      <AdBanner type="responsive" slot="12345678" style={{ marginTop: 40 }} />
     </div>
   );
 }

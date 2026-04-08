@@ -1,16 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // CricketData.org match fields:
 // id, name, matchType, status, venue, date, teams:[], teamInfo:[{name,shortname,img}]
 // score:[{r,w,o,inning}], matchStarted, matchEnded
 export default function MatchCard({ match }) {
+  const navigate = useNavigate();
   const isLive = match.matchStarted && !match.matchEnded;
   const isCompleted = match.matchEnded;
 
   return (
-    <Link to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
-      <div className={`match-card ${isLive ? 'match-card-live' : ''}`}>
+    <div onClick={() => navigate(`/match/${match.id}`)} style={{ textDecoration: "none", cursor: "pointer" }}>
+      <div className={`match-card ${isLive ? 'match-card-live' : ''}`} style={{ transition: "0.3s" }}>
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
           <span style={{ 
@@ -85,9 +86,11 @@ export default function MatchCard({ match }) {
                   fontSize: 16
                 }}>
                   {s.r}/{s.w} 
-                  <span style={{ color: "var(--text3)", fontSize: 12, fontWeight: 500, marginLeft: 6 }}>
-                    ({s.o} ov)
-                  </span>
+                  {s.o > 0 && (
+                    <span style={{ color: "var(--text3)", fontSize: 12, fontWeight: 500, marginLeft: 6 }}>
+                      ({s.o} ov)
+                    </span>
+                  )}
                 </span>
               </div>
             ))}
@@ -108,6 +111,12 @@ export default function MatchCard({ match }) {
           {match.status}
         </div>
 
+        {match.statusDetail && (
+           <div style={{ fontSize: 11, color: "var(--accent-teal)", fontWeight: 700, marginTop: 8, padding: "4px 8px", background: "rgba(20, 184, 166, 0.05)", borderRadius: 4 }}>
+              🏏 {match.statusDetail}
+           </div>
+        )}
+
         {/* Date + Venue */}
         <div style={{ 
           fontSize: 12, 
@@ -120,6 +129,6 @@ export default function MatchCard({ match }) {
           {match.venue && <span>📍 {match.venue}</span>}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

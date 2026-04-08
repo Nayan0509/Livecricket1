@@ -635,28 +635,65 @@ input::placeholder, textarea::placeholder {
   .stat-value { font-size: 40px; }
 }
 
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
-.text-primary { color: var(--primary-light); }
-.text-secondary { color: var(--secondary); }
-.text-muted { color: var(--text3); }
-.bg-primary { background: var(--primary); }
-.link-primary {
-  color: var(--primary-light);
-  font-weight: 600;
-  transition: all 0.2s;
-}
-.link-primary:hover {
-  color: var(--primary);
-  text-decoration: underline;
+:root {
+  /* Enterprise Glassmorphism */
+  --glass: rgba(26, 31, 53, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
-/* Backward Compatibility */
-:root {
-  --green: var(--primary);
-  --green-dark: var(--primary-dark);
-  --green-light: var(--primary-light);
-  --red: var(--error);
-  --gold: var(--warning);
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.premium-gradient-text {
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Entry Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Staggered Delay for lists */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* Dashboard Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 340px;
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 340px;
+  }
+  .dashboard-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-aside {
+    display: none;
+  }
 }

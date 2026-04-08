@@ -15,4 +15,6 @@ export const fetchPlayers         = (search = "india") => api.get(`/players?sear
 export const fetchPlayerInfo      = (id) => api.get(`/players/${id}`).then(r => r.data);
 export const fetchNews            = () => api.get("/news").then(r => r.data);
 export const fetchTeams           = () => api.get("/teams").then(r => r.data);
-export const fetchRankings        = () => api.get("/rankings").then(r => r.data);
+export const fetchRankings        = (type = "batting", format = "tests", category = "men") => 
+  api.get("/rankings", { params: { type, format, category } }).then(r => r.data);
+
