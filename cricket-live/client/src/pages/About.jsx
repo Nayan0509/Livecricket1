@@ -1,9 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SEO from "../components/SEO";
 
 export default function About() {
   return (
     <div className="container" style={{ paddingBottom: 60, maxWidth: 900 }}>
+      <SEO 
+        title="About Us - Independent Cricket Intelligence & Real-Time Stats"
+        description="Learn about Live Cricket Zone, the next-generation sports analytics platform providing high-speed cricket data, live scores, and expert match analysis."
+        url="/about"
+      />
       <div className="hero" style={{ marginBottom: 40, textAlign: "left" }}>
         <div style={{ fontSize: 64, marginBottom: 16 }}>🏏</div>
         <h1 className="hero-title" style={{ textAlign: "left" }}>About Live Cricket Zone</h1>

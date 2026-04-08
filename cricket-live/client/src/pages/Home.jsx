@@ -39,9 +39,10 @@ export default function Home() {
   return (
     <div className="container animate-fade-in" style={{ paddingTop: 20, paddingBottom: 60 }}>
       <SEO
-        title="Live Cricket Score Today - Enterprise Dashboard"
-        description="Premium cricket scores, ball-by-ball commentary and news."
+        title="Live Cricket Score Today - Ball by Ball Commentary, IPL 2026 & Live Match Updates"
+        description="Fastest live cricket score today, ball by ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards. Real-time cricket dashboard with expert insights."
         url="/"
+        keywords="live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary, cricket live streaming, T20 World Cup 2026, fastest cricket score, cricket news today, ICC rankings"
         structuredData={SITE_SD}
       />
 
