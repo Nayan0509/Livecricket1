@@ -167,9 +167,9 @@ export default function Home() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="Live Cricket Scores, IPL 2026, Betting Odds & Fantasy Tips (UK, US, Australia)"
-        description="Get live cricket scores, IPL 2026 betting odds, Polymarket predictions, DraftKings & FanDuel fantasy tips, ball-by-ball commentary, T20 World Cup updates, The Ashes, Big Bash League, and cricket news. Legal fantasy sports and betting for UK, US, and Australia."
-        keywords="live cricket score UK, cricket live score USA, cricket score Australia, IPL 2026 live score, IPL betting odds UK, Polymarket cricket, DraftKings cricket, FanDuel cricket, fantasy cricket UK, T20 World Cup live, The Ashes live score, Big Bash League, cricket scorecard, ball by ball commentary, cricket news today, ICC rankings 2026, cricket predictions UK, cricket DFS USA, cricket betting Australia, live cricket streaming"
+        title="Live Cricket Score Today - Watch Live Match, Ball by Ball Updates 2026"
+        description="Live cricket score today with real-time updates. Watch live cricket match online free, get ball-by-ball commentary, live streaming for IPL 2026, T20 World Cup, ODI, Test matches. Fastest cricket scores updated every 15 seconds."
+        keywords="live cricket score, cricket score, live score, cricket live, live cricket, score cricket, cricket score today, live match, watch live cricket, cricket live score today, live cricket score today, cricket match live, ball by ball, live cricket streaming, watch cricket online, cricket live stream, ipl live score, t20 world cup live, cricket score live today, live cricket match today, cricket live tv, watch live match online"
         url="/"
         structuredData={SITE_SD}
       />

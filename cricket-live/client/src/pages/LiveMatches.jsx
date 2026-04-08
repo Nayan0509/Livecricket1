@@ -18,9 +18,9 @@ export default function LiveMatches() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="Live Cricket Score Today — Ball by Ball Updates, IPL 2026 Live"
-        description="Watch live cricket scores ball by ball with real-time updates. Get live cricket match scores today for IPL 2026, T20 World Cup, ODI and Test matches with instant score updates and commentary."
-        keywords="live cricket score, cricket live score today, live cricket match today, ball by ball cricket, IPL 2026 live score, T20 live score, ODI live score, cricket score update, live cricket streaming"
+        title="Live Cricket Matches Now - Live Score Today, Watch Live Match Online"
+        description="Live cricket matches now with real-time ball-by-ball updates. Watch live cricket score today for all matches. Live streaming, instant score updates for IPL, T20 World Cup, ODI, Test cricket. Updated every 15 seconds."
+        keywords="live cricket, live cricket matches, live match, cricket live, live cricket score, live score cricket, cricket match live, live cricket today, watch live cricket, cricket live streaming, live cricket match today, live score today, cricket live now, live cricket score now, watch live match, cricket live match online"
         url="/live"
       />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>

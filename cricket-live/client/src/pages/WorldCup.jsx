@@ -31,72 +31,72 @@ export default function WorldCup() {
         image="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=630&fit=crop"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">Cricket World Cup 2026</h1>
-          <p className="text-xl mb-4">ODI World Cup - Live Score & Updates</p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/live" className="bg-white text-blue-700 px-6 py-2 rounded font-bold hover:bg-gray-100">
-              Live Matches
-            </Link>
-            <Link to="/schedule" className="bg-blue-800 text-white px-6 py-2 rounded font-bold hover:bg-blue-900">
-              Schedule
-            </Link>
-            <Link to="/results" className="bg-blue-800 text-white px-6 py-2 rounded font-bold hover:bg-blue-900">
-              Results
-            </Link>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">Cricket World Cup 2026</h1>
+          <p className="hero-subtitle">ODI World Cup - Live Score & Updates</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
+            <Link to="/live" className="btn btn-primary">Live Matches</Link>
+            <Link to="/schedule" className="btn btn-secondary">Schedule</Link>
+            <Link to="/results" className="btn btn-secondary">Results</Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-blue-700">10</div>
-            <div className="text-gray-600">Teams</div>
+        <div className="grid-4" style={{ marginBottom: 48 }}>
+          <div className="stat-card">
+            <div className="stat-value">10</div>
+            <div className="stat-label">Teams</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-indigo-600">48</div>
-            <div className="text-gray-600">Matches</div>
+          <div className="stat-card">
+            <div className="stat-value">48</div>
+            <div className="stat-label">Matches</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-purple-600">45</div>
-            <div className="text-gray-600">Days</div>
+          <div className="stat-card">
+            <div className="stat-value">45</div>
+            <div className="stat-label">Days</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-pink-600">300+</div>
-            <div className="text-gray-600">Players</div>
+          <div className="stat-card">
+            <div className="stat-value">300+</div>
+            <div className="stat-label">Players</div>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live World Cup Matches</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live World Cup Matches</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.slice(0, 6).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-bold text-lg">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.date}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-blue-700 font-bold">{match.status}</div>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 16, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4 }}>📅 {match.date}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "var(--primary-light)", fontWeight: 700 }}>{match.status}</div>
+                      </div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center text-gray-600">
+            <div className="card" style={{ textAlign: "center", padding: 40, color: "var(--text2)" }}>
               No World Cup matches currently available
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 p-8 rounded-lg mb-8">
-          <h2 className="text-2xl font-bold mb-4">About Cricket World Cup</h2>
-          <div className="space-y-4 text-gray-700">
+        <div className="card">
+          <div className="section-header">
+            <h2 className="section-title">About Cricket World Cup</h2>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16, color: "var(--text2)", lineHeight: 1.6 }}>
             <p>
               The ICC Cricket World Cup is the premier ODI cricket tournament featuring the top 10 teams from around the world. 
               Get live scores, ball-by-ball commentary, and real-time updates for all World Cup matches.

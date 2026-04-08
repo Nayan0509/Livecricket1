@@ -31,74 +31,79 @@ export default function WomensCricket() {
         image="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=630&fit=crop"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">Women's Cricket Live Score</h1>
-          <p className="text-xl mb-4">Real-time Updates for Women's Cricket Worldwide</p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/live" className="bg-white text-pink-600 px-6 py-2 rounded font-bold hover:bg-gray-100">
-              Live Now
-            </Link>
-            <Link to="/schedule" className="bg-pink-700 text-white px-6 py-2 rounded font-bold hover:bg-pink-800">
-              Schedule
-            </Link>
-            <Link to="/rankings" className="bg-pink-700 text-white px-6 py-2 rounded font-bold hover:bg-pink-800">
-              Rankings
-            </Link>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">Women's Cricket Live Score</h1>
+          <p className="hero-subtitle">Real-time Updates for Women's Cricket Worldwide</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
+            <Link to="/live" className="btn btn-primary">Live Now</Link>
+            <Link to="/schedule" className="btn btn-secondary">Schedule</Link>
+            <Link to="/rankings" className="btn btn-secondary">Rankings</Link>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Major Women's Tournaments</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-              <div className="text-2xl font-bold text-pink-600 mb-2">Women's T20 WC</div>
-              <div className="text-gray-600">T20 World Cup</div>
-              <div className="text-sm text-gray-500 mt-2">16 Teams</div>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Major Women's Tournaments</h2>
+          </div>
+          <div className="grid-3">
+            <div className="feature-card">
+              <div className="feature-icon">🏆</div>
+              <h3 style={{ fontWeight: 700, fontSize: 18, marginBottom: 8, fontFamily: "'Poppins', sans-serif" }}>Women's T20 WC</h3>
+              <div style={{ color: "var(--text2)" }}>T20 World Cup</div>
+              <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>16 Teams</div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-              <div className="text-2xl font-bold text-purple-600 mb-2">Women's ODI WC</div>
-              <div className="text-gray-600">ODI World Cup</div>
-              <div className="text-sm text-gray-500 mt-2">10 Teams</div>
+            <div className="feature-card">
+              <div className="feature-icon">🏏</div>
+              <h3 style={{ fontWeight: 700, fontSize: 18, marginBottom: 8, fontFamily: "'Poppins', sans-serif" }}>Women's ODI WC</h3>
+              <div style={{ color: "var(--text2)" }}>ODI World Cup</div>
+              <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>10 Teams</div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-              <div className="text-2xl font-bold text-blue-600 mb-2">Women's IPL</div>
-              <div className="text-gray-600">Indian Premier League</div>
-              <div className="text-sm text-gray-500 mt-2">5 Teams</div>
+            <div className="feature-card">
+              <div className="feature-icon">⚡</div>
+              <h3 style={{ fontWeight: 700, fontSize: 18, marginBottom: 8, fontFamily: "'Poppins', sans-serif" }}>Women's IPL</h3>
+              <div style={{ color: "var(--text2)" }}>Indian Premier League</div>
+              <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>5 Teams</div>
             </div>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live Women's Cricket Matches</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live Women's Cricket Matches</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.slice(0, 8).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-bold text-lg">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.date}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-pink-600 font-bold">{match.status}</div>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 16, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4 }}>📅 {match.date}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "var(--primary-light)", fontWeight: 700 }}>{match.status}</div>
+                      </div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center text-gray-600">
+            <div className="card" style={{ textAlign: "center", padding: 40, color: "var(--text2)" }}>
               No women's cricket matches currently available
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 p-8 rounded-lg mb-8">
-          <h2 className="text-2xl font-bold mb-4">Women's Cricket</h2>
-          <div className="space-y-4 text-gray-700">
+        <div className="card">
+          <div className="section-header">
+            <h2 className="section-title">Women's Cricket</h2>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16, color: "var(--text2)", lineHeight: 1.6 }}>
             <p>
               Follow live scores for women's cricket including T20 World Cup, ODI World Cup, Women's IPL, 
               and international bilateral series. Get real-time ball-by-ball commentary and match updates.

@@ -32,89 +32,86 @@ export default function T20WorldCup() {
         image="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=630&fit=crop"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">T20 World Cup 2026</h1>
-          <p className="text-xl mb-4">Live Score, Schedule & Coverage</p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/live" className="bg-white text-purple-600 px-6 py-2 rounded font-bold hover:bg-gray-100">
-              Live Matches
-            </Link>
-            <Link to="/schedule" className="bg-purple-700 text-white px-6 py-2 rounded font-bold hover:bg-purple-800">
-              Schedule
-            </Link>
-            <Link to="/results" className="bg-purple-700 text-white px-6 py-2 rounded font-bold hover:bg-purple-800">
-              Results
-            </Link>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">T20 World Cup 2026</h1>
+          <p className="hero-subtitle">Live Score, Schedule & Coverage</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
+            <Link to="/live" className="btn btn-primary">Live Matches</Link>
+            <Link to="/schedule" className="btn btn-secondary">Schedule</Link>
+            <Link to="/results" className="btn btn-secondary">Results</Link>
           </div>
         </div>
 
-        {/* Tournament Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-purple-600">16</div>
-            <div className="text-gray-600">Teams</div>
+        <div className="grid-4" style={{ marginBottom: 48 }}>
+          <div className="stat-card">
+            <div className="stat-value">16</div>
+            <div className="stat-label">Teams</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-pink-600">45</div>
-            <div className="text-gray-600">Matches</div>
+          <div className="stat-card">
+            <div className="stat-value">45</div>
+            <div className="stat-label">Matches</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-blue-600">30</div>
-            <div className="text-gray-600">Days</div>
+          <div className="stat-card">
+            <div className="stat-value">30</div>
+            <div className="stat-label">Days</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-green-600">400+</div>
-            <div className="text-gray-600">Players</div>
+          <div className="stat-card">
+            <div className="stat-value">400+</div>
+            <div className="stat-label">Players</div>
           </div>
         </div>
 
-        {/* Live Matches */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live T20 World Cup Matches</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live T20 World Cup Matches</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.slice(0, 6).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-bold text-lg">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.date}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-purple-600 font-bold">{match.status}</div>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 16, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4 }}>📅 {match.date}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "var(--primary-light)", fontWeight: 700 }}>{match.status}</div>
+                      </div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center text-gray-600">
+            <div className="card" style={{ textAlign: "center", padding: 40, color: "var(--text2)" }}>
               No T20 World Cup matches currently available
             </div>
           )}
         </div>
 
-        {/* Participating Teams */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Participating Teams</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Participating Teams</h2>
+          </div>
+          <div className="grid-4">
             {["India", "Pakistan", "Australia", "England", "South Africa", "West Indies", "New Zealand", "Sri Lanka", 
               "Bangladesh", "Afghanistan", "Ireland", "Netherlands", "Namibia", "Oman", "UAE", "Zimbabwe"].map(team => (
-              <div key={team} className="bg-white p-4 rounded-lg shadow text-center hover:shadow-lg transition">
-                <div className="font-bold">{team}</div>
+              <div key={team} className="card" style={{ textAlign: "center", padding: "20px 16px" }}>
+                <div style={{ fontWeight: 700 }}>{team}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* SEO Content */}
-        <div className="bg-gray-50 p-8 rounded-lg mb-8">
-          <h2 className="text-2xl font-bold mb-4">About T20 World Cup 2026</h2>
-          <div className="space-y-4 text-gray-700">
+        <div className="card" style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">About T20 World Cup 2026</h2>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16, color: "var(--text2)", lineHeight: 1.6 }}>
             <p>
               The ICC T20 World Cup 2026 is the premier international T20 cricket tournament featuring 16 teams from around the world. 
               Get live scores, ball-by-ball commentary, and real-time updates for all matches.
@@ -129,26 +126,13 @@ export default function T20WorldCup() {
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <Link to="/live" className="bg-purple-600 text-white p-4 rounded text-center font-bold hover:bg-purple-700">
-            Live Matches
-          </Link>
-          <Link to="/schedule" className="bg-pink-600 text-white p-4 rounded text-center font-bold hover:bg-pink-700">
-            Schedule
-          </Link>
-          <Link to="/results" className="bg-blue-600 text-white p-4 rounded text-center font-bold hover:bg-blue-700">
-            Results
-          </Link>
-          <Link to="/rankings" className="bg-green-600 text-white p-4 rounded text-center font-bold hover:bg-green-700">
-            Rankings
-          </Link>
-          <Link to="/teams" className="bg-orange-600 text-white p-4 rounded text-center font-bold hover:bg-orange-700">
-            Teams
-          </Link>
-          <Link to="/players" className="bg-indigo-600 text-white p-4 rounded text-center font-bold hover:bg-indigo-700">
-            Players
-          </Link>
+        <div className="grid-3">
+          <Link to="/live" className="btn btn-primary" style={{ padding: "16px", justifyContent: "center" }}>Live Matches</Link>
+          <Link to="/schedule" className="btn btn-secondary" style={{ padding: "16px", justifyContent: "center" }}>Schedule</Link>
+          <Link to="/results" className="btn btn-secondary" style={{ padding: "16px", justifyContent: "center" }}>Results</Link>
+          <Link to="/rankings" className="btn btn-secondary" style={{ padding: "16px", justifyContent: "center" }}>Rankings</Link>
+          <Link to="/teams" className="btn btn-secondary" style={{ padding: "16px", justifyContent: "center" }}>Teams</Link>
+          <Link to="/players" className="btn btn-secondary" style={{ padding: "16px", justifyContent: "center" }}>Players</Link>
         </div>
       </div>
     </>

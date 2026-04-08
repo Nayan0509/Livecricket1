@@ -31,50 +31,52 @@ export default function ChampionsTrophy() {
         image="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=630&fit=crop"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">Champions Trophy 2026</h1>
-          <p className="text-xl mb-4">ICC Champions Trophy - Live Score & Updates</p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/live" className="bg-white text-teal-600 px-6 py-2 rounded font-bold hover:bg-gray-100">
-              Live Matches
-            </Link>
-            <Link to="/schedule" className="bg-teal-700 text-white px-6 py-2 rounded font-bold hover:bg-teal-800">
-              Schedule
-            </Link>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">Champions Trophy 2026</h1>
+          <p className="hero-subtitle">ICC Champions Trophy - Live Score & Updates</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
+            <Link to="/live" className="btn btn-primary">Live Matches</Link>
+            <Link to="/schedule" className="btn btn-secondary">Schedule</Link>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live Champions Trophy Matches</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live Champions Trophy Matches</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.slice(0, 6).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-bold text-lg">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.date}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-teal-600 font-bold">{match.status}</div>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 16, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4 }}>📅 {match.date}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "var(--primary-light)", fontWeight: 700 }}>{match.status}</div>
+                      </div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center text-gray-600">
+            <div className="card" style={{ textAlign: "center", padding: 40, color: "var(--text2)" }}>
               No Champions Trophy matches currently available
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 p-8 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">About Champions Trophy</h2>
-          <p className="text-gray-700">
+        <div className="card">
+          <div className="section-header">
+            <h2 className="section-title">About Champions Trophy</h2>
+          </div>
+          <p style={{ color: "var(--text2)", lineHeight: 1.6 }}>
             The ICC Champions Trophy is a premier ODI cricket tournament featuring the top 8 teams. 
             Get live scores and real-time updates for all Champions Trophy matches.
           </p>

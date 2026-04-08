@@ -31,61 +31,65 @@ export default function AsiaCup() {
         image="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=630&fit=crop"
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">Asia Cup 2026 Live Score</h1>
-          <p className="text-xl mb-4">Asia's Premier Cricket Tournament</p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/live" className="bg-white text-orange-600 px-6 py-2 rounded font-bold hover:bg-gray-100">
-              Live Matches
-            </Link>
-            <Link to="/schedule" className="bg-orange-700 text-white px-6 py-2 rounded font-bold hover:bg-orange-800">
-              Schedule
-            </Link>
+      <div className="container" style={{ paddingBottom: 40 }}>
+        <div className="hero">
+          <h1 className="hero-title">Asia Cup 2026 Live Score</h1>
+          <p className="hero-subtitle">Asia's Premier Cricket Tournament</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
+            <Link to="/live" className="btn btn-primary">Live Matches</Link>
+            <Link to="/schedule" className="btn btn-secondary">Schedule</Link>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Participating Teams</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Participating Teams</h2>
+          </div>
+          <div className="grid-3">
             {["India", "Pakistan", "Sri Lanka", "Bangladesh", "Afghanistan", "Nepal"].map(team => (
-              <div key={team} className="bg-white p-4 rounded-lg shadow text-center hover:shadow-lg transition">
-                <div className="font-bold">{team}</div>
+              <div key={team} className="card" style={{ textAlign: "center", padding: "20px 16px" }}>
+                <div style={{ fontWeight: 700 }}>{team}</div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live Asia Cup Matches</h2>
+        <div style={{ marginBottom: 48 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live Asia Cup Matches</h2>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {matches.slice(0, 6).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-bold text-lg">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.date}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-orange-600 font-bold">{match.status}</div>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 16, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
+                        <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4 }}>📅 {match.date}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "var(--primary-light)", fontWeight: 700 }}>{match.status}</div>
+                      </div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center text-gray-600">
+            <div className="card" style={{ textAlign: "center", padding: 40, color: "var(--text2)" }}>
               No Asia Cup matches currently available
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 p-8 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">About Asia Cup</h2>
-          <p className="text-gray-700">
+        <div className="card">
+          <div className="section-header">
+            <h2 className="section-title">About Asia Cup</h2>
+          </div>
+          <p style={{ color: "var(--text2)", lineHeight: 1.6 }}>
             The Asia Cup is a premier cricket tournament featuring teams from Asia including India, Pakistan, Sri Lanka, 
             Bangladesh, Afghanistan, and Nepal. Get live scores and real-time updates for all Asia Cup matches.
           </p>

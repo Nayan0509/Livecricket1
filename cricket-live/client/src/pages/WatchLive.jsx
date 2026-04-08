@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import AdBanner from "../components/AdBanner";
+import SEO from "../components/SEO";
 
 const STEPS = [
   {
@@ -8,8 +9,6 @@ const STEPS = [
     heading: "Watch Live Cricket",
     sub: "Get instant access to live match streaming",
     btn: "Click Here to Watch Live Match",
-    btnColor: "var(--green)",
-    bg: "linear-gradient(135deg, #0a2e14, #0f1a0d)",
     hint: "Free • No signup required",
   },
   {
@@ -17,8 +16,6 @@ const STEPS = [
     heading: "Connecting to Stream",
     sub: "Your live match is being prepared",
     btn: "Continue to Live Match →",
-    btnColor: "#2196f3",
-    bg: "linear-gradient(135deg, #0a1929, #0d1b2a)",
     hint: "HD quality available",
   },
   {
@@ -26,8 +23,6 @@ const STEPS = [
     heading: "Almost There!",
     sub: "Stream is loading, just one more step",
     btn: "Load My Live Stream",
-    btnColor: "#ff9800",
-    bg: "linear-gradient(135deg, #1a1200, #2a1f00)",
     hint: "Buffering complete — ready to play",
   },
   {
@@ -35,17 +30,13 @@ const STEPS = [
     heading: "Unlock Your Stream",
     sub: "Verify you're not a robot to continue",
     btn: "Yes, Show Me the Match!",
-    btnColor: "#9c27b0",
-    bg: "linear-gradient(135deg, #1a0029, #120020)",
     hint: "Secure & encrypted connection",
   },
   {
     emoji: "⏳",
     heading: "Try Again After Some Time",
     sub: "Too many requests. Please wait before trying again.",
-    btn: null, // no button — shows cooldown
-    btnColor: null,
-    bg: "linear-gradient(135deg, #1a0000, #2a0000)",
+    btn: null,
     hint: null,
     isFinal: true,
   },
@@ -55,26 +46,32 @@ const COUNTDOWN_SECS = 5;
 const COOLDOWN_SECS = 60; // 1 min cooldown on final page
 
 function CircleTimer({ seconds, total }) {
-  const r = 28;
+  const r = 32;
   const circ = 2 * Math.PI * r;
   const progress = (seconds / total) * circ;
 
   return (
-    <svg width={70} height={70} style={{ transform: "rotate(-90deg)" }}>
-      <circle cx={35} cy={35} r={r} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth={4} />
+    <svg width={80} height={80} style={{ transform: "rotate(-90deg)", filter: "drop-shadow(0 4px 12px rgba(224, 45, 45, 0.3))" }}>
+      <circle cx={40} cy={40} r={r} fill="none" stroke="var(--border)" strokeWidth={5} />
       <circle
-        cx={35} cy={35} r={r} fill="none"
-        stroke="var(--green)" strokeWidth={4}
+        cx={40} cy={40} r={r} fill="none"
+        stroke="url(#gradient)" strokeWidth={5}
         strokeDasharray={circ}
         strokeDashoffset={circ - progress}
         strokeLinecap="round"
         style={{ transition: "stroke-dashoffset 1s linear" }}
       />
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#e02d2d" />
+          <stop offset="100%" stopColor="#b91c1c" />
+        </linearGradient>
+      </defs>
       <text
-        x={35} y={35}
+        x={40} y={40}
         textAnchor="middle" dominantBaseline="central"
-        fill="white" fontSize={16} fontWeight={700}
-        style={{ transform: "rotate(90deg)", transformOrigin: "35px 35px" }}
+        fill="var(--text)" fontSize={20} fontWeight={800}
+        style={{ transform: "rotate(90deg)", transformOrigin: "40px 40px", fontFamily: "'Poppins', sans-serif" }}
       >
         {seconds}
       </text>
@@ -89,20 +86,39 @@ function CooldownTimer({ seconds }) {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <div style={{ fontSize: 64, marginBottom: 8 }}>⏳</div>
-      <div style={{ fontSize: 36, fontWeight: 800, color: "var(--red)", marginBottom: 8 }}>
+      <div style={{ fontSize: 72, marginBottom: 16 }}>⏳</div>
+      <div style={{ 
+        fontSize: 48, 
+        fontWeight: 900, 
+        background: "var(--gradient-primary)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+        marginBottom: 16,
+        fontFamily: "'Poppins', sans-serif"
+      }}>
         {mins > 0 ? `${mins}:${String(secs).padStart(2, "0")}` : `${secs}s`}
       </div>
-      <div style={{ width: "100%", maxWidth: 300, margin: "0 auto 16px", height: 6,
-        background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
+      <div style={{ 
+        width: "100%", 
+        maxWidth: 400, 
+        margin: "0 auto 20px", 
+        height: 8,
+        background: "var(--bg3)", 
+        borderRadius: "var(--radius)", 
+        overflow: "hidden",
+        border: "1px solid var(--border)"
+      }}>
         <div style={{
-          height: "100%", borderRadius: 3,
-          background: "var(--red)",
+          height: "100%", 
+          borderRadius: "var(--radius)",
+          background: "var(--gradient-primary)",
           width: `${pct}%`,
-          transition: "width 1s linear"
+          transition: "width 1s linear",
+          boxShadow: "0 0 10px var(--live-glow)"
         }} />
       </div>
-      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 14 }}>
+      <div style={{ color: "var(--text2)", fontSize: 15, fontWeight: 500 }}>
         Please wait before trying again
       </div>
     </div>
@@ -167,68 +183,108 @@ export default function WatchLive() {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh", background: current.bg,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: 20, transition: "background 0.6s ease"
+    <>
+      <SEO 
+        title="Watch Live Cricket Match Online Free - Live Cricket Streaming 2026"
+        description="Watch live cricket match online free. Stream live cricket matches today with HD quality. Free cricket live streaming for IPL, T20 World Cup, ODI, Test matches. No signup required."
+        keywords="watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites"
+        url="/watch-live"
+      />
+      
+      <div style={{
+      minHeight: "100vh", 
+      background: "var(--bg)",
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center",
+      padding: 20
     }}>
-      <div style={{ maxWidth: 480, width: "100%", textAlign: "center" }}>
+      <div className="container" style={{ maxWidth: 600, textAlign: "center" }}>
 
-        {/* Step dots */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 40 }}>
+        {/* Step Progress */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 48 }}>
           {STEPS.map((_, i) => (
             <div key={i} style={{
-              width: i === step ? 24 : 8, height: 8, borderRadius: 4,
-              background: i < step ? "var(--green)" : i === step ? "white" : "rgba(255,255,255,0.2)",
-              transition: "all 0.3s"
+              width: i === step ? 32 : 10, 
+              height: 10, 
+              borderRadius: 5,
+              background: i < step ? "var(--gradient-primary)" : i === step ? "var(--primary)" : "var(--border)",
+              transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+              boxShadow: i === step ? "0 0 20px var(--live-glow)" : "none"
             }} />
           ))}
         </div>
 
-        {/* Emoji */}
+        {/* Icon with gradient background */}
         <div style={{
-          fontSize: 72, marginBottom: 24,
-          animation: "bounce 0.5s ease",
+          width: 120,
+          height: 120,
+          margin: "0 auto 32px",
+          background: "var(--gradient-primary)",
+          borderRadius: "var(--radius-xl)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 64,
+          boxShadow: "var(--shadow-2xl)",
+          animation: "bounce 0.6s ease",
         }}>
           {current.emoji}
         </div>
 
         {/* Heading */}
         <h1 style={{
-          fontSize: 28, fontWeight: 800, color: "white",
-          marginBottom: 12, lineHeight: 1.3
+          fontSize: 36, 
+          fontWeight: 900, 
+          color: "var(--text)",
+          marginBottom: 16, 
+          lineHeight: 1.2,
+          fontFamily: "'Poppins', sans-serif",
+          background: "var(--gradient-primary)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text"
         }}>
           {current.heading}
         </h1>
-        <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 16, marginBottom: 40 }}>
+        <p style={{ color: "var(--text2)", fontSize: 18, marginBottom: 48, lineHeight: 1.6 }}>
           {current.sub}
         </p>
 
         {/* Final step — cooldown */}
         {current.isFinal ? (
-          <div>
+          <div className="card" style={{ padding: 40 }}>
             {!cooldownDone ? (
               <CooldownTimer seconds={cooldown} />
             ) : (
               <div>
-                <div style={{ color: "var(--green)", fontSize: 18, fontWeight: 700, marginBottom: 20 }}>
-                  ✅ You can try again now!
+                <div style={{ 
+                  color: "var(--accent-green)", 
+                  fontSize: 20, 
+                  fontWeight: 700, 
+                  marginBottom: 24,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8
+                }}>
+                  <span style={{ fontSize: 28 }}>✅</span> You can try again now!
                 </div>
-                <button onClick={handleRetry} style={{
-                  background: "var(--green)", color: "#000",
-                  border: "none", borderRadius: 12, padding: "16px 40px",
-                  fontSize: 16, fontWeight: 700, cursor: "pointer",
-                  width: "100%", maxWidth: 360
+                <button onClick={handleRetry} className="btn btn-primary" style={{
+                  width: "100%",
+                  padding: "18px",
+                  fontSize: 16,
+                  justifyContent: "center"
                 }}>
                   🔄 Try Again
                 </button>
               </div>
             )}
-            <button onClick={() => navigate("/")} style={{
-              background: "transparent", color: "rgba(255,255,255,0.4)",
-              border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8,
-              padding: "10px 24px", fontSize: 13, cursor: "pointer",
-              marginTop: 20, width: "100%", maxWidth: 360
+            <button onClick={() => navigate("/")} className="btn btn-outline" style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px",
+              justifyContent: "center"
             }}>
               ← Back to Home
             </button>
@@ -236,21 +292,28 @@ export default function WatchLive() {
         ) : (
           /* Normal steps — countdown + button */
           <div>
-        {/* Ad shown while user waits for countdown */}
-        <div style={{ marginBottom: 28, width: "100%", maxWidth: 480 }}>
-          <AdBanner type="responsive" slot="1234567894" />
-        </div>
+            {/* Ad shown while user waits for countdown */}
+            <div className="card" style={{ marginBottom: 32, padding: 20 }}>
+              <AdBanner type="responsive" slot="1234567894" />
+            </div>
 
-        {/* Countdown ring */}
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 28 }}>
+            {/* Countdown ring */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
               {!ready ? (
                 <CircleTimer seconds={countdown} total={COUNTDOWN_SECS} />
               ) : (
                 <div style={{
-                  width: 70, height: 70, borderRadius: "50%",
-                  background: "rgba(0,200,83,0.15)", border: "2px solid var(--green)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 28, animation: "pulse-ring 1s infinite"
+                  width: 80, 
+                  height: 80, 
+                  borderRadius: "50%",
+                  background: "rgba(16, 185, 129, 0.15)", 
+                  border: "3px solid var(--accent-green)",
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  fontSize: 32, 
+                  animation: "pulse-ring 1s infinite",
+                  boxShadow: "0 0 30px rgba(16, 185, 129, 0.4)"
                 }}>✓</div>
               )}
             </div>
@@ -259,32 +322,46 @@ export default function WatchLive() {
             <button
               onClick={handleClick}
               disabled={!ready}
+              className={ready ? "btn btn-primary" : ""}
               style={{
-                background: ready ? current.btnColor : "rgba(255,255,255,0.1)",
-                color: ready ? "#fff" : "rgba(255,255,255,0.3)",
-                border: "none", borderRadius: 12,
-                padding: "18px 32px", fontSize: 16, fontWeight: 700,
+                background: ready ? "var(--gradient-primary)" : "var(--bg3)",
+                color: ready ? "#fff" : "var(--text3)",
+                border: ready ? "none" : "2px solid var(--border)",
+                borderRadius: "var(--radius-lg)",
+                padding: "20px 40px", 
+                fontSize: 18, 
+                fontWeight: 700,
                 cursor: ready ? "pointer" : "not-allowed",
-                width: "100%", maxWidth: 380,
-                transition: "all 0.3s",
-                transform: ready ? "scale(1)" : "scale(0.97)",
-                boxShadow: ready ? `0 8px 32px ${current.btnColor}44` : "none",
+                width: "100%",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                transform: ready ? "scale(1)" : "scale(0.98)",
+                boxShadow: ready ? "var(--shadow-xl)" : "var(--shadow-sm)",
+                fontFamily: "'Poppins', sans-serif"
               }}
             >
               {ready ? current.btn : `Wait ${countdown}s...`}
             </button>
 
             {current.hint && (
-              <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, marginTop: 16 }}>
+              <div style={{ 
+                color: "var(--text3)", 
+                fontSize: 13, 
+                marginTop: 20,
+                padding: "12px 20px",
+                background: "var(--bg3)",
+                borderRadius: "var(--radius)",
+                border: "1px solid var(--border)"
+              }}>
                 🔒 {current.hint}
               </div>
             )}
 
             {/* Skip to home */}
-            <button onClick={() => navigate("/")} style={{
-              background: "transparent", color: "rgba(255,255,255,0.3)",
-              border: "none", fontSize: 12, cursor: "pointer", marginTop: 24,
-              textDecoration: "underline"
+            <button onClick={() => navigate("/")} className="btn btn-outline" style={{
+              marginTop: 24,
+              width: "100%",
+              padding: "12px",
+              justifyContent: "center"
             }}>
               ← Back to Home
             </button>
@@ -294,15 +371,21 @@ export default function WatchLive() {
 
       <style>{`
         @keyframes bounce {
-          0% { transform: scale(0.8); opacity: 0; }
-          60% { transform: scale(1.1); }
-          100% { transform: scale(1); opacity: 1; }
+          0% { transform: scale(0.7) rotate(-5deg); opacity: 0; }
+          50% { transform: scale(1.1) rotate(5deg); }
+          100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
         @keyframes pulse-ring {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(0,200,83,0.4); }
-          50% { box-shadow: 0 0 0 12px rgba(0,200,83,0); }
+          0%, 100% { 
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+            transform: scale(1);
+          }
+          50% { 
+            box-shadow: 0 0 0 20px rgba(16, 185, 129, 0);
+            transform: scale(1.05);
+          }
         }
       `}</style>
-    </div>
+    </>
   );
 }
