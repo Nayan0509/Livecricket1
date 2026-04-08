@@ -368,6 +368,7 @@ export default function WatchLive() {
           </div>
         )}
       </div>
+    </div>
 
       <style>{`
         @keyframes bounce {
