@@ -49,57 +49,152 @@ export default function Navbar() {
 
   return (
     <nav style={{
-      position: "sticky", top: 0, zIndex: 100,
-      background: scrolled ? "rgba(10,15,13,0.97)" : "var(--bg2)",
-      borderBottom: "1px solid var(--border)",
-      backdropFilter: "blur(12px)",
-      transition: "background 0.3s"
+      position: "sticky", 
+      top: 0, 
+      zIndex: 100,
+      background: scrolled ? "rgba(15, 20, 25, 0.98)" : "var(--bg2)",
+      borderBottom: scrolled ? "1px solid var(--primary)" : "1px solid var(--border)",
+      backdropFilter: "blur(16px)",
+      boxShadow: scrolled ? "var(--shadow-lg)" : "none",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
     }}>
-      <div className="container" style={{ display: "flex", alignItems: "center", height: 64, gap: 16 }}>
+      <div className="container" style={{ display: "flex", alignItems: "center", height: 72, gap: 20 }}>
         {/* Logo */}
-        <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <span style={{ fontSize: 28 }}>🏏</span>
-          <span style={{ fontWeight: 800, fontSize: 20, color: "var(--green)" }}>CricketZone</span>
+        <Link to="/" style={{ 
+          display: "flex", 
+          alignItems: "center", 
+          gap: 10, 
+          flexShrink: 0,
+          transition: "transform 0.2s"
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+        onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+        >
+          <span style={{ fontSize: 32 }}>🏏</span>
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+            <span style={{ 
+              fontWeight: 900, 
+              fontSize: 22, 
+              background: "var(--gradient-primary)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              fontFamily: "'Poppins', sans-serif"
+            }}>CricketZone</span>
+            <span style={{ fontSize: 9, color: "var(--text3)", fontWeight: 600, letterSpacing: "1px" }}>LIVE SCORES</span>
+          </div>
         </Link>
 
         {/* Desktop Nav */}
-        <div style={{ display: "flex", gap: 2, flex: 1, overflowX: "auto" }} className="desktop-nav">
+        <div style={{ 
+          display: "flex", 
+          gap: 4, 
+          flex: 1, 
+          overflowX: "auto",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none"
+        }} className="desktop-nav">
           {NAV.map(n => (
             <NavLink key={n.to} to={n.to} style={({ isActive }) => ({
-              padding: "6px 12px", borderRadius: 8, fontSize: 13, fontWeight: 500, whiteSpace: "nowrap",
-              color: isActive ? "var(--green)" : "var(--text2)",
-              background: isActive ? "rgba(0,200,83,0.1)" : "transparent",
-            })}>
+              padding: "8px 14px", 
+              borderRadius: "var(--radius)", 
+              fontSize: 13, 
+              fontWeight: 600, 
+              whiteSpace: "nowrap",
+              color: isActive ? "#ffffff" : "var(--text2)",
+              background: isActive ? "var(--gradient-primary)" : "transparent",
+              border: isActive ? "none" : "1px solid transparent",
+              transition: "all 0.2s",
+              boxShadow: isActive ? "0 2px 8px rgba(26, 115, 232, 0.3)" : "none"
+            })}
+            onMouseEnter={e => {
+              if (!e.currentTarget.classList.contains('active')) {
+                e.currentTarget.style.background = "var(--bg3)";
+                e.currentTarget.style.borderColor = "var(--border)";
+              }
+            }}
+            onMouseLeave={e => {
+              if (!e.currentTarget.classList.contains('active')) {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "transparent";
+              }
+            }}
+            >
               {n.label}
             </NavLink>
           ))}
         </div>
 
         {/* Search */}
-        <form onSubmit={handleSearch} style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+        <form onSubmit={handleSearch} style={{ display: "flex", gap: 8, flexShrink: 0 }}>
           <input
-            value={search} onChange={e => setSearch(e.target.value)}
+            value={search} 
+            onChange={e => setSearch(e.target.value)}
             placeholder="Search players..."
-            style={{ width: 160, padding: "6px 12px", fontSize: 13 }}
+            style={{ 
+              width: 180, 
+              padding: "10px 14px", 
+              fontSize: 13,
+              background: "var(--bg3)",
+              border: "2px solid var(--border)",
+              borderRadius: "var(--radius)",
+              color: "var(--text)",
+              transition: "all 0.3s"
+            }}
+            onFocus={e => {
+              e.target.style.borderColor = "var(--primary)";
+              e.target.style.background = "var(--bg4)";
+            }}
+            onBlur={e => {
+              e.target.style.borderColor = "var(--border)";
+              e.target.style.background = "var(--bg3)";
+            }}
           />
-          <button type="submit" className="btn btn-primary" style={{ padding: "6px 14px", fontSize: 13 }}>
+          <button type="submit" className="btn btn-primary" style={{ 
+            padding: "10px 16px", 
+            fontSize: 13,
+            minWidth: "auto"
+          }}>
             🔍
           </button>
         </form>
 
         {/* Mobile toggle */}
         <button onClick={() => setOpen(!open)} style={{
-          display: "none", background: "none", border: "none",
-          color: "var(--text)", fontSize: 22, cursor: "pointer"
+          display: "none", 
+          background: "var(--bg3)", 
+          border: "2px solid var(--border)",
+          borderRadius: "var(--radius)",
+          color: "var(--text)", 
+          fontSize: 24, 
+          cursor: "pointer",
+          padding: "8px 12px",
+          transition: "all 0.2s"
         }} className="mobile-toggle">☰</button>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div style={{ background: "var(--bg2)", borderTop: "1px solid var(--border)", padding: "12px 20px" }}>
+        <div style={{ 
+          background: "var(--bg2)", 
+          borderTop: "1px solid var(--border)", 
+          padding: "16px 20px",
+          maxHeight: "70vh",
+          overflowY: "auto"
+        }}>
           {NAV.map(n => (
             <NavLink key={n.to} to={n.to} onClick={() => setOpen(false)}
-              style={{ display: "block", padding: "10px 0", color: "var(--text2)", fontSize: 15 }}>
+              style={({ isActive }) => ({ 
+                display: "block", 
+                padding: "12px 16px", 
+                color: isActive ? "var(--primary-light)" : "var(--text2)", 
+                fontSize: 15,
+                fontWeight: isActive ? 600 : 500,
+                background: isActive ? "rgba(26, 115, 232, 0.1)" : "transparent",
+                borderRadius: "var(--radius)",
+                marginBottom: "4px",
+                transition: "all 0.2s"
+              })}>
               {n.label}
             </NavLink>
           ))}
@@ -107,6 +202,7 @@ export default function Navbar() {
       )}
 
       <style>{`
+        .desktop-nav::-webkit-scrollbar { display: none; }
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-toggle { display: block !important; }

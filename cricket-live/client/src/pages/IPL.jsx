@@ -34,77 +34,99 @@ export default function IPL() {
       
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">IPL 2026 Live Score</h1>
-          <p className="text-xl mb-4">Indian Premier League - Real-time Updates & Coverage</p>
-          <div className="flex gap-4">
-            <Link to="/ipl/live" className="bg-white text-blue-600 px-6 py-2 rounded font-bold hover:bg-gray-100">
+        <div className="hero" style={{ marginBottom: 40 }}>
+          <h1 className="hero-title">IPL 2026 Live Score</h1>
+          <p className="hero-subtitle">Indian Premier League - Real-time Updates & Coverage</p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link to="/ipl/live" className="btn btn-primary">
               Live Matches
             </Link>
-            <Link to="/ipl/standings" className="bg-blue-700 text-white px-6 py-2 rounded font-bold hover:bg-blue-800">
+            <Link to="/ipl/standings" className="btn btn-outline">
               Standings
             </Link>
-            <Link to="/ipl/schedule" className="bg-blue-700 text-white px-6 py-2 rounded font-bold hover:bg-blue-800">
+            <Link to="/ipl/schedule" className="btn btn-outline">
               Schedule
             </Link>
           </div>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-blue-600">10</div>
-            <div className="text-gray-600">Teams</div>
+        <div className="grid-4" style={{ marginBottom: 40 }}>
+          <div className="stat-card">
+            <div className="stat-value">10</div>
+            <div className="stat-label">Teams</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-purple-600">70</div>
-            <div className="text-gray-600">Matches</div>
+          <div className="stat-card">
+            <div className="stat-value">70</div>
+            <div className="stat-label">Matches</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-green-600">140</div>
-            <div className="text-gray-600">Days</div>
+          <div className="stat-card">
+            <div className="stat-value">140</div>
+            <div className="stat-label">Days</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="text-3xl font-bold text-orange-600">1000+</div>
-            <div className="text-gray-600">Players</div>
+          <div className="stat-card">
+            <div className="stat-value">1000+</div>
+            <div className="stat-label">Players</div>
           </div>
         </div>
 
         {/* Live Matches Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Live & Upcoming IPL Matches</h2>
+        <div style={{ marginBottom: 40 }}>
+          <div className="section-header">
+            <h2 className="section-title">Live & Upcoming IPL Matches</h2>
+            <Link to="/live" className="link-primary">View all →</Link>
+          </div>
           {loading ? (
-            <div className="text-center py-8">Loading matches...</div>
+            <div className="spinner" />
           ) : matches.length > 0 ? (
-            <div className="grid gap-4">
+            <div className="grid-2">
               {matches.slice(0, 5).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-bold text-lg">{match.name}</div>
-                      <div className="text-gray-600 text-sm">{match.date}</div>
+                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
+                  <div className="card match-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                      <span style={{ fontSize: 12, color: "var(--text3)", fontWeight: 600, textTransform: "uppercase" }}>
+                        {match.matchType}
+                      </span>
+                      <span className="badge badge-live">● LIVE</span>
                     </div>
-                    <div className="text-right">
-                      <div className="text-blue-600 font-bold">{match.status}</div>
-                    </div>
+                    <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8, color: "var(--text)" }}>{match.name}</div>
+                    <div style={{ fontSize: 13, color: "var(--text2)" }}>{match.date}</div>
+                    <div style={{ fontSize: 14, color: "var(--primary-light)", marginTop: 12, fontWeight: 600 }}>{match.status}</div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg text-center text-gray-600">
-              No IPL matches currently available
+            <div className="card" style={{ textAlign: "center", padding: 40 }}>
+              <div style={{ fontSize: 48, marginBottom: 16 }}>🏏</div>
+              <p style={{ color: "var(--text2)", marginBottom: 16 }}>No IPL matches currently available</p>
+              <Link to="/upcoming" className="btn btn-primary">View Upcoming Matches</Link>
             </div>
           )}
         </div>
 
         {/* IPL Teams */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">IPL 2026 Teams</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div style={{ marginBottom: 40 }}>
+          <div className="section-header">
+            <h2 className="section-title">IPL 2026 Teams</h2>
+          </div>
+          <div className="grid-4">
             {["MI", "CSK", "RCB", "KKR", "DC", "RR", "SRH", "PBKS", "GT", "LSG"].map(team => (
-              <div key={team} className="bg-white p-4 rounded-lg shadow text-center hover:shadow-lg transition">
-                <div className="font-bold text-lg">{team}</div>
+              <div key={team} className="card" style={{ textAlign: "center", padding: 20, cursor: "pointer" }}>
+                <div style={{ 
+                  width: 60, 
+                  height: 60, 
+                  background: "var(--gradient-primary)", 
+                  borderRadius: "50%", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  margin: "0 auto 12px",
+                  fontSize: 24,
+                  fontWeight: 800,
+                  color: "#fff"
+                }}>{team.slice(0, 2)}</div>
+                <div style={{ fontWeight: 700, fontSize: 15, color: "var(--text)" }}>{team}</div>
               </div>
             ))}
           </div>
