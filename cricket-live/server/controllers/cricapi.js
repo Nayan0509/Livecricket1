@@ -1,53 +1,82 @@
-const axios = require("axios");
 const NodeCache = require("node-cache");
+const scraper = require("../utils/scraper");
 
 const liveCache = new NodeCache({ stdTTL: 30 });   // 30s for live data
 const dataCache = new NodeCache({ stdTTL: 300 });  // 5min for static data
 
-// ── CricketData.org ──────────────────────────────────────────────────────────
-// Tested working endpoints:
-//   currentMatches, matches, series, series_info, players, players_info,
-//   match_info, cricScore
-const CRIC_BASE = "https://api.cricapi.com/v1";
-
+/**
+ * Scale Up Replacement for cricGet
+ */
 async function cricGet(endpoint, params = {}, cache = dataCache) {
-  const key = `cric:${endpoint}:${JSON.stringify(params)}`;
+  const key = `scaleup:cric:${endpoint}:${JSON.stringify(params)}`;
   const hit = cache.get(key);
   if (hit) return hit;
-  const { data } = await axios.get(`${CRIC_BASE}/${endpoint}`, {
-    params: { apikey: process.env.CRICAPI_KEY, ...params },
-    timeout: 12000,
-  });
-  if (data.status === "failure") throw new Error(data.reason || "CricAPI error");
-  cache.set(key, data);
-  return data;
+
+  let result;
+  try {
+    if (endpoint === "currentMatches") {
+      const data = await scraper.getLiveMatchesWithFallback();
+      result = { status: "success", data };
+    } else if (endpoint === "matches") {
+      const data = await scraper.scrapeCricbuzzUpcoming();
+      result = { status: "success", data };
+    } else if (endpoint === "match_scorecard" || endpoint === "cricScore" || endpoint === "match_info") {
+      const data = await scraper.scrapeCricbuzzScorecard(params.id);
+      result = { status: "success", data: endpoint === "match_scorecard" ? data : [data] };
+    } else if (endpoint === "series") {
+      const data = await scraper.scrapeCricbuzzSeries();
+      result = { status: "success", data };
+    } else {
+      result = { status: "success", data: [] };
+    }
+
+    cache.set(key, result);
+    return result;
+  } catch (err) {
+    return { status: "failure", reason: err.message };
+  }
 }
 
-// ── RapidAPI Free Cricbuzz ───────────────────────────────────────────────────
-// Tested working endpoints:
-//   GET /cricket-livescores  → { status, response: [] | [...matches] }
-//   GET /cricket-schedule    → { status, response: { schedules: [...] } }
-//   GET /cricket-teams       → { status, response: [ {id, title, image} ] }
-//   GET /cricket-series      → { status, response: [ {month, series, dates, url, title} ] }
-//   GET /cricket-match-info?matchid=  → { status, response: { matchInfo: {} } }
-// NOT available on free tier: /cricket-news, /cricket-players, /rankings/*
-const RAPID_BASE = "https://free-cricbuzz-cricket-api.p.rapidapi.com";
-const rapidHeaders = () => ({
-  "x-rapidapi-key": process.env.RAPIDAPI_KEY,
-  "x-rapidapi-host": "free-cricbuzz-cricket-api.p.rapidapi.com",
-});
-
+/**
+ * Scale Up Replacement for rapidGet
+ */
 async function rapidGet(path, params = {}, cache = dataCache) {
-  const key = `rapid:${path}:${JSON.stringify(params)}`;
+  const key = `scaleup:rapid:${path}:${JSON.stringify(params)}`;
   const hit = cache.get(key);
   if (hit) return hit;
-  const { data } = await axios.get(`${RAPID_BASE}${path}`, {
-    headers: rapidHeaders(),
-    params,
-    timeout: 12000,
-  });
-  cache.set(key, data);
-  return data;
+
+  let result;
+  try {
+    if (path === "/cricket-livescores") {
+      const resp = await scraper.getLiveMatchesWithFallback();
+      result = { status: true, response: resp };
+    } else if (path === "/cricket-schedule") {
+      const resp = await scraper.scrapeCricbuzzUpcoming();
+      result = { status: true, response: { schedules: [{ scheduleAdWrapper: { date: "Upcoming", matchScheduleList: [{ seriesName: "Upcoming matches", matchInfo: resp }] } }] } };
+    } else if (path === "/cricket-series") {
+      const resp = await scraper.scrapeCricbuzzSeries();
+      result = { status: true, response: resp };
+    } else if (path.includes("/rankings/")) {
+      const type = path.split("/")[2] || "batting";
+      const format = params.format || "tests";
+      const category = params.category || "men";
+      const resp = await scraper.scrapeCricbuzzRankings(category, type, format);
+      result = { status: true, response: resp };
+    } else if (path === "/cricket-teams") {
+      const resp = await scraper.scrapeCricbuzzTeams();
+      result = { status: true, response: resp };
+    } else {
+      result = { status: true, response: [] };
+    }
+
+
+    cache.set(key, result);
+    return result;
+  } catch (err) {
+    return { status: false, error: err.message };
+  }
 }
 
 module.exports = { cricGet, rapidGet, liveCache, dataCache };
+
+

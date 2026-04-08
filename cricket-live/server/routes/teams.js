@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { rapidGet } = require("../controllers/cricapi");
 
-// GET /api/teams
-// RapidAPI /cricket-teams (tested ✓)
-// Response: { status:"success", response: [ {id, title, image} ] }
+/**
+ * GET /api/teams
+ * Scale Up: Fetches international teams by scraping Cricbuzz
+ */
 router.get("/", async (req, res) => {
   try {
     const data = await rapidGet("/cricket-teams");
@@ -14,4 +15,6 @@ router.get("/", async (req, res) => {
   }
 });
 
+
 module.exports = router;
+

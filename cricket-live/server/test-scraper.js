@@ -1,46 +1,33 @@
 const {
-  scrapeCricbuzzLiveMatches,
-  scrapeEspnLiveMatches,
+  getLiveMatchesWithFallback,
   scrapeCricbuzzScorecard,
-  getLiveMatchesWithFallback
+  getScaledData
 } = require("./utils/scraper");
 
 async function testScrapers() {
-  console.log("🏏 Testing Cricket Scrapers...\n");
+  console.log("🏏 Testing Cricket Scrapers (Scale Up)...\n");
 
-  // Test Cricbuzz live matches
-  console.log("1️⃣ Testing Cricbuzz Live Matches:");
-  try {
-    const cricbuzzMatches = await scrapeCricbuzzLiveMatches();
-    console.log(`✅ Found ${cricbuzzMatches.length} matches from Cricbuzz`);
-    if (cricbuzzMatches.length > 0) {
-      console.log("Sample match:", JSON.stringify(cricbuzzMatches[0], null, 2));
-    }
-  } catch (error) {
-    console.log("❌ Cricbuzz failed:", error.message);
-  }
-
-  console.log("\n2️⃣ Testing ESPNcricinfo Live Matches:");
-  try {
-    const espnMatches = await scrapeEspnLiveMatches();
-    console.log(`✅ Found ${espnMatches.length} matches from ESPNcricinfo`);
-    if (espnMatches.length > 0) {
-      console.log("Sample match:", JSON.stringify(espnMatches[0], null, 2));
-    }
-  } catch (error) {
-    console.log("❌ ESPNcricinfo failed:", error.message);
-  }
-
-  console.log("\n3️⃣ Testing Fallback Strategy:");
+  console.log("1️⃣ Testing Live Matches (Fallback Strategy):");
   try {
     const matches = await getLiveMatchesWithFallback();
-    console.log(`✅ Fallback returned ${matches.length} matches`);
-    console.log(`Source: ${matches[0]?.source || "unknown"}`);
+    console.log(`✅ Found ${matches.length} matches`);
+    if (matches.length > 0) {
+      console.log("Sample match structure:", JSON.stringify(matches[0], null, 2));
+    }
   } catch (error) {
-    console.log("❌ All sources failed:", error.message);
+    console.log("❌ Live matches failed:", error.message);
+  }
+
+  console.log("\n2️⃣ Testing News (Scale Up):");
+  try {
+    const newsData = await getScaledData("news");
+    console.log(`✅ Found ${newsData.data.length} news items`);
+  } catch (error) {
+    console.log("❌ News failed:", error.message);
   }
 
   console.log("\n✨ Testing complete!");
 }
 
 testScrapers();
+

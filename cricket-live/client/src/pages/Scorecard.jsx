@@ -2,66 +2,71 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMatchScorecard, fetchMatchInfo } from "../api";
+import SEO from "../components/SEO";
 
-function BattingTable({ innings }) {
-  const batters = innings.batting || [];
+function BattingTable({ team, batsmen }) {
   return (
-    <div style={{ overflowX: "auto", marginBottom: 24 }}>
-      <div style={{ fontWeight: 700, marginBottom: 8, color: "var(--green)", fontSize: 15 }}>{innings.inning}</div>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-        <thead>
-          <tr style={{ background: "var(--bg3)" }}>
-            {["Batsman","Dismissal","R","B","4s","6s","SR"].map(h => (
-              <th key={h} style={{ padding: "8px 10px", textAlign: h==="Batsman"||h==="Dismissal"?"left":"right",
-                color:"var(--text2)", fontWeight:600, borderBottom:"1px solid var(--border)" }}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {batters.map((b, i) => (
-            <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
-              <td style={{ padding:"8px 10px", fontWeight:600 }}>{b["batsman-name"] || b.batsman?.name}</td>
-              <td style={{ padding:"8px 10px", color:"var(--text2)", fontSize:12 }}>{b["dismissal-text"] || b.dismissal || "not out"}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right", fontWeight:700, color:"var(--green)" }}>{b.r}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b.b}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b["4s"]}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b["6s"]}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b.sr}</td>
+    <div style={{ marginBottom: 40 }}>
+      <div className="section-header" style={{ marginBottom: 16 }}>
+        <h3 style={{ fontSize: 18, fontWeight: 800, color: "var(--primary-light)" }}>Batting: {team}</h3>
+      </div>
+      <div className="glass" style={{ overflowX: "auto", borderRadius: "var(--radius)" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 600 }}>
+          <thead>
+            <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+              {["BATSMAN", "STATUS", "R", "B", "4s", "6s", "SR"].map(h => (
+                <th key={h} style={{ padding: "14px 20px", textAlign: h==="BATSMAN"||h==="STATUS"?"left":"right", color: "var(--text3)", fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }}>{h}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {batsmen.map((b, i) => (
+              <tr key={i} style={{ borderTop: "1px solid var(--divider)", transition: "0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.02)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                <td style={{ padding: "14px 20px", fontWeight: 700, fontSize: 14 }}>{b.name}</td>
+                <td style={{ padding: "14px 20px", color: "var(--text3)", fontSize: 12 }}>{b.dismissal}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", fontWeight: 900, fontSize: 15, color: "var(--text)" }}>{b.r}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", color: "var(--text2)" }}>{b.b}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", color: "var(--text2)" }}>{b.fours}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", color: "var(--text2)" }}>{b.sixes}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", fontWeight: 600, color: "var(--accent-teal)" }}>{b.sr}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-function BowlingTable({ innings }) {
-  const bowlers = innings.bowling || [];
+function BowlingTable({ bowlers }) {
   return (
-    <div style={{ overflowX: "auto", marginBottom: 24 }}>
-      <div style={{ fontWeight: 700, marginBottom: 8, color: "var(--text2)", fontSize: 14 }}>Bowling</div>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-        <thead>
-          <tr style={{ background: "var(--bg3)" }}>
-            {["Bowler","O","M","R","W","Econ"].map(h => (
-              <th key={h} style={{ padding:"8px 10px", textAlign:h==="Bowler"?"left":"right",
-                color:"var(--text2)", fontWeight:600, borderBottom:"1px solid var(--border)" }}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {bowlers.map((b, i) => (
-            <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
-              <td style={{ padding:"8px 10px", fontWeight:600 }}>{b["bowler-name"] || b.bowler?.name}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b.o}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b.m}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b.r}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right", fontWeight:700, color:"var(--red)" }}>{b.w}</td>
-              <td style={{ padding:"8px 10px", textAlign:"right" }}>{b.eco}</td>
+    <div style={{ marginBottom: 40 }}>
+      <div className="section-header" style={{ marginBottom: 16 }}>
+        <h3 style={{ fontSize: 18, fontWeight: 800 }}>Bowling Analysis</h3>
+      </div>
+      <div className="glass" style={{ overflowX: "auto", borderRadius: "var(--radius)" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 600 }}>
+          <thead>
+            <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+              {["BOWLER", "O", "M", "R", "W", "ECON"].map(h => (
+                <th key={h} style={{ padding: "14px 20px", textAlign: h==="BOWLER"?"left":"right", color: "var(--text3)", fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }}>{h}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {bowlers.map((b, i) => (
+              <tr key={i} style={{ borderTop: "1px solid var(--divider)", transition: "0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.02)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                <td style={{ padding: "14px 20px", fontWeight: 700, fontSize: 14 }}>{b.name}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right" }}>{b.o}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right" }}>{b.m}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right" }}>{b.r}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", fontWeight: 900, fontSize: 15, color: "var(--primary-light)" }}>{b.w}</td>
+                <td style={{ padding: "14px 20px", textAlign: "right", fontWeight: 600 }}>{b.eco}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -69,55 +74,66 @@ function BowlingTable({ innings }) {
 export default function Scorecard() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [inningsIdx, setInningsIdx] = useState(0);
+  const [innIdx, setInnIdx] = useState(0);
 
   const { data: scData, isLoading, error } = useQuery({
     queryKey: ["scorecard", id],
     queryFn: () => fetchMatchScorecard(id),
-  });
-  const { data: infoData } = useQuery({
-    queryKey: ["matchInfo", id],
-    queryFn: () => fetchMatchInfo(id),
+    refetchInterval: 30000
   });
 
-  const scorecard = scData?.data?.scorecard || [];
-  const match = infoData?.data;
-
-  if (isLoading) return <div className="container"><div className="spinner" /></div>;
+  const innings = scData?.data?.innings || [];
 
   return (
-    <div className="container" style={{ paddingBottom: 40 }}>
-      <button onClick={() => navigate(-1)} className="btn btn-outline" style={{ marginBottom: 16, fontSize: 13 }}>← Back</button>
-      <h1 className="page-title">📊 Scorecard</h1>
-      {match && <div style={{ color: "var(--text2)", marginBottom: 20, fontSize: 14 }}>{match.name}</div>}
+    <div className="container animate-fade-in" style={{ paddingBottom: 80 }}>
+      <SEO title="Statistical Match Scorecard" description="In-depth ball-by-ball match statistics." />
+      
+      <div className="glass" style={{ padding: "30px 40px", borderRadius: "var(--radius-xl)", marginBottom: 40, marginTop: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h1 className="page-title" style={{ marginBottom: 4 }}>📊 Match Scorecard</h1>
+            <p style={{ color: "var(--text3)", fontSize: 14 }}>Full Innings Statistics & Performance Metrics</p>
+          </div>
+          <button onClick={() => navigate(-1)} className="btn btn-outline" style={{ padding: "10px 20px", fontSize: 13 }}>← RETURN</button>
+        </div>
+      </div>
 
+      {isLoading && <div className="spinner" />}
+      
       {error && (
-        <div className="card" style={{ textAlign: "center", color: "var(--text2)", padding: 40 }}>
-          Scorecard not available for this match yet
+        <div className="card glass" style={{ padding: 60, textAlign: "center", borderColor: "var(--error)" }}>
+           <h2 style={{ color: "var(--error)" }}>Data Link Failure</h2>
+           <p style={{ color: "var(--text3)", marginTop: 12 }}>Statistical data for match {id} is currently unavailable.</p>
         </div>
       )}
 
-      {scorecard.length > 0 && (
+      {!isLoading && !error && innings.length > 0 && (
         <>
-          {scorecard.length > 1 && (
-            <div className="tab-bar" style={{ marginBottom: 20 }}>
-              {scorecard.map((inn, i) => (
-                <button key={i} className={`tab ${inningsIdx===i?"active":""}`} onClick={() => setInningsIdx(i)}>
-                  {inn.inning?.split(" ").slice(0,2).join(" ")}
-                </button>
-              ))}
-            </div>
-          )}
-          <div className="card">
-            <BattingTable innings={scorecard[inningsIdx]} />
-            <BowlingTable innings={scorecard[inningsIdx]} />
+          <div className="glass" style={{ display: "inline-flex", padding: 6, borderRadius: "14px", marginBottom: 32, gap: 4 }}>
+            {innings.map((inn, i) => (
+              <button 
+                key={i} 
+                onClick={() => setInnIdx(i)}
+                className={`btn ${innIdx === i ? 'btn-primary' : ''}`}
+                style={{ padding: "10px 24px", fontSize: 13, border: "none", background: innIdx === i ? 'var(--gradient-primary)' : 'transparent', color: innIdx === i ? '#fff' : 'var(--text2)' }}
+              >
+                {inn.team}
+              </button>
+            ))}
+          </div>
+
+          <div key={innIdx} className="animate-fade-in">
+             <BattingTable team={innings[innIdx].team} batsmen={innings[innIdx].batsmen} />
+             <BowlingTable bowlers={innings[innIdx].bowlers} />
           </div>
         </>
       )}
 
-      {!error && scorecard.length === 0 && (
-        <div className="card" style={{ textAlign: "center", color: "var(--text2)", padding: 40 }}>
-          Scorecard not available yet — check back once the match starts
+      {!isLoading && !error && innings.length === 0 && (
+        <div className="card glass" style={{ padding: 100, textAlign: "center" }}>
+           <div style={{ fontSize: 60, marginBottom: 20 }}>🕐</div>
+           <h2>Live Stream Initializing</h2>
+           <p style={{ color: "var(--text3)", marginTop: 16 }}>Detailed scorecard data will populate once the primary nodes receive first-innings metrics.</p>
         </div>
       )}
     </div>

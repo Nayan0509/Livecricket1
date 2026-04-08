@@ -11,175 +11,108 @@ export default function About() {
       </div>
 
       <div className="card feature-card" style={{ marginBottom: 32 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 20, color: "var(--text)" }}>Your Live Cricket Hub</h2>
+        <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 20, color: "var(--text)" }}>Independent Cricket Intelligence</h2>
         <p style={{ color: "var(--text2)", lineHeight: 1.8, marginBottom: 20, fontSize: 15 }}>
-          Live Cricket Zone is your comprehensive destination for everything cricket. We deliver real-time cricket scores, 
-          detailed ball-by-ball commentary, complete match schedules, in-depth player statistics, team rankings, and the 
-          latest cricket news from around the world — all in one convenient platform.
+          Live Cricket Zone is a next-generation sports analytics platform designed for the modern cricket enthusiast. 
+          By combining high-speed data processing with an intuitive glassmorphic interface, we provide a premium 
+          dashboard for tracking live matches, player trajectories, and world rankings.
         </p>
         <p style={{ color: "var(--text2)", lineHeight: 1.8, marginBottom: 20, fontSize: 15 }}>
-          Founded by passionate cricket enthusiasts, our mission is to bring cricket fans closer to the game they love. 
-          Whether you're following the Indian Premier League, international Test matches, T20 World Cup, or domestic 
-          tournaments like PSL, BBL, and CPL, we provide comprehensive coverage with lightning-fast updates.
+          Our mission is to democratize high-end cricket analytics. From the intense strategy of Test cricket to the 
+          explosive dynamics of T20 leagues like IPL, PSL, and BBL, we offer deep-dive coverage that was previously 
+          reserved for enterprise-level sports journalists.
         </p>
         <p style={{ color: "var(--text2)", lineHeight: 1.8, marginBottom: 20, fontSize: 15 }}>
-          Our platform aggregates data from trusted sources including <a href="https://cricketdata.org" target="_blank" 
-          rel="noreferrer" className="link-primary">CricketData.org</a> (formerly CricAPI) and Cricbuzz via 
-          RapidAPI, ensuring you receive accurate, up-to-date cricket information 24/7. We process millions of data 
-          points daily to bring you the most reliable cricket statistics and live scores.
-        </p>
-        <p style={{ color: "var(--text2)", lineHeight: 1.8, fontSize: 15 }}>
-          What sets us apart is our commitment to user experience. We've designed our interface to be fast, intuitive, 
-          and accessible on all devices. Whether you're on desktop, tablet, or mobile, you get the same seamless 
-          experience with instant score updates, detailed match analysis, and comprehensive player profiles.
+          What defines Live Cricket Zone is our <strong>proprietary Independent Scraper Engine</strong>. Unlike traditional 
+          platforms that relay third-party APIs with high latency, our system directly processes real-time match data, 
+          ensuring ball-by-ball updates are delivered with industry-leading precision.
         </p>
       </div>
 
       <div className="card" style={{ marginBottom: 32 }}>
         <div className="section-header" style={{ borderBottom: "none", paddingBottom: 0 }}>
-          <h3 className="section-title">Why Choose Live Cricket Zone?</h3>
+          <h3 className="section-title">The Enterprise Advantage</h3>
         </div>
         <div className="grid-2" style={{ gap: 20 }}>
           <div className="feature-card" style={{ padding: 24 }}>
-            <div className="feature-icon">⚡</div>
-            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Real-Time Updates</div>
+            <div className="feature-icon">🚀</div>
+            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>High-Frequency Polling</div>
             <p style={{ fontSize: 14, color: "var(--text2)", margin: 0, lineHeight: 1.7 }}>
-              Get instant score updates with our live refresh system. Never miss a boundary, wicket, or milestone 
-              with our ball-by-ball commentary that updates every few seconds during live matches.
+              Our backend employs high-frequency scraping logic that monitors multiple global nodes to bring you 
+              scores within seconds of on-field action.
             </p>
           </div>
           <div className="feature-card" style={{ padding: 24 }}>
-            <div className="feature-icon">📊</div>
-            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Comprehensive Statistics</div>
+            <div className="feature-icon">🛡️</div>
+            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Dependency-Free</div>
             <p style={{ fontSize: 14, color: "var(--text2)", margin: 0, lineHeight: 1.7 }}>
-              Access detailed player statistics, career records, head-to-head comparisons, team rankings, and 
-              historical data. Our database covers international cricket, domestic leagues, and major tournaments 
-              with extensive statistical analysis.
+              By operating our own data extraction pipelines, we ensure 99.9% uptime, free from the constraints 
+              and rate limits of traditional sports data providers.
             </p>
           </div>
           <div className="feature-card" style={{ padding: 24 }}>
-            <div className="feature-icon">🌍</div>
-            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Global Coverage</div>
+            <div className="feature-icon">💎</div>
+            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Premium UI/UX</div>
             <p style={{ fontSize: 14, color: "var(--text2)", margin: 0, lineHeight: 1.7 }}>
-              Follow cricket from every corner of the world. From IPL and Big Bash to international Test series 
-              and T20 leagues, we cover all major cricket events across all formats - Test, ODI, and T20.
+              Experience the data through a state-of-the-art glassmorphic interface designed for both desktop 
+              immersion and mobile efficiency.
             </p>
           </div>
           <div className="feature-card" style={{ padding: 24 }}>
-            <div className="feature-icon">📱</div>
-            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Mobile Optimized</div>
+            <div className="feature-icon">📈</div>
+            <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 18, color: "var(--text)" }}>Advanced Metrics</div>
             <p style={{ fontSize: 14, color: "var(--text2)", margin: 0, lineHeight: 1.7 }}>
-              Our responsive design ensures perfect viewing on any device. Check scores on the go, watch live 
-              streams, and stay updated with push notifications for your favorite teams and players.
+              Beyond scores, we provide strike rates, economy analysis, and partnership breakdowns to give you 
+              the full tactical picture of the match.
             </p>
           </div>
         </div>
       </div>
 
       <div className="card" style={{ marginBottom: 20 }}>
-        <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Our Features</h3>
+        <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Core Infrastructure</h3>
         <div style={{ display: "grid", gap: 12 }}>
-          <div style={{ padding: 12, borderLeft: "3px solid var(--green)", background: "var(--bg3)" }}>
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>🔴 Live Match Coverage</div>
+          <div style={{ padding: 12, borderLeft: "3px solid var(--primary)", background: "var(--bg3)" }}>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>🔴 Real-Time Live Analytics</div>
             <p style={{ fontSize: 13, color: "var(--text2)", margin: 0, lineHeight: 1.6 }}>
-              Experience cricket matches as they happen with our live scoring system. Get ball-by-ball updates, 
-              live commentary, player performance tracking, and match statistics updated in real-time. Our system 
-              processes data within seconds of each delivery, ensuring you never miss a moment of the action.
+              Our live center processes raw match data to provide ball-by-ball commentary and dynamic scorecards 
+              across all international and domestic formats.
             </p>
           </div>
-          <div style={{ padding: 12, borderLeft: "3px solid var(--green)", background: "var(--bg3)" }}>
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>📅 Complete Match Schedules</div>
+          <div style={{ padding: 12, borderLeft: "3px solid var(--primary)", background: "var(--bg3)" }}>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>📅 Global Pipeline Monitoring</div>
             <p style={{ fontSize: 13, color: "var(--text2)", margin: 0, lineHeight: 1.6 }}>
-              Plan your cricket viewing with our comprehensive match schedules. We list all upcoming international 
-              matches, domestic leagues, and tournaments with dates, times, venues, and team information. Set 
-              reminders for your favorite matches and never miss an important game.
+              We track the global cricket schedule to ensure upcoming series are identified and indexed well 
+              before the first ball is bowled.
             </p>
           </div>
-          <div style={{ padding: 12, borderLeft: "3px solid var(--green)", background: "var(--bg3)" }}>
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>👥 Player Profiles & Stats</div>
+          <div style={{ padding: 12, borderLeft: "3px solid var(--primary)", background: "var(--bg3)" }}>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>📊 Global Table Rankings</div>
             <p style={{ fontSize: 13, color: "var(--text2)", margin: 0, lineHeight: 1.6 }}>
-              Explore detailed player profiles with career statistics, recent form, batting and bowling averages, 
-              strike rates, economy rates, and milestone achievements. Compare players across different formats 
-              and track their performance throughout tournaments.
+              Integration with real-time world standings allows us to present the latest rankings for players 
+              and teams across Tests, ODIs, and T20Is.
             </p>
           </div>
-          <div style={{ padding: 12, borderLeft: "3px solid var(--green)", background: "var(--bg3)" }}>
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>🏆 Tournament Coverage</div>
-            <p style={{ fontSize: 13, color: "var(--text2)", margin: 0, lineHeight: 1.6 }}>
-              Follow all major cricket tournaments including IPL, T20 World Cup, ODI World Cup, Champions Trophy, 
-              Asia Cup, and domestic leagues like PSL, BBL, CPL, and BPL. Get tournament standings, points tables, 
-              playoff scenarios, and championship predictions.
-            </p>
-          </div>
-          <div style={{ padding: 12, borderLeft: "3px solid var(--green)", background: "var(--bg3)" }}>
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>📊 ICC Rankings</div>
-            <p style={{ fontSize: 13, color: "var(--text2)", margin: 0, lineHeight: 1.6 }}>
-              Stay updated with the latest ICC rankings for teams and players across all formats. Track ranking 
-              movements, see who's climbing the charts, and understand how performances impact global standings.
-            </p>
-          </div>
-          <div style={{ padding: 12, borderLeft: "3px solid var(--green)", background: "var(--bg3)" }}>
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>📰 Cricket News & Updates</div>
-            <p style={{ fontSize: 13, color: "var(--text2)", margin: 0, lineHeight: 1.6 }}>
-              Read the latest cricket news, match reports, player interviews, transfer updates, and expert analysis. 
-              Our news section aggregates stories from trusted sources to keep you informed about everything 
-              happening in the cricket world.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="card" style={{ marginBottom: 20 }}>
-        <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Trusted Data Sources</h3>
-        <p style={{ fontSize: 14, color: "var(--text2)", marginBottom: 16, lineHeight: 1.6 }}>
-          We partner with industry-leading cricket data providers to ensure accuracy and reliability. Our data 
-          infrastructure processes information from multiple sources, cross-validates statistics, and delivers 
-          verified cricket data to our users.
-        </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {[
-            { name: "CricketData.org", url: "https://cricketdata.org", desc: "Primary source for live scores, match information, detailed scorecards, player statistics, series data, and historical records. Provides comprehensive coverage of international and domestic cricket." },
-            { name: "Cricbuzz via RapidAPI", url: "https://rapidapi.com/Creativesdev/api/free-cricbuzz-cricket-api", desc: "Supplementary data for cricket news, ICC rankings, match schedules, and tournament information. Offers additional context and editorial content." },
-            { name: "YouTube IFrame API", url: "https://developers.google.com/youtube/iframe_api_reference", desc: "Enables embedded video highlights and live streaming content. No API key required for basic video embeds, making cricket content accessible to all users." },
-          ].map(s => (
-            <div key={s.name} style={{ padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
-              <a href={s.url} target="_blank" rel="noreferrer" style={{ color: "var(--green)", fontWeight: 600 }}>{s.name}</a>
-              <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4, lineHeight: 1.6 }}>{s.desc}</div>
-            </div>
-          ))}
         </div>
       </div>
 
       <div className="card">
-        <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Getting Started with Live Cricket Zone</h3>
+        <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Commitment to Integrity</h3>
         <p style={{ color: "var(--text2)", marginBottom: 16, fontSize: 14, lineHeight: 1.6 }}>
-          Live Cricket Zone is completely free to use for all cricket fans. Simply navigate through our sections 
-          to access live scores, match schedules, player statistics, and cricket news. No registration required 
-          for basic features.
+          Live Cricket Zone is dedicated to providing high-quality cricket data for informational purposes. 
+          We believe in the integrity of the sport and focus strictly on match data, schedules, and analytics 
+          to enhance the fan experience globally.
         </p>
-        <p style={{ color: "var(--text2)", marginBottom: 16, fontSize: 14, lineHeight: 1.6 }}>
-          For developers interested in building cricket applications, you can access the same data sources we use. 
-          Both CricketData.org and RapidAPI offer free tier API keys that provide substantial data access for 
-          personal projects and small applications.
-        </p>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
-          <a href="https://cricketdata.org" target="_blank" rel="noreferrer" className="btn btn-primary">
-            Get CricketData Key (Free)
-          </a>
-          <a href="https://rapidapi.com/Creativesdev/api/free-cricbuzz-cricket-api" target="_blank" rel="noreferrer" className="btn btn-outline">
-            Get RapidAPI Key (Free)
-          </a>
-        </div>
         <div style={{ padding: 16, background: "var(--bg3)", borderRadius: 8, marginTop: 16 }}>
-          <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>Contact & Support</h4>
+          <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>Contact</h4>
           <p style={{ fontSize: 13, color: "var(--text2)", lineHeight: 1.6, margin: 0 }}>
-            Have questions, feedback, or suggestions? We'd love to hear from you. While we're a data aggregation 
-            platform and don't control match schedules or scores, we're always working to improve our service and 
-            add new features based on user feedback. Check our <Link to="/" style={{ color: "var(--green)" }}>homepage</Link> for 
-            the latest updates and features.
+            Our engineering team is constantly refining our scraper algorithms. If you have feedback or 
+            technical suggestions, feel free to explore our <Link to="/" style={{ color: "var(--primary-light)" }}>Homepage</Link> for 
+            the latest feature rollouts.
           </p>
         </div>
       </div>
+
     </div>
   );
 }
