@@ -42,6 +42,8 @@ import LiveCricketScore from "./pages/LiveCricketScore";
 import CricketScoreToday from "./pages/CricketScoreToday";
 import BallByBall from "./pages/BallByBall";
 import CricketWebsite from "./pages/CricketWebsite";
+import FantasyGuide from "./pages/FantasyGuide";
+import BettingGuide from "./pages/BettingGuide";
 
 export default function App() {
   return (
@@ -89,6 +91,10 @@ export default function App() {
           <Route path="/asia-cup" element={<AsiaCup />} />
           <Route path="/champions-trophy" element={<ChampionsTrophy />} />
           <Route path="/womens-cricket" element={<WomensCricket />} />
+          
+          {/* Guide Pages */}
+          <Route path="/fantasy-cricket-guide" element={<FantasyGuide />} />
+          <Route path="/cricket-betting-guide" element={<BettingGuide />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>

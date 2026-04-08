@@ -167,9 +167,9 @@ export default function Home() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="Live Cricket Scores, IPL 2026, T20 World Cup & ODI Match Updates Today"
-        description="Get live cricket scores, ball-by-ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards, player statistics, ICC rankings 2026 and cricket news today on Live Cricket Zone. Watch live cricket streaming and get instant score updates."
-        keywords="live cricket score, cricket live score today, IPL 2026 live score, T20 World Cup live, cricket scorecard, ball by ball cricket commentary, cricket news today, ICC rankings 2026, cricket schedule, cricket players stats, cricket match today live, live cricket streaming, cricket score update, cricket live match, ODI cricket live, Test cricket live"
+        title="Live Cricket Scores, IPL 2026, Betting Odds & Fantasy Tips (UK, US, Australia)"
+        description="Get live cricket scores, IPL 2026 betting odds, Polymarket predictions, DraftKings & FanDuel fantasy tips, ball-by-ball commentary, T20 World Cup updates, The Ashes, Big Bash League, and cricket news. Legal fantasy sports and betting for UK, US, and Australia."
+        keywords="live cricket score UK, cricket live score USA, cricket score Australia, IPL 2026 live score, IPL betting odds UK, Polymarket cricket, DraftKings cricket, FanDuel cricket, fantasy cricket UK, T20 World Cup live, The Ashes live score, Big Bash League, cricket scorecard, ball by ball commentary, cricket news today, ICC rankings 2026, cricket predictions UK, cricket DFS USA, cricket betting Australia, live cricket streaming"
         url="/"
         structuredData={SITE_SD}
       />
@@ -183,7 +183,7 @@ export default function Home() {
         <div style={{ fontSize: 64, marginBottom: 12 }}>🏏</div>
         <h1 style={{ fontSize: 42, fontWeight: 800, color: "var(--green)", marginBottom: 8 }}>Live Cricket Zone</h1>
         <p style={{ color: "var(--text2)", fontSize: 18, marginBottom: 24 }}>
-          Live Cricket Scores • Ball-by-Ball Commentary • IPL 2026 • T20 World Cup • ODI & Test Updates
+          Live Cricket Scores • Ball-by-Ball Commentary • IPL 2026 • The Ashes • Big Bash League • Betting Odds (UK, US, AU) • DraftKings & FanDuel Fantasy Tips • T20 World Cup
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link to="/live" className="btn btn-primary">🔴 Live Matches</Link>
@@ -308,6 +308,83 @@ export default function Home() {
 
       <AdBanner type="responsive" slot="1234567892" style={{ marginBottom: 40 }} />
 
+      {/* Latest Cricket News - Last 24 Hours */}
+      <section style={{ marginBottom: 40 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700 }}>📰 Latest Cricket News (Last 24 Hours)</h2>
+          <Link to="/news" style={{ color: "var(--green)", fontSize: 13 }}>View all →</Link>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
+          <div className="card" style={{ borderLeft: "3px solid var(--green)" }}>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}>IPL 2026 • 2 hours ago</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>
+              Rajasthan Royals Defeat Mumbai Indians by 27 Runs
+            </h3>
+            <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6 }}>
+              RR maintain their unbeaten streak in IPL 2026 with a dominant 27-run victory over MI. Yashasvi Jaiswal's 
+              unbeaten 77 powered RR to 150/3, with Vaibhav Sooryavanshi smashing Jasprit Bumrah for six first ball.
+            </p>
+          </div>
+          
+          <div className="card" style={{ borderLeft: "3px solid var(--red)" }}>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}>IPL 2026 • 5 hours ago</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>
+              RR vs MI Match Delayed Due to Rain
+            </h3>
+            <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6 }}>
+              The highly anticipated Match 13 between Rajasthan Royals and Mumbai Indians at Guwahati was delayed due 
+              to rain. RR entered the match unbeaten with two wins, while MI searched for rhythm after previous defeats.
+            </p>
+          </div>
+          
+          <div className="card" style={{ borderLeft: "3px solid var(--green)" }}>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}>IPL 2026 • 8 hours ago</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>
+              Tim David's Monstrous Hitting Powers RCB Victory
+            </h3>
+            <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6 }}>
+              Tim David's explosive batting, backed by Devdutt Padikkal and Rajat Patidar, powered Royal Challengers 
+              Bengaluru to a commanding victory. The 'attacking champions' showcased their batting depth and firepower.
+            </p>
+          </div>
+          
+          <div className="card" style={{ borderLeft: "3px solid var(--green)" }}>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}>Australia • 12 hours ago</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>
+              Cricket Australia Announces Women's Central Contracts
+            </h3>
+            <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6 }}>
+              Cricket Australia has revealed a list of 18 women's players to be offered national contracts for 2026-27. 
+              The announcement follows the MOU between CA and the Australian Cricketer's Association.
+            </p>
+          </div>
+          
+          <div className="card" style={{ borderLeft: "3px solid var(--green)" }}>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}>IPL 2026 • 18 hours ago</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>
+              DC vs GT: Delhi Capitals Face Gujarat Titans Today
+            </h3>
+            <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6 }}>
+              Delhi Capitals take on Gujarat Titans at Kotla in New Delhi. Match predictions, playing XI, pitch report, 
+              and venue analysis ahead of this crucial IPL 2026 encounter.
+            </p>
+          </div>
+          
+          <div className="card" style={{ borderLeft: "3px solid var(--green)" }}>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}>PSL 2026 • 20 hours ago</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>
+              Multan Sultans Beat Rawalpindi by 7 Wickets
+            </h3>
+            <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6 }}>
+              Multan Sultans chased down Rawalpindi's 182/8 with ease, reaching 186/3 in just 16.2 overs at Gaddafi 
+              Stadium, Lahore. Dominant performance in PSL 2026's 14th T20 match.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <AdBanner type="responsive" slot="1234567892" style={{ marginBottom: 40 }} />
+
       {/* Watch Live CTA */}
       <section style={{ marginBottom: 40 }}>
         <div onClick={() => navigate("/watch-live")} style={{
@@ -333,6 +410,58 @@ export default function Home() {
           }}>
             <span style={{ fontSize: 20 }}>▶</span> Click Here to Watch
           </div>
+        </div>
+      </section>
+
+      <AdBanner type="responsive" slot="1234567893" style={{ marginBottom: 40 }} />
+
+      {/* Fantasy & Betting Guides */}
+      <section style={{ marginBottom: 40 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>🎯 Expert Guides</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
+          <Link to="/fantasy-cricket-guide" style={{ textDecoration: "none" }}>
+            <div className="card" style={{ 
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", 
+              color: "white", 
+              border: "none",
+              height: "100%",
+              transition: "transform 0.2s"
+            }}
+              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"}
+              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
+            >
+              <div style={{ fontSize: 32, marginBottom: 12 }}>🎮</div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Fantasy Cricket Guide</h3>
+              <p style={{ fontSize: 14, opacity: 0.9, lineHeight: 1.6 }}>
+                Master Dream11, DraftKings & FanDuel with expert tips, optimal lineups, captain picks, and winning DFS strategies for IPL 2026
+              </p>
+              <div style={{ marginTop: 16, fontSize: 13, fontWeight: 600 }}>
+                Read Guide →
+              </div>
+            </div>
+          </Link>
+          
+          <Link to="/cricket-betting-guide" style={{ textDecoration: "none" }}>
+            <div className="card" style={{ 
+              background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)", 
+              color: "white", 
+              border: "none",
+              height: "100%",
+              transition: "transform 0.2s"
+            }}
+              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"}
+              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
+            >
+              <div style={{ fontSize: 32, marginBottom: 12 }}>💰</div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Cricket Betting Guide</h3>
+              <p style={{ fontSize: 14, opacity: 0.9, lineHeight: 1.6 }}>
+                Learn betting odds, Polymarket predictions, value betting strategies, bankroll management, and winning tips for cricket betting
+              </p>
+              <div style={{ marginTop: 16, fontSize: 13, fontWeight: 600 }}>
+                Read Guide →
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 
@@ -369,14 +498,62 @@ export default function Home() {
           <p style={{ marginBottom: 16 }}>
             Welcome to <strong>Live Cricket Zone</strong>, your premier destination for <strong>live cricket scores</strong>, 
             real-time ball-by-ball commentary, and comprehensive cricket coverage. Stay updated with <strong>IPL 2026 live scores</strong>, 
-            <strong>T20 World Cup</strong> updates, ODI matches, and Test cricket from around the world.
+            <strong>The Ashes</strong>, <strong>Big Bash League</strong>, <strong>T20 World Cup</strong> updates, ODI matches, 
+            and Test cricket from around the world. Access <strong>betting odds</strong> from major UK, US, and Australian sportsbooks, 
+            <strong>Polymarket predictions</strong>, and <strong>fantasy cricket tips</strong> for DraftKings and FanDuel contests.
           </p>
           <p style={{ marginBottom: 16 }}>
             Our platform provides instant <strong>cricket score updates</strong>, detailed scorecards, player statistics, 
             <strong>ICC rankings 2026</strong>, team standings, and the latest cricket news. Whether you're following the 
-            Indian Premier League, international tournaments, or bilateral series, we've got you covered with live streaming 
-            links and match highlights.
+            Indian Premier League, The Ashes series, Big Bash League, or international tournaments, we've got you covered with 
+            live streaming links, match highlights, <strong>betting predictions</strong>, and <strong>fantasy cricket lineups</strong> 
+            tailored for <strong>UK</strong>, <strong>US</strong>, and <strong>Australian</strong> audiences.
           </p>
+          
+          <h3 style={{ fontSize: 18, fontWeight: 700, marginTop: 24, marginBottom: 12, color: "var(--green)" }}>
+            Cricket Betting Odds & Predictions (UK, US, Australia)
+          </h3>
+          <p style={{ marginBottom: 16 }}>
+            Access real-time <strong>cricket betting odds</strong> and match predictions from licensed bookmakers in the 
+            <strong>UK</strong>, <strong>United States</strong>, and <strong>Australia</strong>. <strong>Polymarket</strong>, 
+            the leading decentralized prediction platform, offers crowd-sourced forecasts for IPL matches, T20 World Cup games, 
+            The Ashes, and major cricket events. Compare odds across multiple sportsbooks, track line movements, and make 
+            informed betting decisions with our comprehensive odds comparison tools.
+          </p>
+          <p style={{ marginBottom: 16 }}>
+            Popular betting markets include match winners, top batsman, total runs, toss predictions, powerplay scores, and 
+            player performance props. Our platform aggregates odds from trusted bookmakers including Bet365 (UK), DraftKings 
+            Sportsbook (US), and Sportsbet (Australia), providing you with the best available lines for every cricket match. 
+            Stay ahead with live odds updates that change ball-by-ball during matches.
+          </p>
+          
+          <h3 style={{ fontSize: 18, fontWeight: 700, marginTop: 24, marginBottom: 12, color: "var(--green)" }}>
+            Fantasy Cricket Tips & DFS Lineups (Legal in UK, US, Australia)
+          </h3>
+          <p style={{ marginBottom: 16 }}>
+            Dominate your <strong>fantasy cricket</strong> leagues with expert tips, optimal lineups, and player projections. 
+            Whether you play <strong>DraftKings</strong> (US, UK, Australia), <strong>FanDuel</strong> (US, UK), or other 
+            licensed fantasy platforms, our fantasy cricket section provides daily lineup recommendations, captain picks, 
+            differential players, and budget-friendly options to maximize your winning potential.
+          </p>
+          <p style={{ marginBottom: 16 }}>
+            Our <strong>DFS (Daily Fantasy Sports)</strong> analysis includes pitch reports, weather conditions, player form, 
+            head-to-head statistics, and venue-specific performance data. Get access to projected ownership percentages, 
+            value plays, and tournament-winning strategies for GPP (Guaranteed Prize Pool) contests. Fantasy cricket is 
+            legal and regulated in the UK, most US states, and Australia - always verify local regulations before participating.
+          </p>
+          
+          <h3 style={{ fontSize: 18, fontWeight: 700, marginTop: 24, marginBottom: 12, color: "var(--green)" }}>
+            Match Predictions & Analysis
+          </h3>
+          <p style={{ marginBottom: 16 }}>
+            Our <strong>cricket match predictions</strong> combine statistical modeling, machine learning algorithms, and 
+            expert analysis to forecast match outcomes. We analyze team composition, recent form, venue statistics, weather 
+            conditions, and historical head-to-head records to provide accurate predictions for every match. Polymarket's 
+            prediction markets aggregate thousands of traders' opinions, often proving more accurate than traditional expert 
+            predictions.
+          </p>
+          
           <p style={{ marginBottom: 16 }}>
             Get access to comprehensive <strong>cricket player stats</strong>, career records, match schedules, upcoming fixtures, 
             results, and in-depth analysis. Follow your favorite teams and players with our detailed profiles, rankings, and 
@@ -391,6 +568,10 @@ export default function Home() {
               <li style={{ marginBottom: 8 }}>🏏 IPL 2026 live updates and scorecards</li>
               <li style={{ marginBottom: 8 }}>🌍 T20 World Cup, ODI & Test match coverage</li>
               <li style={{ marginBottom: 8 }}>📊 ICC rankings 2026 and player statistics</li>
+              <li style={{ marginBottom: 8 }}>💰 Real-time betting odds and Polymarket predictions</li>
+              <li style={{ marginBottom: 8 }}>🎮 Fantasy cricket tips for Dream11, DraftKings, FanDuel</li>
+              <li style={{ marginBottom: 8 }}>📈 DFS lineups and optimal player projections</li>
+              <li style={{ marginBottom: 8 }}>🔮 AI-powered match predictions and analysis</li>
               <li style={{ marginBottom: 8 }}>📅 Complete cricket schedule and fixtures</li>
               <li style={{ marginBottom: 8 }}>📺 Live cricket streaming links</li>
               <li style={{ marginBottom: 8 }}>📰 Latest cricket news and updates</li>
