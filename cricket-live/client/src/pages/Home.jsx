@@ -64,9 +64,9 @@ export default function Home() {
         </p>
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <Link to="/live" className="btn btn-primary">🔴 Enter Live Center</Link>
-          <Link to="/watch-live" className="btn btn-outline" style={{ background: "var(--glass)", border: "1px solid var(--glass-border)" }}>▶ Watch Stream</Link>
           <Link to="/schedule" className="btn btn-outline" style={{ border: "1px solid var(--glass-border)" }}>📅 Schedule</Link>
         </div>
+
       </div>
 
       <div className="dashboard-grid">
