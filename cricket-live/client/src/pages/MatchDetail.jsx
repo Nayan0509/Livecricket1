@@ -122,7 +122,29 @@ export default function MatchDetail() {
 
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
-      <SEO title={`${match.name} - Live Analysis - CricketZone`} description={`Real-time insights for ${match.name}.`} />
+      <SEO 
+        title={`${match.name} Live Score, Ball-by-Ball Commentary, Scorecard | Live Cricket Zone`} 
+        description={`Get ${match.name} live cricket score updates, ball-by-ball commentary, full scorecard, and match analysis. Stay updated with real-time insights from ${match.venue}.`}
+        url={`/match/${id}`}
+        type="article"
+        keywords={`${match.name} live score, ${match.name} scorecard, ${match.name} commentary, cricket live score today, ${match.teamInfo?.[0]?.name} vs ${match.teamInfo?.[1]?.name} live`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "SportsEvent",
+          "name": match.name,
+          "description": match.status,
+          "startDate": match.dateTimeGMT,
+          "location": {
+            "@type": "Place",
+            "name": match.venue
+          },
+          "competitor": match.teamInfo?.map(t => ({
+            "@type": "SportsTeam",
+            "name": t.name,
+            "image": t.img
+          }))
+        }}
+      />
       
       <button onClick={() => navigate(-1)} className="btn btn-outline" style={{ border: "1px solid var(--glass-border)", background: "var(--glass)", marginBottom: 20 }}>
         ← Dashboard

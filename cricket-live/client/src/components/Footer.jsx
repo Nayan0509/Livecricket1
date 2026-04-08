@@ -27,14 +27,21 @@ export default function Footer() {
             ))}
           </div>
           <div>
-            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>Cricket</div>
-            {[["Series", "/series"], ["Teams", "/teams"], ["Players", "/players"], ["Rankings", "/rankings"]].map(([l, h]) => (
+            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>Popular Leagues</div>
+            {[
+              ["IPL 2026", "/ipl"], 
+              ["T20 World Cup", "/t20-world-cup"], 
+              ["Asia Cup", "/asia-cup"], 
+              ["Champions Trophy", "/champions-trophy"],
+              ["PSL 2026", "/psl"],
+              ["BBL", "/bbl"]
+            ].map(([l, h]) => (
               <Link key={h} to={h} style={{ display: "block", color: "var(--text2)", fontSize: 13, marginBottom: 8 }}>{l}</Link>
             ))}
           </div>
           <div>
-            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>More</div>
-            {[["News", "/news"], ["Stats", "/stats"], ["About", "/about"]].map(([l, h]) => (
+            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>Resources</div>
+            {[["News", "/news"], ["Stats", "/stats"], ["Rankings", "/rankings"], ["About", "/about"]].map(([l, h]) => (
               <Link key={h} to={h} style={{ display: "block", color: "var(--text2)", fontSize: 13, marginBottom: 8 }}>{l}</Link>
             ))}
           </div>

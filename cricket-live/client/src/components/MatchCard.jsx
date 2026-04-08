@@ -43,7 +43,7 @@ export default function MatchCard({ match }) {
                     border: "2px solid var(--border)",
                     boxShadow: "var(--shadow-sm)"
                   }}>
-                    <img src={t.img} alt={t.shortname} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={t.img} alt={`${t.name} Cricket Team Logo`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
                 )}
                 <span style={{ 
