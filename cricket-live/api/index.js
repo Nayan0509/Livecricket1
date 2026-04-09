@@ -431,9 +431,20 @@ module.exports = async (req, res) => {
   if (serveMeta(req.url, res)) return;
 
   // Extraction of path even if Vercel rewrites it to /api/index
+  // Use URL constructor instead of deprecated url.parse()
   const fullUrl = req.url || "";
   const queryPath = req.query && req.query.path;
-  const path = queryPath || fullUrl.split("?")[0].replace("/api/", "").replace("/", "").replace("index.js", "").replace(/^\/+|\/+$/g, "");
+  
+  // Parse URL without deprecated url.parse()
+  let path = "";
+  try {
+    const urlObj = new URL(fullUrl, `http://${req.headers.host || 'localhost'}`);
+    path = queryPath || urlObj.pathname.replace("/api/", "").replace("/", "").replace("index.js", "").replace(/^\/+|\/+$/g, "");
+  } catch (e) {
+    // Fallback to simple string parsing if URL constructor fails
+    path = queryPath || fullUrl.split("?")[0].replace("/api/", "").replace("/", "").replace("index.js", "").replace(/^\/+|\/+$/g, "");
+  }
+  
   const parts = path.split("/").filter(Boolean);
 
   try {
@@ -442,9 +453,14 @@ module.exports = async (req, res) => {
     }
 
     if (path === "news") {
-      const data = await getNews();
-      console.log(`[API] News endpoint: ${data.length} items`);
-      return res.json({ status: "success", data });
+      try {
+        const data = await getNews();
+        console.log(`[API] News endpoint: ${data.length} items`);
+        return res.json({ status: "success", data });
+      } catch (newsError) {
+        console.error(`[API] News fetch error: ${newsError.message}`);
+        return res.json({ status: "success", data: [] });
+      }
     }
 
     if (path === "matches/live" || path === "matches/current") {
