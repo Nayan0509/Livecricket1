@@ -463,7 +463,13 @@ module.exports = async (req, res) => {
 
   try {
     if (path === "health") {
-      return res.json({ status: "ok", mode: "Scale Up Enterprise", dependencyFree: true });
+      return res.json({ 
+        status: "ok", 
+        mode: "Scale Up Enterprise", 
+        dependencyFree: true,
+        timestamp: new Date().toISOString(),
+        version: "2.0.1" // Increment this to verify new deployment
+      });
     }
 
     if (path === "news") {
