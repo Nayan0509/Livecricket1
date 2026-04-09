@@ -2,6 +2,15 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const NodeCache = require("node-cache");
 
+// Suppress url.parse deprecation warnings from dependencies
+process.removeAllListeners('warning');
+process.on('warning', (warning) => {
+  if (warning.name === 'DeprecationWarning' && warning.message.includes('url.parse')) {
+    return; // Ignore url.parse warnings from dependencies
+  }
+  console.warn(warning);
+});
+
 const cache = new NodeCache({ stdTTL: 30 }); // Cache for 30s
 
 const headers = {
@@ -76,12 +85,16 @@ function parseScore(scoreStr) {
  */
 async function getLiveMatches() {
   try {
+    console.log("[Scraper] Fetching live matches from Cricbuzz...");
     const { data } = await axios.get("https://www.cricbuzz.com/cricket-match/live-scores", { headers, timeout: 10000 });
     const $ = cheerio.load(data);
     const matches = [];
 
     // Modern Cricbuzz selectors - synchronized with server/utils/scraper.js
-    $("a[href^='/live-cricket-scores/']").each((i, elem) => {
+    const matchLinks = $("a[href^='/live-cricket-scores/']");
+    console.log(`[Scraper] Found ${matchLinks.length} potential match links`);
+    
+    matchLinks.each((i, elem) => {
       const $card = $(elem);
       const url = $card.attr("href");
       const id = url ? url.split("/")[2] : `cb-${i}`;
@@ -122,10 +135,10 @@ async function getLiveMatches() {
       }
     });
     
-    console.log(`Scraped ${matches.length} live matches from Cricbuzz`);
+    console.log(`[Scraper] Successfully scraped ${matches.length} live matches from Cricbuzz`);
     return matches;
   } catch (e) {
-    console.error("Live matches scrape failed:", e.message);
+    console.error("[Scraper] Live matches scrape failed:", e.message);
     return [];
   }
 }
@@ -430,22 +443,23 @@ module.exports = async (req, res) => {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (serveMeta(req.url, res)) return;
 
-  // Extraction of path even if Vercel rewrites it to /api/index
+  // Extraction of path from URL
   // Use URL constructor instead of deprecated url.parse()
   const fullUrl = req.url || "";
-  const queryPath = req.query && req.query.path;
   
   // Parse URL without deprecated url.parse()
   let path = "";
   try {
     const urlObj = new URL(fullUrl, `http://${req.headers.host || 'localhost'}`);
-    path = queryPath || urlObj.pathname.replace("/api/", "").replace("/", "").replace("index.js", "").replace(/^\/+|\/+$/g, "");
+    path = urlObj.pathname.replace("/api/", "").replace(/^\/+|\/+$/g, "");
   } catch (e) {
     // Fallback to simple string parsing if URL constructor fails
-    path = queryPath || fullUrl.split("?")[0].replace("/api/", "").replace("/", "").replace("index.js", "").replace(/^\/+|\/+$/g, "");
+    path = fullUrl.split("?")[0].replace("/api/", "").replace(/^\/+|\/+$/g, "");
   }
   
   const parts = path.split("/").filter(Boolean);
+  
+  console.log(`[API] Request: ${req.method} ${fullUrl} -> path: ${path}`);
 
   try {
     if (path === "health") {
