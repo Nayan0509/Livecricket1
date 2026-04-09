@@ -38,6 +38,69 @@ function parseScore(scoreStr) {
 }
 
 /**
+ * Get Match Info (uses live matches data or scrapes)
+ */
+async function scrapeMatchInfo(matchId) {
+  const cacheKey = `cricbuzz:matchinfo:${matchId}`;
+  const cached = scrapeCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    // First try to get from live matches
+    const liveMatches = await scrapeCricbuzzLiveMatches();
+    const liveMatch = liveMatches.find(m => m.id === matchId);
+    
+    if (liveMatch) {
+      scrapeCache.set(cacheKey, liveMatch);
+      return liveMatch;
+    }
+
+    // If not in live matches, scrape the match page
+    const { data } = await axios.get(`https://www.cricbuzz.com/live-cricket-scores/${matchId}`, { headers, timeout: 10000 });
+    const $ = cheerio.load(data);
+    
+    // Try to extract basic info
+    const matchTitle = $(".cb-nav-hdr.cb-font-18").first().text().trim();
+    const status = $(".cb-text-complete, .cb-text-live, .cb-text-stumps, .cb-text-preview").first().text().trim() || "Scheduled";
+    const venue = $(".cb-nav-subhdr.cb-font-12").text().trim();
+    
+    // Extract teams from title (e.g., "India vs Australia, 1st Test")
+    const teams = [];
+    const teamInfo = [];
+    const vsMatch = matchTitle.match(/(.+?)\s+vs\s+(.+?),/i);
+    if (vsMatch) {
+      teams.push(vsMatch[1].trim(), vsMatch[2].trim());
+      teamInfo.push(
+        { name: vsMatch[1].trim(), shortname: vsMatch[1].trim().slice(0, 3).toUpperCase(), img: null },
+        { name: vsMatch[2].trim(), shortname: vsMatch[2].trim().slice(0, 3).toUpperCase(), img: null }
+      );
+    }
+
+    const matchInfo = {
+      id: matchId,
+      name: teams.length >= 2 ? `${teams[0]} vs ${teams[1]}` : matchTitle || "Match",
+      matchType: matchTitle.split(",")[1]?.trim() || "International",
+      status,
+      venue,
+      date: new Date().toLocaleDateString(),
+      teams,
+      teamInfo,
+      score: [],
+      matchStarted: status.toLowerCase().includes("live") || status.toLowerCase().includes("innings"),
+      matchEnded: status.toLowerCase().includes("won") || status.toLowerCase().includes("drawn"),
+      tossWinner: "",
+      tossChoice: ""
+    };
+
+    scrapeCache.set(cacheKey, matchInfo);
+    return matchInfo;
+  } catch (err) {
+    console.error(`Match info scrape failed for ${matchId}:`, err.message);
+    return { id: matchId, name: "Match", teams: [], teamInfo: [], score: [], matchStarted: false };
+  }
+}
+
+/**
  * LIVE MATCHES - Cricbuzz Scraper
  */
 async function scrapeCricbuzzLiveMatches() {
@@ -314,70 +377,182 @@ async function getScaledData(type, params = {}) {
       return { status: "success", data: await scrapeCricbuzzTeams() };
 
     case "scorecard": {
-        const url = `https://www.cricbuzz.com/live-cricket-scorecard/${params.id}`;
-        const html = await fetchWithTimeout(url);
-        const $ = cheerio.load(html);
-        const innings = [];
+        try {
+          const { data: html } = await axios.get(`https://www.cricbuzz.com/live-cricket-scorecard/${params.id}`, { headers, timeout: 10000 });
+          const $ = cheerio.load(html);
+          const innings = [];
 
-        ["1", "2", "3", "4"].forEach(num => {
-          const innDiv = $(`#innings_${num}`);
-          if (innDiv.length) {
-            const teamName = innDiv.find(".cb-scrd-hdr").text().split("Innings")[0].trim();
-            const score = innDiv.find(".cb-scrd-hdr .text-bold").text().trim();
+          // Try JSON extraction from script tags first (Cricbuzz uses Next.js with embedded JSON)
+          let jsonExtracted = false;
+          
+          $("script").each((i, el) => {
+            const scriptContent = $(el).html();
             
-            const batsmen = [];
-            innDiv.find(".cb-scrd-itms").each((i, el) => {
-              const row = $(el);
-              const name = row.find("a.text-cbTextLink").text().trim();
-              if (name && !row.find(".cb-col-10").text().includes("Extras")) {
-                const rowData = row.find(".cb-col-8");
-                batsmen.push({
-                  name,
-                  dismissal: row.find(".cb-font-12.text-gray").text().trim(),
-                  r: $(rowData[0]).text().trim(),
-                  b: $(rowData[1]).text().trim(),
-                  fours: $(rowData[2]).text().trim(),
-                  sixes: $(rowData[3]).text().trim(),
-                  sr: $(rowData[4]).text().trim()
+            if (scriptContent && scriptContent.includes('scoreCard')) {
+              try {
+                // The scoreCard data is embedded in the script as escaped JSON
+                // Find the start of the scoreCard array (it's escaped as \\"scoreCard\\":)
+                const startIdx = scriptContent.indexOf('\\"scoreCard\\":[');
+                
+                if (startIdx !== -1) {
+                  // Find the end of the scoreCard array by counting brackets
+                  let bracketCount = 0;
+                  let inArray = false;
+                  let endIdx = startIdx + '\\"scoreCard\\":'.length;
+                  
+                  for (let j = endIdx; j < scriptContent.length; j++) {
+                    const char = scriptContent[j];
+                    if (char === '[') {
+                      bracketCount++;
+                      inArray = true;
+                    } else if (char === ']') {
+                      bracketCount--;
+                      if (inArray && bracketCount === 0) {
+                        endIdx = j + 1;
+                        break;
+                      }
+                    }
+                  }
+                  
+                  // Extract the JSON string (it's escaped, so we need to unescape it)
+                  let jsonStr = scriptContent.substring(startIdx + '\\"scoreCard\\":'.length, endIdx);
+                  // Unescape the JSON string
+                  jsonStr = jsonStr.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+                  const scorecardData = JSON.parse(jsonStr);
+                  
+                  // Process each innings from JSON
+                  scorecardData.forEach(inn => {
+                    if (inn.batTeamDetails && inn.batTeamDetails.batsmenData) {
+                      const batsmen = [];
+                      const batsmenData = inn.batTeamDetails.batsmenData;
+                      
+                      // Extract batsmen
+                      Object.keys(batsmenData).forEach(key => {
+                        const bat = batsmenData[key];
+                        if (bat.batName) {
+                          batsmen.push({
+                            name: bat.batName,
+                            dismissal: bat.outDesc || "not out",
+                            r: String(bat.runs || 0),
+                            b: String(bat.balls || 0),
+                            fours: String(bat.fours || 0),
+                            sixes: String(bat.sixes || 0),
+                            sr: bat.strikeRate ? String(bat.strikeRate.toFixed(2)) : "0.00"
+                          });
+                        }
+                      });
+
+                      const bowlers = [];
+                      if (inn.bowlTeamDetails && inn.bowlTeamDetails.bowlersData) {
+                        const bowlersData = inn.bowlTeamDetails.bowlersData;
+                        Object.keys(bowlersData).forEach(key => {
+                          const bowl = bowlersData[key];
+                          if (bowl.bowlName) {
+                            bowlers.push({
+                              name: bowl.bowlName,
+                              o: String(bowl.overs || 0),
+                              m: String(bowl.maidens || 0),
+                              r: String(bowl.runs || 0),
+                              w: String(bowl.wickets || 0),
+                              eco: bowl.economy ? String(bowl.economy.toFixed(2)) : "0.00"
+                            });
+                          }
+                        });
+                      }
+
+                      const teamName = inn.batTeamDetails.batTeamName || "Team";
+                      const score = `${inn.scoreDetails?.runs || 0}/${inn.scoreDetails?.wickets || 0}`;
+                      const extras = String(inn.extrasData?.total || 0);
+
+                      innings.push({ 
+                        team: teamName, 
+                        score, 
+                        batsmen, 
+                        bowlers, 
+                        extras, 
+                        fow: [] 
+                      });
+                    }
+                  });
+                  
+                  jsonExtracted = true;
+                  return false; // Break the each loop
+                }
+              } catch (jsonErr) {
+                console.log("JSON extraction attempt failed, falling back to HTML:", jsonErr.message);
+              }
+            }
+          });
+
+          // Fallback to HTML scraping if JSON extraction failed
+          if (!jsonExtracted) {
+            ["1", "2", "3", "4"].forEach(num => {
+              const innDiv = $(`#innings_${num}`);
+              if (innDiv.length) {
+                const teamName = innDiv.find(".cb-scrd-hdr").text().split("Innings")[0].trim();
+                const score = innDiv.find(".cb-scrd-hdr .text-bold").text().trim();
+                
+                const batsmen = [];
+                innDiv.find(".cb-scrd-itms").each((i, el) => {
+                  const row = $(el);
+                  const name = row.find("a.text-cbTextLink").text().trim();
+                  if (name && !row.find(".cb-col-10").text().includes("Extras")) {
+                    const rowData = row.find(".cb-col-8");
+                    batsmen.push({
+                      name,
+                      dismissal: row.find(".cb-font-12.text-gray").text().trim(),
+                      r: $(rowData[0]).text().trim(),
+                      b: $(rowData[1]).text().trim(),
+                      fours: $(rowData[2]).text().trim(),
+                      sixes: $(rowData[3]).text().trim(),
+                      sr: $(rowData[4]).text().trim()
+                    });
+                  }
                 });
+
+                const bowlers = [];
+                innDiv.find(".cb-ltst-wgt-hdr:contains('Bowling')").nextAll(".cb-scrd-itms").each((i, el) => {
+                   const row = $(el);
+                   const name = row.find("a.text-cbTextLink").text().trim();
+                   if (name) {
+                     const rowData = row.find(".cb-col-8, .cb-col-10");
+                     bowlers.push({
+                       name,
+                       o: $(rowData[0]).text().trim(),
+                       m: $(rowData[1]).text().trim(),
+                       r: $(rowData[2]).text().trim(),
+                       w: $(rowData[3]).text().trim(),
+                       eco: $(rowData[4]).text().trim()
+                     });
+                   }
+                });
+
+                const fow = [];
+                let extras = "0";
+                innDiv.find(".cb-scrd-itms").each((i, el) => {
+                   const row = $(el);
+                   const label = row.find(".cb-col-8").first().text().trim();
+                   if (label.includes("Extras")) {
+                      extras = row.find(".cb-col-10.cb-font-12.text-bold").text().trim();
+                   } else if (label.includes("Fall of Wickets")) {
+                      fow.push(row.find(".cb-col-92").text().trim());
+                   }
+                });
+
+                if (teamName) {
+                  innings.push({ team: teamName, score, batsmen, bowlers, fow, extras });
+                }
               }
             });
-
-            const bowlers = [];
-            innDiv.find(".cb-ltst-wgt-hdr:contains('Bowling')").nextAll(".cb-scrd-itms").each((i, el) => {
-               const row = $(el);
-               const name = row.find("a.text-cbTextLink").text().trim();
-               if (name) {
-                 const rowData = row.find(".cb-col-8, .cb-col-10");
-                 bowlers.push({
-                   name,
-                   o: $(rowData[0]).text().trim(),
-                   m: $(rowData[1]).text().trim(),
-                   r: $(rowData[2]).text().trim(),
-                   w: $(rowData[3]).text().trim(),
-                   eco: $(rowData[4]).text().trim()
-                 });
-               }
-            });
-
-            const fow = [];
-            let extras = "0";
-            innDiv.find(".cb-scrd-itms").each((i, el) => {
-               const row = $(el);
-               const label = row.find(".cb-col-8").first().text().trim();
-               if (label.includes("Extras")) {
-                  extras = row.find(".cb-col-10.cb-font-12.text-bold").text().trim();
-               } else if (label.includes("Fall of Wickets")) {
-                  fow.push(row.find(".cb-col-92").text().trim());
-               }
-            });
-
-            innings.push({ team: teamName, score, batsmen, bowlers, fow, extras });
           }
-        });
 
-        return { status: "success", data: { innings } };
+          console.log(`Scorecard for ${params.id}: ${innings.length} innings (JSON: ${jsonExtracted})`);
+          return { status: "success", data: { innings } };
+      } catch (e) {
+        console.error("Scorecard scrape error:", e.message);
+        return { status: "error", message: "Scorecard failed", data: { innings: [] } };
       }
+    }
     case "match_scorecard":
     case "cricScore":
       try {
@@ -405,6 +580,7 @@ module.exports = {
   scrapeCricbuzzRankings: scrapeRankings,
   scrapeCricbuzzTeams,
   scrapeCricbuzzScorecard: async (id) => (await getScaledData("scorecard", {id})).data,
+  scrapeMatchInfo,
   getScaledData
 };
 

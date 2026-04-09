@@ -9,6 +9,7 @@ import LiveMatches from "./pages/LiveMatches";
 import MatchDetail from "./pages/MatchDetail";
 import Scorecard from "./pages/Scorecard";
 import LiveScore from "./pages/LiveScore";
+import BallByBall from "./pages/BallByBall";
 import UpcomingMatches from "./pages/UpcomingMatches";
 import Results from "./pages/Results";
 import Series from "./pages/Series";
@@ -37,6 +38,8 @@ import WorldCup from "./pages/WorldCup";
 import AsiaCup from "./pages/AsiaCup";
 import ChampionsTrophy from "./pages/ChampionsTrophy";
 import WomensCricket from "./pages/WomensCricket";
+import LiveCricketScore from "./pages/LiveCricketScore";
+import CricketScoreToday from "./pages/CricketScoreToday";
 
 
 export default function App() {
@@ -49,6 +52,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/live" element={<LiveMatches />} />
+            <Route path="/live-cricket-score" element={<LiveCricketScore />} />
+            <Route path="/cricket-score-today" element={<CricketScoreToday />} />
+            <Route path="/ball-by-ball" element={<BallByBall />} />
 
             <Route path="/match/:id" element={<MatchDetail />} />
             <Route path="/match/:id/scorecard" element={<Scorecard />} />

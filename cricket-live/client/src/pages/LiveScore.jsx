@@ -1,7 +1,7 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMatchScore, fetchMatchInfo } from "../api";
+import { fetchMatchScore, fetchMatchInfo, fetchMatchScorecard } from "../api";
 
 export default function LiveScore() {
   const { id } = useParams();
@@ -14,7 +14,14 @@ export default function LiveScore() {
     refetchInterval: 15000,
   });
 
+  const { data: scorecardData } = useQuery({
+    queryKey: ["scorecard", id],
+    queryFn: () => fetchMatchScorecard(id),
+    refetchInterval: 30000,
+  });
+
   const match = infoData?.data;
+  const innings = scorecardData?.data?.innings || [];
 
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
@@ -54,12 +61,61 @@ export default function LiveScore() {
               </div>
             ))}
 
-            <div style={{ padding: "12px 16px", background: "rgba(0,200,83,0.08)", borderRadius: 8 }}>
+            <div style={{ padding: "12px 16px", background: "rgba(0,200,83,0.08)", borderRadius: 8, marginBottom: 16 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: match.matchStarted && !match.matchEnded ? "var(--red)" : "var(--text2)" }}>
                 {match.status}
               </div>
             </div>
+
+            {/* Quick Actions */}
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link to={`/match/${id}`} className="btn btn-outline" style={{ flex: 1, minWidth: 140 }}>
+                📊 Match Details
+              </Link>
+              <Link to={`/match/${id}/scorecard`} className="btn btn-primary" style={{ flex: 1, minWidth: 140 }}>
+                📋 Full Scorecard
+              </Link>
+            </div>
           </div>
+
+          {/* Quick Scorecard Preview */}
+          {innings.length > 0 && (
+            <div className="card" style={{ marginBottom: 20 }}>
+              <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Latest Batting</h3>
+              {innings.slice(-1).map((inn, idx) => (
+                <div key={idx}>
+                  <div style={{ fontSize: 14, color: "var(--primary-light)", fontWeight: 700, marginBottom: 12 }}>
+                    {inn.team} - {inn.score}
+                  </div>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                      <thead>
+                        <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+                          <th style={{ padding: 10, textAlign: "left", fontSize: 11, color: "var(--text3)" }}>BATSMAN</th>
+                          <th style={{ padding: 10, textAlign: "right", fontSize: 11, color: "var(--text3)" }}>R</th>
+                          <th style={{ padding: 10, textAlign: "right", fontSize: 11, color: "var(--text3)" }}>B</th>
+                          <th style={{ padding: 10, textAlign: "right", fontSize: 11, color: "var(--text3)" }}>SR</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {inn.batsmen.slice(0, 5).map((b, i) => (
+                          <tr key={i} style={{ borderTop: "1px solid var(--divider)" }}>
+                            <td style={{ padding: 10, fontWeight: 600 }}>{b.name}</td>
+                            <td style={{ padding: 10, textAlign: "right", fontWeight: 800 }}>{b.r}</td>
+                            <td style={{ padding: 10, textAlign: "right" }}>{b.b}</td>
+                            <td style={{ padding: 10, textAlign: "right", color: "var(--accent-teal)" }}>{b.sr}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <Link to={`/match/${id}/scorecard`} className="link-primary" style={{ display: "block", marginTop: 12, fontSize: 13 }}>
+                    View Full Scorecard →
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="card">
             <h3 style={{ fontWeight: 700, marginBottom: 12 }}>Match Info</h3>
