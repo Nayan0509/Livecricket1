@@ -20,9 +20,15 @@ async function cricGet(endpoint, params = {}, cache = dataCache) {
     } else if (endpoint === "matches") {
       const data = await scraper.scrapeCricbuzzUpcoming();
       result = { status: "success", data };
-    } else if (endpoint === "match_scorecard" || endpoint === "cricScore" || endpoint === "match_info") {
+    } else if (endpoint === "match_info") {
+      const data = await scraper.scrapeMatchInfo(params.id);
+      result = { status: "success", data };
+    } else if (endpoint === "match_scorecard") {
       const data = await scraper.scrapeCricbuzzScorecard(params.id);
-      result = { status: "success", data: endpoint === "match_scorecard" ? data : [data] };
+      result = { status: "success", data };
+    } else if (endpoint === "cricScore") {
+      const data = await scraper.scrapeCricbuzzScorecard(params.id);
+      result = { status: "success", data: [data] };
     } else if (endpoint === "series") {
       const data = await scraper.scrapeCricbuzzSeries();
       result = { status: "success", data };

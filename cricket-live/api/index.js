@@ -131,6 +131,279 @@ async function getLiveMatches() {
 }
 
 /**
+ * Get Match Info
+ */
+async function getMatchInfo(matchId) {
+  const cacheKey = `match-info-${matchId}`;
+  const cached = cache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const { data } = await axios.get(`https://www.cricbuzz.com/live-cricket-scores/${matchId}`, { headers, timeout: 10000 });
+    const $ = cheerio.load(data);
+    
+    const teams = [];
+    const teamInfo = [];
+    const scoreArr = [];
+    
+    // Extract team names and scores
+    $(".cb-col.cb-col-100.cb-ltst-wgt-hdr").each((i, el) => {
+      const team = $(el).find(".cb-col-84").text().trim();
+      const score = $(el).find(".cb-col-16").text().trim();
+      if (team) {
+        teams.push(team);
+        teamInfo.push({ 
+          name: team, 
+          shortname: team.slice(0, 3).toUpperCase(), 
+          img: null 
+        });
+        if (score) {
+          scoreArr.push({ ...parseScore(score), inning: team, team, score });
+        }
+      }
+    });
+
+    const status = $(".cb-text-complete, .cb-text-live, .cb-text-stumps").first().text().trim() || "In Progress";
+    const venue = $(".cb-nav-subhdr.cb-font-12").text().trim();
+    const matchType = $(".cb-nav-hdr.cb-font-18").text().split(",")[0]?.trim() || "International";
+    
+    // Extract toss info
+    let tossWinner = "";
+    let tossChoice = "";
+    $(".cb-col.cb-col-100.cb-mtch-info-itm").each((i, el) => {
+      const text = $(el).text();
+      if (text.includes("Toss")) {
+        const tossText = text.replace("Toss", "").trim();
+        const match = tossText.match(/(.+?)\s+opt to\s+(\w+)/i);
+        if (match) {
+          tossWinner = match[1].trim();
+          tossChoice = match[2].trim();
+        }
+      }
+    });
+
+    const matchInfo = {
+      id: matchId,
+      name: teams.length >= 2 ? `${teams[0]} vs ${teams[1]}` : teams[0] || "Match",
+      matchType,
+      status,
+      venue,
+      date: new Date().toLocaleDateString(),
+      teams,
+      teamInfo,
+      score: scoreArr,
+      matchStarted: true,
+      matchEnded: status.toLowerCase().includes("won") || status.toLowerCase().includes("drawn"),
+      tossWinner,
+      tossChoice
+    };
+
+    cache.set(cacheKey, matchInfo);
+    return matchInfo;
+  } catch (e) {
+    console.error(`Match info scrape failed for ${matchId}:`, e.message);
+    return { id: matchId, name: "Match", teams: [], teamInfo: [], score: [], matchStarted: false };
+  }
+}
+
+/**
+ * Get Match Scorecard
+ */
+async function getMatchScorecard(matchId) {
+  const cacheKey = `scorecard-${matchId}`;
+  const cached = cache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const { data: html } = await axios.get(`https://www.cricbuzz.com/live-cricket-scorecard/${matchId}`, { headers, timeout: 10000 });
+    const $ = cheerio.load(html);
+    const innings = [];
+
+    // Try JSON extraction from script tags first (Cricbuzz uses Next.js with embedded JSON)
+    let jsonExtracted = false;
+    $("script").each((i, el) => {
+      const scriptContent = $(el).html();
+      if (scriptContent && scriptContent.includes('scoreCard')) {
+        try {
+          // The scoreCard data is embedded in the script as escaped JSON
+          // Find the start of the scoreCard array (it's escaped as \\"scoreCard\\":)
+          const startIdx = scriptContent.indexOf('\\"scoreCard\\":[');
+          
+          if (startIdx !== -1) {
+            // Find the end of the scoreCard array by counting brackets
+            let bracketCount = 0;
+            let inArray = false;
+            let endIdx = startIdx + '\\"scoreCard\\":'.length;
+            
+            for (let j = endIdx; j < scriptContent.length; j++) {
+              const char = scriptContent[j];
+              if (char === '[') {
+                bracketCount++;
+                inArray = true;
+              } else if (char === ']') {
+                bracketCount--;
+                if (inArray && bracketCount === 0) {
+                  endIdx = j + 1;
+                  break;
+                }
+              }
+            }
+            
+            // Extract the JSON string (it's escaped, so we need to unescape it)
+            let jsonStr = scriptContent.substring(startIdx + '\\"scoreCard\\":'.length, endIdx);
+            // Unescape the JSON string
+            jsonStr = jsonStr.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+            const scorecardData = JSON.parse(jsonStr);
+            
+            // Process each innings from JSON
+            scorecardData.forEach(inn => {
+              if (inn.batTeamDetails && inn.batTeamDetails.batsmenData) {
+                const batsmen = [];
+                const batsmenData = inn.batTeamDetails.batsmenData;
+                
+                // Extract batsmen
+                Object.keys(batsmenData).forEach(key => {
+                  const bat = batsmenData[key];
+                  if (bat.batName) {
+                    batsmen.push({
+                      name: bat.batName,
+                      dismissal: bat.outDesc || "not out",
+                      r: String(bat.runs || 0),
+                      b: String(bat.balls || 0),
+                      fours: String(bat.fours || 0),
+                      sixes: String(bat.sixes || 0),
+                      sr: bat.strikeRate ? String(bat.strikeRate.toFixed(2)) : "0.00"
+                    });
+                  }
+                });
+
+                const bowlers = [];
+                if (inn.bowlTeamDetails && inn.bowlTeamDetails.bowlersData) {
+                  const bowlersData = inn.bowlTeamDetails.bowlersData;
+                  Object.keys(bowlersData).forEach(key => {
+                    const bowl = bowlersData[key];
+                    if (bowl.bowlName) {
+                      bowlers.push({
+                        name: bowl.bowlName,
+                        o: String(bowl.overs || 0),
+                        m: String(bowl.maidens || 0),
+                        r: String(bowl.runs || 0),
+                        w: String(bowl.wickets || 0),
+                        eco: bowl.economy ? String(bowl.economy.toFixed(2)) : "0.00"
+                      });
+                    }
+                  });
+                }
+
+                const teamName = inn.batTeamDetails.batTeamName || "Team";
+                const score = `${inn.scoreDetails?.runs || 0}/${inn.scoreDetails?.wickets || 0}`;
+                const extras = String(inn.extrasData?.total || 0);
+
+                innings.push({ 
+                  team: teamName, 
+                  score, 
+                  batsmen, 
+                  bowlers, 
+                  extras, 
+                  fow: [] 
+                });
+              }
+            });
+            
+            jsonExtracted = true;
+            return false; // Break the each loop
+          }
+        } catch (jsonErr) {
+          console.log("JSON extraction attempt failed, falling back to HTML:", jsonErr.message);
+        }
+      }
+    });
+
+    // Fallback to HTML scraping if JSON extraction failed
+    if (!jsonExtracted) {
+      ["1", "2", "3", "4"].forEach(num => {
+        const innDiv = $(`#innings_${num}`);
+        if (innDiv.length) {
+          const teamName = innDiv.find(".cb-scrd-hdr-rw .cb-col-84").first().text().split("Innings")[0].trim();
+          const score = innDiv.find(".cb-scrd-hdr-rw .cb-col-16").first().text().trim();
+          
+          const batsmen = [];
+          innDiv.find(".cb-scrd-itms").each((i, el) => {
+            const row = $(el);
+            const name = row.find("a.cb-text-link").first().text().trim();
+            const dismissal = row.find(".text-gray").first().text().trim();
+            
+            if (name && !name.includes("Extras") && !name.includes("Total")) {
+              const cols = row.find(".cb-col-8");
+              batsmen.push({
+                name,
+                dismissal: dismissal || "not out",
+                r: $(cols[0]).text().trim() || "0",
+                b: $(cols[1]).text().trim() || "0",
+                fours: $(cols[2]).text().trim() || "0",
+                sixes: $(cols[3]).text().trim() || "0",
+                sr: $(cols[4]).text().trim() || "0.00"
+              });
+            }
+          });
+
+          const bowlers = [];
+          innDiv.find(".cb-ltst-wgt-hdr:contains('Bowling')").parent().find(".cb-scrd-itms").each((i, el) => {
+            const row = $(el);
+            const name = row.find("a.cb-text-link").first().text().trim();
+            if (name) {
+              const cols = row.find(".cb-col-8");
+              bowlers.push({
+                name,
+                o: $(cols[0]).text().trim() || "0",
+                m: $(cols[1]).text().trim() || "0",
+                r: $(cols[2]).text().trim() || "0",
+                w: $(cols[3]).text().trim() || "0",
+                eco: $(cols[4]).text().trim() || "0.00"
+              });
+            }
+          });
+
+          let extras = "0";
+          innDiv.find(".cb-scrd-itms").each((i, el) => {
+            const row = $(el);
+            const label = row.find(".cb-col-32").text().trim();
+            if (label.includes("Extras")) {
+              extras = row.find(".cb-col-8").first().text().trim() || "0";
+            }
+          });
+
+          const fow = [];
+          innDiv.find(".cb-col-100:contains('Fall of wickets')").each((i, el) => {
+            const fowText = $(el).text().replace("Fall of wickets:", "").trim();
+            if (fowText) fow.push(fowText);
+          });
+
+          if (batsmen.length > 0) {
+            innings.push({ 
+              team: teamName, 
+              score, 
+              batsmen, 
+              bowlers, 
+              extras, 
+              fow 
+            });
+          }
+        }
+      });
+    }
+
+    const scorecard = { innings };
+    cache.set(cacheKey, scorecard);
+    console.log(`Scraped scorecard for ${matchId}: ${innings.length} innings (JSON: ${jsonExtracted})`);
+    return scorecard;
+  } catch (e) {
+    console.error(`Scorecard scrape failed for ${matchId}:`, e.message);
+    return { innings: [] };
+  }
+}
+
+/**
  * Serve Static Metadata
  */
 function serveMeta(url, res) {
@@ -184,6 +457,22 @@ module.exports = async (req, res) => {
        // Simplified upcoming for Vercel
        console.log(`[API] Schedule endpoint called`);
        return res.json({ status: "success", data: [] });
+    }
+
+    // Match scorecard endpoint
+    if (parts[0] === "matches" && parts[2] === "scorecard") {
+      const matchId = parts[1];
+      const data = await getMatchScorecard(matchId);
+      console.log(`[API] Scorecard for match ${matchId}: ${data.innings?.length || 0} innings`);
+      return res.json({ status: "success", data });
+    }
+
+    // Match info endpoint
+    if (parts[0] === "matches" && parts[1] && !parts[2]) {
+      const matchId = parts[1];
+      const data = await getMatchInfo(matchId);
+      console.log(`[API] Match info for ${matchId}`);
+      return res.json({ status: "success", data });
     }
 
     // Fallback search rankings etc.
