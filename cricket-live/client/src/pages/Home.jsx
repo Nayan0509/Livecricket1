@@ -17,7 +17,7 @@ const SITE_SD = {
 export default function Home() {
   const navigate = useNavigate();
 
-  const { data: liveData, isLoading: liveLoading } = useQuery({
+  const { data: liveData, isLoading: liveLoading, error: liveError } = useQuery({
     queryKey: ["liveMatches"], queryFn: fetchLiveMatches, refetchInterval: 30000,
   });
   const { data: upcomingData } = useQuery({
@@ -30,11 +30,18 @@ export default function Home() {
     queryKey: ["news"], queryFn: fetchNews,
   });
 
-  const liveMatches = liveData?.data?.slice(0, 4) || [];
-  const upcoming = upcomingData?.data?.filter(m => !m.matchEnded).slice(0, 4) || [];
-  const newsItems = newsData?.data?.slice(0, 6) || [];
+  const liveMatches = Array.isArray(liveData?.data) ? liveData.data.slice(0, 4) : [];
+  const upcoming = Array.isArray(upcomingData?.data) ? upcomingData.data.filter(m => !m.matchEnded).slice(0, 4) : [];
+  const newsItems = Array.isArray(newsData?.data) ? newsData.data.slice(0, 6) : [];
 
-  const scheduleRows = scheduleData?.data || [];
+  const scheduleRows = Array.isArray(scheduleData?.data) ? scheduleData.data : [];
+  
+  // Debug logging
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Live data:', liveData);
+    console.log('Live matches:', liveMatches);
+    console.log('Live error:', liveError);
+  }
 
   return (
     <div className="container animate-fade-in" style={{ paddingTop: 20, paddingBottom: 60 }}>
@@ -115,7 +122,13 @@ export default function Home() {
               <h2 className="section-title">Live Analytics</h2>
               <Link to="/live" className="link-primary">See All Feed</Link>
             </div>
-            {liveLoading ? <div className="spinner" /> : (
+            {liveLoading ? <div className="spinner" /> : liveError ? (
+              <div className="glass" style={{ padding: 40, textAlign: "center", gridColumn: "span 2", borderRadius: "var(--radius-lg)", border: "1px solid #ef4444" }}>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>⚠️</div>
+                <h3 style={{ marginBottom: 12, color: "#ef4444" }}>Error Loading Matches</h3>
+                <p style={{ color: "var(--text3)", fontSize: 14 }}>{liveError?.message || "Failed to fetch live matches"}</p>
+              </div>
+            ) : (
               <div className="grid-2">
                 {liveMatches.length ? liveMatches.map(m => <MatchCard key={m.id} match={m} />) : (
                   <div className="glass" style={{ padding: 60, textAlign: "center", gridColumn: "span 2", borderRadius: "var(--radius-lg)" }}>
