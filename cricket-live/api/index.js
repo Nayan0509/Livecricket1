@@ -480,7 +480,9 @@ module.exports = async (req, res) => {
     if (path === "matches/live" || path === "matches/current") {
       const data = await getLiveMatches();
       console.log(`[API] Live matches endpoint: ${data.length} matches`);
-      return res.json({ status: "success", data });
+      const response = { status: "success", data };
+      console.log(`[API] Response structure:`, JSON.stringify({ status: response.status, dataType: Array.isArray(response.data) ? 'array' : typeof response.data, dataLength: response.data?.length }));
+      return res.json(response);
     }
 
     if (path === "matches/upcoming" || path === "schedule") {
