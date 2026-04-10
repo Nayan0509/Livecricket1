@@ -172,18 +172,41 @@ function generateMatchStructuredData(match) {
   const team2 = match.team2 || match.teams?.[1] || 'Team 2';
   const tournament = match.tournament || match.series || 'Cricket Match';
   const venue = match.venue || 'Cricket Stadium';
-  const date = match.date || new Date().toISOString();
+  const city = match.city || 'India';
+  const country = match.country || 'India';
+  
+  // Ensure we have a valid date
+  let startDate;
+  if (match.date) {
+    startDate = new Date(match.date).toISOString();
+  } else if (match.dateTimeGMT) {
+    startDate = new Date(match.dateTimeGMT).toISOString();
+  } else {
+    startDate = new Date().toISOString();
+  }
+  
+  // Calculate end date (typically 8 hours after start for cricket matches)
+  const endDate = new Date(new Date(startDate).getTime() + 8 * 60 * 60 * 1000).toISOString();
   
   return {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
     "name": `${team1} vs ${team2}`,
     "description": `${tournament} - ${team1} vs ${team2} live cricket match`,
-    "startDate": date,
+    "startDate": startDate,
+    "endDate": endDate,
+    "eventStatus": "https://schema.org/EventScheduled",
     "location": {
       "@type": "Place",
-      "name": venue
+      "name": venue,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": city,
+        "addressCountry": country
+      }
     },
+    "image": "https://www.livecricketzone.com/logo192.png",
+    "sport": "Cricket",
     "competitor": [
       {
         "@type": "SportsTeam",
@@ -194,11 +217,28 @@ function generateMatchStructuredData(match) {
         "name": team2
       }
     ],
-    "sport": "Cricket",
     "organizer": {
       "@type": "SportsOrganization",
-      "name": tournament
-    }
+      "name": tournament,
+      "url": "https://www.livecricketzone.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.livecricketzone.com",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "performer": [
+      {
+        "@type": "SportsTeam",
+        "name": team1
+      },
+      {
+        "@type": "SportsTeam",
+        "name": team2
+      }
+    ]
   };
 }
 

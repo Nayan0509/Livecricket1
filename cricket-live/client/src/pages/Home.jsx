@@ -8,10 +8,19 @@ import SEO from "../components/SEO";
 
 const SITE_SD = {
   "@context": "https://schema.org",
-  "@type": "SportsEvent",
-  "name": "Live Cricket Zone - Enterprise Edition",
-  "sport": "Cricket",
-  "url": "https://www.livecricketzone.com"
+  "@type": "WebSite",
+  "name": "Live Cricket Zone",
+  "alternateName": "Cricket Live Zone",
+  "url": "https://www.livecricketzone.com",
+  "description": "Live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup, ODI and Test match updates",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://www.livecricketzone.com/players?search={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
 };
 
 export default function Home() {

@@ -131,18 +131,52 @@ export default function MatchDetail() {
         structuredData={{
           "@context": "https://schema.org",
           "@type": "SportsEvent",
-          "name": match.name,
-          "description": match.status,
-          "startDate": match.dateTimeGMT,
+          "name": match.name || "Cricket Match",
+          "description": match.status || "Live Cricket Match",
+          "startDate": match.dateTimeGMT || new Date().toISOString(),
+          "endDate": match.dateTimeGMT ? new Date(new Date(match.dateTimeGMT).getTime() + 8 * 60 * 60 * 1000).toISOString() : new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
+          "eventStatus": match.matchEnded ? "https://schema.org/EventScheduled" : "https://schema.org/EventScheduled",
           "location": {
             "@type": "Place",
-            "name": match.venue
+            "name": match.venue || "Cricket Stadium",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": match.venue || "India",
+              "addressCountry": "IN"
+            }
           },
+          "image": match.teamInfo?.[0]?.img || "https://www.livecricketzone.com/logo192.png",
+          "sport": "Cricket",
           "competitor": match.teamInfo?.map(t => ({
             "@type": "SportsTeam",
-            "name": t.name,
-            "image": t.img
-          }))
+            "name": t.name || "Team",
+            "image": t.img || "https://www.livecricketzone.com/logo192.png"
+          })) || [
+            {
+              "@type": "SportsTeam",
+              "name": "Team 1"
+            },
+            {
+              "@type": "SportsTeam",
+              "name": "Team 2"
+            }
+          ],
+          "organizer": {
+            "@type": "SportsOrganization",
+            "name": match.series || "Cricket Tournament",
+            "url": "https://www.livecricketzone.com"
+          },
+          "offers": {
+            "@type": "Offer",
+            "url": `https://www.livecricketzone.com/match/${id}`,
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "performer": match.teamInfo?.map(t => ({
+            "@type": "SportsTeam",
+            "name": t.name || "Team"
+          })) || []
         }}
       />
       
