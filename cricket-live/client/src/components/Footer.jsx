@@ -96,9 +96,9 @@ export default function Footer() {
           </div>
           <div style={{ display: "flex", gap: 16 }}>
             {[
-              ["Privacy Policy", "/about"],
-              ["Terms of Use", "/about"],
-              ["DMCA / Copyright", "/about"],
+              ["Privacy Policy", "/privacy-policy"],
+              ["Terms of Use", "/terms-of-use"],
+              ["DMCA / Copyright", "/dmca-copyright"],
               ["Sitemap", "/sitemap.xml"],
             ].map(([label, href]) => (
               <a key={label} href={href} style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", textDecoration: "none" }}

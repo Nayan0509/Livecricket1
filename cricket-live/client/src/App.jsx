@@ -44,6 +44,9 @@ import CricketMatchesToday from "./pages/CricketMatchesToday";
 import WatchLive from "./pages/WatchLive";
 import Videos from "./pages/Videos";
 import CountyChampionship from "./pages/CountyChampionship";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfUse from "./pages/TermsOfUse";
+import DMCACopyright from "./pages/DMCACopyright";
 
 
 export default function App() {
@@ -82,6 +85,9 @@ export default function App() {
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/about" element={<About />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-use" element={<TermsOfUse />} />
+            <Route path="/dmca-copyright" element={<DMCACopyright />} />
 
             <Route path="/ipl" element={<IPL />} />
             <Route path="/t20" element={<T20Cricket />} />

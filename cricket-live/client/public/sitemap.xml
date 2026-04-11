@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- ═══ TIER 1: Homepage & Live ═══ -->
+  <!-- TIER 1: Homepage & Live -->
   <url><loc>https://www.livecricketzone.com/</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/live</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/live-cricket-score</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
@@ -10,13 +9,13 @@
   <url><loc>https://www.livecricketzone.com/cricket-matches-today</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/ball-by-ball</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 2: Watch / Stream ═══ -->
+  <!-- TIER 2: Watch / Stream -->
   <url><loc>https://www.livecricketzone.com/watch-live</loc><changefreq>always</changefreq><priority>0.98</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/watch</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/live-stream</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/videos</loc><changefreq>daily</changefreq><priority>0.8</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 3: Major International Tournaments ═══ -->
+  <!-- TIER 3: Major International Tournaments -->
   <url><loc>https://www.livecricketzone.com/ipl</loc><changefreq>hourly</changefreq><priority>0.98</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/t20-world-cup</loc><changefreq>hourly</changefreq><priority>0.97</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/world-cup</loc><changefreq>hourly</changefreq><priority>0.96</priority><lastmod>2026-04-11</lastmod></url>
@@ -24,27 +23,27 @@
   <url><loc>https://www.livecricketzone.com/champions-trophy</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/womens-cricket</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 4: UK Cricket — County Championship ═══ -->
+  <!-- TIER 4: UK Cricket -->
   <url><loc>https://www.livecricketzone.com/county-championship</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/county-cricket</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 5: Domestic Leagues ═══ -->
+  <!-- TIER 5: Domestic Leagues -->
   <url><loc>https://www.livecricketzone.com/psl</loc><changefreq>hourly</changefreq><priority>0.93</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/bbl</loc><changefreq>hourly</changefreq><priority>0.88</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/cpl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/bpl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 6: Cricket Formats ═══ -->
+  <!-- TIER 6: Cricket Formats -->
   <url><loc>https://www.livecricketzone.com/t20</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/odi</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/test</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 7: Schedule & Results ═══ -->
+  <!-- TIER 7: Schedule & Results -->
   <url><loc>https://www.livecricketzone.com/schedule</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/upcoming</loc><changefreq>hourly</changefreq><priority>0.90</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/results</loc><changefreq>hourly</changefreq><priority>0.88</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 8: Content & Data ═══ -->
+  <!-- TIER 8: Content & Data -->
   <url><loc>https://www.livecricketzone.com/news</loc><changefreq>hourly</changefreq><priority>0.88</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/series</loc><changefreq>daily</changefreq><priority>0.82</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/players</loc><changefreq>daily</changefreq><priority>0.82</priority><lastmod>2026-04-11</lastmod></url>
@@ -52,8 +51,11 @@
   <url><loc>https://www.livecricketzone.com/rankings</loc><changefreq>weekly</changefreq><priority>0.82</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/stats</loc><changefreq>daily</changefreq><priority>0.78</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- ═══ TIER 9: Static Pages ═══ -->
+  <!-- TIER 9: Static & Legal Pages -->
   <url><loc>https://www.livecricketzone.com/about</loc><changefreq>monthly</changefreq><priority>0.5</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/best-cricket-website</loc><changefreq>monthly</changefreq><priority>0.7</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.4</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/terms-of-use</loc><changefreq>yearly</changefreq><priority>0.4</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/dmca-copyright</loc><changefreq>yearly</changefreq><priority>0.4</priority><lastmod>2026-04-11</lastmod></url>
 
 </urlset>
