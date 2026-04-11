@@ -163,7 +163,23 @@ export default function WatchSection({ match, autoOpen }) {
                     />
                   </div>
                 )}
-                <div style={{ marginTop: 10, textAlign: "right" }}>
+                {/* YouTube credit + legal */}
+                <div style={{
+                  marginTop: 8, padding: "8px 12px",
+                  background: "rgba(255,0,0,0.06)", borderRadius: 8,
+                  border: "1px solid rgba(255,0,0,0.12)",
+                  display: "flex", alignItems: "flex-start", gap: 8,
+                }}>
+                  <svg width="16" height="12" viewBox="0 0 16 12" fill="none" style={{ flexShrink: 0, marginTop: 1 }}>
+                    <rect width="16" height="12" rx="3" fill="#FF0000"/>
+                    <polygon points="6.5,3 6.5,9 11,6" fill="white"/>
+                  </svg>
+                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>
+                    Videos are sourced from <strong style={{ color: "rgba(255,255,255,0.6)" }}>YouTube</strong> and are the property of their respective owners and channels. All rights belong to the original content creators. We do not host, upload or own any video content. Embedded via YouTube's official embed API in compliance with{" "}
+                    <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>YouTube Terms of Service</a>.
+                  </div>
+                </div>
+                <div style={{ marginTop: 6, textAlign: "right" }}>
                   <a
                     href={`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`}
                     target="_blank" rel="noopener noreferrer"
@@ -213,7 +229,16 @@ export default function WatchSection({ match, autoOpen }) {
                           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
                           lineHeight: 1.4,
                         }}>{v.title}</div>
-                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>{v.channel}</div>
+                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>
+                          <a
+                            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(v.title)}`}
+                            target="_blank" rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none" }}
+                          >
+                            📺 {v.channel || "YouTube"}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   ))}

@@ -148,6 +148,25 @@ function StripCard({ match }) {
       }}>
         {match.status}
       </div>
+
+      {/* Watch button */}
+      <button
+        onClick={e => { e.stopPropagation(); navigate(`/match/${match.id}?watch=1`); }}
+        style={{
+          marginTop: 10, width: "100%",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
+          background: isLive ? "rgba(239,68,68,0.18)" : "rgba(255,255,255,0.05)",
+          border: `1px solid ${isLive ? "rgba(239,68,68,0.4)" : "rgba(255,255,255,0.1)"}`,
+          color: isLive ? "#f87171" : "rgba(255,255,255,0.55)",
+          borderRadius: 8, padding: "6px 0",
+          fontSize: 11, fontWeight: 700, cursor: "pointer",
+          transition: "all 0.2s",
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.28)" : "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.18)" : "rgba(255,255,255,0.05)"; e.currentTarget.style.color = isLive ? "#f87171" : "rgba(255,255,255,0.55)"; }}
+      >
+        📺 Watch {isLive ? "Live" : "Highlights"}
+      </button>
     </div>
   );
 }
@@ -168,9 +187,9 @@ function MatchRow({ match }) {
     <div
       onClick={() => navigate(`/match/${match.id}`)}
       style={{
-        display: "grid", gridTemplateColumns: "1fr 56px 1fr",
+        display: "grid", gridTemplateColumns: "1fr 56px 1fr auto",
         alignItems: "center", gap: 8,
-        padding: "13px 18px", cursor: "pointer",
+        padding: "11px 14px", cursor: "pointer",
         borderBottom: "1px solid rgba(255,255,255,0.04)",
         transition: "background 0.15s",
         background: isLive ? "rgba(244,63,94,0.03)" : "transparent",
@@ -229,6 +248,24 @@ function MatchRow({ match }) {
           )}
         </div>
       </div>
+
+      {/* Watch button */}
+      <button
+        onClick={e => { e.stopPropagation(); navigate(`/match/${match.id}?watch=1`); }}
+        style={{
+          display: "flex", alignItems: "center", gap: 4,
+          background: isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",
+          border: `1px solid ${isLive ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.1)"}`,
+          color: isLive ? "#f87171" : "rgba(255,255,255,0.5)",
+          borderRadius: 7, padding: "5px 10px",
+          fontSize: 11, fontWeight: 700, cursor: "pointer",
+          whiteSpace: "nowrap", transition: "all 0.2s", flexShrink: 0,
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.25)" : "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)"; e.currentTarget.style.color = isLive ? "#f87171" : "rgba(255,255,255,0.5)"; }}
+      >
+        📺
+      </button>
     </div>
   );
 }
