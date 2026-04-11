@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchLiveMatches, fetchUpcomingMatches, fetchSchedule, fetchNews } from "../api";
+import { fetchAllMatches, fetchNews } from "../api";
 import MatchCard from "../components/MatchCard";
 import AdBanner from "../components/AdBanner";
 import SEO from "../components/SEO";
@@ -25,32 +25,34 @@ const SITE_SD = {
 
 export default function Home() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("live");
 
-  const { data: liveData, isLoading: liveLoading, error: liveError } = useQuery({
-    queryKey: ["liveMatches"], queryFn: fetchLiveMatches, refetchInterval: 30000,
+  const { data: allMatchesData, isLoading: matchesLoading, error: matchesError } = useQuery({
+    queryKey: ["allMatches"], 
+    queryFn: fetchAllMatches, 
+    refetchInterval: 30000,
   });
-  const { data: upcomingData } = useQuery({
-    queryKey: ["upcoming"], queryFn: fetchUpcomingMatches,
-  });
-  const { data: scheduleData } = useQuery({
-    queryKey: ["schedule"], queryFn: fetchSchedule,
-  });
+
   const { data: newsData } = useQuery({
-    queryKey: ["news"], queryFn: fetchNews,
+    queryKey: ["news"], 
+    queryFn: fetchNews,
   });
 
-  const liveMatches = Array.isArray(liveData?.data) ? liveData.data.slice(0, 4) : [];
-  const upcoming = Array.isArray(upcomingData?.data) ? upcomingData.data.filter(m => !m.matchEnded).slice(0, 4) : [];
+  const liveMatches = allMatchesData?.data?.live || [];
+  const recentMatches = allMatchesData?.data?.recent || [];
+  const upcomingMatches = allMatchesData?.data?.upcoming || [];
   const newsItems = Array.isArray(newsData?.data) ? newsData.data.slice(0, 6) : [];
 
-  const scheduleRows = Array.isArray(scheduleData?.data) ? scheduleData.data : [];
-  
-  // Debug logging
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Live data:', liveData);
-    console.log('Live matches:', liveMatches);
-    console.log('Live error:', liveError);
-  }
+  const getCurrentMatches = () => {
+    switch(activeTab) {
+      case "live": return liveMatches;
+      case "recent": return recentMatches;
+      case "upcoming": return upcomingMatches;
+      default: return liveMatches;
+    }
+  };
+
+  const currentMatches = getCurrentMatches();
 
   return (
     <div className="container animate-fade-in" style={{ paddingTop: 20, paddingBottom: 60 }}>
@@ -123,27 +125,72 @@ export default function Home() {
           </div>
         </aside>
 
-        {/* Center: Live Center & News */}
+        {/* Center: Matches & News */}
         <main style={{ minWidth: 0 }}>
-          {/* Live Matches */}
+          {/* Match Tabs */}
           <section className="animate-fade-in delay-1" style={{ marginBottom: 48 }}>
-            <div className="section-header">
-              <h2 className="section-title">Live Analytics</h2>
-              <Link to="/live" className="link-primary">See All Feed</Link>
+            <div className="section-header" style={{ marginBottom: 24 }}>
+              <h2 className="section-title">Cricket Matches</h2>
             </div>
-            {liveLoading ? <div className="spinner" /> : liveError ? (
-              <div className="glass" style={{ padding: 40, textAlign: "center", gridColumn: "span 2", borderRadius: "var(--radius-lg)", border: "1px solid #ef4444" }}>
+
+            {/* Tabs */}
+            <div style={{ display: "flex", gap: 16, marginBottom: 24, borderBottom: "2px solid var(--divider)" }}>
+              {[
+                { key: "live", label: "🔴 Live", count: liveMatches.length },
+                { key: "recent", label: "📊 Recent", count: recentMatches.length },
+                { key: "upcoming", label: "📅 Upcoming", count: upcomingMatches.length }
+              ].map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: "12px 24px",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: activeTab === tab.key ? "var(--primary-light)" : "var(--text3)",
+                    cursor: "pointer",
+                    position: "relative",
+                    transition: "all 0.3s"
+                  }}
+                >
+                  {tab.label} ({tab.count})
+                  {activeTab === tab.key && (
+                    <div style={{
+                      position: "absolute",
+                      bottom: -2,
+                      left: 0,
+                      right: 0,
+                      height: 3,
+                      background: "var(--primary-light)",
+                      borderRadius: "2px 2px 0 0"
+                    }} />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Match Content */}
+            {matchesLoading ? (
+              <div className="spinner" />
+            ) : matchesError ? (
+              <div className="glass" style={{ padding: 40, textAlign: "center", borderRadius: "var(--radius-lg)", border: "1px solid #ef4444" }}>
                 <div style={{ fontSize: 40, marginBottom: 16 }}>⚠️</div>
                 <h3 style={{ marginBottom: 12, color: "#ef4444" }}>Error Loading Matches</h3>
-                <p style={{ color: "var(--text3)", fontSize: 14 }}>{liveError?.message || "Failed to fetch live matches"}</p>
+                <p style={{ color: "var(--text3)", fontSize: 14 }}>{matchesError?.message || "Failed to fetch matches"}</p>
               </div>
             ) : (
               <div className="grid-2">
-                {liveMatches.length ? liveMatches.map(m => <MatchCard key={m.id} match={m} />) : (
+                {currentMatches.length ? currentMatches.map(m => <MatchCard key={m.id} match={m} />) : (
                   <div className="glass" style={{ padding: 60, textAlign: "center", gridColumn: "span 2", borderRadius: "var(--radius-lg)" }}>
                     <div style={{ fontSize: 60, marginBottom: 20 }}>🏏</div>
-                    <h3 style={{ marginBottom: 12 }}>No Live Coverage</h3>
-                    <p style={{ color: "var(--text3)" }}>There are no matches currently being monitored live. Check the schedule for upcoming events.</p>
+                    <h3 style={{ marginBottom: 12 }}>No {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Matches</h3>
+                    <p style={{ color: "var(--text3)" }}>
+                      {activeTab === "live" && "There are no matches currently being played live."}
+                      {activeTab === "recent" && "No recently completed matches available."}
+                      {activeTab === "upcoming" && "No upcoming matches scheduled at the moment."}
+                    </p>
                   </div>
                 )}
               </div>
@@ -188,40 +235,35 @@ export default function Home() {
           </section>
         </main>
 
-        {/* Right Sidebar: Schedule & CTA */}
+        {/* Right Sidebar: Quick Stats */}
         <aside className="dashboard-aside">
           <div className="glass" style={{ borderRadius: "var(--radius-lg)", padding: 24, position: "sticky", top: 100 }}>
              <h3 className="section-title" style={{ fontSize: 18, marginBottom: 24, paddingBottom: 0, border: "none" }}>
-               🗓️ Global Schedule
+               📊 Match Stats
              </h3>
-             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {scheduleRows.slice(0, 5).map((m, i) => (
-                   <div key={i} className="animate-fade-in" style={{ 
-                     borderBottom: "1px solid var(--divider)", 
-                     paddingBottom: 16,
-                     animationDelay: `${i * 0.1}s` 
-                   }}>
-                      <div style={{ fontSize: 13, fontWeight: 800, marginTop: 6 }}>
-                         {m.name}
-                      </div>
-                      <div style={{ fontSize: 12, color: "var(--accent-green)", marginTop: 4, fontWeight: 600 }}>{m.date}</div>
-                   </div>
-                ))}
-                {scheduleRows.length === 0 && (
-                   <div style={{ color: "var(--text3)", fontSize: 13, textAlign: "center", padding: 20 }}>
-                      No upcoming matches scheduled.
-                   </div>
-                )}
+             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <div style={{ padding: 16, background: "rgba(224, 45, 45, 0.1)", borderRadius: "var(--radius)", border: "1px solid rgba(224, 45, 45, 0.3)" }}>
+                   <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 4 }}>LIVE NOW</div>
+                   <div style={{ fontSize: 32, fontWeight: 900, color: "var(--primary-light)" }}>{liveMatches.length}</div>
+                </div>
+                <div style={{ padding: 16, background: "rgba(20, 184, 166, 0.1)", borderRadius: "var(--radius)", border: "1px solid rgba(20, 184, 166, 0.3)" }}>
+                   <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 4 }}>UPCOMING</div>
+                   <div style={{ fontSize: 32, fontWeight: 900, color: "var(--accent-teal)" }}>{upcomingMatches.length}</div>
+                </div>
+                <div style={{ padding: 16, background: "rgba(251, 191, 36, 0.1)", borderRadius: "var(--radius)", border: "1px solid rgba(251, 191, 36, 0.3)" }}>
+                   <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 4 }}>RECENT</div>
+                   <div style={{ fontSize: 32, fontWeight: 900, color: "var(--accent-orange)" }}>{recentMatches.length}</div>
+                </div>
              </div>
 
              <div className="card" style={{ marginTop: 32, background: "var(--gradient-primary)", border: "none", padding: 24, textAlign: "center" }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>💎</div>
-                <h4 style={{ color: "#fff", marginBottom: 12, fontSize: 18 }}>Enterprise Pro</h4>
+                <h4 style={{ color: "#fff", marginBottom: 12, fontSize: 18 }}>Premium Access</h4>
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.9)", marginBottom: 20, lineHeight: 1.5 }}>
-                  Access deep-data heatmaps, player trajectory, and predictive ML models for every match.
+                  Get detailed analytics, player stats, and match predictions.
                 </p>
                 <button className="btn" style={{ background: "#fff", color: "var(--primary)", padding: "12px 24px", width: "100%", fontWeight: 800 }}>
-                  Start Free Trial
+                  Upgrade Now
                 </button>
              </div>
           </div>

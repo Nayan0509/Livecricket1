@@ -18,7 +18,7 @@ export default function News() {
       
       <div className="glass" style={{ padding: "40px", borderRadius: "var(--radius-xl)", marginBottom: 40 }}>
         <h1 className="page-title" style={{ marginBottom: 12 }}>📰 Global Newsroom</h1>
-        <p style={{ color: "var(--text2)", fontSize: 16 }}>Curated high-frequency updates from Google News RSS and direct global streams.</p>
+        <p style={{ color: "var(--text2)", fontSize: 16 }}>Latest cricket news from the past 2-3 days. Curated from Google News and Cricbuzz.</p>
       </div>
 
       {isLoading && <div className="spinner" />}
@@ -36,7 +36,11 @@ export default function News() {
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
                  <span className="badge badge-upcoming" style={{ background: "rgba(224, 45, 45, 0.1)", color: "var(--primary-light)" }}>{n.source}</span>
-                 <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700 }}>{n.date}</span>
+                 <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700 }}>
+                   {n.hoursAgo !== undefined ? (
+                     n.hoursAgo < 24 ? `${n.hoursAgo}h ago` : `${n.daysAgo}d ago`
+                   ) : n.date}
+                 </span>
               </div>
               <h3 style={{ fontSize: 20, fontWeight: 900, marginBottom: 12, lineHeight: 1.4 }}>{n.title}</h3>
               <p style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
