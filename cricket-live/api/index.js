@@ -485,6 +485,7 @@ function serveMeta(url, res) {
 
     res.setHeader("Content-Type", "application/xml");
     res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
+    res.setHeader("X-Robots-Tag", "noindex");
     res.status(200).send(
       `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>`
     );
@@ -492,9 +493,13 @@ function serveMeta(url, res) {
   }
   if (url.includes("robots.txt")) {
     res.setHeader("Content-Type", "text/plain");
+    res.setHeader("Cache-Control", "s-maxage=86400");
     res.status(200).send(
       "User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /*.json$\nCrawl-delay: 1\n\n" +
       "User-agent: Googlebot\nAllow: /\nCrawl-delay: 0\n\n" +
+      "User-agent: Bingbot\nAllow: /\nCrawl-delay: 1\n\n" +
+      "User-agent: adidxbot\nAllow: /\nCrawl-delay: 1\n\n" +
+      "User-agent: msnbot\nAllow: /\nCrawl-delay: 1\n\n" +
       "Sitemap: https://www.livecricketzone.com/sitemap.xml"
     );
     return true;
@@ -509,7 +514,7 @@ function serveMeta(url, res) {
 
 // ─── BOT DETECTION ───────────────────────────────────────────────────────────
 
-const BOT_UA = /googlebot|bingbot|yandex|baiduspider|duckduckbot|slurp|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix/i;
+const BOT_UA = /googlebot|bingbot|adidxbot|bingpreview|msnbot|yandex|yandexbot|baiduspider|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix|petalbot|bytespider|gptbot|claudebot|ccbot/i;
 
 function isBot(req) {
   return BOT_UA.test(req.headers["user-agent"] || "");
@@ -697,10 +702,23 @@ function getPageMeta(pathname) {
 // ─── BOT HTML RENDERER ────────────────────────────────────────────────────────
 // Serves a fully-formed HTML page to crawlers with all meta tags + visible content
 
-function renderBotHtml(pathname, meta, liveMatches = []) {
-  const matchListHtml = liveMatches.length > 0
-    ? `<ul>${liveMatches.slice(0, 10).map(m => `<li><a href="${BASE}/match/${m.id}">${m.name} — ${m.status}</a></li>`).join("")}</ul>`
-    : "<p>Check back soon for live matches.</p>";
+function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
+  const liveHtml = liveMatches.length > 0
+    ? liveMatches.slice(0, 10).map(m => `
+      <article itemscope itemtype="https://schema.org/SportsEvent">
+        <h3 itemprop="name"><a href="${BASE}/match/${m.id}">${m.name}</a></h3>
+        <p itemprop="description">${m.status}${m.venue ? ` — ${m.venue}` : ""}</p>
+        <meta itemprop="sport" content="Cricket"/>
+      </article>`).join("")
+    : "";
+
+  const recentHtml = recentMatches.length > 0
+    ? recentMatches.slice(0, 5).map(m => `
+      <article>
+        <h3><a href="${BASE}/match/${m.id}">${m.name}</a></h3>
+        <p>${m.status}</p>
+      </article>`).join("")
+    : "";
 
   const sd = JSON.stringify({
     "@context": "https://schema.org",
@@ -708,11 +726,34 @@ function renderBotHtml(pathname, meta, liveMatches = []) {
     "name": meta.title,
     "description": meta.desc,
     "url": meta.canonical,
-    "publisher": { "@type": "Organization", "name": SITE, "url": BASE }
+    "inLanguage": "en-US",
+    "isPartOf": { "@type": "WebSite", "name": "Live Cricket Zone", "url": BASE },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Live Cricket Zone",
+      "url": BASE,
+      "logo": { "@type": "ImageObject", "url": `${BASE}/logo192.png` }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": BASE },
+        ...(pathname !== "/" ? [{ "@type": "ListItem", "position": 2, "name": meta.title.split("|")[0].trim(), "item": meta.canonical }] : [])
+      ]
+    }
   });
 
+  const navLinks = [
+    ["/", "Home"], ["/live", "Live Scores"], ["/ipl", "IPL 2026"],
+    ["/t20-world-cup", "T20 World Cup"], ["/cricket-matches-today", "Today's Matches"],
+    ["/schedule", "Schedule"], ["/results", "Results"], ["/news", "News"],
+    ["/rankings", "ICC Rankings"], ["/players", "Players"], ["/teams", "Teams"],
+    ["/ball-by-ball", "Ball by Ball"], ["/t20", "T20 Cricket"],
+    ["/odi", "ODI Cricket"], ["/test", "Test Cricket"],
+  ];
+
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/WebPage">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -721,54 +762,120 @@ function renderBotHtml(pathname, meta, liveMatches = []) {
   <meta name="keywords" content="${meta.kw}"/>
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
   <meta name="googlebot" content="index,follow"/>
+  <meta name="bingbot" content="index,follow"/>
+  <meta name="author" content="Live Cricket Zone"/>
+  <meta name="language" content="English"/>
+  <meta name="geo.region" content="IN"/>
+  <meta name="geo.placename" content="India"/>
   <link rel="canonical" href="${meta.canonical}"/>
   <meta property="og:title" content="${meta.title}"/>
   <meta property="og:description" content="${meta.desc}"/>
   <meta property="og:url" content="${meta.canonical}"/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="${BASE}/og-image.png"/>
-  <meta property="og:site_name" content="${SITE}"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:site_name" content="Live Cricket Zone"/>
+  <meta property="og:locale" content="en_US"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="${meta.title}"/>
   <meta name="twitter:description" content="${meta.desc}"/>
   <meta name="twitter:image" content="${BASE}/og-image.png"/>
   <meta name="twitter:site" content="@LiveCricketZone"/>
   <script type="application/ld+json">${sd}</script>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:1200px;margin:0 auto;padding:16px;color:#1a1a1a;line-height:1.6}
+    header{border-bottom:2px solid #00c853;padding-bottom:12px;margin-bottom:20px}
+    h1{color:#00c853;margin:0 0 8px}
+    nav a{margin-right:12px;color:#1565c0;text-decoration:none;font-size:14px}
+    nav a:hover{text-decoration:underline}
+    h2{color:#1a1a1a;border-left:4px solid #00c853;padding-left:10px}
+    article{border:1px solid #e0e0e0;border-radius:6px;padding:12px;margin-bottom:10px}
+    article h3{margin:0 0 4px;font-size:15px}
+    article h3 a{color:#1565c0;text-decoration:none}
+    article p{margin:0;color:#555;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+    .link-card{border:1px solid #e0e0e0;border-radius:6px;padding:12px;text-align:center}
+    .link-card a{color:#1565c0;text-decoration:none;font-weight:bold}
+    footer{margin-top:40px;padding-top:16px;border-top:1px solid #e0e0e0;font-size:12px;color:#777}
+  </style>
 </head>
 <body>
   <header>
-    <h1><a href="${BASE}">${SITE}</a></h1>
-    <nav>
-      <a href="${BASE}/live">Live</a> |
-      <a href="${BASE}/ipl">IPL 2026</a> |
-      <a href="${BASE}/t20-world-cup">T20 World Cup</a> |
-      <a href="${BASE}/schedule">Schedule</a> |
-      <a href="${BASE}/news">News</a> |
-      <a href="${BASE}/rankings">Rankings</a> |
-      <a href="${BASE}/players">Players</a>
+    <h1 itemprop="name"><a href="${BASE}" style="color:#00c853;text-decoration:none">🏏 Live Cricket Zone</a></h1>
+    <p itemprop="description" style="margin:4px 0 10px;color:#555;font-size:14px">Fastest live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup &amp; all cricket updates</p>
+    <nav aria-label="Main navigation">
+      ${navLinks.map(([href, label]) => `<a href="${BASE}${href}">${label}</a>`).join("")}
     </nav>
   </header>
+
   <main>
     <h1>${meta.title.split("|")[0].trim()}</h1>
-    <p>${meta.desc}</p>
-    ${liveMatches.length > 0 ? `<h2>Live Cricket Matches</h2>${matchListHtml}` : ""}
-    <section>
+    <p style="font-size:15px;color:#333;margin-bottom:20px">${meta.desc}</p>
+
+    ${liveMatches.length > 0 ? `
+    <section aria-label="Live cricket matches">
+      <h2>🔴 Live Cricket Matches Right Now</h2>
+      ${liveHtml}
+    </section>` : ""}
+
+    ${recentMatches.length > 0 ? `
+    <section aria-label="Recent cricket results">
+      <h2>✅ Recent Match Results</h2>
+      ${recentHtml}
+    </section>` : ""}
+
+    <section aria-label="Cricket tournaments">
+      <h2>🏆 Cricket Tournaments &amp; Leagues</h2>
+      <div class="grid">
+        <div class="link-card"><a href="${BASE}/ipl">IPL 2026 Live Score</a><br/><small>Indian Premier League</small></div>
+        <div class="link-card"><a href="${BASE}/t20-world-cup">T20 World Cup 2026</a><br/><small>ICC T20 World Cup</small></div>
+        <div class="link-card"><a href="${BASE}/world-cup">Cricket World Cup 2027</a><br/><small>ICC ODI World Cup</small></div>
+        <div class="link-card"><a href="${BASE}/asia-cup">Asia Cup 2026</a><br/><small>India vs Pakistan</small></div>
+        <div class="link-card"><a href="${BASE}/champions-trophy">Champions Trophy 2025</a><br/><small>ICC Champions Trophy</small></div>
+        <div class="link-card"><a href="${BASE}/psl">PSL 2026 Live Score</a><br/><small>Pakistan Super League</small></div>
+        <div class="link-card"><a href="${BASE}/bbl">BBL 2026 Live Score</a><br/><small>Big Bash League</small></div>
+        <div class="link-card"><a href="${BASE}/cpl">CPL 2026 Live Score</a><br/><small>Caribbean Premier League</small></div>
+        <div class="link-card"><a href="${BASE}/bpl">BPL 2026 Live Score</a><br/><small>Bangladesh Premier League</small></div>
+        <div class="link-card"><a href="${BASE}/womens-cricket">Women's Cricket</a><br/><small>ICC Women's T20 &amp; ODI</small></div>
+      </div>
+    </section>
+
+    <section aria-label="Cricket formats">
+      <h2>🏏 Cricket Formats</h2>
+      <div class="grid">
+        <div class="link-card"><a href="${BASE}/t20">T20 Cricket Live Score</a><br/><small>Twenty20 matches</small></div>
+        <div class="link-card"><a href="${BASE}/odi">ODI Cricket Live Score</a><br/><small>One Day International</small></div>
+        <div class="link-card"><a href="${BASE}/test">Test Cricket Live Score</a><br/><small>5-day Test matches</small></div>
+        <div class="link-card"><a href="${BASE}/ball-by-ball">Ball by Ball Commentary</a><br/><small>Real-time commentary</small></div>
+      </div>
+    </section>
+
+    <section aria-label="About Live Cricket Zone">
       <h2>About Live Cricket Zone</h2>
-      <p>Live Cricket Zone provides the fastest live cricket scores with ball-by-ball commentary updated every 15 seconds. Get real-time IPL 2026 live score, T20 World Cup live score, ODI and Test match scorecards.</p>
+      <p>Live Cricket Zone is your ultimate destination for <strong>live cricket scores</strong> with real-time ball-by-ball commentary updated every 15 seconds. We cover all major cricket tournaments including <strong>IPL 2026 live score</strong>, <strong>T20 World Cup 2026</strong>, ODI World Cup, Asia Cup, Champions Trophy, PSL, BBL, CPL, BPL and all international cricket.</p>
+      <p>Our <strong>cricket score today</strong> service is faster than Cricbuzz and ESPNcricinfo. Get <strong>live cricket match</strong> updates, full scorecards, toss results, player statistics, ICC rankings 2026, cricket news and match schedules — all in one place.</p>
+      <h3>Why Choose Live Cricket Zone?</h3>
       <ul>
-        <li><a href="${BASE}/live">Live Cricket Score Now</a></li>
-        <li><a href="${BASE}/ipl">IPL 2026 Live Score</a></li>
-        <li><a href="${BASE}/t20-world-cup">T20 World Cup 2026 Live Score</a></li>
-        <li><a href="${BASE}/ball-by-ball">Ball by Ball Commentary</a></li>
-        <li><a href="${BASE}/cricket-matches-today">Cricket Matches Today</a></li>
-        <li><a href="${BASE}/schedule">Cricket Schedule 2026</a></li>
-        <li><a href="${BASE}/rankings">ICC Rankings 2026</a></li>
-        <li><a href="${BASE}/news">Cricket News Today</a></li>
-        <li><a href="${BASE}/players">Cricket Players</a></li>
-        <li><a href="${BASE}/teams">Cricket Teams</a></li>
+        <li>Fastest live cricket score — updated every 15 seconds</li>
+        <li>Ball-by-ball commentary for every match</li>
+        <li>Complete scorecards with batting and bowling figures</li>
+        <li>IPL 2026 live score, points table and schedule</li>
+        <li>T20 World Cup 2026 live updates</li>
+        <li>ICC rankings 2026 for batsmen, bowlers and teams</li>
+        <li>Cricket news today from all major sources</li>
+        <li>Player profiles and career statistics</li>
+        <li>Free — no subscription required</li>
       </ul>
     </section>
   </main>
+
+  <footer>
+    <p>&copy; ${new Date().getFullYear()} Live Cricket Zone — <a href="${BASE}">livecricketzone.com</a> | 
+    <a href="${BASE}/about">About</a> | 
+    <a href="${BASE}/sitemap.xml">Sitemap</a> | 
+    <a href="${BASE}/news">Cricket News</a></p>
+  </footer>
 </body>
 </html>`;
 }
@@ -794,17 +901,19 @@ module.exports = async (req, res) => {
     // Skip API paths — bots shouldn't get HTML for /api/* routes
     if (!pathname.startsWith("/api/")) {
       const meta = getPageMeta(pathname);
-      let liveMatches = [];
-      // For homepage and live page, inject actual live match data
-      if (pathname === "/" || pathname === "/live" || pathname === "/cricket-matches-today") {
+      let liveMatches = [], recentMatches = [];
+      // For homepage, live page and today page — inject actual match data
+      if (pathname === "/" || pathname === "/live" || pathname === "/cricket-matches-today" || pathname === "/cricket-score-today") {
         try {
           const all = await getAllMatches();
           liveMatches = all.live || [];
+          recentMatches = all.recent || [];
         } catch (_) {}
       }
-      const html = renderBotHtml(pathname, meta, liveMatches);
+      const html = renderBotHtml(pathname, meta, liveMatches, recentMatches);
       res.setHeader("Content-Type", "text/html; charset=utf-8");
       res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
+      res.setHeader("Vary", "User-Agent");
       res.setHeader("X-Rendered-For", "bot");
       return res.status(200).send(html);
     }

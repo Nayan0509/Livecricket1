@@ -24,6 +24,13 @@
   ],
   "headers": [
     {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Vary", "value": "User-Agent" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    },
+    {
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin",  "value": "*" },
@@ -35,7 +42,8 @@
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "s-maxage=3600" }
+        { "key": "Cache-Control", "value": "s-maxage=3600" },
+        { "key": "X-Robots-Tag", "value": "noindex" }
       ]
     }
   ]
