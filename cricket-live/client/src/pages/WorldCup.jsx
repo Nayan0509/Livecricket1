@@ -9,7 +9,7 @@ export default function WorldCup() {
       shortName="World Cup"
       filterKeywords={["World Cup", "ODI World Cup", "ICC World Cup", "Cricket World Cup"]}
       accentColor="#fbbf24"
-      seoTitle="Cricket World Cup 2027 Live Score - ICC ODI World Cup Ball by Ball"
+      seoTitle="Cricket World Cup 2027 Live Score - ICC ODI WC"
       seoDesc="ICC Cricket World Cup 2027 live score, ball-by-ball commentary, schedule, standings and match results. Get real-time ODI World Cup updates on Live Cricket Zone."
       seoKeywords="Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule 2027, World Cup ball by ball, ICC World Cup 2027, cricket world cup today match"
       stats={[

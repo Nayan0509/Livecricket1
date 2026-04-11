@@ -21,7 +21,7 @@ export default function Schedule() {
   return (
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
-        title="Cricket Match Schedule 2026 — Today's Matches, IPL 2026 Fixtures & Upcoming Series"
+        title="Cricket Schedule 2026 - Fixtures & Match Timings"
         description="Complete cricket match schedule for 2026. Find today's cricket matches, this week's fixtures, IPL 2026 schedule, T20 World Cup, ODI and Test series timetable with match timings and venues."
         keywords="cricket schedule, cricket match today, IPL 2026 schedule, T20 World Cup schedule, cricket fixtures, upcoming cricket matches, cricket timetable, cricket calendar 2026"
         url="/schedule"

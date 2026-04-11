@@ -9,7 +9,7 @@ export default function WomensCricket() {
       shortName="Women's Cricket"
       filterKeywords={["Women", "WODI", "WT20", "Women's", "Womens"]}
       accentColor="#e879f9"
-      seoTitle="Women's Cricket Live Score 2026 - ICC Women's T20 & ODI Ball by Ball"
+      seoTitle="Women's Cricket Live Score 2026 - ICC WT20 & ODI"
       seoDesc="Women's cricket live score 2026 with ball-by-ball commentary. Get real-time ICC Women's T20 World Cup, Women's ODI and Women's Test match updates on Live Cricket Zone."
       seoKeywords="women's cricket live score, ICC women's T20 World Cup live, women's cricket today, women's ODI live score, women's cricket 2026, women's T20 live score, women's cricket ball by ball"
       stats={[

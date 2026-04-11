@@ -282,7 +282,7 @@ export default function Home() {
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Live Cricket Score Today - Ball by Ball Commentary, IPL 2026 & Live Match Updates"
+        title="Live Cricket Score Today - IPL 2026 & Ball by Ball"
         description="Fastest live cricket score today, ball by ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards."
         url="/"
         keywords="live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary"

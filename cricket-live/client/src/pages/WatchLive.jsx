@@ -185,7 +185,7 @@ export default function WatchLive() {
   return (
     <>
       <SEO 
-        title="Watch Live Cricket Match Online Free - Live Cricket Streaming 2026"
+        title="Watch Live Cricket Online Free - Streaming 2026"
         description="Watch live cricket match online free. Stream live cricket matches today with HD quality. Free cricket live streaming for IPL, T20 World Cup, ODI, Test matches. No signup required."
         keywords="watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites"
         url="/watch-live"

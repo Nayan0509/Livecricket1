@@ -9,7 +9,7 @@ export default function T20WorldCup() {
       shortName="T20 WC"
       filterKeywords={["T20 World Cup", "ICC T20", "WT20"]}
       accentColor="#f472b6"
-      seoTitle="T20 World Cup 2026 Live Score - ICC T20 World Cup Ball by Ball Commentary"
+      seoTitle="T20 World Cup 2026 Live Score - ICC T20 World Cup"
       seoDesc="T20 World Cup 2026 live score, ball-by-ball commentary, schedule, standings and match results. Get real-time ICC T20 World Cup 2026 updates faster than Cricbuzz."
       seoKeywords="T20 World Cup 2026 live score, ICC T20 World Cup live, T20 World Cup schedule 2026, T20 World Cup standings, T20 World Cup ball by ball, T20 World Cup today match, T20 WC live score, ICC T20 2026"
       startDate="2026-06-01"
