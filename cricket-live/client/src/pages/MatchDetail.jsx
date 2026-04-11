@@ -370,6 +370,58 @@ export default function MatchDetail() {
   const isLive = match?.matchStarted && !match?.matchEnded;
   const matchEnded = match?.matchEnded;
 
+  // ── Dynamic SEO helpers ──────────────────────────────────────────────────
+  const team1 = match?.teamInfo?.[0]?.name || match?.teams?.[0] || "";
+  const team2 = match?.teamInfo?.[1]?.name || match?.teams?.[1] || "";
+  const tournament = match?.series || match?.matchType || "Cricket";
+  const venue = match?.venue || "";
+
+  const seoTitle = match
+    ? isLive
+      ? `${team1} vs ${team2} Live Score - ${tournament} | Live Cricket Score Today`
+      : matchEnded
+      ? `${team1} vs ${team2} Scorecard & Result - ${tournament}`
+      : `${team1} vs ${team2} - ${tournament} Match Preview & Schedule`
+    : "Live Cricket Score | LiveCricketZone";
+
+  const seoDesc = match
+    ? isLive
+      ? `${team1} vs ${team2} live cricket score today. Ball-by-ball commentary, live scorecard, real-time updates for ${tournament}${venue ? ` at ${venue}` : ""}. Fastest cricket score updated every 15 seconds.`
+      : matchEnded
+      ? `${team1} vs ${team2} full scorecard, match result and player stats. ${tournament} complete match summary, highlights and analysis.`
+      : `${team1} vs ${team2} ${tournament} match schedule, preview, team news and predictions. Get match timings, venue details and live score updates.`
+    : "Live cricket scores, ball-by-ball commentary and match updates.";
+
+  const seoKeywords = match
+    ? `${team1} vs ${team2}, ${team1} vs ${team2} live score, ${tournament} live score, ${team1} ${team2} scorecard, live cricket score today, ball by ball commentary, cricket score today, ${tournament} 2026`
+    : "live cricket score, cricket scorecard";
+
+  const matchStructuredData = match ? {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    "name": `${team1} vs ${team2}`,
+    "description": seoDesc,
+    "sport": "Cricket",
+    "startDate": match.dateTimeGMT || match.date || new Date().toISOString(),
+    "endDate": new Date(new Date(match.dateTimeGMT || match.date || Date.now()).getTime() + 8 * 3600000).toISOString(),
+    "eventStatus": isLive
+      ? "https://schema.org/EventScheduled"
+      : matchEnded
+      ? "https://schema.org/EventCompleted"
+      : "https://schema.org/EventScheduled",
+    "location": venue ? {
+      "@type": "Place",
+      "name": venue,
+      "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+    } : undefined,
+    "organizer": { "@type": "SportsOrganization", "name": tournament, "url": "https://www.livecricketzone.com" },
+    "competitor": [
+      { "@type": "SportsTeam", "name": team1 },
+      { "@type": "SportsTeam", "name": team2 }
+    ],
+    "offers": { "@type": "Offer", "url": `https://www.livecricketzone.com/match/${id}`, "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+  } : null;
+
   // Auto-select correct tab on load
   useEffect(() => {
     if (match) {
@@ -406,11 +458,12 @@ export default function MatchDetail() {
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 80, paddingTop: 20 }}>
       <SEO
-        title={`${match.name} Live Score, Scorecard & Commentary | LiveCricketZone`}
-        description={`${match.name} live score, full scorecard, ball-by-ball commentary, and match analysis. ${match.status}`}
+        title={seoTitle}
+        description={seoDesc}
         url={`/match/${id}`}
-        type="article"
-        keywords={`${match.name}, live cricket score, scorecard, commentary`}
+        type={matchEnded ? "article" : "website"}
+        keywords={seoKeywords}
+        structuredData={matchStructuredData}
       />
 
       {/* Back button */}

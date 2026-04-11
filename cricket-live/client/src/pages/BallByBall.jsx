@@ -24,9 +24,24 @@ export default function BallByBall() {
   return (
     <>
       <SEO 
-        title="Ball by Ball Cricket Commentary Live - Real-Time Cricket Updates"
-        description="Get ball by ball cricket commentary live for all matches. Real-time ball-by-ball updates, live cricket score, detailed commentary for IPL, T20, ODI, Test matches."
-        keywords="ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, ball by ball cricket score, cricket commentary live, live cricket commentary, ball by ball updates"
+        title="Ball by Ball Cricket Commentary Live - Real-Time Updates Every Ball"
+        description="Ball by ball cricket commentary live for all matches. Real-time ball-by-ball updates, live cricket score, detailed commentary for IPL 2026, T20 World Cup, ODI and Test matches. Updated every 15 seconds."
+        keywords="ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, ball by ball cricket score, cricket commentary live, live cricket commentary, ball by ball updates, IPL ball by ball, T20 ball by ball commentary"
+        url="/ball-by-ball"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Ball by Ball Cricket Commentary Live",
+          "description": "Real-time ball-by-ball cricket commentary for all live matches",
+          "url": "https://www.livecricketzone.com/ball-by-ball",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.livecricketzone.com" },
+              { "@type": "ListItem", "position": 2, "name": "Ball by Ball Commentary", "item": "https://www.livecricketzone.com/ball-by-ball" }
+            ]
+          }
+        }}
       />
       
       <div className="container" style={{ paddingBottom: 40 }}>

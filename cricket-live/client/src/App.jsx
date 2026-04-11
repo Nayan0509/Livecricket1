@@ -40,6 +40,7 @@ import ChampionsTrophy from "./pages/ChampionsTrophy";
 import WomensCricket from "./pages/WomensCricket";
 import LiveCricketScore from "./pages/LiveCricketScore";
 import CricketScoreToday from "./pages/CricketScoreToday";
+import CricketMatchesToday from "./pages/CricketMatchesToday";
 
 
 export default function App() {
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/live" element={<LiveMatches />} />
             <Route path="/live-cricket-score" element={<LiveCricketScore />} />
             <Route path="/cricket-score-today" element={<CricketScoreToday />} />
+            <Route path="/cricket-matches-today" element={<CricketMatchesToday />} />
             <Route path="/ball-by-ball" element={<BallByBall />} />
 
             <Route path="/match/:id" element={<MatchDetail />} />

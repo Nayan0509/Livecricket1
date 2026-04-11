@@ -47,11 +47,46 @@ async function generateDynamicSitemap(matches, players, teams, series) {
   </url>
 
   <url>
+    <loc>${baseUrl}/cricket-matches-today</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>${now}</lastmod>
+  </url>
+
+  <url>
     <loc>${baseUrl}/ball-by-ball</loc>
     <changefreq>always</changefreq>
     <priority>1.0</priority>
     <lastmod>${now}</lastmod>
   </url>
+
+  <!-- Tournament Pages -->
+  <url><loc>${baseUrl}/ipl</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/t20-world-cup</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/world-cup</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/asia-cup</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/champions-trophy</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/womens-cricket</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/t20</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/odi</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/test</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/psl</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/bbl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/cpl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/bpl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+
+  <!-- Content Pages -->
+  <url><loc>${baseUrl}/schedule</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/upcoming</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/results</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/series</loc><changefreq>daily</changefreq><priority>0.8</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/players</loc><changefreq>daily</changefreq><priority>0.8</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/teams</loc><changefreq>weekly</changefreq><priority>0.75</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/rankings</loc><changefreq>weekly</changefreq><priority>0.8</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/news</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/stats</loc><changefreq>daily</changefreq><priority>0.75</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/videos</loc><changefreq>daily</changefreq><priority>0.65</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/about</loc><changefreq>monthly</changefreq><priority>0.5</priority><lastmod>${now}</lastmod></url>
 `;
 
   // Add match pages

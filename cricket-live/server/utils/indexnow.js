@@ -47,6 +47,7 @@ async function submitAllUrls() {
     `${baseUrl}/live`,
     `${baseUrl}/live-cricket-score`,
     `${baseUrl}/cricket-score-today`,
+    `${baseUrl}/cricket-matches-today`,
     `${baseUrl}/ball-by-ball`,
     `${baseUrl}/ipl`,
     `${baseUrl}/t20-world-cup`,

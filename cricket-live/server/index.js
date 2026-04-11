@@ -30,5 +30,35 @@ app.listen(PORT, () => {
   console.log(`\n🏏 Cricket server on port ${PORT}`);
   console.log(`   Mode            : SCALE UP (Independent Scraper)`);
   console.log(`   Dependencies    : All API dependencies removed ✓\n`);
+
+  // Auto-regenerate sitemap every 30 minutes & submit to IndexNow
+  const { submitAllUrls } = require("./utils/indexnow");
+  const scraper = require("./utils/scraper");
+  const { generateDynamicSitemap, saveSitemap } = require("./utils/seoAutomation");
+
+  const regenerateSitemap = async () => {
+    try {
+      const allData = await scraper.getAllMatches();
+      const matches = [
+        ...(allData.live || []),
+        ...(allData.recent || []),
+        ...(allData.upcoming || []),
+      ];
+      const sitemap = await generateDynamicSitemap(matches, [], [], []);
+      await saveSitemap(sitemap);
+      console.log(`✅ Sitemap auto-regenerated (${matches.length} matches)`);
+    } catch (e) {
+      console.error("⚠️  Sitemap regeneration failed:", e.message);
+    }
+  };
+
+  // Run once on startup (after 10s delay), then every 30 min
+  setTimeout(regenerateSitemap, 10000);
+  setInterval(regenerateSitemap, 30 * 60 * 1000);
+
+  // Submit all static URLs to IndexNow once on startup
+  setTimeout(() => {
+    submitAllUrls().catch(() => {});
+  }, 15000);
 });
 

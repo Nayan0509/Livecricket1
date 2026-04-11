@@ -24,21 +24,28 @@
     <loc>https://www.livecricketzone.com/live-cricket-score</loc>
     <changefreq>always</changefreq>
     <priority>1.0</priority>
-    <lastmod>2026-04-04</lastmod>
+    <lastmod>2026-04-11</lastmod>
   </url>
 
   <url>
     <loc>https://www.livecricketzone.com/cricket-score-today</loc>
     <changefreq>always</changefreq>
     <priority>1.0</priority>
-    <lastmod>2026-04-04</lastmod>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.livecricketzone.com/cricket-matches-today</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
   </url>
 
   <url>
     <loc>https://www.livecricketzone.com/ball-by-ball</loc>
     <changefreq>always</changefreq>
     <priority>1.0</priority>
-    <lastmod>2026-04-04</lastmod>
+    <lastmod>2026-04-11</lastmod>
   </url>
 
   <url>

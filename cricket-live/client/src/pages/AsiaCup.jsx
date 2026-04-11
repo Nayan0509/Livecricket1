@@ -1,100 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import SEO from "../components/SEO";
-import { fetchLiveMatches } from "../api";
+import React from "react";
+import TournamentPage from "../components/TournamentPage";
 
 export default function AsiaCup() {
-  const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadMatches = async () => {
-      try {
-        const data = await fetchLiveMatches();
-        const asiaMatches = (data?.data || []).filter(m => m.series?.includes("Asia Cup") || m.name?.includes("Asia Cup"));
-        setMatches(asiaMatches);
-      } catch (error) {
-        console.error("Error loading Asia Cup matches:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadMatches();
-  }, []);
-
   return (
-    <>
-      <SEO 
-        title="Asia Cup 2026 Live Score - Asia Cup Cricket Updates"
-        description="Asia Cup 2026 live score, schedule, standings. Get real-time Asia Cup cricket updates for India, Pakistan, Sri Lanka, Bangladesh."
-        keywords="Asia Cup, Asia Cup 2026, Asia Cup live score, Asia Cup today, India vs Pakistan"
-        image="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=630&fit=crop"
-      />
-      
-      <div className="container" style={{ paddingBottom: 40 }}>
-        <div className="hero">
-          <h1 className="hero-title">Asia Cup 2026 Live Score</h1>
-          <p className="hero-subtitle">Asia's Premier Cricket Tournament</p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
-            <Link to="/live" className="btn btn-primary">Live Matches</Link>
-            <Link to="/schedule" className="btn btn-secondary">Schedule</Link>
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 48 }}>
-          <div className="section-header">
-            <h2 className="section-title">Participating Teams</h2>
-          </div>
-          <div className="grid-3">
-            {["India", "Pakistan", "Sri Lanka", "Bangladesh", "Afghanistan", "Nepal"].map(team => (
-              <div key={team} className="card" style={{ textAlign: "center", padding: "20px 16px" }}>
-                <div style={{ fontWeight: 700 }}>{team}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 48 }}>
-          <div className="section-header">
-            <h2 className="section-title">Live Asia Cup Matches</h2>
-          </div>
-          {loading ? (
-            <div className="spinner" />
-          ) : matches.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {matches.slice(0, 6).map(match => (
-                <Link key={match.id} to={`/match/${match.id}`} style={{ textDecoration: "none" }}>
-                  <div className="match-card">
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: 16, fontFamily: "'Poppins', sans-serif" }}>{match.name}</div>
-                        <div style={{ fontSize: 13, color: "var(--text2)", marginTop: 4 }}>📅 {match.date}</div>
-                      </div>
-                      <div style={{ textAlign: "right" }}>
-                        <div style={{ color: "var(--primary-light)", fontWeight: 700 }}>{match.status}</div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="card" style={{ textAlign: "center", padding: 40, color: "var(--text2)" }}>
-              No Asia Cup matches currently available
-            </div>
-          )}
-        </div>
-
-        <div className="card">
-          <div className="section-header">
-            <h2 className="section-title">About Asia Cup</h2>
-          </div>
-          <p style={{ color: "var(--text2)", lineHeight: 1.6 }}>
-            The Asia Cup is a premier cricket tournament featuring teams from Asia including India, Pakistan, Sri Lanka, 
-            Bangladesh, Afghanistan, and Nepal. Get live scores and real-time updates for all Asia Cup matches.
-          </p>
-        </div>
-      </div>
-    </>
+    <TournamentPage
+      slug="asia-cup"
+      name="Asia Cup 2026"
+      shortName="Asia Cup"
+      filterKeywords={["Asia Cup", "ACC Asia Cup"]}
+      accentColor="#2dd4bf"
+      seoTitle="Asia Cup 2026 Live Score - ACC Asia Cup Ball by Ball Commentary"
+      seoDesc="Asia Cup 2026 live score, ball-by-ball commentary, schedule and match results. Get real-time ACC Asia Cup 2026 updates including India vs Pakistan live score."
+      seoKeywords="Asia Cup 2026 live score, Asia Cup live score today, India vs Pakistan Asia Cup live, Asia Cup ball by ball, Asia Cup schedule 2026, ACC Asia Cup live, Asia Cup cricket 2026"
+      stats={[
+        { value: "6", label: "Teams" },
+        { value: "13", label: "Matches" },
+        { value: "15", label: "Days" },
+        { value: "100+", label: "Players" },
+      ]}
+      teams={["India", "Pakistan", "Sri Lanka", "Bangladesh", "Afghanistan", "Nepal"]}
+      faqItems={[
+        { q: "Where can I watch Asia Cup 2026 live score?", a: "Live Cricket Zone provides real-time Asia Cup 2026 live score with ball-by-ball commentary including India vs Pakistan live score updates." },
+        { q: "Which teams are in Asia Cup 2026?", a: "Asia Cup 2026 features 6 teams: India, Pakistan, Sri Lanka, Bangladesh, Afghanistan and Nepal competing for the Asia Cup trophy." },
+      ]}
+      aboutText="Live Cricket Zone delivers the fastest Asia Cup 2026 live score with real-time ball-by-ball commentary. Follow every Asia Cup match including the highly anticipated India vs Pakistan live score with updates every 15 seconds."
+    />
   );
 }

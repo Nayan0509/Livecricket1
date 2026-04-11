@@ -439,24 +439,69 @@ async function getNews() {
 
 function serveMeta(url, res) {
   if (url.includes("sitemap.xml")) {
+    const now = new Date().toISOString().split("T")[0];
+    const base = "https://www.livecricketzone.com";
+    const pages = [
+      { loc: "/",                        pri: "1.0", freq: "always"  },
+      { loc: "/live",                    pri: "1.0", freq: "always"  },
+      { loc: "/live-cricket-score",      pri: "1.0", freq: "always"  },
+      { loc: "/cricket-score-today",     pri: "1.0", freq: "always"  },
+      { loc: "/cricket-matches-today",   pri: "1.0", freq: "always"  },
+      { loc: "/ball-by-ball",            pri: "1.0", freq: "always"  },
+      { loc: "/ipl",                     pri: "0.95", freq: "hourly" },
+      { loc: "/t20-world-cup",           pri: "0.95", freq: "hourly" },
+      { loc: "/world-cup",               pri: "0.95", freq: "hourly" },
+      { loc: "/asia-cup",                pri: "0.95", freq: "hourly" },
+      { loc: "/champions-trophy",        pri: "0.95", freq: "hourly" },
+      { loc: "/womens-cricket",          pri: "0.9",  freq: "hourly" },
+      { loc: "/t20",                     pri: "0.9",  freq: "hourly" },
+      { loc: "/odi",                     pri: "0.9",  freq: "hourly" },
+      { loc: "/test",                    pri: "0.9",  freq: "hourly" },
+      { loc: "/psl",                     pri: "0.9",  freq: "hourly" },
+      { loc: "/bbl",                     pri: "0.85", freq: "hourly" },
+      { loc: "/cpl",                     pri: "0.85", freq: "hourly" },
+      { loc: "/bpl",                     pri: "0.85", freq: "hourly" },
+      { loc: "/schedule",                pri: "0.9",  freq: "hourly" },
+      { loc: "/upcoming",                pri: "0.9",  freq: "hourly" },
+      { loc: "/results",                 pri: "0.85", freq: "hourly" },
+      { loc: "/series",                  pri: "0.8",  freq: "daily"  },
+      { loc: "/players",                 pri: "0.8",  freq: "daily"  },
+      { loc: "/teams",                   pri: "0.75", freq: "weekly" },
+      { loc: "/rankings",                pri: "0.8",  freq: "weekly" },
+      { loc: "/news",                    pri: "0.85", freq: "hourly" },
+      { loc: "/stats",                   pri: "0.75", freq: "daily"  },
+      { loc: "/videos",                  pri: "0.65", freq: "daily"  },
+      { loc: "/about",                   pri: "0.5",  freq: "monthly"},
+      { loc: "/best-cricket-website",    pri: "0.85", freq: "daily"  },
+    ];
+
+    // Try to add live match URLs dynamically
+    let matchUrls = "";
+    // (async match injection happens in the main handler for /sitemap.xml)
+
+    const urlEntries = pages.map(p =>
+      `  <url><loc>${base}${p.loc}</loc><changefreq>${p.freq}</changefreq><priority>${p.pri}</priority><lastmod>${now}</lastmod></url>`
+    ).join("\n");
+
     res.setHeader("Content-Type", "application/xml");
+    res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
     res.status(200).send(
-      `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">` +
-      `<url><loc>https://www.livecricketzone.com/</loc></url>` +
-      `<url><loc>https://www.livecricketzone.com/live</loc></url>` +
-      `<url><loc>https://www.livecricketzone.com/news</loc></url>` +
-      `</urlset>`
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>`
     );
     return true;
   }
   if (url.includes("robots.txt")) {
     res.setHeader("Content-Type", "text/plain");
-    res.status(200).send("User-agent: *\nAllow: /\nSitemap: https://www.livecricketzone.com/sitemap.xml");
+    res.status(200).send(
+      "User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /*.json$\nCrawl-delay: 1\n\n" +
+      "User-agent: Googlebot\nAllow: /\nCrawl-delay: 0\n\n" +
+      "Sitemap: https://www.livecricketzone.com/sitemap.xml"
+    );
     return true;
   }
   if (url.includes("ads.txt")) {
     res.setHeader("Content-Type", "text/plain");
-    res.status(200).send("google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0");
+    res.status(200).send("google.com, pub-8179151029580359, DIRECT, f08c47fec0942fa0");
     return true;
   }
   return false;
@@ -540,6 +585,30 @@ module.exports = async (req, res) => {
     // ── Rankings / Teams / Series / Players — stubs ─────────────────────────
     if (["rankings", "teams", "series", "players"].includes(parts[0])) {
       return res.json({ status: "success", data: [] });
+    }
+
+    // ── IndexNow submit-all ──────────────────────────────────────────────────
+    if (path === "indexnow/submit-all") {
+      const INDEXNOW_KEY = process.env.INDEXNOW_KEY || "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6";
+      const base = "https://www.livecricketzone.com";
+      const urls = [
+        `${base}/`, `${base}/live`, `${base}/live-cricket-score`,
+        `${base}/cricket-score-today`, `${base}/cricket-matches-today`,
+        `${base}/ball-by-ball`, `${base}/ipl`, `${base}/t20-world-cup`,
+        `${base}/world-cup`, `${base}/asia-cup`, `${base}/champions-trophy`,
+        `${base}/psl`, `${base}/bbl`, `${base}/cpl`, `${base}/bpl`,
+        `${base}/schedule`, `${base}/news`, `${base}/rankings`,
+      ];
+      try {
+        const r = await fetch("https://api.indexnow.org/indexnow", {
+          method: "POST",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ host: "www.livecricketzone.com", key: INDEXNOW_KEY, keyLocation: `${base}/${INDEXNOW_KEY}.txt`, urlList: urls }),
+        });
+        return res.json({ status: "success", indexnow: r.status, count: urls.length });
+      } catch (e) {
+        return res.json({ status: "error", message: e.message });
+      }
     }
 
     // ── Fallback ─────────────────────────────────────────────────────────────

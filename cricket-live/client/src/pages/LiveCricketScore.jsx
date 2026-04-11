@@ -62,9 +62,17 @@ export default function LiveCricketScore() {
   return (
     <>
       <SEO 
-        title="Live Cricket Scores - Live, Recent, Upcoming Matches 2026"
-        description="Get exact match coverage including Live cricket scores, Recent results, and Upcoming schedules for IPL, PSL, Intl matches dynamically. Faster than others."
-        keywords="live cricket scores realtime, cricbuzz alternative, cricket score live, recent cricket results, upcoming cricket matches"
+        title="Live Cricket Score - Real-Time Cricket Scores Today 2026"
+        description="Live cricket score today with real-time updates. Get live cricket scores for IPL 2026, T20 World Cup, ODI, Test matches. Ball-by-ball commentary updated every 15 seconds. Faster than Cricbuzz."
+        keywords="live cricket score, cricket live score today, live cricket score today, cricket score live, live score cricket, cricket live score, real time cricket score, live cricket scores today, IPL live score, T20 live score"
+        url="/live-cricket-score"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Live Cricket Score Today",
+          "description": "Real-time live cricket scores for all matches",
+          "url": "https://www.livecricketzone.com/live-cricket-score"
+        }}
       />
       
       <div className="container" style={{ paddingBottom: 60, maxWidth: "1200px" }}>
