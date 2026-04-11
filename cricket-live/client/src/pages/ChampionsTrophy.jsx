@@ -9,7 +9,7 @@ export default function ChampionsTrophy() {
       shortName="Champions Trophy"
       filterKeywords={["Champions Trophy", "ICC Champions Trophy", "CT 2025"]}
       accentColor="#818cf8"
-      seoTitle="ICC Champions Trophy 2025 Live Score - Ball by Ball Commentary"
+      seoTitle="Champions Trophy 2025 Live Score - ICC CT 2025"
       seoDesc="ICC Champions Trophy 2025 live score, ball-by-ball commentary, schedule and match results. Get real-time Champions Trophy 2025 updates on Live Cricket Zone."
       seoKeywords="Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy ball by ball, Champions Trophy schedule 2025, ICC CT 2025 live"
       stats={[

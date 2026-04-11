@@ -9,7 +9,7 @@ export default function CPL() {
       shortName="CPL"
       filterKeywords={["CPL", "Caribbean Premier League", "Caribbean Premier"]}
       accentColor="#38bdf8"
-      seoTitle="CPL 2026 Live Score - Caribbean Premier League Ball by Ball Commentary"
+      seoTitle="CPL 2026 Live Score - Caribbean Premier League"
       seoDesc="CPL 2026 live score, ball-by-ball commentary, schedule and match results. Get real-time Caribbean Premier League 2026 updates on Live Cricket Zone."
       seoKeywords="CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball, CPL scorecard, CPL schedule 2026, Caribbean Premier League live"
       stats={[

@@ -9,7 +9,7 @@ export default function BBL() {
       shortName="BBL"
       filterKeywords={["BBL", "Big Bash", "Big Bash League"]}
       accentColor="#fb923c"
-      seoTitle="BBL 2026 Live Score - Big Bash League Ball by Ball Commentary"
+      seoTitle="BBL 2026 Live Score - Big Bash League Cricket"
       seoDesc="BBL 2026 live score, ball-by-ball commentary, schedule and match results. Get real-time Big Bash League 2026 updates on Live Cricket Zone."
       seoKeywords="BBL 2026 live score, Big Bash League live score, BBL live today, BBL ball by ball, BBL scorecard, BBL schedule 2026, Big Bash live score, BBL match today"
       stats={[

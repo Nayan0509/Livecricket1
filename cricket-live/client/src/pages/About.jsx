@@ -6,7 +6,7 @@ export default function About() {
   return (
     <div className="container" style={{ paddingBottom: 60, maxWidth: 900 }}>
       <SEO 
-        title="About Us - Independent Cricket Intelligence & Real-Time Stats"
+        title="About Live Cricket Zone - Real-Time Cricket Scores"
         description="Learn about Live Cricket Zone, the next-generation sports analytics platform providing high-speed cricket data, live scores, and expert match analysis."
         url="/about"
       />

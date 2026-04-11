@@ -9,7 +9,7 @@ export default function BPL() {
       shortName="BPL"
       filterKeywords={["BPL", "Bangladesh Premier League", "Bangladesh Premier"]}
       accentColor="#a78bfa"
-      seoTitle="BPL 2026 Live Score - Bangladesh Premier League Ball by Ball Commentary"
+      seoTitle="BPL 2026 Live Score - Bangladesh Premier League"
       seoDesc="BPL 2026 live score, ball-by-ball commentary, schedule and match results. Get real-time Bangladesh Premier League 2026 updates on Live Cricket Zone."
       seoKeywords="BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball, BPL scorecard, BPL schedule 2026, Bangladesh Premier League live"
       stats={[

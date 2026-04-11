@@ -11,8 +11,8 @@ export default function News() {
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
       <SEO
-        title="Global Cricket Newsroom - Enterprise News Feed"
-        description="Premium news coverage from global sources."
+        title="Cricket News Today - Latest Updates & Headlines"
+        description="Latest cricket news today. Breaking news, match previews, player updates, IPL 2026 news and T20 World Cup headlines."
         url="/news"
       />
       
