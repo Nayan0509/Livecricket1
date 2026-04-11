@@ -4,7 +4,7 @@
   "outputDirectory": "client/build",
   "installCommand": "cd api && npm install",
   "functions": {
-    "api/index.js": { "memory": 256, "maxDuration": 15 }
+    "api/index.js": { "memory": 512, "maxDuration": 30 }
   },
   "redirects": [
     {
@@ -27,7 +27,15 @@
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin",  "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS" }
+        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
+        { "key": "Cache-Control", "value": "s-maxage=30, stale-while-revalidate=59" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "s-maxage=3600" }
       ]
     }
   ]
