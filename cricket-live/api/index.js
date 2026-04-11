@@ -531,22 +531,22 @@ function getPageMeta(pathname) {
 
   const map = {
     "/": {
-      title: `Live Cricket Score Today - Ball by Ball Commentary, IPL 2026 & T20 Updates | ${SITE}`,
+      title: `Live Cricket Score Today - IPL 2026 & T20 Updates | ${SITE}`,
       desc: "Fastest live cricket score today. Ball-by-ball commentary, IPL 2026 live score, T20 World Cup, ODI & Test match scorecards updated every 15 seconds.",
       kw: "live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary, cricket live score today",
     },
     "/live": {
-      title: `Live Cricket Matches Now - Real-Time Scores & Commentary | ${SITE}`,
+      title: `Live Cricket Score Now - All Matches Live | ${SITE}`,
       desc: "All live cricket matches right now. Real-time scores, ball-by-ball commentary for every live match. IPL, T20, ODI, Test cricket live.",
       kw: "live cricket matches, cricket live now, live match today, cricket score live, live cricket score now",
     },
     "/live-cricket-score": {
-      title: `Live Cricket Score - Real-Time Cricket Scores Today 2026 | ${SITE}`,
+      title: `Live Cricket Score - Real-Time Scores Today | ${SITE}`,
       desc: "Live cricket score today with real-time updates. Get live cricket scores for IPL 2026, T20 World Cup, ODI, Test matches. Ball-by-ball commentary updated every 15 seconds.",
       kw: "live cricket score, cricket live score today, live cricket score today, cricket score live, live score cricket",
     },
     "/cricket-score-today": {
-      title: `Cricket Score Today - Live Cricket Score & Match Updates | ${SITE}`,
+      title: `Cricket Score Today - Live Match Updates | ${SITE}`,
       desc: "Cricket score today with live updates. Get today's cricket match scores, ball-by-ball commentary and live scorecard for all matches.",
       kw: "cricket score today, cricket today score, today cricket score, live cricket score today, cricket match score today",
     },
@@ -556,37 +556,37 @@ function getPageMeta(pathname) {
       kw: "cricket matches today, cricket today, today cricket match, cricket match today live, cricket schedule today",
     },
     "/ball-by-ball": {
-      title: `Ball by Ball Cricket Commentary Live - Real-Time Updates | ${SITE}`,
+      title: `Ball by Ball Cricket Commentary Live | ${SITE}`,
       desc: "Ball by ball cricket commentary live for all matches. Real-time ball-by-ball updates for IPL 2026, T20 World Cup, ODI and Test matches.",
       kw: "ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, cricket commentary live",
     },
     "/ipl": {
-      title: `IPL 2026 Live Score - Indian Premier League Ball by Ball | ${SITE}`,
+      title: `IPL 2026 Live Score - Indian Premier League | ${SITE}`,
       desc: "IPL 2026 live score, ball-by-ball commentary, points table, schedule and match results. Real-time Indian Premier League 2026 updates.",
       kw: "IPL 2026 live score, IPL live score today, Indian Premier League 2026, IPL ball by ball, IPL scorecard, IPL points table 2026",
     },
     "/t20-world-cup": {
-      title: `T20 World Cup 2026 Live Score - ICC T20 World Cup Ball by Ball | ${SITE}`,
+      title: `T20 World Cup 2026 Live Score - ICC T20 WC | ${SITE}`,
       desc: "T20 World Cup 2026 live score, ball-by-ball commentary, schedule and standings. Real-time ICC T20 World Cup 2026 updates.",
       kw: "T20 World Cup 2026 live score, ICC T20 World Cup live, T20 World Cup schedule 2026, T20 World Cup ball by ball",
     },
     "/world-cup": {
-      title: `Cricket World Cup 2027 Live Score - ICC ODI World Cup | ${SITE}`,
+      title: `Cricket World Cup 2027 Live Score - ODI WC | ${SITE}`,
       desc: "ICC Cricket World Cup 2027 live score, ball-by-ball commentary, schedule and standings. Real-time ODI World Cup updates.",
       kw: "Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule 2027",
     },
     "/asia-cup": {
-      title: `Asia Cup 2026 Live Score - India vs Pakistan Live | ${SITE}`,
+      title: `Asia Cup 2026 Live Score - India vs Pakistan | ${SITE}`,
       desc: "Asia Cup 2026 live score, ball-by-ball commentary and match results. India vs Pakistan live score and all Asia Cup 2026 matches.",
       kw: "Asia Cup 2026 live score, Asia Cup live score today, India vs Pakistan Asia Cup live, Asia Cup ball by ball",
     },
     "/champions-trophy": {
-      title: `ICC Champions Trophy 2025 Live Score - Ball by Ball | ${SITE}`,
+      title: `Champions Trophy 2025 Live Score - ICC CT | ${SITE}`,
       desc: "ICC Champions Trophy 2025 live score, ball-by-ball commentary, schedule and match results. Real-time Champions Trophy updates.",
       kw: "Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy ball by ball",
     },
     "/womens-cricket": {
-      title: `Women's Cricket Live Score 2026 - ICC Women's T20 & ODI | ${SITE}`,
+      title: `Women's Cricket Live Score 2026 - ICC WT20 | ${SITE}`,
       desc: "Women's cricket live score 2026 with ball-by-ball commentary. ICC Women's T20 World Cup, Women's ODI and Women's Test match updates.",
       kw: "women's cricket live score, ICC women's T20 World Cup live, women's cricket today, women's ODI live score",
     },
@@ -596,77 +596,77 @@ function getPageMeta(pathname) {
       kw: "T20 cricket live score, T20 live score today, T20 cricket today, T20 matches today, T20 ball by ball",
     },
     "/odi": {
-      title: `ODI Cricket Live Score Today - One Day International | ${SITE}`,
+      title: `ODI Cricket Live Score Today - One Day Intl | ${SITE}`,
       desc: "ODI cricket live score today. Real-time One Day International match updates with ball-by-ball commentary. All ODI series covered.",
       kw: "ODI cricket live score, ODI live score today, One Day International live, ODI cricket today, ODI ball by ball",
     },
     "/test": {
-      title: `Test Cricket Live Score Today - Test Match Commentary | ${SITE}`,
+      title: `Test Cricket Live Score Today - Test Matches | ${SITE}`,
       desc: "Test cricket live score today. Real-time Test match updates with ball-by-ball commentary, day-by-day scorecard and session reports.",
       kw: "Test cricket live score, Test match live score today, Test cricket today, Test match today, Test cricket ball by ball",
     },
     "/psl": {
-      title: `PSL 2026 Live Score - Pakistan Super League Ball by Ball | ${SITE}`,
+      title: `PSL 2026 Live Score - Pakistan Super League | ${SITE}`,
       desc: "PSL 2026 live score, ball-by-ball commentary, points table, schedule and match results. Real-time Pakistan Super League 2026 updates.",
       kw: "PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard",
     },
     "/bbl": {
-      title: `BBL 2026 Live Score - Big Bash League Ball by Ball | ${SITE}`,
+      title: `BBL 2026 Live Score - Big Bash League | ${SITE}`,
       desc: "BBL 2026 live score, ball-by-ball commentary, schedule and match results. Real-time Big Bash League 2026 updates.",
       kw: "BBL 2026 live score, Big Bash League live score, BBL live today, BBL ball by ball, BBL scorecard",
     },
     "/cpl": {
-      title: `CPL 2026 Live Score - Caribbean Premier League Ball by Ball | ${SITE}`,
+      title: `CPL 2026 Live Score - Caribbean Premier League | ${SITE}`,
       desc: "CPL 2026 live score, ball-by-ball commentary, schedule and match results. Real-time Caribbean Premier League 2026 updates.",
       kw: "CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball",
     },
     "/bpl": {
-      title: `BPL 2026 Live Score - Bangladesh Premier League Ball by Ball | ${SITE}`,
+      title: `BPL 2026 Live Score - Bangladesh Premier League | ${SITE}`,
       desc: "BPL 2026 live score, ball-by-ball commentary, schedule and match results. Real-time Bangladesh Premier League 2026 updates.",
       kw: "BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball",
     },
     "/schedule": {
-      title: `Cricket Schedule 2026 - Upcoming Match Fixtures & Timings | ${SITE}`,
+      title: `Cricket Schedule 2026 - Fixtures & Timings | ${SITE}`,
       desc: "Complete cricket schedule 2026 with all upcoming match fixtures, timings and venues. IPL, T20 World Cup, ODI, Test match schedule.",
       kw: "cricket schedule 2026, cricket fixtures, upcoming cricket matches, cricket match schedule, cricket calendar 2026",
     },
     "/upcoming": {
-      title: `Upcoming Cricket Matches - Schedule & Fixtures 2026 | ${SITE}`,
+      title: `Upcoming Cricket Matches 2026 - Schedule | ${SITE}`,
       desc: "All upcoming cricket matches with schedule, fixtures and timings. IPL 2026, T20 World Cup, ODI, Test matches upcoming schedule.",
       kw: "upcoming cricket matches, cricket upcoming matches, cricket fixtures 2026, next cricket match, cricket schedule upcoming",
     },
     "/results": {
-      title: `Cricket Match Results - Latest Scores & Scorecards | ${SITE}`,
+      title: `Cricket Results - Latest Scores & Scorecards | ${SITE}`,
       desc: "Latest cricket match results, scores and full scorecards. IPL 2026, T20 World Cup, ODI, Test match results and highlights.",
       kw: "cricket results, cricket match results, cricket scores today, cricket scorecard results, latest cricket results",
     },
     "/series": {
-      title: `Cricket Series 2026 - All International & Domestic Series | ${SITE}`,
+      title: `Cricket Series 2026 - All Series & Tours | ${SITE}`,
       desc: "All cricket series 2026 — international tours, bilateral series, ICC tournaments. Live scores, schedules and results for every series.",
       kw: "cricket series 2026, cricket series schedule, international cricket series, cricket tour 2026",
     },
     "/players": {
-      title: `Cricket Players - Stats, Records & Profiles 2026 | ${SITE}`,
+      title: `Cricket Players - Stats & Profiles 2026 | ${SITE}`,
       desc: "Cricket player profiles, career statistics, batting and bowling averages, recent form. Search all international and IPL cricket players.",
       kw: "cricket players, cricket player stats, cricket player records, cricket player profile, IPL players 2026",
     },
     "/teams": {
-      title: `Cricket Teams - International & IPL Team Profiles | ${SITE}`,
+      title: `Cricket Teams - International & IPL Profiles | ${SITE}`,
       desc: "All cricket teams — international and IPL. Team profiles, squad, recent form, head-to-head records and match history.",
       kw: "cricket teams, international cricket teams, IPL teams 2026, cricket team profiles, cricket squad",
     },
     "/rankings": {
-      title: `ICC Cricket Rankings 2026 - Batsmen, Bowlers & Teams | ${SITE}`,
+      title: `ICC Cricket Rankings 2026 - Batsmen & Bowlers | ${SITE}`,
       desc: "Latest ICC cricket rankings 2026 for batsmen, bowlers, all-rounders and teams in Test, ODI and T20 formats.",
       kw: "ICC cricket rankings 2026, cricket rankings, ICC rankings batsmen, ICC rankings bowlers, ICC team rankings 2026",
     },
     "/news": {
-      title: `Cricket News Today - Latest Cricket Updates & Headlines | ${SITE}`,
+      title: `Cricket News Today - Latest Updates | ${SITE}`,
       desc: "Latest cricket news today. Breaking cricket news, match previews, player updates, IPL 2026 news, T20 World Cup news and more.",
       kw: "cricket news today, latest cricket news, cricket news, IPL news 2026, cricket breaking news, cricket updates today",
     },
     "/stats": {
-      title: `Cricket Statistics - Records, Averages & Career Stats | ${SITE}`,
+      title: `Cricket Statistics - Records & Career Stats | ${SITE}`,
       desc: "Comprehensive cricket statistics — batting averages, bowling figures, career records, highest scores, best bowling figures for all formats.",
       kw: "cricket statistics, cricket stats, cricket records, batting average cricket, bowling figures cricket, cricket career stats",
     },
@@ -802,7 +802,7 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
 </head>
 <body>
   <header>
-    <h1 itemprop="name"><a href="${BASE}" style="color:#00c853;text-decoration:none">🏏 Live Cricket Zone</a></h1>
+    <div style="font-size:22px;font-weight:bold"><a href="${BASE}" style="color:#00c853;text-decoration:none">🏏 Live Cricket Zone</a></div>
     <p itemprop="description" style="margin:4px 0 10px;color:#555;font-size:14px">Fastest live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup &amp; all cricket updates</p>
     <nav aria-label="Main navigation">
       ${navLinks.map(([href, label]) => `<a href="${BASE}${href}">${label}</a>`).join("")}
