@@ -634,7 +634,7 @@ export default function MatchDetail() {
       </div>
 
       {/* ── WATCH SECTION ── */}
-      <WatchSection match={match} autoOpen={autoWatch} />
+      <WatchSection match={match} autoOpen={true} />
 
       {/* ── TABS ── */}
       <div style={{ display: "flex", gap: 0, marginBottom: 28, borderBottom: "2px solid var(--glass-border)" }}>

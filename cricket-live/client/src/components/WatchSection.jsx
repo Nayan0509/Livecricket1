@@ -37,15 +37,17 @@ export default function WatchSection({ match, autoOpen }) {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeId, setActiveId] = useState(null);
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(true); // always open by default
+  const fetchedRef = useRef(false);
   const sectionRef = useRef(null);
 
-  const query = buildQuery(match);
-
-  const load = () => {
-    if (loading || videos.length > 0) return;
+  // Fire fetch as soon as match data is available
+  useEffect(() => {
+    if (!match?.id || fetchedRef.current) return;
+    fetchedRef.current = true;
+    const q = buildQuery(match);
     setLoading(true);
-    fetchYouTubeSearch(query)
+    fetchYouTubeSearch(q)
       .then((res) => {
         const vids = res?.videos || [];
         setVideos(vids);
@@ -53,29 +55,21 @@ export default function WatchSection({ match, autoOpen }) {
       })
       .catch(() => setVideos([]))
       .finally(() => setLoading(false));
-  };
+  }, [match?.id]);
 
-  // Auto-open + scroll when ?watch=1
+  // Scroll into view once videos are loaded
   useEffect(() => {
-    if (autoOpen && !opened) {
-      setOpened(true);
-      load();
+    if (activeId && sectionRef.current) {
       setTimeout(() => {
         sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
+      }, 200);
     }
-  }, [autoOpen]);
+  }, [activeId]);
 
-  const handleToggle = () => {
-    if (!opened) {
-      setOpened(true);
-      load();
-    } else {
-      setOpened(false);
-    }
-  };
+  const handleToggle = () => setOpened(o => !o);
 
   const isLive = match?.matchStarted && !match?.matchEnded;
+  const query = buildQuery(match);
 
   return (
     <div ref={sectionRef} style={{ marginBottom: 28 }}>
