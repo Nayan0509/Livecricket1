@@ -153,7 +153,7 @@ function StripCard({ match }) {
 
       {/* Watch button */}
       <button
-        onClick={e => { e.stopPropagation(); navigate(`/match/${match.id}?watch=1`); }}
+        onClick={e => { e.stopPropagation(); trackWatchClick(match.id, match.name); navigate(`/match/${match.id}?watch=1`); }}
         style={{
           marginTop: 10, width: "100%",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
@@ -253,7 +253,7 @@ function MatchRow({ match }) {
 
       {/* Watch button */}
       <button
-        onClick={e => { e.stopPropagation(); navigate(`/match/${match.id}?watch=1`); }}
+        onClick={e => { e.stopPropagation(); trackWatchClick(match.id, match.name); navigate(`/match/${match.id}?watch=1`); }}
         style={{
           display: "flex", alignItems: "center", gap: 4,
           background: isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",

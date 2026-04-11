@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary } from "../api";
 import SEO from "../components/SEO";
 import WatchSection from "../components/WatchSection";
+import { trackMatchView, trackTabSwitch } from "../utils/analytics";
 
 /* ─────────────────────────────────────────────
    UTILITY: Event badge color for commentary
@@ -440,12 +441,13 @@ export default function MatchDetail() {
     }
   ] : null;
 
-  // Auto-select correct tab on load
+  // Auto-select correct tab on load + fire analytics
   useEffect(() => {
     if (match) {
       if (isLive) setTab("scorecard");
       else if (matchEnded) setTab("scorecard");
       else setTab("info");
+      trackMatchView(id, match.name, isLive);
     }
   }, [match?.id]);
 
@@ -642,7 +644,7 @@ export default function MatchDetail() {
           <button
             key={t.id}
             id={`tab-${t.id}`}
-            onClick={() => setTab(t.id)}
+            onClick={() => { setTab(t.id); trackTabSwitch(t.id, id); }}
             style={{
               background: "none", border: "none", cursor: "pointer",
               padding: "14px 28px", fontSize: 14, fontWeight: 700,

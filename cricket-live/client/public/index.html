@@ -161,6 +161,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://g.cricapi.com" />
     <link rel="preconnect" href="https://static.cricbuzz.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
     <link rel="dns-prefetch" href="https://api.cricapi.com" />
     <link rel="dns-prefetch" href="https://free-cricbuzz-cricket-api.p.rapidapi.com" />
 
@@ -175,15 +177,17 @@
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8179151029580359" crossorigin="anonymous"></script>
 
-    <!-- Google Analytics 4 - Replace G-XXXXXXXXXX with your actual tracking ID -->
-    <!-- Get your tracking ID from: https://analytics.google.com -->
-     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3FB38VNBB5"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-        gtag('config', 'G-3FB38VNBB5');
-    </script> 
+      gtag('config', 'G-3FB38VNBB5', {
+        send_page_view: false,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+    </script>
   </head>
   <body>
     <noscript>
