@@ -18,7 +18,7 @@ export default function SEO({
   structuredData,
   article = null,
 }) {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Live Cricket Scores, IPL 2026, T20 & ODI Updates`;
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Live Cricket Scores & IPL 2026`;
   const canonical = url ? `${SITE_URL}${url}` : SITE_URL;
 
   return (

@@ -531,7 +531,7 @@ function getPageMeta(pathname) {
 
   const map = {
     "/": {
-      title: `Live Cricket Score Today - IPL 2026 & T20 Updates | ${SITE}`,
+      title: `Live Cricket Score Today - IPL 2026 & T20 Live | ${SITE}`,
       desc: "Fastest live cricket score today. Ball-by-ball commentary, IPL 2026 live score, T20 World Cup, ODI & Test match scorecards updated every 15 seconds.",
       kw: "live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary, cricket live score today",
     },
