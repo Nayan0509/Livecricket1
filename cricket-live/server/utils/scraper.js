@@ -1101,6 +1101,7 @@ async function getScaledData(type, params = {}) {
 /**
  * COMMENTARY - Cricbuzz Live Commentary Scraper
  * Scrapes ball-by-ball commentary from Cricbuzz
+ * Supports both escaped JSON (Next.js embedded) and plain JSON extraction
  */
 async function scrapeCommentary(matchId) {
   const cacheKey = `cricbuzz:commentary:${matchId}`;
@@ -1115,58 +1116,143 @@ async function scrapeCommentary(matchId) {
     const $ = cheerio.load(data);
     const commentary = [];
 
-    // Try extracting from embedded JSON (same as scorecard approach)
-    $("script").each((i, el) => {
-      const scriptContent = $(el).html();
-      if (scriptContent && scriptContent.includes('"commentaryList"')) {
-        try {
-          const startIdx = scriptContent.indexOf('\\"commentaryList\\":[');
-          if (startIdx !== -1) {
-            let brackets = 0;
-            let inArray = false;
-            let endIdx = startIdx + '\\"commentaryList\\":'.length;
-            for (let j = endIdx; j < scriptContent.length; j++) {
-              const char = scriptContent[j];
-              if (char === '[') { brackets++; inArray = true; }
-              else if (char === ']') {
-                brackets--;
-                if (inArray && brackets === 0) { endIdx = j + 1; break; }
-              }
-            }
-            let jsonStr = scriptContent.substring(startIdx + '\\"commentaryList\\":'.length, endIdx);
-            jsonStr = jsonStr.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-            const list = JSON.parse(jsonStr);
-            list.forEach(c => {
-              if (c.ballNbr !== undefined || c.commText) {
-                commentary.push({
-                  over: c.overNumber || c.overNum || "",
-                  ball: c.ballNbr || "",
-                  event: c.event || "default",
-                  text: c.commText || "",
-                  batsmanStriker: c.batsmanStriker?.batName || "",
-                  bowlerStriker: c.bowlerStriker?.bowlName || "",
-                  runs: c.runs || 0,
-                });
-              }
-            });
-            return false; // break
-          }
-        } catch (e) { /* ignore */ }
+    /**
+     * Helper: extract a JSON array value from a script string by key.
+     * Handles both escaped (\\"key\\":) and unescaped ("key":) forms.
+     */
+    function extractJsonArray(scriptContent, key) {
+      // Try escaped form first (Next.js hydration payload)
+      const escapedKey = `\\"${key}\\":[`;
+      let startIdx = scriptContent.indexOf(escapedKey);
+      let isEscaped = true;
+
+      // Fall back to plain JSON form
+      if (startIdx === -1) {
+        const plainKey = `"${key}":[`;
+        startIdx = scriptContent.indexOf(plainKey);
+        isEscaped = false;
       }
+
+      if (startIdx === -1) return null;
+
+      const keyLen = isEscaped ? escapedKey.length : `"${key}":[`.length;
+      // rewind one char to include the opening '['
+      let pos = startIdx + keyLen - 1;
+      let brackets = 0;
+      let endIdx = -1;
+
+      for (let j = pos; j < scriptContent.length; j++) {
+        const ch = scriptContent[j];
+        if (ch === '[') brackets++;
+        else if (ch === ']') {
+          brackets--;
+          if (brackets === 0) { endIdx = j + 1; break; }
+        }
+      }
+
+      if (endIdx === -1) return null;
+
+      let jsonStr = scriptContent.substring(pos, endIdx);
+      if (isEscaped) {
+        jsonStr = jsonStr.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+      }
+
+      try {
+        return JSON.parse(jsonStr);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Pass 1: scan all script tags for commentaryList
+    $("script").each((i, el) => {
+      if (commentary.length) return false; // already found
+      const scriptContent = $(el).html();
+      if (!scriptContent) return;
+
+      // Check for either escaped or plain form
+      if (!scriptContent.includes('commentaryList')) return;
+
+      const list = extractJsonArray(scriptContent, 'commentaryList');
+      if (!list || !Array.isArray(list)) return;
+
+      list.forEach(c => {
+        // Each entry may be a commentary item or a header object
+        if (!c.commText && c.ballNbr === undefined) return;
+
+        const overRaw = c.overNumber !== undefined ? c.overNumber : (c.overNum !== undefined ? c.overNum : "");
+        const ballRaw = c.ballNbr !== undefined ? c.ballNbr : "";
+
+        // Determine event type
+        let event = "default";
+        if (c.event) {
+          const ev = String(c.event).toUpperCase();
+          if (ev === "SIX" || ev === "SIXER") event = "SIX";
+          else if (ev === "FOUR" || ev === "BOUNDARY") event = "FOUR";
+          else if (ev === "WICKET" || ev === "OUT") event = "WICKET";
+          else if (ev === "WIDE") event = "WIDE";
+          else if (ev === "NO_BALL" || ev === "NOBALL") event = "NO_BALL";
+          else event = ev;
+        } else if (c.runs === 6) {
+          event = "SIX";
+        } else if (c.runs === 4) {
+          event = "FOUR";
+        }
+
+        commentary.push({
+          over: overRaw,
+          ball: ballRaw,
+          event,
+          text: c.commText || "",
+          batsmanStriker: c.batsmanStriker?.batName || c.batName || "",
+          bowlerStriker: c.bowlerStriker?.bowlName || c.bowlName || "",
+          runs: c.runs !== undefined ? c.runs : 0,
+        });
+      });
     });
 
-    // HTML fallback
+    // Pass 2: HTML fallback — Cricbuzz commentary div structure
+    if (!commentary.length) {
+      // Try the commentary page directly
+      try {
+        const { data: commData } = await axios.get(
+          `https://www.cricbuzz.com/live-cricket-scores/${matchId}/commentary`,
+          { headers, timeout: 10000 }
+        );
+        const $c = cheerio.load(commData);
+
+        $c(".cb-col.cb-col-100.cb-ltst-wgt-hdr, .cb-com-ln").each((i, el) => {
+          const $el = $c(el);
+          const overText = $el.find(".cb-col-8, .cb-ovr-num").text().trim();
+          const commText = $el.find(".cb-col-84, .cb-com-txt").text().trim() || $el.text().trim();
+          if (commText && commText.length > 3) {
+            const overMatch = overText.match(/(\d+)\.(\d+)/);
+            commentary.push({
+              over: overMatch ? overMatch[1] : overText,
+              ball: overMatch ? overMatch[2] : "",
+              event: "default",
+              text: commText,
+              batsmanStriker: "",
+              bowlerStriker: "",
+              runs: 0,
+            });
+          }
+        });
+      } catch (e) { /* ignore fallback error */ }
+    }
+
+    // Pass 3: minimal HTML fallback on scorecard page
     if (!commentary.length) {
       $(".cb-col.cb-col-100.cb-ltst-wgt-hdr").each((i, el) => {
         const over = $(el).find(".cb-col-8").text().trim();
         const text = $(el).find(".cb-col-84").text().trim();
         if (text) {
-          commentary.push({ over, ball: "", event: "default", text, runs: 0 });
+          commentary.push({ over, ball: "", event: "default", text, runs: 0, batsmanStriker: "", bowlerStriker: "" });
         }
       });
     }
 
-    scrapeCache.set(cacheKey, commentary);
+    if (commentary.length) scrapeCache.set(cacheKey, commentary);
     return commentary;
   } catch (err) {
     console.error("Commentary scrape error:", err.message);

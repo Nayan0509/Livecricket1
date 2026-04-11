@@ -193,17 +193,27 @@ function ScorecardTab({ matchId }) {
    COMMENTARY TAB
 ───────────────────────────────────────────── */
 function CommentaryTab({ matchId }) {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["commentary", matchId],
     queryFn: () => fetchMatchCommentary(matchId),
     refetchInterval: 15000,
+    retry: 2,
   });
 
-  const commentary = data?.data || [];
+  // API returns { status: "success", data: [...] }
+  const commentary = Array.isArray(data?.data) ? data.data : [];
 
   if (isLoading) return (
     <div style={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
       <div className="spinner" style={{ margin: 0 }} />
+    </div>
+  );
+
+  if (error) return (
+    <div style={{ padding: "60px 0", textAlign: "center" }}>
+      <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
+      <p style={{ color: "var(--text3)", fontSize: 15, marginBottom: 20 }}>Failed to load commentary.</p>
+      <button onClick={() => refetch()} className="btn btn-outline" style={{ padding: "10px 24px" }}>Retry</button>
     </div>
   );
 
@@ -255,14 +265,18 @@ function CommentaryTab({ matchId }) {
             {c.batsmanStriker && (
               <span style={{ fontWeight: 700, color: "var(--text)", marginRight: 6 }}>{c.batsmanStriker}</span>
             )}
-            {c.text}
+            {c.text || <span style={{ color: "var(--text3)", fontStyle: "italic" }}>—</span>}
           </div>
-          {/* Runs chip */}
-          {c.runs !== undefined && c.runs !== 0 && (
+          {/* Runs chip — show for all deliveries including dot balls */}
+          {c.runs !== undefined && (
             <div style={{
               minWidth: 28, height: 28, borderRadius: "50%", display: "flex",
               alignItems: "center", justifyContent: "center",
-              background: c.event === "SIX" ? "#f59e0b" : c.event === "FOUR" ? "var(--accent-green)" : "var(--bg3)",
+              background: c.event === "SIX" ? "#f59e0b"
+                : c.event === "FOUR" ? "var(--accent-green)"
+                : c.event === "WICKET" ? "var(--primary-light)"
+                : c.runs > 0 ? "var(--bg4)"
+                : "rgba(255,255,255,0.06)",
               color: "#fff", fontSize: 13, fontWeight: 900, flexShrink: 0
             }}>
               {c.runs}
