@@ -43,6 +43,7 @@ import CricketScoreToday from "./pages/CricketScoreToday";
 import CricketMatchesToday from "./pages/CricketMatchesToday";
 import WatchLive from "./pages/WatchLive";
 import Videos from "./pages/Videos";
+import CountyChampionship from "./pages/CountyChampionship";
 
 
 export default function App() {
@@ -95,6 +96,8 @@ export default function App() {
             <Route path="/asia-cup" element={<AsiaCup />} />
             <Route path="/champions-trophy" element={<ChampionsTrophy />} />
             <Route path="/womens-cricket" element={<WomensCricket />} />
+            <Route path="/county-championship" element={<CountyChampionship />} />
+            <Route path="/county-cricket" element={<CountyChampionship />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

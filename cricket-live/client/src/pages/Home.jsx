@@ -18,14 +18,15 @@ const SITE_SD = {
 };
 
 const QUICK_LINKS = [
-  { to: "/ipl",             label: "IPL 2026",         color: "#818cf8" },
-  { to: "/t20-world-cup",   label: "T20 WC",           color: "#f472b6" },
-  { to: "/world-cup",       label: "World Cup",        color: "#fbbf24" },
-  { to: "/champions-trophy",label: "Champions Trophy", color: "#2dd4bf" },
-  { to: "/psl",             label: "PSL",              color: "#4ade80" },
-  { to: "/bbl",             label: "BBL",              color: "#fb923c" },
-  { to: "/womens-cricket",  label: "Women's",          color: "#e879f9" },
-  { to: "/rankings",        label: "Rankings",         color: "#38bdf8" },
+  { to: "/ipl",               label: "IPL 2026",           color: "#818cf8" },
+  { to: "/t20-world-cup",     label: "T20 WC",             color: "#f472b6" },
+  { to: "/county-championship", label: "County 🏴󠁧󠁢󠁥󠁮󠁧󠁿",    color: "#60a5fa" },
+  { to: "/world-cup",         label: "World Cup",          color: "#fbbf24" },
+  { to: "/champions-trophy",  label: "Champions Trophy",   color: "#2dd4bf" },
+  { to: "/psl",               label: "PSL",                color: "#4ade80" },
+  { to: "/bbl",               label: "BBL",                color: "#fb923c" },
+  { to: "/womens-cricket",    label: "Women's",            color: "#e879f9" },
+  { to: "/rankings",          label: "Rankings",           color: "#38bdf8" },
 ];
 
 /* ─────────────────────────────────────────────

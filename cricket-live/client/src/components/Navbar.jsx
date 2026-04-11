@@ -11,14 +11,15 @@ const PRIMARY_NAV = [
 ];
 
 const LEAGUES = [
-  { to: "/ipl",             label: "IPL 2026",        color: "#6366f1" },
-  { to: "/t20-world-cup",   label: "T20 World Cup",   color: "#f43f5e" },
-  { to: "/world-cup",       label: "World Cup",       color: "#fbbf24" },
-  { to: "/asia-cup",        label: "Asia Cup",        color: "#22d3ee" },
-  { to: "/champions-trophy",label: "Champions Trophy",color: "#2dd4bf" },
-  { to: "/psl",             label: "PSL",             color: "#10b981" },
-  { to: "/bbl",             label: "BBL",             color: "#fb923c" },
-  { to: "/womens-cricket",  label: "Women's Cricket", color: "#a78bfa" },
+  { to: "/ipl",               label: "IPL 2026",           color: "#6366f1" },
+  { to: "/t20-world-cup",     label: "T20 World Cup",      color: "#f43f5e" },
+  { to: "/world-cup",         label: "World Cup",          color: "#fbbf24" },
+  { to: "/asia-cup",          label: "Asia Cup",           color: "#22d3ee" },
+  { to: "/champions-trophy",  label: "Champions Trophy",   color: "#2dd4bf" },
+  { to: "/county-championship", label: "County Championship 🏴󠁧󠁢󠁥󠁮󠁧󠁿", color: "#003087" },
+  { to: "/psl",               label: "PSL",                color: "#10b981" },
+  { to: "/bbl",               label: "BBL",                color: "#fb923c" },
+  { to: "/womens-cricket",    label: "Women's Cricket",    color: "#a78bfa" },
 ];
 
 export default function Navbar() {
@@ -91,7 +92,8 @@ export default function Navbar() {
             ))}
 
             {/* Leagues dropdown */}
-            <div style={{ position: "relative" }}
+            <div
+              style={{ position: "relative" }}
               onMouseEnter={() => setShowLeagues(true)}
               onMouseLeave={() => setShowLeagues(false)}
             >
@@ -107,19 +109,27 @@ export default function Navbar() {
                 <span style={{ fontSize: 9, transition: "transform 0.2s", transform: showLeagues ? "rotate(180deg)" : "rotate(0deg)", display: "inline-block" }}>▼</span>
               </button>
 
+              {/* Invisible bridge fills the gap so mouse doesn't leave the zone */}
+              {showLeagues && (
+                <div style={{
+                  position: "absolute", top: "100%", left: 0,
+                  width: "100%", height: 12,
+                }} />
+              )}
+
               {/* Dropdown */}
               <div style={{
-                position: "absolute", top: "calc(100% + 8px)", left: 0,
-                width: 220, borderRadius: 12,
-                background: "rgba(13,18,36,0.97)",
+                position: "absolute", top: "calc(100% + 4px)", left: 0,
+                width: 230, borderRadius: 12,
+                background: "rgba(13,18,36,0.98)",
                 border: "1px solid rgba(255,255,255,0.1)",
                 boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
                 backdropFilter: "blur(20px)",
                 padding: "8px",
                 opacity: showLeagues ? 1 : 0,
-                transform: showLeagues ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.97)",
+                transform: showLeagues ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.97)",
                 pointerEvents: showLeagues ? "all" : "none",
-                transition: "opacity 0.2s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1)",
+                transition: "opacity 0.15s, transform 0.15s",
                 zIndex: 100,
               }}>
                 {LEAGUES.map(l => (

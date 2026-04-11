@@ -31,6 +31,7 @@ export default function Footer() {
             {[
               ["IPL 2026", "/ipl"],
               ["T20 World Cup", "/t20-world-cup"],
+              ["County Championship", "/county-championship"],
               ["Asia Cup", "/asia-cup"],
               ["Champions Trophy", "/champions-trophy"],
               ["PSL 2026", "/psl"],

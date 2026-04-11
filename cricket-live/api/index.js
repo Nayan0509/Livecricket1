@@ -474,6 +474,8 @@ function serveMeta(url, res) {
       { loc: "/watch-live",              pri: "0.95", freq: "always" },
       { loc: "/watch",                   pri: "0.9",  freq: "always" },
       { loc: "/live-stream",             pri: "0.9",  freq: "always" },
+      { loc: "/county-championship",     pri: "0.95", freq: "hourly" },
+      { loc: "/county-cricket",          pri: "0.92", freq: "hourly" },
       { loc: "/about",                   pri: "0.5",  freq: "monthly"},
       { loc: "/best-cricket-website",    pri: "0.85", freq: "daily"  },
     ];
@@ -673,6 +675,16 @@ function getPageMeta(pathname) {
       desc: "Comprehensive cricket statistics — batting averages, bowling figures, career records, highest scores, best bowling figures for all formats.",
       kw: "cricket statistics, cricket stats, cricket records, batting average cricket, bowling figures cricket, cricket career stats",
     },
+    "/county-championship": {
+      title: `County Championship 2026 Live Score - English County Cricket | ${SITE}`,
+      desc: "County Championship 2026 live scores, ball-by-ball commentary, Division One and Division Two results. All 18 English counties covered — Surrey, Yorkshire, Lancashire, Hampshire, Kent and more. Live score updates every 15 seconds.",
+      kw: "county championship 2026, county championship live score, county cricket live score, county championship today, county cricket today, division one cricket, division two cricket, english county cricket, surrey cricket, yorkshire cricket, lancashire cricket, hampshire cricket, kent cricket, essex cricket, county championship results, county championship table 2026",
+    },
+    "/county-cricket": {
+      title: `County Cricket Live Score 2026 - All County Matches | ${SITE}`,
+      desc: "County cricket live scores 2026 for all County Championship Division One and Division Two matches. Real-time ball-by-ball commentary for every English county cricket match.",
+      kw: "county cricket live score, county cricket 2026, county cricket today, county cricket results, county cricket schedule, english county cricket live, county championship live",
+    },
     "/watch-live": {
       title: `Watch Live Cricket Online Free - Live Stream 2026 | ${SITE}`,
       desc: "Watch live cricket match online free. Stream IPL 2026, T20 World Cup, ODI, Test matches live on YouTube. Free cricket live streaming — no signup required. Watch cricket live stream today.",
@@ -861,6 +873,7 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
         <div class="link-card"><a href="${BASE}/cpl">CPL 2026 Live Score</a><br/><small>Caribbean Premier League</small></div>
         <div class="link-card"><a href="${BASE}/bpl">BPL 2026 Live Score</a><br/><small>Bangladesh Premier League</small></div>
         <div class="link-card"><a href="${BASE}/womens-cricket">Women's Cricket</a><br/><small>ICC Women's T20 &amp; ODI</small></div>
+        <div class="link-card"><a href="${BASE}/county-championship">County Championship 2026</a><br/><small>English County Cricket</small></div>
       </div>
     </section>
 
