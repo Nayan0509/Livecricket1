@@ -10,7 +10,7 @@ export default function TestCricket() {
       filterKeywords={["Test", "Test Match", "Test cricket"]}
       accentColor="#f87171"
       seoTitle="Test Cricket Live Score Today - Test Match Commentary"
-      seoDesc="Test cricket live score today. Get real-time Test match updates with ball-by-ball commentary, day-by-day scorecard and session reports. All Test series and Ashes covered."
+      seoDesc="Test cricket live score today. Real-time Test match updates with ball-by-ball commentary, day-by-day scorecard and session reports. All Test series covered."
       seoKeywords="Test cricket live score, Test match live score today, Test cricket today, Test match today, Test cricket ball by ball, Test cricket score, live Test score, Test cricket 2026, Ashes live score, Test match commentary"
       stats={[
         { value: "5", label: "Days" },

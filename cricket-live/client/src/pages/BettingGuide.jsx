@@ -8,7 +8,7 @@ export default function BettingGuide() {
     <div className="container" style={{ paddingBottom: 40, maxWidth: 900 }}>
       <SEO
         title="Cricket Betting Guide 2026 - Odds & Predictions"
-        description="Complete cricket betting guide for UK, US, and Australia. Learn betting odds, Polymarket predictions, IPL betting strategies, match predictions, and winning tips for T20, ODI, and Test cricket betting. Legal betting guide."
+        description="Cricket betting guide 2026 for UK, US and Australia. Betting odds, Polymarket predictions, IPL tips and T20 strategies. Gamble responsibly."
         keywords="cricket betting UK, cricket betting USA, cricket betting Australia, cricket betting odds, Polymarket cricket, IPL betting, cricket predictions, betting tips, cricket betting guide, match betting, T20 betting, cricket odds"
         url="/cricket-betting-guide"
       />

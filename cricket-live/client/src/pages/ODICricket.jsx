@@ -10,7 +10,7 @@ export default function ODICricket() {
       filterKeywords={["ODI", "One Day International", "One-Day"]}
       accentColor="#38bdf8"
       seoTitle="ODI Cricket Live Score Today - One Day International"
-      seoDesc="ODI cricket live score today. Get real-time One Day International match updates with ball-by-ball commentary. All ODI series, World Cup qualifiers and bilateral series covered."
+      seoDesc="ODI cricket live score today. Real-time One Day International match updates with ball-by-ball commentary. All ODI series and bilateral series covered."
       seoKeywords="ODI cricket live score, ODI live score today, One Day International live, ODI cricket today, ODI matches today, ODI ball by ball, ODI cricket score, live ODI score, ODI cricket 2026, ODI World Cup live"
       stats={[
         { value: "12", label: "Series" },

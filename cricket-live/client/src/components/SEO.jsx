@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 
 const SITE_NAME = "Live Cricket Zone";
 const SITE_URL = "https://www.livecricketzone.com";
-const DEFAULT_DESC = "Live Cricket Zone — Get real-time cricket scores, ball-by-ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards, player statistics, ICC rankings, cricket news and match schedules. Your ultimate destination for cricket.";
+const DEFAULT_DESC = "Live Cricket Zone — real-time cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup, ODI & Test scorecards, player stats and ICC rankings.";
 const DEFAULT_IMG = `${SITE_URL}/og-image.png`;
 const KEYWORDS = "live cricket score, cricket live score today, IPL 2026 live score, T20 World Cup live, cricket scorecard, ball by ball cricket commentary, cricket news today, ICC rankings 2026, cricket schedule, cricket players stats, cricket match today live, live cricket streaming, cricket score update, cricket live match, ODI cricket live, Test cricket live, cricket highlights, cricket results, cricket fixtures, cricket teams, cricket players";
 

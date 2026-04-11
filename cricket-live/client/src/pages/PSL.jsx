@@ -10,7 +10,7 @@ export default function PSL() {
       filterKeywords={["PSL", "Pakistan Super League", "HBL PSL"]}
       accentColor="#4ade80"
       seoTitle="PSL 2026 Live Score - Pakistan Super League"
-      seoDesc="PSL 2026 live score, ball-by-ball commentary, points table, schedule and match results. Get real-time Pakistan Super League 2026 updates on Live Cricket Zone."
+      seoDesc="PSL 2026 live score, ball-by-ball commentary, points table, schedule and results. Real-time Pakistan Super League 2026 updates."
       seoKeywords="PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard, PSL points table 2026, PSL schedule 2026, PSL match today, HBL PSL live score"
       stats={[
         { value: "6", label: "Teams" },

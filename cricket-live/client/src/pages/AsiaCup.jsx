@@ -10,7 +10,7 @@ export default function AsiaCup() {
       filterKeywords={["Asia Cup", "ACC Asia Cup"]}
       accentColor="#2dd4bf"
       seoTitle="Asia Cup 2026 Live Score - India vs Pakistan"
-      seoDesc="Asia Cup 2026 live score, ball-by-ball commentary, schedule and match results. Get real-time ACC Asia Cup 2026 updates including India vs Pakistan live score."
+      seoDesc="Asia Cup 2026 live score, ball-by-ball commentary, schedule and results. Real-time ACC Asia Cup 2026 updates including India vs Pakistan live score."
       seoKeywords="Asia Cup 2026 live score, Asia Cup live score today, India vs Pakistan Asia Cup live, Asia Cup ball by ball, Asia Cup schedule 2026, ACC Asia Cup live, Asia Cup cricket 2026"
       stats={[
         { value: "6", label: "Teams" },

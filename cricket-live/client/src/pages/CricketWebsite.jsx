@@ -7,7 +7,7 @@ export default function CricketWebsite() {
     <>
       <SEO 
         title="Best Cricket Website 2026 - Free Live Scores"
-        description="Live Cricket Zone is the best cricket website for live scores, ball-by-ball commentary, IPL 2026, T20 World Cup updates. Better than ESPNcricinfo and Cricbuzz. 100% free forever."
+        description="Live Cricket Zone — best cricket website for live scores, ball-by-ball commentary, IPL 2026 and T20 World Cup. Free, no signup."
         keywords="cricket website, best cricket website, cricket site, best cricket site, cricket score website, live cricket website, free cricket website, cricket website free, top cricket website, cricket website live score"
       />
       

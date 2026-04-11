@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fetchYouTubeSearch } from "../api";
+import { trackWatchClick, trackVideoPlay, trackVideoSearch } from "../utils/analytics";
 
 // Official broadcaster channels per region — improves search relevance
 const OFFICIAL_CHANNELS = {
@@ -84,6 +85,7 @@ export default function WatchSection({ match }) {
     fetchYouTubeSearch(q)
       .then((res) => {
         const vids = res?.videos || [];
+        trackVideoSearch(q, vids.length);
         if (vids.length === 0 && idx < queries.length - 1) {
           // Try next query
           setQueryIdx(idx + 1);
@@ -94,6 +96,7 @@ export default function WatchSection({ match }) {
         if (vids.length > 0) {
           setActiveId(vids[0].videoId);
           setActiveVideo(vids[0]);
+          trackVideoPlay(vids[0].videoId, vids[0].title, match?.name);
         }
       })
       .catch(() => setVideos([]))
@@ -112,6 +115,7 @@ export default function WatchSection({ match }) {
   const selectVideo = (v) => {
     setActiveId(v.videoId);
     setActiveVideo(v);
+    trackVideoPlay(v.videoId, v.title, match?.name);
   };
 
   const handleRetry = () => {

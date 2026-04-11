@@ -25,7 +25,7 @@ export default function BallByBall() {
     <>
       <SEO 
         title="Ball by Ball Cricket Commentary Live - All Matches"
-        description="Ball by ball cricket commentary live for all matches. Real-time ball-by-ball updates, live cricket score, detailed commentary for IPL 2026, T20 World Cup, ODI and Test matches. Updated every 15 seconds."
+        description="Ball by ball cricket commentary live for all matches. Real-time updates for IPL 2026, T20 World Cup, ODI and Test matches. Updated every 15 seconds."
         keywords="ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, ball by ball cricket score, cricket commentary live, live cricket commentary, ball by ball updates, IPL ball by ball, T20 ball by ball commentary"
         url="/ball-by-ball"
         structuredData={{

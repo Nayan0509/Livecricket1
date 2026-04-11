@@ -85,7 +85,7 @@ export default function IPL() {
     <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
       <SEO
         title="IPL 2026 Live Score - Indian Premier League"
-        description="IPL 2026 live score, ball-by-ball commentary, points table, schedule and match results. Get real-time Indian Premier League 2026 updates faster than Cricbuzz."
+        description="IPL 2026 live score, ball-by-ball commentary, points table, schedule and results. Real-time Indian Premier League 2026 updates."
         keywords="IPL 2026 live score, IPL live score today, Indian Premier League 2026, IPL ball by ball, IPL scorecard, IPL points table 2026, IPL schedule 2026, IPL match today, IPL live cricket score, IPL 2026 results"
         url="/ipl"
         structuredData={IPL_SD}

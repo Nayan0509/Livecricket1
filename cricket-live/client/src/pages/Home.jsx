@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchAllMatches, fetchNews } from "../api";
 import SEO from "../components/SEO";
+import { trackMatchCardClick, trackWatchClick } from "../utils/analytics";
 
 const SITE_SD = {
   "@context": "https://schema.org",
@@ -77,7 +78,7 @@ function StripCard({ match }) {
 
   return (
     <div
-      onClick={() => navigate(`/match/${match.id}`)}
+      onClick={() => { trackMatchCardClick(match.id, match.name, isLive); navigate(`/match/${match.id}`); }}
       style={{
         minWidth: 230, maxWidth: 230, cursor: "pointer", flexShrink: 0,
         background: isLive
@@ -186,7 +187,7 @@ function MatchRow({ match }) {
 
   return (
     <div
-      onClick={() => navigate(`/match/${match.id}`)}
+      onClick={() => { trackMatchCardClick(match.id, match.name, isLive); navigate(`/match/${match.id}`); }}
       style={{
         display: "grid", gridTemplateColumns: "1fr 56px 1fr auto",
         alignItems: "center", gap: 8,
@@ -321,7 +322,7 @@ export default function Home() {
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
         title="Live Cricket Score Today - IPL 2026 & T20 Live"
-        description="Fastest live cricket score today, ball by ball commentary, IPL 2026 live updates, T20 World Cup, ODI & Test match scorecards."
+        description="Fastest live cricket score today. Ball-by-ball commentary, IPL 2026 live score, T20 World Cup, ODI & Test scorecards updated every 15 seconds."
         url="/"
         keywords="live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary"
         structuredData={SITE_SD}

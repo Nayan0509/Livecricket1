@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { trackWatchClick, trackMatchCardClick } from "../utils/analytics";
 
 export default function MatchCard({ match }) {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ export default function MatchCard({ match }) {
 
   const handleWatch = (e) => {
     e.stopPropagation();
+    trackWatchClick(match.id, match.name);
     navigate(`/match/${match.id}?watch=1`);
   };
 

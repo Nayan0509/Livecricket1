@@ -16,7 +16,7 @@ export default function CountyChampionship() {
       ]}
       accentColor="#003087"
       seoTitle="County Championship 2026 Live Score - UK Cricket"
-      seoDesc="County Championship 2026 live scores, ball-by-ball commentary, Division One and Division Two results. Follow all 18 English county cricket teams. Live score updates for every County Championship match today."
+      seoDesc="County Championship 2026 live scores, Division One and Two results. Surrey, Yorkshire, Lancashire and all 18 English counties. Updated every 15 seconds."
       seoKeywords="county championship 2026, county championship live score, county cricket live score, county championship today, county cricket today, division one cricket, division two cricket, english county cricket, county championship results, county championship schedule, surrey cricket live, yorkshire cricket live, lancashire cricket live, hampshire cricket live, kent cricket live, essex cricket live, warwickshire cricket live, somerset cricket live, nottinghamshire cricket live, durham cricket live, sussex cricket live, middlesex cricket live, worcestershire cricket live, gloucestershire cricket live, northamptonshire cricket live, leicestershire cricket live, glamorgan cricket live, derbyshire cricket live, county championship 2026 table, county cricket scores today, watch county cricket live, county cricket live stream"
       stats={[
         { value: "18", label: "Counties" },

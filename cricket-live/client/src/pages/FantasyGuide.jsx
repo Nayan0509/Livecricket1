@@ -8,7 +8,7 @@ export default function FantasyGuide() {
     <div className="container" style={{ paddingBottom: 40, maxWidth: 900 }}>
       <SEO
         title="Fantasy Cricket Guide 2026 - DraftKings & FanDuel Tips"
-        description="Complete fantasy cricket guide for UK, US, and Australia. Learn DraftKings strategies, FanDuel lineups, captain picks, and winning DFS strategies for IPL, T20 World Cup, and international cricket. Legal in UK, US, and Australia."
+        description="Fantasy cricket guide 2026 for UK, US and Australia. DraftKings, FanDuel tips, captain picks and winning DFS strategies for IPL and T20 World Cup."
         keywords="fantasy cricket UK, fantasy cricket USA, fantasy cricket Australia, DraftKings cricket, FanDuel cricket, fantasy cricket guide, DFS cricket, cricket fantasy tips, fantasy cricket lineups, IPL fantasy, T20 fantasy cricket"
         url="/fantasy-cricket-guide"
       />

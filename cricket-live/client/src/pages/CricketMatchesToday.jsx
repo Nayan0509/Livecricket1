@@ -28,7 +28,7 @@ export default function CricketMatchesToday() {
     <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
       <SEO
         title="Cricket Matches Today - Live Cricket Schedule & Timings"
-        description={`Cricket matches today ${today}. Get live cricket score, match timings, schedule and ball-by-ball commentary for all cricket matches today. IPL, T20, ODI, Test matches.`}
+        description={`Cricket matches today ${today}. Live scores, timings and ball-by-ball commentary for IPL, T20, ODI and Test matches.`}
         keywords="cricket matches today, cricket today, today cricket match, cricket match today live, cricket schedule today, live cricket today, today cricket live score, cricket today match time"
         url="/cricket-matches-today"
         structuredData={TODAY_SD}

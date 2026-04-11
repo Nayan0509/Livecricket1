@@ -23,7 +23,7 @@ export default function DMCACopyright() {
     <div className="container" style={{ maxWidth: 860, paddingBottom: 80 }}>
       <SEO
         title="DMCA & Copyright Policy - Live Cricket Zone"
-        description="DMCA and Copyright Policy for Live Cricket Zone. How to submit a copyright takedown notice. We respect intellectual property rights and respond promptly to valid DMCA claims."
+        description="DMCA and Copyright Policy for Live Cricket Zone. Submit a takedown notice. We respond within 48 hours to valid copyright claims."
         url="/dmca-copyright"
         noindex={false}
       />

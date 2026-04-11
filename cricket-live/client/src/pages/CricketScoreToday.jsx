@@ -27,7 +27,7 @@ export default function CricketScoreToday() {
     <>
       <SEO 
         title="Cricket Score Today - Live Match Scores 2026"
-        description="Cricket score today for all live matches. Get today's cricket match scores, live updates, ball-by-ball commentary for IPL, T20, ODI, Test matches. Updated every 15 seconds."
+        description="Cricket score today for all live matches. Ball-by-ball commentary for IPL, T20, ODI and Test matches. Updated every 15 seconds."
         keywords="cricket score today, today cricket score, cricket match today, cricket today, today cricket match, cricket live today, cricket score live today, today match score, cricket match score today, live cricket today, today cricket live score"
       />
       

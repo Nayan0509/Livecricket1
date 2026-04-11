@@ -1,8 +1,9 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Ticker from "./components/Ticker";
+import { trackPageView } from "./utils/analytics";
 
 import Home from "./pages/Home";
 import LiveMatches from "./pages/LiveMatches";
@@ -49,9 +50,19 @@ import TermsOfUse from "./pages/TermsOfUse";
 import DMCACopyright from "./pages/DMCACopyright";
 
 
+// Tracks every SPA route change as a GA4 page_view
+function RouteTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView(location.pathname + location.search, document.title);
+  }, [location]);
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <RouteTracker />
       <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
         <Navbar />
         <Ticker />

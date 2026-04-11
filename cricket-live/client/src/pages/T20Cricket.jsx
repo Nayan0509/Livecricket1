@@ -11,7 +11,7 @@ export default function T20Cricket() {
       filterKeywords={["T20", "Twenty20", "T20I"]}
       accentColor="#818cf8"
       seoTitle="T20 Cricket Live Score Today - All T20 Matches"
-      seoDesc="T20 cricket live score today. Get real-time updates for all T20 matches — IPL 2026, T20 World Cup, PSL, BBL, CPL, BPL — with ball-by-ball commentary updated every 15 seconds."
+      seoDesc="T20 cricket live score today. IPL 2026, T20 World Cup, PSL, BBL, CPL, BPL — real-time updates with ball-by-ball commentary every 15 seconds."
       seoKeywords="T20 cricket live score, T20 live score today, T20 cricket today, T20 matches today, T20 cricket live, T20 ball by ball, T20 cricket score, live T20 score, T20 cricket 2026, T20 international live"
       stats={[
         { value: "IPL", label: "10 Teams" },
