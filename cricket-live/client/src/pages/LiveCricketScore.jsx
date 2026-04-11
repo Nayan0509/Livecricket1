@@ -63,7 +63,7 @@ export default function LiveCricketScore() {
     <>
       <SEO 
         title="Live Cricket Score - Real-Time Cricket Scores Today 2026"
-        description="Live cricket score today with real-time updates. Get live cricket scores for IPL 2026, T20 World Cup, ODI, Test matches. Ball-by-ball commentary updated every 15 seconds. Faster than Cricbuzz."
+        description="Live cricket score today with real-time updates. IPL 2026, T20 World Cup, ODI, Test matches. Ball-by-ball commentary updated every 15 seconds."
         keywords="live cricket score, cricket live score today, live cricket score today, cricket score live, live score cricket, cricket live score, real time cricket score, live cricket scores today, IPL live score, T20 live score"
         url="/live-cricket-score"
         structuredData={{

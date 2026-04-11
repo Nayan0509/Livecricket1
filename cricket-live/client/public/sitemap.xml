@@ -1,61 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <!-- TIER 1: Homepage & Live -->
-  <url><loc>https://www.livecricketzone.com/</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/live</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/live-cricket-score</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/cricket-score-today</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/cricket-matches-today</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/ball-by-ball</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-11</lastmod></url>
+  <!-- Homepage -->
+  <url>
+    <loc>https://www.livecricketzone.com/</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
 
-  <!-- TIER 2: Watch / Stream -->
-  <url><loc>https://www.livecricketzone.com/watch-live</loc><changefreq>always</changefreq><priority>0.98</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/watch</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/live-stream</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/videos</loc><changefreq>daily</changefreq><priority>0.8</priority><lastmod>2026-04-11</lastmod></url>
+  <!-- High Priority Pages -->
+  <url>
+    <loc>https://www.livecricketzone.com/live</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
 
-  <!-- TIER 3: Major International Tournaments -->
-  <url><loc>https://www.livecricketzone.com/ipl</loc><changefreq>hourly</changefreq><priority>0.98</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/t20-world-cup</loc><changefreq>hourly</changefreq><priority>0.97</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/world-cup</loc><changefreq>hourly</changefreq><priority>0.96</priority><lastmod>2026-04-11</lastmod></url>
+  <url>
+    <loc>https://www.livecricketzone.com/live-cricket-score</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.livecricketzone.com/cricket-score-today</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.livecricketzone.com/cricket-matches-today</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.livecricketzone.com/ball-by-ball</loc>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+
+  <!-- Tournament Pages -->
+  <url><loc>https://www.livecricketzone.com/ipl</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/t20-world-cup</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/world-cup</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/asia-cup</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/champions-trophy</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/womens-cricket</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
-
-  <!-- TIER 4: UK Cricket -->
-  <url><loc>https://www.livecricketzone.com/county-championship</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/county-cricket</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
-
-  <!-- TIER 5: Domestic Leagues -->
-  <url><loc>https://www.livecricketzone.com/psl</loc><changefreq>hourly</changefreq><priority>0.93</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/bbl</loc><changefreq>hourly</changefreq><priority>0.88</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/womens-cricket</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/t20</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/odi</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/test</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/psl</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/bbl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/cpl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/bpl</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
 
-  <!-- TIER 6: Cricket Formats -->
-  <url><loc>https://www.livecricketzone.com/t20</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/odi</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/test</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
-
-  <!-- TIER 7: Schedule & Results -->
-  <url><loc>https://www.livecricketzone.com/schedule</loc><changefreq>hourly</changefreq><priority>0.92</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/upcoming</loc><changefreq>hourly</changefreq><priority>0.90</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/results</loc><changefreq>hourly</changefreq><priority>0.88</priority><lastmod>2026-04-11</lastmod></url>
-
-  <!-- TIER 8: Content & Data -->
-  <url><loc>https://www.livecricketzone.com/news</loc><changefreq>hourly</changefreq><priority>0.88</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/series</loc><changefreq>daily</changefreq><priority>0.82</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/players</loc><changefreq>daily</changefreq><priority>0.82</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/teams</loc><changefreq>weekly</changefreq><priority>0.78</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/rankings</loc><changefreq>weekly</changefreq><priority>0.82</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/stats</loc><changefreq>daily</changefreq><priority>0.78</priority><lastmod>2026-04-11</lastmod></url>
-
-  <!-- TIER 9: Static & Legal Pages -->
+  <!-- Content Pages -->
+  <url><loc>https://www.livecricketzone.com/schedule</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/upcoming</loc><changefreq>hourly</changefreq><priority>0.9</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/results</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/series</loc><changefreq>daily</changefreq><priority>0.8</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/players</loc><changefreq>daily</changefreq><priority>0.8</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/teams</loc><changefreq>weekly</changefreq><priority>0.75</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/rankings</loc><changefreq>weekly</changefreq><priority>0.8</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/news</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/stats</loc><changefreq>daily</changefreq><priority>0.75</priority><lastmod>2026-04-11</lastmod></url>
+  <url><loc>https://www.livecricketzone.com/videos</loc><changefreq>daily</changefreq><priority>0.65</priority><lastmod>2026-04-11</lastmod></url>
   <url><loc>https://www.livecricketzone.com/about</loc><changefreq>monthly</changefreq><priority>0.5</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/best-cricket-website</loc><changefreq>monthly</changefreq><priority>0.7</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.4</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/terms-of-use</loc><changefreq>yearly</changefreq><priority>0.4</priority><lastmod>2026-04-11</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/dmca-copyright</loc><changefreq>yearly</changefreq><priority>0.4</priority><lastmod>2026-04-11</lastmod></url>
 
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-chennai-super-kings-vs-delhi-capitals-149790</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-karachi-kings-vs-hyderabad-kingsmen-149149</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-essex-vs-somerset-142076</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-warwickshire-vs-sussex-142087</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-hampshire-vs-yorkshire-142098</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-surrey-vs-leicestershire-142109</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-nottinghamshire-vs-glamorgan-142120</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-worcestershire-vs-middlesex-142791</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-durham-vs-gloucestershire-142802</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-northamptonshire-vs-kent-142803</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-lancashire-vs-derbyshire-142814</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-mozambique-women-vs-malawi-women-153143</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-oman-vs-namibia-151506</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-indonesia-vs-sweden-148470</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-sweden-vs-indonesia-148481</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-royal-challengers-bengaluru-vs-rajasthan-royals-149768</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-sunrisers-hyderabad-vs-punjab-kings-149779</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-quetta-gladiators-vs-rawalpindiz-149127</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-peshawar-zalmi-vs-lahore-qalandars-149138</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-new-zealand-a-vs-sri-lanka-a-150316</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-england-women-u19-vs-australia-women-u19-152999</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-mozambique-women-vs-brazil-women-153101</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-malawi-women-vs-zambia-women-153112</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-botswana-women-vs-mozambique-women-153123</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-lesotho-women-vs-zambia-women-153132</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-botswana-women-vs-brazil-women-153154</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-namibia-vs-scotland-151517</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-lucknow-super-giants-vs-gujarat-titans-149801</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-mumbai-indians-vs-royal-challengers-bengaluru-149812</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-hyderabad-kingsmen-vs-islamabad-united-149160</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.livecricketzone.com/match/cricket-sri-lanka-women-u19-vs-england-women-u19-153010</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-04-11</lastmod>
+  </url>
 </urlset>

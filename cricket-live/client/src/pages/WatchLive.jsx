@@ -62,7 +62,7 @@ export default function WatchLive() {
     <>
       <SEO
         title="Watch Live Cricket Online Free - Live Stream 2026"
-        description="Watch live cricket match online free. Stream IPL 2026, T20 World Cup, ODI, Test matches live on YouTube. Free cricket live streaming worldwide — UK, India, Pakistan, Australia, USA. No signup required."
+        description="Watch live cricket free online. Stream IPL 2026, T20 World Cup, ODI, Test matches via YouTube. No signup required — UK, India, Pakistan, Australia, USA."
         keywords="watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites, watch cricket live free online, cricket live stream today, live cricket stream, cricket online free, watch cricket free, cricket live watch, live cricket online, cricket streaming free, watch cricket match live, cricket live match watch, live cricket stream free, cricket watch online free, watch cricket uk, watch cricket india, watch cricket pakistan, watch cricket australia, watch cricket usa, cricket live stream uk, cricket live stream free uk, sky sports cricket live stream free, watch cricket online uk free"
         url="/watch-live"
         structuredData={WATCH_SD}

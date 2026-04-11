@@ -22,7 +22,7 @@ export default function Players() {
     <div className="container" style={{ paddingBottom: 40 }}>
       <SEO
         title="Cricket Players Stats - Batting & Bowling Records"
-        description="Search cricket player profiles with detailed statistics. Get batting averages, bowling records, centuries, wickets, strike rates and complete career stats across Test, ODI and T20 formats for all international cricket players."
+        description="Cricket player profiles with batting averages, bowling records, centuries, wickets and career stats for all international and IPL players."
         keywords="cricket players stats, cricket player profiles, batting average, bowling average, cricket centuries, cricket wickets, player statistics, cricket career records, Test cricket stats, ODI stats, T20 stats"
         url="/players"
       />
