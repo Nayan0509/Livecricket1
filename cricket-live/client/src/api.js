@@ -20,3 +20,5 @@ export const fetchTeams           = () => api.get("/teams").then(r => r.data);
 export const fetchRankings        = (type = "batting", format = "tests", category = "men") => 
   api.get("/rankings", { params: { type, format, category } }).then(r => r.data);
 
+export const fetchYouTubeSearch   = (q) => api.get("/youtube/search", { params: { q } }).then(r => r.data);
+

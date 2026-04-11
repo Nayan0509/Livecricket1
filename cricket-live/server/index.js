@@ -19,6 +19,7 @@ app.use("/api/rankings", require("./routes/rankings"));
 app.use("/api/teams",    require("./routes/teams"));
 app.use("/api/indexnow", require("./routes/indexnow"));
 app.use("/api/seo",      require("./routes/seo"));
+app.use("/api/youtube",  require("./routes/youtube"));
 
 app.get("/api/health", (req, res) => res.json({
   status: "ok",

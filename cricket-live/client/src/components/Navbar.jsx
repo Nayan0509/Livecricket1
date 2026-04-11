@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const PRIMARY_NAV = [
-  { to: "/live",     label: "Live",     icon: "🔴" },
-  { to: "/news",     label: "News",     icon: "📰" },
-  { to: "/rankings", label: "Rankings", icon: "📊" },
-  { to: "/series",   label: "Series",   icon: "🏆" },
-  { to: "/teams",    label: "Teams",    icon: "👥" },
+  { to: "/live",       label: "Live",       icon: "🔴" },
+  { to: "/watch-live", label: "Watch",      icon: "📺" },
+  { to: "/news",       label: "News",       icon: "📰" },
+  { to: "/rankings",   label: "Rankings",   icon: "📊" },
+  { to: "/series",     label: "Series",     icon: "🏆" },
+  { to: "/teams",      label: "Teams",      icon: "👥" },
 ];
 
 const LEAGUES = [

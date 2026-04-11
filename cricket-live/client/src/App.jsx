@@ -41,6 +41,8 @@ import WomensCricket from "./pages/WomensCricket";
 import LiveCricketScore from "./pages/LiveCricketScore";
 import CricketScoreToday from "./pages/CricketScoreToday";
 import CricketMatchesToday from "./pages/CricketMatchesToday";
+import WatchLive from "./pages/WatchLive";
+import Videos from "./pages/Videos";
 
 
 export default function App() {
@@ -57,6 +59,10 @@ export default function App() {
             <Route path="/cricket-score-today" element={<CricketScoreToday />} />
             <Route path="/cricket-matches-today" element={<CricketMatchesToday />} />
             <Route path="/ball-by-ball" element={<BallByBall />} />
+            <Route path="/watch-live" element={<WatchLive />} />
+            <Route path="/watch" element={<WatchLive />} />
+            <Route path="/live-stream" element={<WatchLive />} />
+            <Route path="/videos" element={<Videos />} />
 
             <Route path="/match/:id" element={<MatchDetail />} />
             <Route path="/match/:id/scorecard" element={<Scorecard />} />

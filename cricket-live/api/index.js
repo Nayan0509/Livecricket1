@@ -471,6 +471,9 @@ function serveMeta(url, res) {
       { loc: "/news",                    pri: "0.85", freq: "hourly" },
       { loc: "/stats",                   pri: "0.75", freq: "daily"  },
       { loc: "/videos",                  pri: "0.65", freq: "daily"  },
+      { loc: "/watch-live",              pri: "0.95", freq: "always" },
+      { loc: "/watch",                   pri: "0.9",  freq: "always" },
+      { loc: "/live-stream",             pri: "0.9",  freq: "always" },
       { loc: "/about",                   pri: "0.5",  freq: "monthly"},
       { loc: "/best-cricket-website",    pri: "0.85", freq: "daily"  },
     ];
@@ -670,27 +673,46 @@ function getPageMeta(pathname) {
       desc: "Comprehensive cricket statistics — batting averages, bowling figures, career records, highest scores, best bowling figures for all formats.",
       kw: "cricket statistics, cricket stats, cricket records, batting average cricket, bowling figures cricket, cricket career stats",
     },
+    "/watch-live": {
+      title: `Watch Live Cricket Online Free - Live Stream 2026 | ${SITE}`,
+      desc: "Watch live cricket match online free. Stream IPL 2026, T20 World Cup, ODI, Test matches live on YouTube. Free cricket live streaming — no signup required. Watch cricket live stream today.",
+      kw: "watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites, watch cricket live free online, cricket live stream today",
+    },
+    "/watch": {
+      title: `Watch Live Cricket Stream Free - All Matches | ${SITE}`,
+      desc: "Watch live cricket stream free online. All live cricket matches available to stream via YouTube. IPL 2026, T20 World Cup, ODI, Test cricket — watch free, no signup.",
+      kw: "watch cricket live, watch live cricket, cricket live stream, watch cricket online free, cricket streaming free, live cricket watch, cricket live match watch, watch cricket match live",
+    },
+    "/live-stream": {
+      title: `Live Cricket Stream - Watch Cricket Online Free | ${SITE}`,
+      desc: "Live cricket stream for all matches. Watch cricket online free — IPL 2026, T20 World Cup, PSL, BBL, ODI, Test matches. Free live cricket streaming via YouTube.",
+      kw: "live cricket stream, cricket live stream, cricket streaming, watch cricket live stream, live cricket streaming free, cricket online stream, cricket stream today",
+    },
+    "/videos": {
+      title: `Cricket Videos - Highlights & Live Streams | ${SITE}`,
+      desc: "Cricket videos — match highlights, live streams, best moments. Watch IPL 2026 highlights, T20 World Cup videos, ODI and Test match highlights free.",
+      kw: "cricket videos, cricket highlights, cricket live stream video, IPL highlights, T20 World Cup highlights, cricket match video, cricket video online",
+    },
   };
 
   // Match detail pages: /match/:id
   if (p.startsWith("/match/")) {
     const slug = p.replace("/match/", "");
-    // Try to extract team names from slug like "india-vs-australia-12345"
     const vsMatch = slug.match(/^(.+?)-vs-(.+?)(?:-\d+)?$/i);
     if (vsMatch) {
       const t1 = vsMatch[1].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       const t2 = vsMatch[2].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       return {
-        title: `${t1} vs ${t2} Live Score - Ball by Ball Commentary | ${SITE}`,
-        desc: `${t1} vs ${t2} live cricket score today. Ball-by-ball commentary, live scorecard and real-time match updates. Fastest cricket score updated every 15 seconds.`,
-        kw: `${t1} vs ${t2}, ${t1} vs ${t2} live score, ${t1} ${t2} scorecard, live cricket score today, ball by ball commentary`,
+        title: `Watch ${t1} vs ${t2} Live Stream Free - Live Cricket Score | ${SITE}`,
+        desc: `Watch ${t1} vs ${t2} live stream free online. Live cricket score, ball-by-ball commentary, live scorecard and real-time match updates. Stream cricket live — no signup required.`,
+        kw: `${t1} vs ${t2} live stream, watch ${t1} vs ${t2} live, ${t1} vs ${t2} live score, ${t1} ${t2} live cricket, watch cricket live free, live cricket stream free, ${t1} vs ${t2} scorecard, live cricket score today, ball by ball commentary`,
         canonical: `${BASE}${p}`,
       };
     }
     return {
-      title: `Live Cricket Score - Match Scorecard & Commentary | ${SITE}`,
-      desc: "Live cricket score, full scorecard and ball-by-ball commentary for this match. Real-time updates every 15 seconds.",
-      kw: "live cricket score, cricket scorecard, ball by ball commentary, cricket match live",
+      title: `Watch Live Cricket Stream Free - Live Score & Commentary | ${SITE}`,
+      desc: "Watch live cricket stream free online. Live cricket score, full scorecard and ball-by-ball commentary. Stream cricket live — no signup required.",
+      kw: "watch live cricket, live cricket stream free, live cricket score, cricket scorecard, ball by ball commentary, cricket match live, watch cricket online free",
       canonical: `${BASE}${p}`,
     };
   }
@@ -744,8 +766,9 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
   });
 
   const navLinks = [
-    ["/", "Home"], ["/live", "Live Scores"], ["/ipl", "IPL 2026"],
-    ["/t20-world-cup", "T20 World Cup"], ["/cricket-matches-today", "Today's Matches"],
+    ["/", "Home"], ["/live", "Live Scores"], ["/watch-live", "Watch Live"],
+    ["/ipl", "IPL 2026"], ["/t20-world-cup", "T20 World Cup"],
+    ["/cricket-matches-today", "Today's Matches"],
     ["/schedule", "Schedule"], ["/results", "Results"], ["/news", "News"],
     ["/rankings", "ICC Rankings"], ["/players", "Players"], ["/teams", "Teams"],
     ["/ball-by-ball", "Ball by Ball"], ["/t20", "T20 Cricket"],
@@ -1029,6 +1052,44 @@ module.exports = async (req, res) => {
         return res.json({ status: "success", indexnow: r.status, count: urls.length });
       } catch (e) {
         return res.json({ status: "error", message: e.message });
+      }
+    }
+
+    // ── YouTube search ───────────────────────────────────────────────────────
+    if (path === "youtube/search") {
+      const q = new URL(req.url, `http://${req.headers.host || "localhost"}`).searchParams.get("q");
+      if (!q) return res.status(400).json({ error: "Missing query" });
+      const cacheKey = `yt-${q}`;
+      const ytCached = cache.get(cacheKey);
+      if (ytCached) return res.json(ytCached);
+      try {
+        const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}&sp=EgJAAQ%3D%3D`;
+        const { data: ytHtml } = await axios.get(searchUrl, {
+          headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36", "Accept-Language": "en-US,en;q=0.9" },
+          timeout: 10000,
+        });
+        const ytMatch = ytHtml.match(/var ytInitialData = ({.+?});<\/script>/s);
+        if (!ytMatch) throw new Error("ytInitialData not found");
+        const ytData = JSON.parse(ytMatch[1]);
+        const contents = ytData?.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.[0]?.itemSectionRenderer?.contents || [];
+        const videos = [];
+        for (const item of contents) {
+          const vr = item.videoRenderer;
+          if (!vr?.videoId) continue;
+          videos.push({
+            videoId: vr.videoId,
+            title: vr.title?.runs?.[0]?.text || "",
+            thumbnail: `https://img.youtube.com/vi/${vr.videoId}/mqdefault.jpg`,
+            isLive: !!vr.badges?.some(b => b.metadataBadgeRenderer?.label === "LIVE"),
+            channel: vr.ownerText?.runs?.[0]?.text || "",
+          });
+          if (videos.length >= 5) break;
+        }
+        const ytResult = { videos };
+        cache.set(cacheKey, ytResult, 300);
+        return res.json(ytResult);
+      } catch (e) {
+        return res.json({ videos: [], error: e.message });
       }
     }
 

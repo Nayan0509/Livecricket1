@@ -6,7 +6,13 @@ export default function MatchCard({ match }) {
   const isLive      = match.matchStarted && !match.matchEnded;
   const isCompleted = match.matchEnded;
 
+  const handleWatch = (e) => {
+    e.stopPropagation();
+    navigate(`/match/${match.id}?watch=1`);
+  };
+
   return (
+    <>
     <div
       onClick={() => navigate(`/match/${match.id}`)}
       className={`match-card ${isLive ? "match-card-live" : ""}`}
@@ -126,10 +132,29 @@ export default function MatchCard({ match }) {
       </div>
 
       {/* Meta */}
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 11, color: "var(--text-muted)" }}>📅 {match.date}</span>
-        {match.venue && <span style={{ fontSize: 11, color: "var(--text-muted)" }}>📍 {match.venue.split(",")[0]}</span>}
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, color: "var(--text-muted)" }}>📅 {match.date}</span>
+          {match.venue && <span style={{ fontSize: 11, color: "var(--text-muted)" }}>📍 {match.venue.split(",")[0]}</span>}
+        </div>
+        <button
+          onClick={handleWatch}
+          style={{
+            display: "flex", alignItems: "center", gap: 5,
+            background: isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.06)",
+            border: `1px solid ${isLive ? "rgba(239,68,68,0.4)" : "rgba(255,255,255,0.12)"}`,
+            color: isLive ? "#f87171" : "var(--text2)",
+            borderRadius: 8, padding: "5px 12px",
+            fontSize: 12, fontWeight: 700, cursor: "pointer",
+            transition: "all 0.2s", flexShrink: 0,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.25)" : "rgba(255,255,255,0.12)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.06)"; }}
+        >
+          ▶ Watch
+        </button>
       </div>
     </div>
+    </>
   );
 }

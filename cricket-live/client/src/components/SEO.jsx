@@ -81,11 +81,16 @@ export default function SEO({
       <meta name="twitter:creator" content="@LiveCricketZone" />
 
       {/* Structured Data: JSON-LD */}
-      {structuredData && (
+      {structuredData && !Array.isArray(structuredData) && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>
       )}
+      {structuredData && Array.isArray(structuredData) && structuredData.map((sd, i) => (
+        <script key={i} type="application/ld+json">
+          {JSON.stringify(sd)}
+        </script>
+      ))}
       
       {/* BreadcrumbList for better SERP visibility */}
       {url && url !== "/" && (

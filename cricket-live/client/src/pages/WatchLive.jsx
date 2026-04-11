@@ -1,390 +1,261 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdBanner from "../components/AdBanner";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllMatches } from "../api";
 import SEO from "../components/SEO";
+import WatchSection from "../components/WatchSection";
 
-const STEPS = [
-  {
-    emoji: "🏏",
-    heading: "Watch Live Cricket",
-    sub: "Get instant access to live match streaming",
-    btn: "Click Here to Watch Live Match",
-    hint: "Free • No signup required",
+const WATCH_SD = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Watch Live Cricket Online Free - Live Stream 2026",
+  "description": "Watch live cricket matches online free. Stream IPL 2026, T20 World Cup, ODI, Test matches live on YouTube. Free cricket live streaming with no signup required.",
+  "url": "https://www.livecricketzone.com/watch-live",
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.livecricketzone.com" },
+      { "@type": "ListItem", "position": 2, "name": "Watch Live Cricket", "item": "https://www.livecricketzone.com/watch-live" }
+    ]
   },
-  {
-    emoji: "📡",
-    heading: "Connecting to Stream",
-    sub: "Your live match is being prepared",
-    btn: "Continue to Live Match →",
-    hint: "HD quality available",
-  },
-  {
-    emoji: "⚡",
-    heading: "Almost There!",
-    sub: "Stream is loading, just one more step",
-    btn: "Load My Live Stream",
-    hint: "Buffering complete — ready to play",
-  },
-  {
-    emoji: "🔓",
-    heading: "Unlock Your Stream",
-    sub: "Verify you're not a robot to continue",
-    btn: "Yes, Show Me the Match!",
-    hint: "Secure & encrypted connection",
-  },
-  {
-    emoji: "⏳",
-    heading: "Try Again After Some Time",
-    sub: "Too many requests. Please wait before trying again.",
-    btn: null,
-    hint: null,
-    isFinal: true,
-  },
-];
-
-const COUNTDOWN_SECS = 5;
-const COOLDOWN_SECS = 60; // 1 min cooldown on final page
-
-function CircleTimer({ seconds, total }) {
-  const r = 32;
-  const circ = 2 * Math.PI * r;
-  const progress = (seconds / total) * circ;
-
-  return (
-    <svg width={80} height={80} style={{ transform: "rotate(-90deg)", filter: "drop-shadow(0 4px 12px rgba(224, 45, 45, 0.3))" }}>
-      <circle cx={40} cy={40} r={r} fill="none" stroke="var(--border)" strokeWidth={5} />
-      <circle
-        cx={40} cy={40} r={r} fill="none"
-        stroke="url(#gradient)" strokeWidth={5}
-        strokeDasharray={circ}
-        strokeDashoffset={circ - progress}
-        strokeLinecap="round"
-        style={{ transition: "stroke-dashoffset 1s linear" }}
-      />
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#e02d2d" />
-          <stop offset="100%" stopColor="#b91c1c" />
-        </linearGradient>
-      </defs>
-      <text
-        x={40} y={40}
-        textAnchor="middle" dominantBaseline="central"
-        fill="var(--text)" fontSize={20} fontWeight={800}
-        style={{ transform: "rotate(90deg)", transformOrigin: "40px 40px", fontFamily: "'Poppins', sans-serif" }}
-      >
-        {seconds}
-      </text>
-    </svg>
-  );
-}
-
-function CooldownTimer({ seconds }) {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  const pct = (seconds / COOLDOWN_SECS) * 100;
-
-  return (
-    <div style={{ textAlign: "center" }}>
-      <div style={{ fontSize: 72, marginBottom: 16 }}>⏳</div>
-      <div style={{ 
-        fontSize: 48, 
-        fontWeight: 900, 
-        background: "var(--gradient-primary)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-        marginBottom: 16,
-        fontFamily: "'Poppins', sans-serif"
-      }}>
-        {mins > 0 ? `${mins}:${String(secs).padStart(2, "0")}` : `${secs}s`}
-      </div>
-      <div style={{ 
-        width: "100%", 
-        maxWidth: 400, 
-        margin: "0 auto 20px", 
-        height: 8,
-        background: "var(--bg3)", 
-        borderRadius: "var(--radius)", 
-        overflow: "hidden",
-        border: "1px solid var(--border)"
-      }}>
-        <div style={{
-          height: "100%", 
-          borderRadius: "var(--radius)",
-          background: "var(--gradient-primary)",
-          width: `${pct}%`,
-          transition: "width 1s linear",
-          boxShadow: "0 0 10px var(--live-glow)"
-        }} />
-      </div>
-      <div style={{ color: "var(--text2)", fontSize: 15, fontWeight: 500 }}>
-        Please wait before trying again
-      </div>
-    </div>
-  );
-}
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How to watch live cricket online free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can watch live cricket online free on Live Cricket Zone. Click the Watch button on any live match to stream it directly via YouTube. No signup or subscription required."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I watch IPL 2026 live stream free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Watch IPL 2026 live stream free on Live Cricket Zone. We embed official YouTube streams for every IPL match. Click any live IPL match and hit the Watch button."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I watch cricket live without subscription?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Live Cricket Zone provides free cricket live streaming via YouTube embeds. No subscription, no signup — just click Watch on any live match."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which cricket matches are available to watch live?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "All live cricket matches are available including IPL 2026, T20 World Cup, ODI series, Test matches, PSL, BBL, CPL and more. International matches often have official YouTube streams from cricket boards."
+        }
+      }
+    ]
+  }
+};
 
 export default function WatchLive() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
-  const [countdown, setCountdown] = useState(COUNTDOWN_SECS);
-  const [ready, setReady] = useState(false);
-  const [cooldown, setCooldown] = useState(COOLDOWN_SECS);
-  const [cooldownDone, setCooldownDone] = useState(false);
+  const [openMatch, setOpenMatch] = useState(null);
 
-  const current = STEPS[step];
+  const { data, isLoading } = useQuery({
+    queryKey: ["allMatches"],
+    queryFn: fetchAllMatches,
+    refetchInterval: 30000,
+  });
 
-  // Countdown timer — resets on each step change
-  useEffect(() => {
-    setReady(false);
-    setCountdown(COUNTDOWN_SECS);
-    const interval = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setReady(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [step]);
-
-  // Cooldown timer on final step
-  useEffect(() => {
-    if (!current.isFinal) return;
-    setCooldown(COOLDOWN_SECS);
-    setCooldownDone(false);
-    const interval = setInterval(() => {
-      setCooldown(prev => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setCooldownDone(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [current.isFinal]);
-
-  const handleClick = useCallback(() => {
-    if (!ready) return;
-    if (step < STEPS.length - 1) {
-      setStep(s => s + 1);
-    }
-  }, [ready, step]);
-
-  const handleRetry = () => {
-    setStep(0);
-    setCooldownDone(false);
-  };
+  const liveMatches = data?.data?.live || [];
+  const upcomingMatches = (data?.data?.upcoming || []).slice(0, 6);
 
   return (
     <>
-      <SEO 
-        title="Watch Live Cricket Online Free - Streaming 2026"
-        description="Watch live cricket match online free. Stream live cricket matches today with HD quality. Free cricket live streaming for IPL, T20 World Cup, ODI, Test matches. No signup required."
-        keywords="watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites"
+      <SEO
+        title="Watch Live Cricket Online Free - Live Stream 2026"
+        description="Watch live cricket match online free. Stream IPL 2026, T20 World Cup, ODI, Test matches live on YouTube. Free cricket live streaming — no signup required. Watch cricket live stream today."
+        keywords="watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites, watch cricket live free online, cricket live stream today, live cricket stream, cricket online free, watch cricket free, cricket live watch, live cricket online, cricket streaming free, watch cricket match live, cricket live match watch, live cricket stream free, cricket watch online free"
         url="/watch-live"
+        structuredData={WATCH_SD}
       />
-      
-      <div style={{
-      minHeight: "100vh", 
-      background: "var(--bg)",
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center",
-      padding: 20
-    }}>
-      <div className="container" style={{ maxWidth: 600, textAlign: "center" }}>
 
-        {/* Step Progress */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 48 }}>
-          {STEPS.map((_, i) => (
-            <div key={i} style={{
-              width: i === step ? 32 : 10, 
-              height: 10, 
-              borderRadius: 5,
-              background: i < step ? "var(--gradient-primary)" : i === step ? "var(--primary)" : "var(--border)",
-              transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow: i === step ? "0 0 20px var(--live-glow)" : "none"
-            }} />
-          ))}
-        </div>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 16px 80px" }}>
 
-        {/* Icon with gradient background */}
+        {/* Hero */}
         <div style={{
-          width: 120,
-          height: 120,
-          margin: "0 auto 32px",
-          background: "var(--gradient-primary)",
-          borderRadius: "var(--radius-xl)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 64,
-          boxShadow: "var(--shadow-2xl)",
-          animation: "bounce 0.6s ease",
+          background: "linear-gradient(135deg, rgba(239,68,68,0.12) 0%, rgba(17,24,39,0.95) 100%)",
+          border: "1px solid rgba(239,68,68,0.2)",
+          borderRadius: 20, padding: "32px 28px", marginBottom: 28, textAlign: "center",
         }}>
-          {current.emoji}
+          <div style={{ fontSize: 48, marginBottom: 12 }}>📺</div>
+          <h1 style={{ fontSize: 28, fontWeight: 900, color: "#fff", marginBottom: 10, letterSpacing: -0.5 }}>
+            Watch Live Cricket Online Free
+          </h1>
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.6)", maxWidth: 560, margin: "0 auto 20px", lineHeight: 1.6 }}>
+            Stream live cricket matches directly via YouTube — no signup, no subscription. IPL 2026, T20 World Cup, ODI, Test matches and more.
+          </p>
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+            {["IPL 2026", "T20 World Cup", "ODI Series", "Test Cricket", "PSL", "BBL"].map(tag => (
+              <span key={tag} style={{
+                fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 20,
+                background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)",
+                color: "#f87171",
+              }}>{tag}</span>
+            ))}
+          </div>
         </div>
 
-        {/* Heading */}
-        <h1 style={{
-          fontSize: 36, 
-          fontWeight: 900, 
-          color: "var(--text)",
-          marginBottom: 16, 
-          lineHeight: 1.2,
-          fontFamily: "'Poppins', sans-serif",
-          background: "var(--gradient-primary)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text"
-        }}>
-          {current.heading}
-        </h1>
-        <p style={{ color: "var(--text2)", fontSize: 18, marginBottom: 48, lineHeight: 1.6 }}>
-          {current.sub}
-        </p>
-
-        {/* Final step — cooldown */}
-        {current.isFinal ? (
-          <div className="card" style={{ padding: 40 }}>
-            {!cooldownDone ? (
-              <CooldownTimer seconds={cooldown} />
-            ) : (
-              <div>
-                <div style={{ 
-                  color: "var(--accent-green)", 
-                  fontSize: 20, 
-                  fontWeight: 700, 
-                  marginBottom: 24,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8
-                }}>
-                  <span style={{ fontSize: 28 }}>✅</span> You can try again now!
-                </div>
-                <button onClick={handleRetry} className="btn btn-primary" style={{
-                  width: "100%",
-                  padding: "18px",
-                  fontSize: 16,
-                  justifyContent: "center"
-                }}>
-                  🔄 Try Again
-                </button>
-              </div>
-            )}
-            <button onClick={() => navigate("/")} className="btn btn-outline" style={{
-              marginTop: 16,
-              width: "100%",
-              padding: "14px",
-              justifyContent: "center"
-            }}>
-              ← Back to Home
-            </button>
+        {/* Live matches */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block", animation: "livePulse 2s infinite" }} />
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: "#ef4444", margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
+              Live Now — Click to Watch
+            </h2>
           </div>
-        ) : (
-          /* Normal steps — countdown + button */
-          <div>
-            {/* Ad shown while user waits for countdown */}
-            <div className="card" style={{ marginBottom: 32, padding: 20 }}>
-              <AdBanner type="responsive" slot="1234567894" />
+
+          {isLoading ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {[1, 2, 3].map(i => (
+                <div key={i} style={{ height: 72, borderRadius: 12, background: "rgba(255,255,255,0.04)", animation: "pulse 1.5s infinite" }} />
+              ))}
             </div>
-
-            {/* Countdown ring */}
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
-              {!ready ? (
-                <CircleTimer seconds={countdown} total={COUNTDOWN_SECS} />
-              ) : (
-                <div style={{
-                  width: 80, 
-                  height: 80, 
-                  borderRadius: "50%",
-                  background: "rgba(16, 185, 129, 0.15)", 
-                  border: "3px solid var(--accent-green)",
-                  display: "flex", 
-                  alignItems: "center", 
-                  justifyContent: "center",
-                  fontSize: 32, 
-                  animation: "pulse-ring 1s infinite",
-                  boxShadow: "0 0 30px rgba(16, 185, 129, 0.4)"
-                }}>✓</div>
-              )}
-            </div>
-
-            {/* CTA Button */}
-            <button
-              onClick={handleClick}
-              disabled={!ready}
-              className={ready ? "btn btn-primary" : ""}
-              style={{
-                background: ready ? "var(--gradient-primary)" : "var(--bg3)",
-                color: ready ? "#fff" : "var(--text3)",
-                border: ready ? "none" : "2px solid var(--border)",
-                borderRadius: "var(--radius-lg)",
-                padding: "20px 40px", 
-                fontSize: 18, 
-                fontWeight: 700,
-                cursor: ready ? "pointer" : "not-allowed",
-                width: "100%",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                transform: ready ? "scale(1)" : "scale(0.98)",
-                boxShadow: ready ? "var(--shadow-xl)" : "var(--shadow-sm)",
-                fontFamily: "'Poppins', sans-serif"
-              }}
-            >
-              {ready ? current.btn : `Wait ${countdown}s...`}
-            </button>
-
-            {current.hint && (
-              <div style={{ 
-                color: "var(--text3)", 
-                fontSize: 13, 
-                marginTop: 20,
-                padding: "12px 20px",
-                background: "var(--bg3)",
-                borderRadius: "var(--radius)",
-                border: "1px solid var(--border)"
-              }}>
-                🔒 {current.hint}
-              </div>
-            )}
-
-            {/* Skip to home */}
-            <button onClick={() => navigate("/")} className="btn btn-outline" style={{
-              marginTop: 24,
-              width: "100%",
-              padding: "12px",
-              justifyContent: "center"
+          ) : liveMatches.length === 0 ? (
+            <div style={{
+              padding: "32px 20px", textAlign: "center",
+              background: "rgba(255,255,255,0.02)", borderRadius: 14,
+              border: "1px solid rgba(255,255,255,0.07)",
             }}>
-              ← Back to Home
-            </button>
+              <div style={{ fontSize: 36, marginBottom: 10 }}>🏏</div>
+              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14 }}>No live matches right now. Check upcoming matches below.</p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {liveMatches.map(match => (
+                <div key={match.id}>
+                  <div
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      padding: "14px 18px", borderRadius: openMatch === match.id ? "12px 12px 0 0" : 12,
+                      background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.2)",
+                      cursor: "pointer", gap: 12,
+                    }}
+                    onClick={() => navigate(`/match/${match.id}?watch=1`)}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 800, fontSize: 14, color: "#fff", marginBottom: 3 }}>{match.name}</div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)" }}>{match.matchType} · {match.venue?.split(",")[0]}</div>
+                    </div>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
+                      <span style={{ fontSize: 10, fontWeight: 900, color: "#ef4444", background: "rgba(239,68,68,0.15)", padding: "2px 8px", borderRadius: 20 }}>● LIVE</span>
+                      <button
+                        onClick={e => { e.stopPropagation(); navigate(`/match/${match.id}?watch=1`); }}
+                        style={{
+                          background: "#ef4444", color: "#fff", border: "none",
+                          borderRadius: 8, padding: "6px 14px", fontSize: 12,
+                          fontWeight: 700, cursor: "pointer",
+                        }}
+                      >
+                        ▶ Watch
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Upcoming */}
+        {upcomingMatches.length > 0 && (
+          <div style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: 15, fontWeight: 800, color: "rgba(255,255,255,0.7)", marginBottom: 14, textTransform: "uppercase", letterSpacing: 0.5 }}>
+              📅 Upcoming Matches
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {upcomingMatches.map(match => (
+                <div
+                  key={match.id}
+                  onClick={() => navigate(`/match/${match.id}`)}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "12px 18px", borderRadius: 10, cursor: "pointer",
+                    background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)",
+                    transition: "background 0.15s",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
+                >
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: "#fff", marginBottom: 2 }}>{match.name}</div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{match.matchType} · {match.date}</div>
+                  </div>
+                  <span style={{ fontSize: 11, color: "#38bdf8", fontWeight: 700 }}>Set Reminder →</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
+
+        {/* SEO text block — visible to crawlers and users */}
+        <div style={{
+          background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
+          borderRadius: 14, padding: "24px 28px", marginBottom: 28,
+        }}>
+          <h2 style={{ fontSize: 17, fontWeight: 800, color: "#fff", marginBottom: 14 }}>
+            How to Watch Live Cricket Online Free
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              { n: "1", t: "Find your match", d: "Browse live or upcoming matches above. All current cricket matches are listed in real time." },
+              { n: "2", t: "Click Watch", d: "Hit the Watch button on any match. We search YouTube for the official live stream or highlights." },
+              { n: "3", t: "Stream instantly", d: "The YouTube video plays directly on the page — no redirect, no signup, completely free." },
+            ].map(s => (
+              <div key={s.n} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: "rgba(239,68,68,0.15)",
+                  border: "1px solid rgba(239,68,68,0.3)", display: "flex", alignItems: "center",
+                  justifyContent: "center", fontSize: 12, fontWeight: 900, color: "#f87171", flexShrink: 0,
+                }}>{s.n}</div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: "#fff", marginBottom: 3 }}>{s.t}</div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.5 }}>{s.d}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FAQ — helps with "People also ask" */}
+        <div style={{
+          background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
+          borderRadius: 14, padding: "24px 28px",
+        }}>
+          <h2 style={{ fontSize: 17, fontWeight: 800, color: "#fff", marginBottom: 16 }}>
+            Frequently Asked Questions
+          </h2>
+          {[
+            { q: "Is live cricket streaming free on this site?", a: "Yes, completely free. We embed YouTube streams — no subscription or account needed." },
+            { q: "Which tournaments can I watch live?", a: "IPL 2026, T20 World Cup, ODI series, Test matches, PSL, BBL, CPL, BPL and all international cricket." },
+            { q: "Do I need to create an account to watch?", a: "No account needed. Just click Watch on any match and the stream loads instantly." },
+            { q: "Why can't I find a stream for some matches?", a: "Some domestic matches may not have official YouTube streams. We automatically search for the best available video." },
+          ].map((faq, i) => (
+            <div key={i} style={{
+              paddingBottom: 14, marginBottom: 14,
+              borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none",
+            }}>
+              <div style={{ fontWeight: 700, fontSize: 13, color: "#fff", marginBottom: 6 }}>Q: {faq.q}</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>A: {faq.a}</div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
 
       <style>{`
-        @keyframes bounce {
-          0% { transform: scale(0.7) rotate(-5deg); opacity: 0; }
-          50% { transform: scale(1.1) rotate(5deg); }
-          100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-        @keyframes pulse-ring {
-          0%, 100% { 
-            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-            transform: scale(1);
-          }
-          50% { 
-            box-shadow: 0 0 0 20px rgba(16, 185, 129, 0);
-            transform: scale(1.05);
-          }
+        @keyframes pulse {
+          0%,100% { opacity: 0.35; }
+          50% { opacity: 0.7; }
         }
       `}</style>
     </>
