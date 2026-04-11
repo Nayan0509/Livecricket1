@@ -507,6 +507,272 @@ function serveMeta(url, res) {
   return false;
 }
 
+// ─── BOT DETECTION ───────────────────────────────────────────────────────────
+
+const BOT_UA = /googlebot|bingbot|yandex|baiduspider|duckduckbot|slurp|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix/i;
+
+function isBot(req) {
+  return BOT_UA.test(req.headers["user-agent"] || "");
+}
+
+// ─── PAGE META MAP ────────────────────────────────────────────────────────────
+// For each route, define what bots should see in <head>
+
+const BASE = "https://www.livecricketzone.com";
+const SITE = "Live Cricket Zone";
+
+function getPageMeta(pathname) {
+  const p = pathname.replace(/\/$/, "") || "/";
+
+  const map = {
+    "/": {
+      title: `Live Cricket Score Today - Ball by Ball Commentary, IPL 2026 & T20 Updates | ${SITE}`,
+      desc: "Fastest live cricket score today. Ball-by-ball commentary, IPL 2026 live score, T20 World Cup, ODI & Test match scorecards updated every 15 seconds.",
+      kw: "live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary, cricket live score today",
+    },
+    "/live": {
+      title: `Live Cricket Matches Now - Real-Time Scores & Commentary | ${SITE}`,
+      desc: "All live cricket matches right now. Real-time scores, ball-by-ball commentary for every live match. IPL, T20, ODI, Test cricket live.",
+      kw: "live cricket matches, cricket live now, live match today, cricket score live, live cricket score now",
+    },
+    "/live-cricket-score": {
+      title: `Live Cricket Score - Real-Time Cricket Scores Today 2026 | ${SITE}`,
+      desc: "Live cricket score today with real-time updates. Get live cricket scores for IPL 2026, T20 World Cup, ODI, Test matches. Ball-by-ball commentary updated every 15 seconds.",
+      kw: "live cricket score, cricket live score today, live cricket score today, cricket score live, live score cricket",
+    },
+    "/cricket-score-today": {
+      title: `Cricket Score Today - Live Cricket Score & Match Updates | ${SITE}`,
+      desc: "Cricket score today with live updates. Get today's cricket match scores, ball-by-ball commentary and live scorecard for all matches.",
+      kw: "cricket score today, cricket today score, today cricket score, live cricket score today, cricket match score today",
+    },
+    "/cricket-matches-today": {
+      title: `Cricket Matches Today - Live Schedule & Timings | ${SITE}`,
+      desc: "All cricket matches today with live scores, match timings and ball-by-ball commentary. IPL, T20, ODI, Test cricket matches today.",
+      kw: "cricket matches today, cricket today, today cricket match, cricket match today live, cricket schedule today",
+    },
+    "/ball-by-ball": {
+      title: `Ball by Ball Cricket Commentary Live - Real-Time Updates | ${SITE}`,
+      desc: "Ball by ball cricket commentary live for all matches. Real-time ball-by-ball updates for IPL 2026, T20 World Cup, ODI and Test matches.",
+      kw: "ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, cricket commentary live",
+    },
+    "/ipl": {
+      title: `IPL 2026 Live Score - Indian Premier League Ball by Ball | ${SITE}`,
+      desc: "IPL 2026 live score, ball-by-ball commentary, points table, schedule and match results. Real-time Indian Premier League 2026 updates.",
+      kw: "IPL 2026 live score, IPL live score today, Indian Premier League 2026, IPL ball by ball, IPL scorecard, IPL points table 2026",
+    },
+    "/t20-world-cup": {
+      title: `T20 World Cup 2026 Live Score - ICC T20 World Cup Ball by Ball | ${SITE}`,
+      desc: "T20 World Cup 2026 live score, ball-by-ball commentary, schedule and standings. Real-time ICC T20 World Cup 2026 updates.",
+      kw: "T20 World Cup 2026 live score, ICC T20 World Cup live, T20 World Cup schedule 2026, T20 World Cup ball by ball",
+    },
+    "/world-cup": {
+      title: `Cricket World Cup 2027 Live Score - ICC ODI World Cup | ${SITE}`,
+      desc: "ICC Cricket World Cup 2027 live score, ball-by-ball commentary, schedule and standings. Real-time ODI World Cup updates.",
+      kw: "Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule 2027",
+    },
+    "/asia-cup": {
+      title: `Asia Cup 2026 Live Score - India vs Pakistan Live | ${SITE}`,
+      desc: "Asia Cup 2026 live score, ball-by-ball commentary and match results. India vs Pakistan live score and all Asia Cup 2026 matches.",
+      kw: "Asia Cup 2026 live score, Asia Cup live score today, India vs Pakistan Asia Cup live, Asia Cup ball by ball",
+    },
+    "/champions-trophy": {
+      title: `ICC Champions Trophy 2025 Live Score - Ball by Ball | ${SITE}`,
+      desc: "ICC Champions Trophy 2025 live score, ball-by-ball commentary, schedule and match results. Real-time Champions Trophy updates.",
+      kw: "Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy ball by ball",
+    },
+    "/womens-cricket": {
+      title: `Women's Cricket Live Score 2026 - ICC Women's T20 & ODI | ${SITE}`,
+      desc: "Women's cricket live score 2026 with ball-by-ball commentary. ICC Women's T20 World Cup, Women's ODI and Women's Test match updates.",
+      kw: "women's cricket live score, ICC women's T20 World Cup live, women's cricket today, women's ODI live score",
+    },
+    "/t20": {
+      title: `T20 Cricket Live Score Today - All T20 Matches | ${SITE}`,
+      desc: "T20 cricket live score today. Real-time updates for all T20 matches — IPL 2026, T20 World Cup, PSL, BBL, CPL, BPL — with ball-by-ball commentary.",
+      kw: "T20 cricket live score, T20 live score today, T20 cricket today, T20 matches today, T20 ball by ball",
+    },
+    "/odi": {
+      title: `ODI Cricket Live Score Today - One Day International | ${SITE}`,
+      desc: "ODI cricket live score today. Real-time One Day International match updates with ball-by-ball commentary. All ODI series covered.",
+      kw: "ODI cricket live score, ODI live score today, One Day International live, ODI cricket today, ODI ball by ball",
+    },
+    "/test": {
+      title: `Test Cricket Live Score Today - Test Match Commentary | ${SITE}`,
+      desc: "Test cricket live score today. Real-time Test match updates with ball-by-ball commentary, day-by-day scorecard and session reports.",
+      kw: "Test cricket live score, Test match live score today, Test cricket today, Test match today, Test cricket ball by ball",
+    },
+    "/psl": {
+      title: `PSL 2026 Live Score - Pakistan Super League Ball by Ball | ${SITE}`,
+      desc: "PSL 2026 live score, ball-by-ball commentary, points table, schedule and match results. Real-time Pakistan Super League 2026 updates.",
+      kw: "PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard",
+    },
+    "/bbl": {
+      title: `BBL 2026 Live Score - Big Bash League Ball by Ball | ${SITE}`,
+      desc: "BBL 2026 live score, ball-by-ball commentary, schedule and match results. Real-time Big Bash League 2026 updates.",
+      kw: "BBL 2026 live score, Big Bash League live score, BBL live today, BBL ball by ball, BBL scorecard",
+    },
+    "/cpl": {
+      title: `CPL 2026 Live Score - Caribbean Premier League Ball by Ball | ${SITE}`,
+      desc: "CPL 2026 live score, ball-by-ball commentary, schedule and match results. Real-time Caribbean Premier League 2026 updates.",
+      kw: "CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball",
+    },
+    "/bpl": {
+      title: `BPL 2026 Live Score - Bangladesh Premier League Ball by Ball | ${SITE}`,
+      desc: "BPL 2026 live score, ball-by-ball commentary, schedule and match results. Real-time Bangladesh Premier League 2026 updates.",
+      kw: "BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball",
+    },
+    "/schedule": {
+      title: `Cricket Schedule 2026 - Upcoming Match Fixtures & Timings | ${SITE}`,
+      desc: "Complete cricket schedule 2026 with all upcoming match fixtures, timings and venues. IPL, T20 World Cup, ODI, Test match schedule.",
+      kw: "cricket schedule 2026, cricket fixtures, upcoming cricket matches, cricket match schedule, cricket calendar 2026",
+    },
+    "/upcoming": {
+      title: `Upcoming Cricket Matches - Schedule & Fixtures 2026 | ${SITE}`,
+      desc: "All upcoming cricket matches with schedule, fixtures and timings. IPL 2026, T20 World Cup, ODI, Test matches upcoming schedule.",
+      kw: "upcoming cricket matches, cricket upcoming matches, cricket fixtures 2026, next cricket match, cricket schedule upcoming",
+    },
+    "/results": {
+      title: `Cricket Match Results - Latest Scores & Scorecards | ${SITE}`,
+      desc: "Latest cricket match results, scores and full scorecards. IPL 2026, T20 World Cup, ODI, Test match results and highlights.",
+      kw: "cricket results, cricket match results, cricket scores today, cricket scorecard results, latest cricket results",
+    },
+    "/series": {
+      title: `Cricket Series 2026 - All International & Domestic Series | ${SITE}`,
+      desc: "All cricket series 2026 — international tours, bilateral series, ICC tournaments. Live scores, schedules and results for every series.",
+      kw: "cricket series 2026, cricket series schedule, international cricket series, cricket tour 2026",
+    },
+    "/players": {
+      title: `Cricket Players - Stats, Records & Profiles 2026 | ${SITE}`,
+      desc: "Cricket player profiles, career statistics, batting and bowling averages, recent form. Search all international and IPL cricket players.",
+      kw: "cricket players, cricket player stats, cricket player records, cricket player profile, IPL players 2026",
+    },
+    "/teams": {
+      title: `Cricket Teams - International & IPL Team Profiles | ${SITE}`,
+      desc: "All cricket teams — international and IPL. Team profiles, squad, recent form, head-to-head records and match history.",
+      kw: "cricket teams, international cricket teams, IPL teams 2026, cricket team profiles, cricket squad",
+    },
+    "/rankings": {
+      title: `ICC Cricket Rankings 2026 - Batsmen, Bowlers & Teams | ${SITE}`,
+      desc: "Latest ICC cricket rankings 2026 for batsmen, bowlers, all-rounders and teams in Test, ODI and T20 formats.",
+      kw: "ICC cricket rankings 2026, cricket rankings, ICC rankings batsmen, ICC rankings bowlers, ICC team rankings 2026",
+    },
+    "/news": {
+      title: `Cricket News Today - Latest Cricket Updates & Headlines | ${SITE}`,
+      desc: "Latest cricket news today. Breaking cricket news, match previews, player updates, IPL 2026 news, T20 World Cup news and more.",
+      kw: "cricket news today, latest cricket news, cricket news, IPL news 2026, cricket breaking news, cricket updates today",
+    },
+    "/stats": {
+      title: `Cricket Statistics - Records, Averages & Career Stats | ${SITE}`,
+      desc: "Comprehensive cricket statistics — batting averages, bowling figures, career records, highest scores, best bowling figures for all formats.",
+      kw: "cricket statistics, cricket stats, cricket records, batting average cricket, bowling figures cricket, cricket career stats",
+    },
+  };
+
+  // Match detail pages: /match/:id
+  if (p.startsWith("/match/")) {
+    const slug = p.replace("/match/", "");
+    // Try to extract team names from slug like "india-vs-australia-12345"
+    const vsMatch = slug.match(/^(.+?)-vs-(.+?)(?:-\d+)?$/i);
+    if (vsMatch) {
+      const t1 = vsMatch[1].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const t2 = vsMatch[2].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      return {
+        title: `${t1} vs ${t2} Live Score - Ball by Ball Commentary | ${SITE}`,
+        desc: `${t1} vs ${t2} live cricket score today. Ball-by-ball commentary, live scorecard and real-time match updates. Fastest cricket score updated every 15 seconds.`,
+        kw: `${t1} vs ${t2}, ${t1} vs ${t2} live score, ${t1} ${t2} scorecard, live cricket score today, ball by ball commentary`,
+        canonical: `${BASE}${p}`,
+      };
+    }
+    return {
+      title: `Live Cricket Score - Match Scorecard & Commentary | ${SITE}`,
+      desc: "Live cricket score, full scorecard and ball-by-ball commentary for this match. Real-time updates every 15 seconds.",
+      kw: "live cricket score, cricket scorecard, ball by ball commentary, cricket match live",
+      canonical: `${BASE}${p}`,
+    };
+  }
+
+  const meta = map[p] || map["/"];
+  return { ...meta, canonical: `${BASE}${p}` };
+}
+
+// ─── BOT HTML RENDERER ────────────────────────────────────────────────────────
+// Serves a fully-formed HTML page to crawlers with all meta tags + visible content
+
+function renderBotHtml(pathname, meta, liveMatches = []) {
+  const matchListHtml = liveMatches.length > 0
+    ? `<ul>${liveMatches.slice(0, 10).map(m => `<li><a href="${BASE}/match/${m.id}">${m.name} — ${m.status}</a></li>`).join("")}</ul>`
+    : "<p>Check back soon for live matches.</p>";
+
+  const sd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": meta.title,
+    "description": meta.desc,
+    "url": meta.canonical,
+    "publisher": { "@type": "Organization", "name": SITE, "url": BASE }
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>${meta.title}</title>
+  <meta name="description" content="${meta.desc}"/>
+  <meta name="keywords" content="${meta.kw}"/>
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
+  <meta name="googlebot" content="index,follow"/>
+  <link rel="canonical" href="${meta.canonical}"/>
+  <meta property="og:title" content="${meta.title}"/>
+  <meta property="og:description" content="${meta.desc}"/>
+  <meta property="og:url" content="${meta.canonical}"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="${BASE}/og-image.png"/>
+  <meta property="og:site_name" content="${SITE}"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="${meta.title}"/>
+  <meta name="twitter:description" content="${meta.desc}"/>
+  <meta name="twitter:image" content="${BASE}/og-image.png"/>
+  <meta name="twitter:site" content="@LiveCricketZone"/>
+  <script type="application/ld+json">${sd}</script>
+</head>
+<body>
+  <header>
+    <h1><a href="${BASE}">${SITE}</a></h1>
+    <nav>
+      <a href="${BASE}/live">Live</a> |
+      <a href="${BASE}/ipl">IPL 2026</a> |
+      <a href="${BASE}/t20-world-cup">T20 World Cup</a> |
+      <a href="${BASE}/schedule">Schedule</a> |
+      <a href="${BASE}/news">News</a> |
+      <a href="${BASE}/rankings">Rankings</a> |
+      <a href="${BASE}/players">Players</a>
+    </nav>
+  </header>
+  <main>
+    <h1>${meta.title.split("|")[0].trim()}</h1>
+    <p>${meta.desc}</p>
+    ${liveMatches.length > 0 ? `<h2>Live Cricket Matches</h2>${matchListHtml}` : ""}
+    <section>
+      <h2>About Live Cricket Zone</h2>
+      <p>Live Cricket Zone provides the fastest live cricket scores with ball-by-ball commentary updated every 15 seconds. Get real-time IPL 2026 live score, T20 World Cup live score, ODI and Test match scorecards.</p>
+      <ul>
+        <li><a href="${BASE}/live">Live Cricket Score Now</a></li>
+        <li><a href="${BASE}/ipl">IPL 2026 Live Score</a></li>
+        <li><a href="${BASE}/t20-world-cup">T20 World Cup 2026 Live Score</a></li>
+        <li><a href="${BASE}/ball-by-ball">Ball by Ball Commentary</a></li>
+        <li><a href="${BASE}/cricket-matches-today">Cricket Matches Today</a></li>
+        <li><a href="${BASE}/schedule">Cricket Schedule 2026</a></li>
+        <li><a href="${BASE}/rankings">ICC Rankings 2026</a></li>
+        <li><a href="${BASE}/news">Cricket News Today</a></li>
+        <li><a href="${BASE}/players">Cricket Players</a></li>
+        <li><a href="${BASE}/teams">Cricket Teams</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>`;
+}
+
 // ─── MAIN VERCEL HANDLER ─────────────────────────────────────────────────────
 
 module.exports = async (req, res) => {
@@ -516,7 +782,55 @@ module.exports = async (req, res) => {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (serveMeta(req.url || "", res)) return;
 
-  // Parse path safely
+  // ── Bot detection: serve pre-rendered HTML to crawlers ───────────────────
+  if (isBot(req)) {
+    let pathname = "/";
+    try {
+      pathname = new URL(req.url, `http://${req.headers.host || "localhost"}`).pathname;
+    } catch (_) {
+      pathname = (req.url || "/").split("?")[0];
+    }
+
+    // Skip API paths — bots shouldn't get HTML for /api/* routes
+    if (!pathname.startsWith("/api/")) {
+      const meta = getPageMeta(pathname);
+      let liveMatches = [];
+      // For homepage and live page, inject actual live match data
+      if (pathname === "/" || pathname === "/live" || pathname === "/cricket-matches-today") {
+        try {
+          const all = await getAllMatches();
+          liveMatches = all.live || [];
+        } catch (_) {}
+      }
+      const html = renderBotHtml(pathname, meta, liveMatches);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
+      res.setHeader("X-Rendered-For", "bot");
+      return res.status(200).send(html);
+    }
+  }
+
+  // ── Normal users on non-API routes: serve the React app ─────────────────
+  let pathname = "/";
+  try {
+    pathname = new URL(req.url, `http://${req.headers.host || "localhost"}`).pathname;
+  } catch (_) {
+    pathname = (req.url || "/").split("?")[0];
+  }
+
+  if (!pathname.startsWith("/api/") && !pathname.includes(".")) {
+    const fs = require("fs");
+    const path2 = require("path");
+    const indexPath = path2.join(__dirname, "../client/build/index.html");
+    if (fs.existsSync(indexPath)) {
+      const html = fs.readFileSync(indexPath, "utf8");
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+      return res.status(200).send(html);
+    }
+  }
+
+  // ── Parse path for API routes ─────────────────────────────────────────────
   let path = "";
   try {
     const u = new URL(req.url, `http://${req.headers.host || "localhost"}`);
@@ -524,9 +838,7 @@ module.exports = async (req, res) => {
   } catch (_) {
     path = (req.url || "").split("?")[0].replace(/^\/api\//, "").replace(/^\/+|\/+$/g, "");
   }
-
   const parts = path.split("/").filter(Boolean);
-  console.log(`[API] ${req.method} /${path}`);
 
   try {
     // ── Health ──────────────────────────────────────────────────────────────
