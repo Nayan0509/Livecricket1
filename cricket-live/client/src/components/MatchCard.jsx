@@ -28,9 +28,9 @@ export default function MatchCard({ match }) {
         background: isLive
           ? "linear-gradient(90deg, #f43f5e, #fb7185)"
           : isCompleted
-          ? "linear-gradient(90deg, #10b981, #2dd4bf)"
-          : "linear-gradient(90deg, #6366f1, #818cf8)",
-        opacity: 0.8,
+          ? "linear-gradient(90deg, #10b981, #34d399)"
+          : "linear-gradient(90deg, #7c3aed, #06b6d4)",
+        opacity: 0.9,
       }} />
 
       {/* Header row */}
@@ -75,11 +75,11 @@ export default function MatchCard({ match }) {
               ) : (
                 <div style={{
                   width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
-                  background: i === 0 ? "rgba(244,63,94,0.15)" : "rgba(99,102,241,0.15)",
-                  border: `1.5px solid ${i === 0 ? "rgba(244,63,94,0.3)" : "rgba(99,102,241,0.3)"}`,
+                  background: i === 0 ? "rgba(244,63,94,0.15)" : "rgba(124,58,237,0.15)",
+                  border: `1.5px solid ${i === 0 ? "rgba(244,63,94,0.3)" : "rgba(124,58,237,0.3)"}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 11, fontWeight: 900,
-                  color: i === 0 ? "var(--primary-light)" : "var(--secondary-light)",
+                  color: i === 0 ? "#fb7185" : "#a78bfa",
                 }}>
                   {t.shortname?.slice(0, 2)}
                 </div>
@@ -143,15 +143,15 @@ export default function MatchCard({ match }) {
           onClick={handleWatch}
           style={{
             display: "flex", alignItems: "center", gap: 5,
-            background: isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.06)",
-            border: `1px solid ${isLive ? "rgba(239,68,68,0.4)" : "rgba(255,255,255,0.12)"}`,
-            color: isLive ? "#f87171" : "var(--text2)",
+            background: isLive ? "rgba(244,63,94,0.15)" : "rgba(124,58,237,0.08)",
+            border: `1px solid ${isLive ? "rgba(244,63,94,0.4)" : "rgba(124,58,237,0.25)"}`,
+            color: isLive ? "#fb7185" : "#a78bfa",
             borderRadius: 8, padding: "5px 12px",
             fontSize: 12, fontWeight: 700, cursor: "pointer",
             transition: "all 0.2s", flexShrink: 0,
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.25)" : "rgba(255,255,255,0.12)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.06)"; }}
+          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(244,63,94,0.25)" : "rgba(124,58,237,0.18)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(244,63,94,0.15)" : "rgba(124,58,237,0.08)"; }}
         >
           ▶ Watch
         </button>

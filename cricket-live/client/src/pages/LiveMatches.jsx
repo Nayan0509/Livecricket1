@@ -68,8 +68,9 @@ export default function LiveMatches() {
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
       <SEO
-        title="Scalable Live Center - Real-time Cricket Analytics"
-        description="High-frequency live cricket analytics and scores."
+        title="Live Cricket Matches Today - Live Score & Streaming"
+        description="All live cricket matches today with real-time scores, ball-by-ball commentary and free live streaming. IPL 2026, domestic cricket, T20, ODI and Test matches live."
+        keywords="live cricket matches today, cricket live today, all live cricket matches, live cricket score today, IPL live today, domestic cricket live, T20 live today, ODI live today, Test live today, cricket match live now, live cricket score all matches, cricket live score all, today cricket live match, live cricket all matches today"
         url="/live"
       />
       

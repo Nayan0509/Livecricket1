@@ -5,29 +5,81 @@ import { fetchAllMatches, fetchNews } from "../api";
 import SEO from "../components/SEO";
 import { trackMatchCardClick, trackWatchClick } from "../utils/analytics";
 
-const SITE_SD = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Live Cricket Zone",
-  "url": "https://www.livecricketzone.com",
-  "description": "Live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup updates",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": { "@type": "EntryPoint", "urlTemplate": "https://www.livecricketzone.com/players?search={search_term_string}" },
-    "query-input": "required name=search_term_string"
+const SITE_SD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Live Cricket Zone",
+    "url": "https://www.livecricketzone.com",
+    "description": "Live cricket scores, ball-by-ball commentary, IPL 2026 today, T20 World Cup, domestic cricket live updates",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": { "@type": "EntryPoint", "urlTemplate": "https://www.livecricketzone.com/players?search={search_term_string}" },
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    "name": "IPL 2026 - Indian Premier League Today",
+    "alternateName": "IPL 2026 Live Score Today",
+    "sport": "Cricket",
+    "startDate": "2026-03-28",
+    "endDate": "2026-05-31",
+    "location": { "@type": "Place", "name": "India" },
+    "organizer": { "@type": "SportsOrganization", "name": "BCCI" },
+    "url": "https://www.livecricketzone.com/ipl",
+    "description": "Today's IPL 2026: LSG vs GT (Match 19, Ekana Lucknow, 3:30 PM IST) and MI vs RCB (Match 20, Wankhede Mumbai, 7:30 PM IST). Watch live free.",
+    "performer": [
+      { "@type": "Person", "name": "Virat Kohli", "affiliation": "Royal Challengers Bengaluru" },
+      { "@type": "Person", "name": "Rohit Sharma", "affiliation": "Mumbai Indians" },
+      { "@type": "Person", "name": "Hardik Pandya", "affiliation": "Mumbai Indians" },
+      { "@type": "Person", "name": "Rishabh Pant", "affiliation": "Lucknow Super Giants" },
+      { "@type": "Person", "name": "Shubman Gill", "affiliation": "Gujarat Titans" },
+      { "@type": "Person", "name": "Tilak Varma", "affiliation": "Mumbai Indians" },
+      { "@type": "Person", "name": "Kagiso Rabada", "affiliation": "Gujarat Titans" },
+      { "@type": "Person", "name": "Mitchell Marsh", "affiliation": "Lucknow Super Giants" }
+    ],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are today's IPL 2026 matches?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Today's IPL 2026 matches (April 12): Match 19 — LSG vs GT (Lucknow Super Giants vs Gujarat Titans) at Ekana Stadium Lucknow at 3:30 PM IST. Match 20 — MI vs RCB (Mumbai Indians vs Royal Challengers Bengaluru) at Wankhede Stadium Mumbai at 7:30 PM IST." }
+      },
+      {
+        "@type": "Question",
+        "name": "How to watch LSG vs GT live today?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Watch LSG vs GT live today free on Live Cricket Zone. Rishabh Pant's Lucknow Super Giants vs Shubman Gill's Gujarat Titans — IPL 2026 Match 19 at Ekana Stadium Lucknow. Free YouTube live stream, no signup needed." }
+      },
+      {
+        "@type": "Question",
+        "name": "How to watch MI vs RCB live today?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Watch MI vs RCB live today free on Live Cricket Zone. Hardik Pandya's Mumbai Indians vs Rajat Patidar's Royal Challengers Bengaluru at Wankhede Stadium Mumbai at 7:30 PM IST. Features Rohit Sharma vs Virat Kohli." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I watch live cricket streaming free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Live Cricket Zone provides free live cricket streaming via YouTube for all matches. No subscription or account needed. Works in UK, India, Pakistan, Australia, USA, UAE, South Africa, Bangladesh, Sri Lanka and worldwide." }
+      }
+    ]
   }
-};
+];
 
 const QUICK_LINKS = [
-  { to: "/ipl",               label: "IPL 2026",           color: "#818cf8" },
-  { to: "/t20-world-cup",     label: "T20 WC",             color: "#f472b6" },
-  { to: "/county-championship", label: "County 🏴󠁧󠁢󠁥󠁮󠁧󠁿",    color: "#60a5fa" },
-  { to: "/world-cup",         label: "World Cup",          color: "#fbbf24" },
-  { to: "/champions-trophy",  label: "Champions Trophy",   color: "#2dd4bf" },
-  { to: "/psl",               label: "PSL",                color: "#4ade80" },
-  { to: "/bbl",               label: "BBL",                color: "#fb923c" },
-  { to: "/womens-cricket",    label: "Women's",            color: "#e879f9" },
-  { to: "/rankings",          label: "Rankings",           color: "#38bdf8" },
+  { to: "/ipl",               label: "IPL 2026",           color: "#f59e0b" },
+  { to: "/t20-world-cup",     label: "T20 WC",             color: "#06b6d4" },
+  { to: "/county-championship", label: "County 🏴󠁧󠁢󠁥󠁮󠁧󠁿",    color: "#38bdf8" },
+  { to: "/world-cup",         label: "World Cup",          color: "#a78bfa" },
+  { to: "/champions-trophy",  label: "Champions Trophy",   color: "#10b981" },
+  { to: "/psl",               label: "PSL",                color: "#84cc16" },
+  { to: "/bbl",               label: "BBL",                color: "#f97316" },
+  { to: "/womens-cricket",    label: "Women's",            color: "#ec4899" },
+  { to: "/rankings",          label: "Rankings",           color: "#8b5cf6" },
 ];
 
 /* ─────────────────────────────────────────────
@@ -43,7 +95,7 @@ function TeamScoreBlock({ team, score, isLive, align = "left" }) {
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexDirection: isRight ? "row-reverse" : "row" }}>
         {team?.img
           ? <img src={team.img} alt={team?.name} style={{ width: 20, height: 20, borderRadius: "50%", objectFit: "cover", border: "1px solid rgba(255,255,255,0.12)" }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 20, height: 20, borderRadius: "50%", background: isRight ? "rgba(99,102,241,0.2)" : "rgba(244,63,94,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: isRight ? "#818cf8" : "#fb7185" }}>
+          : <div style={{ width: 20, height: 20, borderRadius: "50%", background: isRight ? "rgba(124,58,237,0.2)" : "rgba(6,182,212,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: isRight ? "#a78bfa" : "#22d3ee" }}>
               {team?.shortname?.slice(0, 2) || "?"}
             </div>
         }
@@ -54,7 +106,7 @@ function TeamScoreBlock({ team, score, isLive, align = "left" }) {
       {/* Middle: big score */}
       {score ? (
         <div style={{ textAlign: isRight ? "right" : "left" }}>
-          <span style={{ fontSize: 20, fontWeight: 900, fontFamily: "'Poppins',sans-serif", color: isLive ? (isRight ? "#818cf8" : "#fb7185") : "var(--text)", lineHeight: 1 }}>
+          <span style={{ fontSize: 20, fontWeight: 900, fontFamily: "'Poppins',sans-serif", color: isLive ? (isRight ? "#a78bfa" : "#22d3ee") : "var(--text)", lineHeight: 1 }}>
             {score.r}/{score.w}
           </span>
           <span style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 500, marginLeft: 4 }}>
@@ -82,9 +134,9 @@ function StripCard({ match }) {
       style={{
         minWidth: 230, maxWidth: 230, cursor: "pointer", flexShrink: 0,
         background: isLive
-          ? "linear-gradient(145deg, rgba(244,63,94,0.07) 0%, rgba(13,20,38,0.95) 100%)"
-          : "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(13,20,38,0.9) 100%)",
-        border: `1px solid ${isLive ? "rgba(244,63,94,0.28)" : "rgba(255,255,255,0.08)"}`,
+          ? "linear-gradient(145deg, rgba(244,63,94,0.08) 0%, rgba(8,14,26,0.95) 100%)"
+          : "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(8,14,26,0.9) 100%)",
+        border: `1px solid ${isLive ? "rgba(244,63,94,0.25)" : "rgba(255,255,255,0.07)"}`,
         borderRadius: 14, padding: "12px 14px",
         transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
         position: "relative", overflow: "hidden",
@@ -92,18 +144,18 @@ function StripCard({ match }) {
       onMouseEnter={e => {
         e.currentTarget.style.transform = "translateY(-2px)";
         e.currentTarget.style.boxShadow = isLive ? "0 8px 24px rgba(244,63,94,0.2)" : "0 8px 24px rgba(0,0,0,0.4)";
-        e.currentTarget.style.borderColor = isLive ? "rgba(244,63,94,0.45)" : "rgba(255,255,255,0.14)";
+        e.currentTarget.style.borderColor = isLive ? "rgba(244,63,94,0.45)" : "rgba(124,58,237,0.3)";
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = "none";
-        e.currentTarget.style.borderColor = isLive ? "rgba(244,63,94,0.28)" : "rgba(255,255,255,0.08)";
+        e.currentTarget.style.borderColor = isLive ? "rgba(244,63,94,0.25)" : "rgba(255,255,255,0.07)";
       }}
     >
       {/* Top accent line */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 2, borderRadius: "14px 14px 0 0",
-        background: isLive ? "linear-gradient(90deg,#f43f5e,#fb7185)" : match.matchEnded ? "linear-gradient(90deg,#22c55e,#4ade80)" : "linear-gradient(90deg,#6366f1,#818cf8)",
+        background: isLive ? "linear-gradient(90deg,#f43f5e,#fb7185)" : match.matchEnded ? "linear-gradient(90deg,#10b981,#34d399)" : "linear-gradient(90deg,#7c3aed,#06b6d4)",
       }} />
 
       {/* Header: match type + status badge */}
@@ -143,10 +195,10 @@ function StripCard({ match }) {
       {/* Status text */}
       <div style={{
         fontSize: 10, fontWeight: 600, lineHeight: 1.4,
-        color: isLive ? "#fb7185" : match.matchEnded ? "#4ade80" : "var(--text3)",
+        color: isLive ? "#22d3ee" : match.matchEnded ? "#34d399" : "var(--text3)",
         overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
         padding: "6px 8px", borderRadius: 6,
-        background: isLive ? "rgba(244,63,94,0.06)" : match.matchEnded ? "rgba(34,197,94,0.06)" : "rgba(255,255,255,0.03)",
+        background: isLive ? "rgba(6,182,212,0.06)" : match.matchEnded ? "rgba(16,185,129,0.06)" : "rgba(255,255,255,0.03)",
       }}>
         {match.status}
       </div>
@@ -157,15 +209,15 @@ function StripCard({ match }) {
         style={{
           marginTop: 10, width: "100%",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
-          background: isLive ? "rgba(239,68,68,0.18)" : "rgba(255,255,255,0.05)",
-          border: `1px solid ${isLive ? "rgba(239,68,68,0.4)" : "rgba(255,255,255,0.1)"}`,
-          color: isLive ? "#f87171" : "rgba(255,255,255,0.55)",
+          background: isLive ? "rgba(244,63,94,0.18)" : "rgba(124,58,237,0.08)",
+          border: `1px solid ${isLive ? "rgba(244,63,94,0.4)" : "rgba(124,58,237,0.2)"}`,
+          color: isLive ? "#fb7185" : "#a78bfa",
           borderRadius: 8, padding: "6px 0",
           fontSize: 11, fontWeight: 700, cursor: "pointer",
           transition: "all 0.2s",
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.28)" : "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#fff"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.18)" : "rgba(255,255,255,0.05)"; e.currentTarget.style.color = isLive ? "#f87171" : "rgba(255,255,255,0.55)"; }}
+        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(244,63,94,0.28)" : "rgba(124,58,237,0.18)"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(244,63,94,0.18)" : "rgba(124,58,237,0.08)"; e.currentTarget.style.color = isLive ? "#fb7185" : "#a78bfa"; }}
       >
         📺 Watch {isLive ? "Live" : "Highlights"}
       </button>
@@ -183,7 +235,7 @@ function MatchRow({ match }) {
   const s1 = match.score?.[0];
   const s2 = match.score?.[1];
 
-  const scoreColor = isLive ? "#fb7185" : isCompleted ? "#4ade80" : "var(--text)";
+  const scoreColor = isLive ? "#22d3ee" : isCompleted ? "#34d399" : "var(--text)";
 
   return (
     <div
@@ -203,7 +255,7 @@ function MatchRow({ match }) {
       <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
         {t1?.img
           ? <img src={t1.img} alt={t1.name} style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(255,255,255,0.1)", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(244,63,94,0.12)", border: "1.5px solid rgba(244,63,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, color: "#fb7185", flexShrink: 0 }}>{t1?.shortname?.slice(0, 2) || "?"}</div>
+          : <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(6,182,212,0.12)", border: "1.5px solid rgba(6,182,212,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, color: "#22d3ee", flexShrink: 0 }}>{t1?.shortname?.slice(0, 2) || "?"}</div>
         }
         <div style={{ minWidth: 0 }}>
           <div style={{ fontWeight: 800, fontSize: 13, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -236,7 +288,7 @@ function MatchRow({ match }) {
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexDirection: "row-reverse", minWidth: 0 }}>
         {t2?.img
           ? <img src={t2.img} alt={t2.name} style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(255,255,255,0.1)", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(99,102,241,0.12)", border: "1.5px solid rgba(99,102,241,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, color: "#818cf8", flexShrink: 0 }}>{t2?.shortname?.slice(0, 2) || "?"}</div>
+          : <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(124,58,237,0.12)", border: "1.5px solid rgba(124,58,237,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, color: "#a78bfa", flexShrink: 0 }}>{t2?.shortname?.slice(0, 2) || "?"}</div>
         }
         <div style={{ minWidth: 0, textAlign: "right" }}>
           <div style={{ fontWeight: 800, fontSize: 13, color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -256,15 +308,15 @@ function MatchRow({ match }) {
         onClick={e => { e.stopPropagation(); trackWatchClick(match.id, match.name); navigate(`/match/${match.id}?watch=1`); }}
         style={{
           display: "flex", alignItems: "center", gap: 4,
-          background: isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",
-          border: `1px solid ${isLive ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.1)"}`,
-          color: isLive ? "#f87171" : "rgba(255,255,255,0.5)",
+          background: isLive ? "rgba(244,63,94,0.15)" : "rgba(124,58,237,0.07)",
+          border: `1px solid ${isLive ? "rgba(244,63,94,0.35)" : "rgba(124,58,237,0.2)"}`,
+          color: isLive ? "#fb7185" : "#a78bfa",
           borderRadius: 7, padding: "5px 10px",
           fontSize: 11, fontWeight: 700, cursor: "pointer",
           whiteSpace: "nowrap", transition: "all 0.2s", flexShrink: 0,
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.25)" : "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#fff"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)"; e.currentTarget.style.color = isLive ? "#f87171" : "rgba(255,255,255,0.5)"; }}
+        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(244,63,94,0.25)" : "rgba(124,58,237,0.18)"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(244,63,94,0.15)" : "rgba(124,58,237,0.07)"; e.currentTarget.style.color = isLive ? "#fb7185" : "#a78bfa"; }}
       >
         📺
       </button>
@@ -282,7 +334,7 @@ function NewsCard({ item }) {
         onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
-          <span style={{ fontSize: 9, color: "#fb7185", fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.8, background: "rgba(244,63,94,0.1)", padding: "2px 7px", borderRadius: 4 }}>
+          <span style={{ fontSize: 9, color: "#f59e0b", fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.8, background: "rgba(245,158,11,0.12)", padding: "2px 7px", borderRadius: 4 }}>
             {item.source}
           </span>
           <span style={{ fontSize: 10, color: "var(--text-muted)" }}>
@@ -321,10 +373,10 @@ export default function Home() {
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Live Cricket Score Today - IPL 2026 & T20 Live"
-        description="Fastest live cricket score today. Ball-by-ball commentary, IPL 2026 live score, T20 World Cup, ODI & Test scorecards updated every 15 seconds."
+        title="IPL 2026 Live Score Today - LSG vs GT, MI vs RCB Live"
+        description="IPL 2026 live today: LSG vs GT (Match 19, 3:30 PM IST) & MI vs RCB (Match 20, 7:30 PM IST). Watch Virat Kohli, Rohit Sharma, Rishabh Pant, Shubman Gill live free. Ball-by-ball score updated every 15 seconds."
         url="/"
-        keywords="live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary"
+        keywords="IPL 2026 live score today, LSG vs GT live score today, MI vs RCB live score today, LSG vs GT today, MI vs RCB today, Lucknow vs Gujarat live, Mumbai vs RCB live, Virat Kohli live today, Rohit Sharma live today, Rishabh Pant live, Shubman Gill live, Hardik Pandya IPL, IPL today match live, IPL live today, watch IPL live free, IPL live streaming today, live cricket score today, cricket match today live, watch live cricket free, live cricket streaming, cricket live score today, today IPL match live, IPL score today, IPL 2026 today match live, domestic cricket live today, all cricket matches today, cricket live today, watch cricket online free, cricket live stream today, live cricket match today, cricket score today live, IPL live score ball by ball, cricket today match score, live cricket score all matches, cricket streaming free 2026, Namibia vs Scotland live, county cricket live today"
         structuredData={SITE_SD}
       />
 
@@ -332,8 +384,8 @@ export default function Home() {
       {(liveMatches.length > 0 || matchesLoading) && (
         <div style={{ marginBottom: 20, paddingTop: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block", animation: "livePulse 2s infinite" }} />
-            <span style={{ fontSize: 13, fontWeight: 800, color: "#ef4444", textTransform: "uppercase", letterSpacing: 0.5 }}>Live Now</span>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f43f5e", display: "inline-block", animation: "livePulse 2s infinite" }} />
+            <span style={{ fontSize: 13, fontWeight: 800, color: "#fb7185", textTransform: "uppercase", letterSpacing: 0.5 }}>Live Now</span>
             <span style={{ fontSize: 12, color: "var(--text3)" }}>{liveMatches.length} match{liveMatches.length !== 1 ? "es" : ""}</span>
           </div>
           <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8, scrollbarWidth: "thin" }}>
@@ -374,8 +426,8 @@ export default function Home() {
             <div style={{ display: "flex", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               {[
                 { key: "live",     label: "Live",     count: liveMatches.length,     color: "#f43f5e" },
-                { key: "recent",   label: "Recent",   count: recentMatches.length,   color: "#4ade80" },
-                { key: "upcoming", label: "Upcoming", count: upcomingMatches.length, color: "#38bdf8" },
+                { key: "recent",   label: "Recent",   count: recentMatches.length,   color: "#34d399" },
+                { key: "upcoming", label: "Upcoming", count: upcomingMatches.length, color: "#a78bfa" },
               ].map(tab => (
                 <button
                   key={tab.key}
@@ -425,10 +477,10 @@ export default function Home() {
           <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, overflow: "hidden" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#f43f5e,#fb7185)", display: "inline-block" }} />
+                <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#f59e0b,#fcd34d)", display: "inline-block" }} />
                 <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text)" }}>Latest News</span>
               </div>
-              <Link to="/news" style={{ fontSize: 11, color: "#38bdf8", fontWeight: 700, transition: "opacity 0.2s" }}
+              <Link to="/news" style={{ fontSize: 11, color: "#a78bfa", fontWeight: 700, transition: "opacity 0.2s" }}
                 onMouseEnter={e => { e.currentTarget.style.opacity = "0.7"; }}
                 onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}
               >
@@ -456,8 +508,8 @@ export default function Home() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
               {[
                 { label: "Live",     value: liveMatches.length,     color: "#f43f5e", bg: "rgba(244,63,94,0.08)" },
-                { label: "Recent",   value: recentMatches.length,   color: "#4ade80", bg: "rgba(74,222,128,0.08)" },
-                { label: "Soon",     value: upcomingMatches.length, color: "#38bdf8", bg: "rgba(56,189,248,0.08)" },
+                { label: "Recent",   value: recentMatches.length,   color: "#34d399", bg: "rgba(52,211,153,0.08)" },
+                { label: "Soon",     value: upcomingMatches.length, color: "#a78bfa", bg: "rgba(167,139,250,0.08)" },
               ].map((s, i) => (
                 <div key={i} style={{
                   padding: "14px 8px", textAlign: "center",
@@ -521,6 +573,34 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* ── SEO CONTENT BLOCK — keyword-rich, crawler-visible ── */}
+      <section aria-label="About Live Cricket Zone" style={{
+        marginTop: 32, padding: "24px 28px", borderRadius: 14,
+        background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)"
+      }}>
+        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 10 }}>
+          IPL 2026 Live Score Today — Watch All Cricket Matches Live
+        </h2>
+        <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8, marginBottom: 10 }}>
+          Live Cricket Zone is your fastest source for <strong style={{ color: "var(--text2)" }}>IPL 2026 live score today</strong>. Get real-time ball-by-ball commentary, live scorecard and match updates for every IPL match today. Watch <strong style={{ color: "var(--text2)" }}>IPL live streaming free</strong> via YouTube — no signup, no subscription required.
+        </p>
+        <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8, marginBottom: 10 }}>
+          Beyond IPL, we cover all <strong style={{ color: "var(--text2)" }}>cricket matches live today</strong> — domestic cricket, T20 internationals, ODI series, Test matches, PSL, BBL, CPL, BPL, County Championship and Women's cricket. One site for every live cricket score today.
+        </p>
+        <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8 }}>
+          <strong style={{ color: "var(--text2)" }}>Watch live cricket free</strong> from anywhere — UK, India, Pakistan, Australia, USA, UAE, South Africa, Bangladesh, Sri Lanka. Our <strong style={{ color: "var(--text2)" }}>live cricket streaming</strong> works worldwide with no geo-restrictions. Scores updated every 15 seconds — faster than Cricbuzz and ESPNcricinfo.
+        </p>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
+          {["IPL 2026 Today", "Live Cricket Score", "Watch Cricket Free", "Cricket Streaming", "Ball by Ball", "Live Score Today", "Domestic Cricket Live", "T20 Live", "ODI Live", "Test Live"].map(tag => (
+            <span key={tag} style={{
+              fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
+              background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)",
+              color: "#a78bfa"
+            }}>{tag}</span>
+          ))}
+        </div>
+      </section>
 
       <style>{`
         @media (max-width: 1100px) {
