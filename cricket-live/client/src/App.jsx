@@ -45,6 +45,7 @@ import CricketMatchesToday from "./pages/CricketMatchesToday";
 import WatchLive from "./pages/WatchLive";
 import Videos from "./pages/Videos";
 import CountyChampionship from "./pages/CountyChampionship";
+import ICCCWCLeague2 from "./pages/ICCCWCLeague2";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfUse from "./pages/TermsOfUse";
 import DMCACopyright from "./pages/DMCACopyright";
@@ -115,6 +116,8 @@ export default function App() {
             <Route path="/womens-cricket" element={<WomensCricket />} />
             <Route path="/county-championship" element={<CountyChampionship />} />
             <Route path="/county-cricket" element={<CountyChampionship />} />
+            <Route path="/icc-cwc-league-2" element={<ICCCWCLeague2 />} />
+            <Route path="/namibia-vs-scotland" element={<ICCCWCLeague2 />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

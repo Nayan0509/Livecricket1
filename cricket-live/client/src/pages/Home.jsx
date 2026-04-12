@@ -580,19 +580,19 @@ export default function Home() {
         background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)"
       }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 10 }}>
-          IPL 2026 Live Score Today — Watch All Cricket Matches Live
+          IPL 2026 Today — LSG vs GT &amp; MI vs RCB Live Score
         </h2>
         <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8, marginBottom: 10 }}>
-          Live Cricket Zone is your fastest source for <strong style={{ color: "var(--text2)" }}>IPL 2026 live score today</strong>. Get real-time ball-by-ball commentary, live scorecard and match updates for every IPL match today. Watch <strong style={{ color: "var(--text2)" }}>IPL live streaming free</strong> via YouTube — no signup, no subscription required.
+          Today's IPL 2026 (April 12): <strong style={{ color: "var(--text2)" }}>LSG vs GT (Match 19)</strong> — Rishabh Pant's Lucknow Super Giants vs Shubman Gill's Gujarat Titans at Ekana Stadium, Lucknow (3:30 PM IST). GT won the toss and elected to bowl. Key players: Mitchell Marsh, Aiden Markram (LSG) vs Kagiso Rabada, Jos Buttler (GT).
         </p>
         <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8, marginBottom: 10 }}>
-          Beyond IPL, we cover all <strong style={{ color: "var(--text2)" }}>cricket matches live today</strong> — domestic cricket, T20 internationals, ODI series, Test matches, PSL, BBL, CPL, BPL, County Championship and Women's cricket. One site for every live cricket score today.
+          Night game: <strong style={{ color: "var(--text2)" }}>MI vs RCB (Match 20)</strong> at Wankhede Stadium, Mumbai (7:30 PM IST). Hardik Pandya's Mumbai Indians vs defending champions Royal Challengers Bengaluru (Rajat Patidar). The iconic <strong style={{ color: "var(--text2)" }}>Rohit Sharma vs Virat Kohli</strong> rivalry plus Tilak Varma, Phil Salt, Mitchell Santner.
         </p>
         <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8 }}>
-          <strong style={{ color: "var(--text2)" }}>Watch live cricket free</strong> from anywhere — UK, India, Pakistan, Australia, USA, UAE, South Africa, Bangladesh, Sri Lanka. Our <strong style={{ color: "var(--text2)" }}>live cricket streaming</strong> works worldwide with no geo-restrictions. Scores updated every 15 seconds — faster than Cricbuzz and ESPNcricinfo.
+          Also live: <strong style={{ color: "var(--text2)" }}>Namibia vs Scotland</strong> (ICC CWC League 2 ODI, Windhoek) and County Championship Day 3 — Essex vs Somerset, Notts vs Glamorgan, Surrey vs Leicestershire. <strong style={{ color: "var(--text2)" }}>Watch live cricket free</strong> worldwide — no signup, no subscription.
         </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
-          {["IPL 2026 Today", "Live Cricket Score", "Watch Cricket Free", "Cricket Streaming", "Ball by Ball", "Live Score Today", "Domestic Cricket Live", "T20 Live", "ODI Live", "Test Live"].map(tag => (
+          {["LSG vs GT Live", "MI vs RCB Live", "Virat Kohli IPL", "Rohit Sharma IPL", "Rishabh Pant LSG", "Shubman Gill GT", "Hardik Pandya MI", "IPL 2026 Today", "Live Cricket Score", "Watch Cricket Free", "Cricket Streaming", "NAM vs SCO Live", "County Cricket Live", "Ball by Ball", "Domestic Cricket Live"].map(tag => (
             <span key={tag} style={{
               fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
               background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)",
