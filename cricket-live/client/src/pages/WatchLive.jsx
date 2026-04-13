@@ -61,9 +61,9 @@ export default function WatchLive() {
   return (
     <>
       <SEO
-        title="Watch Live Cricket Online Free - Live Stream 2026"
-        description="Watch live cricket free online. Stream IPL 2026, T20 World Cup, ODI, Test matches via YouTube. No signup required — UK, India, Pakistan, Australia, USA."
-        keywords="watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, live cricket match today, stream cricket live, watch ipl live, watch t20 world cup live, free cricket streaming, cricket live tv, watch cricket match online, live cricket video, cricket streaming sites, watch cricket live free online, cricket live stream today, live cricket stream, cricket online free, watch cricket free, cricket live watch, live cricket online, cricket streaming free, watch cricket match live, cricket live match watch, live cricket stream free, cricket watch online free, watch cricket uk, watch cricket india, watch cricket pakistan, watch cricket australia, watch cricket usa, cricket live stream uk, cricket live stream free uk, sky sports cricket live stream free, watch cricket online uk free"
+        title="Watch IPL 2026 Live Stream Free - Cricket Live Streaming"
+        description="Watch IPL 2026 live stream free online. Stream every cricket match live — IPL, T20, ODI, Test. No JioCinema, no Hotstar, no signup needed. Works on mobile & desktop worldwide."
+        keywords="watch IPL live stream free, IPL live stream free, IPL 2026 live stream, watch IPL online free, IPL live streaming free, watch cricket live stream free, cricket live stream today, IPL stream free no signup, watch IPL without JioCinema, watch IPL without Hotstar, IPL live stream India, IPL live stream UK, IPL live stream USA, IPL live stream Pakistan, IPL live stream Australia, free cricket live stream, watch cricket online free, cricket streaming free 2026, live cricket stream free, watch live cricket match online, cricket live tv free, IPL live stream mobile, watch IPL on mobile free, cricket live stream no subscription, IPL 2026 streaming free"
         url="/watch-live"
         structuredData={WATCH_SD}
       />

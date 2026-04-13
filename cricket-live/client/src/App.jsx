@@ -43,6 +43,7 @@ import LiveCricketScore from "./pages/LiveCricketScore";
 import CricketScoreToday from "./pages/CricketScoreToday";
 import CricketMatchesToday from "./pages/CricketMatchesToday";
 import WatchLive from "./pages/WatchLive";
+import IPLLiveStream from "./pages/IPLLiveStream";
 import Videos from "./pages/Videos";
 import CountyChampionship from "./pages/CountyChampionship";
 import ICCCWCLeague2 from "./pages/ICCCWCLeague2";
@@ -78,6 +79,10 @@ export default function App() {
             <Route path="/watch-live" element={<WatchLive />} />
             <Route path="/watch" element={<WatchLive />} />
             <Route path="/live-stream" element={<WatchLive />} />
+            <Route path="/ipl-live-stream" element={<IPLLiveStream />} />
+            <Route path="/ipl-live" element={<IPLLiveStream />} />
+            <Route path="/watch-ipl-live" element={<IPLLiveStream />} />
+            <Route path="/ipl-stream" element={<IPLLiveStream />} />
             <Route path="/videos" element={<Videos />} />
 
             <Route path="/match/:id" element={<MatchDetail />} />

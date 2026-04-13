@@ -141,6 +141,9 @@ export default function IPL() {
           <Link to="/live" style={{ padding: "10px 24px", borderRadius: 10, background: "rgba(245,158,11,0.9)", color: "#000", fontWeight: 800, fontSize: 13, textDecoration: "none" }}>
             🔴 Live Updates
           </Link>
+          <Link to="/ipl-live-stream" style={{ padding: "10px 24px", borderRadius: 10, background: "rgba(239,68,68,0.9)", color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none" }}>
+            📺 Watch IPL Live Free
+          </Link>
           <Link to="/schedule" style={{ padding: "10px 24px", borderRadius: 10, border: "1px solid rgba(245,158,11,0.4)", color: "#f59e0b", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
             📅 IPL Schedule
           </Link>

@@ -89,15 +89,42 @@ export default function WatchSection({ match }) {
   return <YouTubeWatchSection match={match} />;
 }
 
-// ── IPL custom stream player ──────────────────────────────────────────────
+// ── IPL custom stream player — 5s countdown then opens in new tab ─────────
 function IPLStreamPlayer({ match }) {
-  const [opened, setOpened] = useState(true);
+  const [countdown, setCountdown] = useState(5);
+  const [launched, setLaunched] = useState(false);
   const isLive = match?.matchStarted && !match?.matchEnded;
   const shareUrl = `https://www.livecricketzone.com/match/${match?.id}`;
 
+  // Detect Chrome (includes Chromium-based: Edge, Brave, Opera also pass but that's fine)
+  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  const [dismissedWarning, setDismissedWarning] = useState(false);
+
+  useEffect(() => {
+    if (launched) return;
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          window.open(IPL_STREAM_URL, "_blank", "noopener,noreferrer");
+          setLaunched(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleWatchNow = () => {
+    window.open(IPL_STREAM_URL, "_blank", "noopener,noreferrer");
+    setLaunched(true);
+    setCountdown(0);
+  };
+
   return (
     <div style={{ marginBottom: 28 }}>
-      {/* Header bar */}
+      {/* Header */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "12px 18px",
@@ -105,13 +132,9 @@ function IPLStreamPlayer({ match }) {
           ? "linear-gradient(90deg, rgba(239,68,68,0.18) 0%, rgba(239,68,68,0.06) 100%)"
           : "linear-gradient(90deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.04) 100%)",
         border: `1px solid ${isLive ? "rgba(239,68,68,0.35)" : "rgba(245,158,11,0.3)"}`,
-        borderRadius: opened ? "14px 14px 0 0" : 14,
-        cursor: "pointer", transition: "all 0.2s",
-      }}
-        onClick={() => setOpened(o => !o)}
-      >
+        borderRadius: 14,
+      }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {/* IPL badge */}
           <div style={{
             background: "linear-gradient(135deg,#f59e0b,#ef4444)",
             borderRadius: 6, padding: "4px 10px",
@@ -122,7 +145,7 @@ function IPLStreamPlayer({ match }) {
               {isLive ? "🔴 Watch IPL Live Stream" : "▶ Watch IPL Stream"}
             </div>
             <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", marginTop: 1 }}>
-              Free · No signup · HD Stream
+              Free · No signup · Opens in new tab
             </div>
           </div>
           {isLive && (
@@ -134,100 +157,134 @@ function IPLStreamPlayer({ match }) {
             }}>● LIVE</span>
           )}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {match?.id && (
-            <button
-              onClick={e => {
-                e.stopPropagation();
-                if (navigator.share) {
-                  navigator.share({ title: match.name, url: shareUrl });
-                } else {
-                  navigator.clipboard?.writeText(shareUrl);
-                }
-              }}
-              style={{
-                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
-                color: "rgba(255,255,255,0.6)", borderRadius: 7, padding: "4px 10px",
-                fontSize: 11, fontWeight: 600, cursor: "pointer",
-              }}
-              title="Share this match"
-            >
-              🔗 Share
-            </button>
-          )}
-          <span style={{
-            color: "rgba(255,255,255,0.4)", fontSize: 16,
-            transform: opened ? "rotate(180deg)" : "none",
-            transition: "transform 0.2s", display: "inline-block",
-          }}>▾</span>
-        </div>
+        {match?.id && (
+          <button
+            onClick={() => {
+              if (navigator.share) navigator.share({ title: match.name, url: shareUrl });
+              else navigator.clipboard?.writeText(shareUrl);
+            }}
+            style={{
+              background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
+              color: "rgba(255,255,255,0.6)", borderRadius: 7, padding: "4px 10px",
+              fontSize: 11, fontWeight: 600, cursor: "pointer",
+            }}
+          >🔗 Share</button>
+        )}
       </div>
 
-      {/* Player body */}
-      {opened && (
+      {/* Chrome warning banner */}
+      {!isChrome && !dismissedWarning && (
         <div style={{
-          background: "rgba(5,8,20,0.98)",
-          border: `1px solid ${isLive ? "rgba(239,68,68,0.2)" : "rgba(245,158,11,0.2)"}`,
-          borderTop: "none", borderRadius: "0 0 14px 14px",
-          overflow: "hidden",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+          margin: "8px 0 0", padding: "12px 16px", borderRadius: 10,
+          background: "linear-gradient(90deg, rgba(234,179,8,0.18) 0%, rgba(234,179,8,0.06) 100%)",
+          border: "1px solid rgba(234,179,8,0.45)",
         }}>
-          {/* iframe embed */}
-          <div style={{ position: "relative", background: "#000", aspectRatio: "16/9" }}>
-            <iframe
-              src={IPL_STREAM_URL}
-              title={match?.name || "IPL Live Stream"}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
-            />
-          </div>
-
-          {/* Now playing bar */}
-          <div style={{
-            padding: "10px 16px",
-            background: "rgba(255,255,255,0.03)",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
-            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
-          }}>
-            <div style={{ minWidth: 0 }}>
-              <div style={{
-                fontSize: 12, fontWeight: 700, color: "#fff",
-                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-              }}>{match?.name || "IPL 2026 Live"}</div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
-                📺 IPL Live Stream
-                {isLive && (
-                  <span style={{ marginLeft: 8, color: "#ef4444", fontWeight: 800 }}>● LIVE</span>
-                )}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Chrome icon */}
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <circle cx="11" cy="11" r="11" fill="#fff"/>
+              <circle cx="11" cy="11" r="4.5" fill="#4285F4"/>
+              <path d="M11 6.5h8.5A11 11 0 0 0 2.5 6.5H11z" fill="#EA4335"/>
+              <path d="M6.5 11A4.5 4.5 0 0 0 11 15.5L7 21.5A11 11 0 0 1 .5 11H6.5z" fill="#34A853"/>
+              <path d="M15.5 11A4.5 4.5 0 0 1 11 15.5l4 6A11 11 0 0 0 21.5 11H15.5z" fill="#FBBC05"/>
+            </svg>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#fde047" }}>
+                ⚠️ Best viewed on Google Chrome
+              </div>
+              <div style={{ fontSize: 11, color: "rgba(253,224,71,0.7)", marginTop: 2 }}>
+                For the best live stream experience, please open this page in Chrome browser.
               </div>
             </div>
-            <a
-              href={IPL_STREAM_URL}
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                flexShrink: 0, fontSize: 11, color: "rgba(255,255,255,0.4)",
-                textDecoration: "none", whiteSpace: "nowrap",
-              }}
-            >
-              Open in new tab ↗
-            </a>
           </div>
-
-          {/* Disclaimer */}
-          <div style={{
-            padding: "10px 16px",
-            borderTop: "1px solid rgba(255,255,255,0.05)",
-            display: "flex", alignItems: "flex-start", gap: 8,
-            background: "rgba(245,158,11,0.03)",
-          }}>
-            <span style={{ fontSize: 13, flexShrink: 0 }}>🏏</span>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>
-              IPL 2026 live stream. For the best experience open in full screen.
-              Live Cricket Zone does not host any video content.
-            </div>
-          </div>
+          <button
+            onClick={() => setDismissedWarning(true)}
+            style={{
+              flexShrink: 0, background: "none", border: "none",
+              color: "rgba(253,224,71,0.6)", fontSize: 18, cursor: "pointer",
+              lineHeight: 1, padding: "0 4px",
+            }}
+            title="Dismiss"
+          >×</button>
         </div>
       )}
+
+      {/* Countdown / launched card */}
+      <div style={{
+        marginTop: 2,
+        background: "rgba(5,8,20,0.98)",
+        border: `1px solid ${isLive ? "rgba(239,68,68,0.2)" : "rgba(245,158,11,0.2)"}`,
+        borderRadius: 14, padding: "40px 24px",
+        textAlign: "center",
+      }}>
+        {!launched ? (
+          <>
+            {/* Circular countdown ring */}
+            <div style={{ position: "relative", width: 90, height: 90, margin: "0 auto 20px" }}>
+              <svg width="90" height="90" style={{ transform: "rotate(-90deg)" }}>
+                <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="5" />
+                <circle
+                  cx="45" cy="45" r="38" fill="none"
+                  stroke={isLive ? "#ef4444" : "#f59e0b"}
+                  strokeWidth="5"
+                  strokeDasharray={`${2 * Math.PI * 38}`}
+                  strokeDashoffset={`${2 * Math.PI * 38 * (1 - countdown / 5)}`}
+                  strokeLinecap="round"
+                  style={{ transition: "stroke-dashoffset 0.9s linear" }}
+                />
+              </svg>
+              <div style={{
+                position: "absolute", inset: 0,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 32, fontWeight: 900, color: "#fff",
+              }}>{countdown}</div>
+            </div>
+
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
+              Opening stream in {countdown} second{countdown !== 1 ? "s" : ""}...
+            </div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>
+              Stream will open in a new browser tab
+            </div>
+
+            <button
+              onClick={handleWatchNow}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: isLive ? "#ef4444" : "linear-gradient(135deg,#f59e0b,#ef4444)",
+                border: "none", color: "#fff",
+                padding: "12px 32px", borderRadius: 10,
+                fontSize: 14, fontWeight: 800, cursor: "pointer",
+                boxShadow: isLive ? "0 4px 20px rgba(239,68,68,0.4)" : "0 4px 20px rgba(245,158,11,0.4)",
+              }}
+            >
+              ▶ Watch Now
+            </button>
+          </>
+        ) : (
+          <>
+            <div style={{ fontSize: 44, marginBottom: 14 }}>📺</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
+              Stream opened in a new tab!
+            </div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>
+              If it didn't open, click the button below
+            </div>
+            <button
+              onClick={handleWatchNow}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff", padding: "10px 24px", borderRadius: 10,
+                fontSize: 13, fontWeight: 700, cursor: "pointer",
+              }}
+            >
+              🔁 Open Again
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
