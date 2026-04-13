@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllMatches } from "../api";
 import SEO from "../components/SEO";
 import WatchSection from "../components/WatchSection";
+import StreamDisclaimer from "../components/StreamDisclaimer";
 
 const WATCH_SD = {
   "@context": "https://schema.org",
@@ -246,6 +247,9 @@ export default function WatchLive() {
             </div>
           </div>
         )}
+
+        {/* Stream Disclaimer */}
+        <StreamDisclaimer />
 
         {/* SEO content — "People also ask" + global audience */}
         <div style={{

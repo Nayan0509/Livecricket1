@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary } from "../api";
 import SEO from "../components/SEO";
 import WatchSection from "../components/WatchSection";
+import StreamDisclaimer from "../components/StreamDisclaimer";
 import { trackMatchView, trackTabSwitch } from "../utils/analytics";
 
 /* ─────────────────────────────────────────────
@@ -637,6 +638,9 @@ export default function MatchDetail() {
 
       {/* ── WATCH SECTION ── */}
       <WatchSection match={match} autoOpen={true} />
+
+      {/* ── STREAM DISCLAIMER ── */}
+      <StreamDisclaimer />
 
       {/* ── TABS ── */}
       <div style={{ display: "flex", gap: 0, marginBottom: 28, borderBottom: "2px solid var(--glass-border)" }}>

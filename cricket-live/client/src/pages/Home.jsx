@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { fetchAllMatches, fetchNews } from "../api";
 import SEO from "../components/SEO";
 import { trackMatchCardClick, trackWatchClick } from "../utils/analytics";
+import StreamDisclaimer from "../components/StreamDisclaimer";
 
 const SITE_SD = [
   {
@@ -573,6 +574,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* ── STREAM DISCLAIMER ── */}
+      <StreamDisclaimer />
 
       {/* ── SEO CONTENT BLOCK — keyword-rich, crawler-visible ── */}
       <section aria-label="About Live Cricket Zone" style={{

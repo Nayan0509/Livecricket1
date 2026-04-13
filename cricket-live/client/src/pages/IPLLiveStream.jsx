@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllMatches } from "../api";
 import SEO from "../components/SEO";
 import WatchSection from "../components/WatchSection";
+import StreamDisclaimer from "../components/StreamDisclaimer";
 
 // ── Structured data ────────────────────────────────────────────────────────
 const SD_WEBPAGE = {
@@ -306,6 +307,9 @@ export default function IPLLiveStream() {
           ))}
         </div>
       </div>
+
+      {/* ── STREAM DISCLAIMER ── */}
+      <StreamDisclaimer />
 
       {/* ── SEO CONTENT BLOCK ── */}
       <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, padding: "24px 28px", marginBottom: 20 }}>
