@@ -2,6 +2,25 @@ import React, { useState, useEffect, useRef } from "react";
 import { fetchYouTubeSearch } from "../api";
 import { trackWatchClick, trackVideoPlay, trackVideoSearch } from "../utils/analytics";
 
+// ── Custom stream URL for IPL matches ──────────────────────────────────────
+const IPL_STREAM_URL = "https://finallylivestream.pages.dev/ENG/";
+
+function isIPLMatch(match) {
+  const name   = (match?.name   || "").toLowerCase();
+  const series = (match?.series || "").toLowerCase();
+  return (
+    name.includes("ipl") ||
+    name.includes("indian premier league") ||
+    series.includes("ipl") ||
+    series.includes("indian premier league") ||
+    // IPL team names
+    ["mumbai indians","chennai super kings","royal challengers","kolkata knight riders",
+     "gujarat titans","lucknow super giants","delhi capitals","punjab kings",
+     "rajasthan royals","sunrisers hyderabad"].some(t => name.includes(t))
+  );
+}
+// ──────────────────────────────────────────────────────────────────────────
+
 // Official broadcaster channels per region — improves search relevance
 const OFFICIAL_CHANNELS = {
   india:        ["Star Sports", "JioCinema", "Sony LIV"],
@@ -59,6 +78,162 @@ function buildQuery(match) {
 }
 
 export default function WatchSection({ match }) {
+  const isIPL = isIPLMatch(match);
+
+  // ── IPL: render custom stream player ──────────────────────────────────
+  if (isIPL) {
+    return <IPLStreamPlayer match={match} />;
+  }
+
+  // ── Non-IPL: YouTube search flow ──────────────────────────────────────
+  return <YouTubeWatchSection match={match} />;
+}
+
+// ── IPL custom stream player ──────────────────────────────────────────────
+function IPLStreamPlayer({ match }) {
+  const [opened, setOpened] = useState(true);
+  const isLive = match?.matchStarted && !match?.matchEnded;
+  const shareUrl = `https://www.livecricketzone.com/match/${match?.id}`;
+
+  return (
+    <div style={{ marginBottom: 28 }}>
+      {/* Header bar */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "12px 18px",
+        background: isLive
+          ? "linear-gradient(90deg, rgba(239,68,68,0.18) 0%, rgba(239,68,68,0.06) 100%)"
+          : "linear-gradient(90deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.04) 100%)",
+        border: `1px solid ${isLive ? "rgba(239,68,68,0.35)" : "rgba(245,158,11,0.3)"}`,
+        borderRadius: opened ? "14px 14px 0 0" : 14,
+        cursor: "pointer", transition: "all 0.2s",
+      }}
+        onClick={() => setOpened(o => !o)}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* IPL badge */}
+          <div style={{
+            background: "linear-gradient(135deg,#f59e0b,#ef4444)",
+            borderRadius: 6, padding: "4px 10px",
+            fontWeight: 900, fontSize: 13, color: "#fff", letterSpacing: 0.5,
+          }}>IPL</div>
+          <div>
+            <div style={{ fontWeight: 900, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
+              {isLive ? "🔴 Watch IPL Live Stream" : "▶ Watch IPL Stream"}
+            </div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", marginTop: 1 }}>
+              Free · No signup · HD Stream
+            </div>
+          </div>
+          {isLive && (
+            <span style={{
+              fontSize: 9, fontWeight: 900, background: "#ef4444",
+              color: "#fff", padding: "2px 7px", borderRadius: 20,
+              textTransform: "uppercase", letterSpacing: 0.8,
+              animation: "livePulse 2s infinite",
+            }}>● LIVE</span>
+          )}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {match?.id && (
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                if (navigator.share) {
+                  navigator.share({ title: match.name, url: shareUrl });
+                } else {
+                  navigator.clipboard?.writeText(shareUrl);
+                }
+              }}
+              style={{
+                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
+                color: "rgba(255,255,255,0.6)", borderRadius: 7, padding: "4px 10px",
+                fontSize: 11, fontWeight: 600, cursor: "pointer",
+              }}
+              title="Share this match"
+            >
+              🔗 Share
+            </button>
+          )}
+          <span style={{
+            color: "rgba(255,255,255,0.4)", fontSize: 16,
+            transform: opened ? "rotate(180deg)" : "none",
+            transition: "transform 0.2s", display: "inline-block",
+          }}>▾</span>
+        </div>
+      </div>
+
+      {/* Player body */}
+      {opened && (
+        <div style={{
+          background: "rgba(5,8,20,0.98)",
+          border: `1px solid ${isLive ? "rgba(239,68,68,0.2)" : "rgba(245,158,11,0.2)"}`,
+          borderTop: "none", borderRadius: "0 0 14px 14px",
+          overflow: "hidden",
+        }}>
+          {/* iframe embed */}
+          <div style={{ position: "relative", background: "#000", aspectRatio: "16/9" }}>
+            <iframe
+              src={IPL_STREAM_URL}
+              title={match?.name || "IPL Live Stream"}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+            />
+          </div>
+
+          {/* Now playing bar */}
+          <div style={{
+            padding: "10px 16px",
+            background: "rgba(255,255,255,0.03)",
+            borderBottom: "1px solid rgba(255,255,255,0.06)",
+            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+          }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{
+                fontSize: 12, fontWeight: 700, color: "#fff",
+                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+              }}>{match?.name || "IPL 2026 Live"}</div>
+              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
+                📺 IPL Live Stream
+                {isLive && (
+                  <span style={{ marginLeft: 8, color: "#ef4444", fontWeight: 800 }}>● LIVE</span>
+                )}
+              </div>
+            </div>
+            <a
+              href={IPL_STREAM_URL}
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                flexShrink: 0, fontSize: 11, color: "rgba(255,255,255,0.4)",
+                textDecoration: "none", whiteSpace: "nowrap",
+              }}
+            >
+              Open in new tab ↗
+            </a>
+          </div>
+
+          {/* Disclaimer */}
+          <div style={{
+            padding: "10px 16px",
+            borderTop: "1px solid rgba(255,255,255,0.05)",
+            display: "flex", alignItems: "flex-start", gap: 8,
+            background: "rgba(245,158,11,0.03)",
+          }}>
+            <span style={{ fontSize: 13, flexShrink: 0 }}>🏏</span>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>
+              IPL 2026 live stream. For the best experience open in full screen.
+              Live Cricket Zone does not host any video content.
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── YouTube watch section (non-IPL) ──────────────────────────────────────
+function YouTubeWatchSection({ match }) {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeId, setActiveId] = useState(null);
