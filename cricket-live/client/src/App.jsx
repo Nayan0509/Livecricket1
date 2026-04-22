@@ -47,6 +47,7 @@ import IPLLiveStream from "./pages/IPLLiveStream";
 import Videos from "./pages/Videos";
 import CountyChampionship from "./pages/CountyChampionship";
 import ICCCWCLeague2 from "./pages/ICCCWCLeague2";
+import CricketWebsite from "./pages/CricketWebsite";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfUse from "./pages/TermsOfUse";
 import DMCACopyright from "./pages/DMCACopyright";
@@ -102,6 +103,7 @@ export default function App() {
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/about" element={<About />} />
+            <Route path="/cricket-website" element={<CricketWebsite />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-use" element={<TermsOfUse />} />
             <Route path="/dmca-copyright" element={<DMCACopyright />} />

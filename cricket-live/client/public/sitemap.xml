@@ -3,11 +3,6 @@
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <url><loc>https://www.livecricketzone.com/ipl-live-stream</loc><changefreq>always</changefreq><priority>1.0</priority><lastmod>2026-04-12</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/ipl-live</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-12</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/ipl-stream</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-12</lastmod></url>
-  <url><loc>https://www.livecricketzone.com/watch-ipl-live</loc><changefreq>always</changefreq><priority>0.95</priority><lastmod>2026-04-12</lastmod></url>
-
   <!-- Homepage -->
   <url>
     <loc>https://www.livecricketzone.com/</loc>
