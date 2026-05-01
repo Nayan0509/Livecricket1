@@ -3,7 +3,7 @@ import { fetchYouTubeSearch } from "../api";
 import { trackWatchClick, trackVideoPlay, trackVideoSearch } from "../utils/analytics";
 
 // ── Custom stream URL for IPL matches ──────────────────────────────────────
-const IPL_STREAM_URL = "https://finallylivestream.pages.dev/ENG/";
+const IPL_STREAM_URL = "https://streamsbyfinally.pages.dev/jio?id=SS1";
 
 function isIPLMatch(match) {
   const name   = (match?.name   || "").toLowerCase();
