@@ -116,21 +116,21 @@ function PointsTable() {
                 key={r.short || i}
                 style={{
                   borderBottom: "1px solid rgba(255,255,255,0.04)",
-                  background: isQualified ? "rgba(34,197,94,0.04)" : "transparent",
+                  background: isQualified ? "rgba(16,185,129,0.04)" : "transparent",
                   transition: "background 0.15s",
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = isQualified ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.025)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = isQualified ? "rgba(34,197,94,0.04)" : "transparent"; }}
+                onMouseEnter={e => { e.currentTarget.style.background = isQualified ? "rgba(16,185,129,0.08)" : "rgba(255,255,255,0.025)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = isQualified ? "rgba(16,185,129,0.04)" : "transparent"; }}
               >
                 {/* Rank */}
                 <td style={{ padding: "14px 10px", textAlign: "center" }}>
                   <div style={{
                     width: 24, height: 24, borderRadius: "50%",
-                    background: isQualified ? "rgba(34,197,94,0.15)" : isEliminated ? "rgba(239,68,68,0.08)" : "rgba(255,255,255,0.05)",
-                    border: isQualified ? "1.5px solid rgba(34,197,94,0.35)" : "1.5px solid rgba(255,255,255,0.06)",
+                    background: isQualified ? "rgba(16,185,129,0.15)" : isEliminated ? "rgba(239,68,68,0.08)" : "rgba(255,255,255,0.05)",
+                    border: isQualified ? "1.5px solid rgba(16,185,129,0.35)" : "1.5px solid rgba(255,255,255,0.06)",
                     display: "inline-flex", alignItems: "center", justifyContent: "center",
                     fontSize: 11, fontWeight: 900,
-                    color: isQualified ? "#22C55E" : isEliminated ? "#F87171" : "var(--text3)",
+                    color: isQualified ? "#10B981" : isEliminated ? "#F87171" : "var(--text3)",
                   }}>{i + 1}</div>
                 </td>
 
@@ -159,8 +159,8 @@ function PointsTable() {
                     {isQualified && (
                       <span style={{
                         marginLeft: "auto", fontSize: 9, fontWeight: 800,
-                        color: "#22C55E", background: "rgba(34,197,94,0.12)",
-                        border: "1px solid rgba(34,197,94,0.25)",
+                        color: "#10B981", background: "rgba(16,185,129,0.12)",
+                        border: "1px solid rgba(16,185,129,0.25)",
                         padding: "2px 7px", borderRadius: 20, whiteSpace: "nowrap",
                       }}>Q</span>
                     )}
@@ -169,18 +169,18 @@ function PointsTable() {
 
                 {/* Stats */}
                 <td style={{ padding: "14px 10px", textAlign: "center", fontSize: 14, fontWeight: 700, color: "var(--text2)" }}>{r.p ?? "—"}</td>
-                <td style={{ padding: "14px 10px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#22C55E" }}>{r.w ?? "—"}</td>
+                <td style={{ padding: "14px 10px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#10B981" }}>{r.w ?? "—"}</td>
                 <td style={{ padding: "14px 10px", textAlign: "center", fontSize: 14, fontWeight: 700, color: "#F87171" }}>{r.l ?? "—"}</td>
                 <td style={{ padding: "14px 10px", textAlign: "center", fontSize: 13, color: "var(--text3)" }}>{r.nr ?? "—"}</td>
                 <td style={{ padding: "14px 10px", textAlign: "center" }}>
                   <span style={{
                     fontSize: 12, fontWeight: 700,
-                    color: r.nrr && r.nrr.startsWith("+") ? "#22C55E" : r.nrr && r.nrr.startsWith("-") ? "#F87171" : "var(--text3)",
+                    color: r.nrr && r.nrr.startsWith("+") ? "#10B981" : r.nrr && r.nrr.startsWith("-") ? "#F87171" : "var(--text3)",
                   }}>{r.nrr || "—"}</span>
                 </td>
                 <td style={{ padding: "14px 10px", textAlign: "center" }}>
                   <span style={{
-                    fontSize: 16, fontWeight: 900, fontFamily: "'Poppins',sans-serif",
+                    fontSize: 16, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
                     color: isQualified ? "#F59E0B" : "var(--text)",
                   }}>{r.pts ?? "—"}</span>
                 </td>
@@ -192,7 +192,7 @@ function PointsTable() {
       {/* Legend */}
       <div style={{ display: "flex", gap: 16, padding: "10px 16px", borderTop: "1px solid rgba(255,255,255,0.04)", flexWrap: "wrap" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--text3)" }}>
-          <span style={{ width: 10, height: 10, borderRadius: "50%", background: "rgba(34,197,94,0.3)", border: "1px solid rgba(34,197,94,0.5)", display: "inline-block" }} />
+          <span style={{ width: 10, height: 10, borderRadius: "50%", background: "rgba(16,185,129,0.3)", border: "1px solid rgba(16,185,129,0.5)", display: "inline-block" }} />
           Qualify for Playoffs (Top 4)
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--text3)" }}>
@@ -216,18 +216,18 @@ function MatchCard({ match, isLive }) {
       onClick={() => { trackMatchCardClick(match.id, match.name, isLive); navigate(`/match/${match.id}`); }}
       style={{
         padding: "18px 20px", borderRadius: 14, cursor: "pointer",
-        background: isLive ? "rgba(34,197,94,0.05)" : "rgba(255,255,255,0.02)",
-        border: `1px solid ${isLive ? "rgba(34,197,94,0.25)" : "rgba(255,255,255,0.07)"}`,
+        background: isLive ? "rgba(16,185,129,0.05)" : "rgba(255,255,255,0.02)",
+        border: `1px solid ${isLive ? "rgba(16,185,129,0.25)" : "rgba(255,255,255,0.07)"}`,
         transition: "all 0.2s",
       }}
-      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = isLive ? "0 8px 30px rgba(34,197,94,0.12)" : "0 8px 20px rgba(0,0,0,0.3)"; }}
+      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = isLive ? "0 8px 30px rgba(16,185,129,0.12)" : "0 8px 20px rgba(0,0,0,0.3)"; }}
       onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
     >
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
         {isLive
-          ? <span style={{ fontSize: 10, fontWeight: 800, color: "#22C55E", background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)", padding: "3px 9px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#22C55E", animation: "livePulse 1.8s infinite" }} />
+          ? <span style={{ fontSize: 10, fontWeight: 800, color: "#10B981", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.3)", padding: "3px 9px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite" }} />
               LIVE
             </span>
           : <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-muted)", background: "rgba(255,255,255,0.04)", padding: "3px 9px", borderRadius: 20 }}>UPCOMING</span>
@@ -246,7 +246,7 @@ function MatchCard({ match, isLive }) {
             {t1?.shortname || match.teams?.[0] || "TBD"}
           </div>
           {s1 ? (
-            <div style={{ fontSize: 22, fontWeight: 900, color: "#22C55E", fontFamily: "'Poppins',sans-serif", lineHeight: 1 }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#10B981", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", lineHeight: 1 }}>
               {s1.r}/{s1.w}
               <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500, marginLeft: 6 }}>({s1.o})</span>
             </div>
@@ -261,7 +261,7 @@ function MatchCard({ match, isLive }) {
             {t2?.shortname || match.teams?.[1] || "TBD"}
           </div>
           {s2 ? (
-            <div style={{ fontSize: 22, fontWeight: 900, color: "#22C55E", fontFamily: "'Poppins',sans-serif", lineHeight: 1 }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#10B981", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", lineHeight: 1 }}>
               {s2.r}/{s2.w}
               <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500, marginLeft: 6 }}>({s2.o})</span>
             </div>
@@ -270,7 +270,7 @@ function MatchCard({ match, isLive }) {
       </div>
 
       {/* Status */}
-      <div style={{ marginTop: 12, padding: "7px 12px", borderRadius: 8, background: isLive ? "rgba(34,197,94,0.06)" : "rgba(255,255,255,0.03)", fontSize: 12, color: isLive ? "#4ADE80" : "var(--text3)", fontWeight: 600 }}>
+      <div style={{ marginTop: 12, padding: "7px 12px", borderRadius: 8, background: isLive ? "rgba(16,185,129,0.06)" : "rgba(255,255,255,0.03)", fontSize: 12, color: isLive ? "#34D399" : "var(--text3)", fontWeight: 600 }}>
         {match.status}
       </div>
     </div>
@@ -321,7 +321,7 @@ export default function IPL() {
         margin: "16px 0 20px",
         padding: "32px 28px",
         borderRadius: 20,
-        background: "linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(9,9,11,0.98) 60%, rgba(34,197,94,0.06) 100%)",
+        background: "linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(9,9,11,0.98) 60%, rgba(16,185,129,0.06) 100%)",
         border: "1px solid rgba(245,158,11,0.18)",
         position: "relative",
         overflow: "hidden",
@@ -342,15 +342,15 @@ export default function IPL() {
             </p>
             {liveMatches.length > 0 && (
               <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 10 }}>
-                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22C55E", animation: "livePulse 1.8s infinite" }} />
-                <span style={{ fontSize: 13, fontWeight: 700, color: "#22C55E" }}>
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite" }} />
+                <span style={{ fontSize: 13, fontWeight: 700, color: "#10B981" }}>
                   {liveMatches.length} match{liveMatches.length > 1 ? "es" : ""} live now
                 </span>
               </div>
             )}
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            <Link to="/live" style={{ padding: "9px 20px", borderRadius: 100, background: "rgba(34,197,94,0.15)", border: "1px solid rgba(34,197,94,0.35)", color: "#22C55E", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
+            <Link to="/live" style={{ padding: "9px 20px", borderRadius: 100, background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.35)", color: "#10B981", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
               Live Scores
             </Link>
             <Link to="/schedule" style={{ padding: "9px 20px", borderRadius: 100, background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.3)", color: "#F59E0B", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
@@ -397,7 +397,7 @@ export default function IPL() {
                   <span style={{ width: 3, height: 18, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
                   IPL 2026 Points Table
                 </h2>
-                <span style={{ fontSize: 11, color: "var(--text-muted)", background: "rgba(34,197,94,0.07)", padding: "3px 9px", borderRadius: 20, fontWeight: 600 }}>
+                <span style={{ fontSize: 11, color: "var(--text-muted)", background: "rgba(16,185,129,0.07)", padding: "3px 9px", borderRadius: 20, fontWeight: 600 }}>
                   Live Updated
                 </span>
               </div>
@@ -409,7 +409,7 @@ export default function IPL() {
           {activeSection === "live" && (
             <section aria-label="IPL 2026 Live Matches">
               <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22C55E", animation: "livePulse 1.8s infinite" }} />
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite" }} />
                 IPL 2026 — Live Now
               </h2>
               {liveLoading
@@ -539,7 +539,7 @@ export default function IPL() {
               IPL 2026 Key Stats
             </div>
             {[
-              { label: "Teams",       value: "10", color: "#22C55E" },
+              { label: "Teams",       value: "10", color: "#10B981" },
               { label: "Matches",     value: "84+4", color: "#F59E0B" },
               { label: "Season",      value: "19th", color: "#A78BFA" },
               { label: "Start Date",  value: "Mar 28", color: "#38BDF8" },
@@ -559,7 +559,7 @@ export default function IPL() {
           {/* Key Players */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
             <div style={{ padding: "10px 14px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
               Star Players
             </div>
             {[

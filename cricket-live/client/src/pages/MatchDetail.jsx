@@ -11,7 +11,7 @@ import { trackMatchView, trackTabSwitch } from "../utils/analytics";
 function eventColor(event) {
   if (!event) return "var(--text3)";
   if (event === "SIX")    return "#F59E0B";
-  if (event === "FOUR")   return "#22C55E";
+  if (event === "FOUR")   return "#10B981";
   if (event === "WICKET") return "#F87171";
   if (event === "WIDE" || event === "NO_BALL") return "#A78BFA";
   return "var(--text3)";
@@ -98,7 +98,7 @@ function ScorecardTab({ matchId }) {
             onClick={() => setInnIdx(idx)}
             style={{
               background: innIdx === idx ? "rgba(34,197,94,0.15)" : "rgba(255,255,255,0.04)",
-              color: innIdx === idx ? "#22C55E" : "var(--text2)",
+              color: innIdx === idx ? "#10B981" : "var(--text2)",
               border: `1.5px solid ${innIdx === idx ? "rgba(34,197,94,0.4)" : "rgba(255,255,255,0.08)"}`,
               borderRadius: 100, padding: "8px 18px", fontWeight: 700, fontSize: 13,
               cursor: "pointer", transition: "all 0.2s",
@@ -147,14 +147,14 @@ function ScorecardTab({ matchId }) {
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       {b.name}
                       {b.dismissal === "not out" && (
-                        <span style={{ fontSize: 10, color: "#22C55E", background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)", padding: "2px 7px", borderRadius: 20, fontWeight: 800 }}>NOT OUT</span>
+                        <span style={{ fontSize: 10, color: "#10B981", background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)", padding: "2px 7px", borderRadius: 20, fontWeight: 800 }}>NOT OUT</span>
                       )}
                     </div>
                   </td>
                   <td style={{ padding: "14px 16px", fontSize: 12, color: "var(--text3)", maxWidth: 200 }}>{b.dismissal}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 900, fontSize: 16, color: "var(--text)", fontFamily: "'Poppins',sans-serif" }}>{b.r}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{b.b}</td>
-                  <td style={{ padding: "14px 16px", textAlign: "right", color: "#22C55E", fontWeight: 700 }}>{b.fours}</td>
+                  <td style={{ padding: "14px 16px", textAlign: "right", color: "#10B981", fontWeight: 700 }}>{b.fours}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "#F59E0B", fontWeight: 700 }}>{b.sixes}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{b.sr}</td>
                 </tr>
@@ -196,7 +196,7 @@ function ScorecardTab({ matchId }) {
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{bw.o}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{bw.m}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text)", fontWeight: 600 }}>{bw.r}</td>
-                  <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 900, fontSize: 16, color: "#22C55E", fontFamily: "'Poppins',sans-serif" }}>{bw.w}</td>
+                  <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 900, fontSize: 16, color: "#10B981", fontFamily: "'Poppins',sans-serif" }}>{bw.w}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 600, color: "var(--text2)" }}>{bw.eco}</td>
                 </tr>
               ))}
@@ -225,7 +225,7 @@ function CommentaryTab({ matchId }) {
     <div className="animate-fade-in">
       {/* Current over strip */}
       <div style={{ background: "rgba(34,197,94,0.04)", border: "1px solid rgba(34,197,94,0.12)", borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#22C55E", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>Current Over</div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#10B981", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>Current Over</div>
         <BallStrip commentary={commentary} />
       </div>
 
@@ -330,7 +330,7 @@ function LiveDataPanel({ matchId, isLive }) {
 
   return (
     <div style={{ marginBottom: 16, padding: "16px 20px", borderRadius: 14, background: "rgba(34,197,94,0.05)", border: "1px solid rgba(34,197,94,0.18)" }}>
-      <div style={{ fontSize: 10, fontWeight: 900, color: "#22C55E", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
+      <div style={{ fontSize: 10, fontWeight: 900, color: "#10B981", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
         🟢 Live Match Situation
       </div>
 
@@ -340,7 +340,7 @@ function LiveDataPanel({ matchId, isLive }) {
           <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase" }}>Batting</div>
           {[ms.batsman1, ms.batsman2].filter(b => b?.name).map((b, i) => (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: b.isStriker ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.03)", border: `1px solid ${b.isStriker ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.05)"}` }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: b.isStriker ? "#22C55E" : "var(--text2)" }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: b.isStriker ? "#10B981" : "var(--text2)" }}>
                 {b.name}{b.isStriker ? " *" : ""}
               </span>
               <span style={{ fontSize: 12, fontWeight: 900, color: "var(--text)" }}>{b.runs} <span style={{ fontSize: 10, color: "var(--text3)" }}>({b.balls}) SR:{b.sr}</span></span>
@@ -416,13 +416,13 @@ function SquadTab({ matchId }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
         {teams.map(([teamName, players]) => (
           <div key={teamName} style={{ borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden" }}>
-            <div style={{ padding: "12px 16px", background: "rgba(34,197,94,0.07)", borderBottom: "1px solid rgba(34,197,94,0.15)", fontWeight: 800, fontSize: 14, color: "#22C55E" }}>
+            <div style={{ padding: "12px 16px", background: "rgba(34,197,94,0.07)", borderBottom: "1px solid rgba(34,197,94,0.15)", fontWeight: 800, fontSize: 14, color: "#10B981" }}>
               {teamName}
             </div>
             <div>
               {players.map((p, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < players.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#22C55E", flexShrink: 0 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#10B981", flexShrink: 0 }}>
                     {i + 1}
                   </div>
                   <div style={{ flex: 1 }}>
@@ -484,7 +484,7 @@ export default function MatchDetail() {
       <div className="card" style={{ textAlign: "center", padding: "40px 24px" }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
         <p style={{ color: "var(--text3)", fontSize: 15 }}>Match not found.</p>
-        <button onClick={() => navigate("/")} style={{ marginTop: 16, padding: "9px 22px", borderRadius: 100, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)", color: "#22C55E", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>← Back to Home</button>
+        <button onClick={() => navigate("/")} style={{ marginTop: 16, padding: "9px 22px", borderRadius: 100, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)", color: "#10B981", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>← Back to Home</button>
       </div>
     </div>
   );
@@ -523,7 +523,7 @@ export default function MatchDetail() {
       <button
         onClick={() => navigate(-1)}
         style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "transparent", border: "none", color: "var(--text3)", padding: "16px 0 12px", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "color 0.2s" }}
-        onMouseEnter={e => { e.currentTarget.style.color = "#22C55E"; }}
+        onMouseEnter={e => { e.currentTarget.style.color = "#10B981"; }}
         onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
       >
         ← Back
@@ -538,14 +538,14 @@ export default function MatchDetail() {
         boxShadow: isLive ? "0 0 60px rgba(34,197,94,0.08)" : "none",
       }}>
         {/* Decorative */}
-        <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "repeating-linear-gradient(90deg, #22C55E 0 1px, transparent 1px 60px)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "repeating-linear-gradient(90deg, #10B981 0 1px, transparent 1px 60px)", pointerEvents: "none" }} />
 
         {/* Status row */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, position: "relative" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             {isLive && (
-              <span style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.35)", color: "#22C55E", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E", animation: "livePulse 1.8s infinite" }} />
+              <span style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.35)", color: "#10B981", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite" }} />
                 LIVE
               </span>
             )}
@@ -592,7 +592,7 @@ export default function MatchDetail() {
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {t1?.img
               ? <img src={t1.img} alt={t1.name} style={{ width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(34,197,94,0.3)", objectFit: "cover", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-              : <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "2px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, color: "#22C55E", flexShrink: 0 }}>
+              : <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "2px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, color: "#10B981", flexShrink: 0 }}>
                   {t1?.shortname?.slice(0, 2) || "?"}
                 </div>
             }
@@ -601,7 +601,7 @@ export default function MatchDetail() {
               <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>{t1?.shortname}</div>
               {s1 ? (
                 <div style={{ fontFamily: "'Poppins',sans-serif" }}>
-                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#22C55E" : "var(--text)", lineHeight: 1 }}>{s1.r}/{s1.w}</span>
+                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#10B981" : "var(--text)", lineHeight: 1 }}>{s1.r}/{s1.w}</span>
                   <span style={{ fontSize: 13, color: "var(--text3)", fontWeight: 500, marginLeft: 8 }}>({s1.o} ov)</span>
                 </div>
               ) : (
@@ -633,7 +633,7 @@ export default function MatchDetail() {
               <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>{t2?.shortname}</div>
               {s2 ? (
                 <div style={{ fontFamily: "'Poppins',sans-serif" }}>
-                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#22C55E" : "var(--text)", lineHeight: 1 }}>{s2.r}/{s2.w}</span>
+                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#10B981" : "var(--text)", lineHeight: 1 }}>{s2.r}/{s2.w}</span>
                   <span style={{ fontSize: 13, color: "var(--text3)", fontWeight: 500, marginLeft: 8 }}>({s2.o} ov)</span>
                 </div>
               ) : (
@@ -649,10 +649,10 @@ export default function MatchDetail() {
           background: isLive ? "rgba(34,197,94,0.07)" : matchEnded ? "rgba(74,222,128,0.05)" : "rgba(255,255,255,0.03)",
           border: `1px solid ${isLive ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.07)"}`,
           fontSize: 14, fontWeight: 600,
-          color: isLive ? "#4ADE80" : matchEnded ? "#22C55E" : "var(--text2)",
+          color: isLive ? "#4ADE80" : matchEnded ? "#10B981" : "var(--text2)",
           display: "flex", alignItems: "center", gap: 8, position: "relative",
         }}>
-          {isLive && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />}
+          {isLive && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />}
           {match.status || "Scheduled"}
         </div>
 
@@ -688,8 +688,8 @@ export default function MatchDetail() {
             style={{
               flexShrink: 0, background: "transparent", border: "none", cursor: "pointer",
               padding: "14px 20px", fontSize: 13, fontWeight: tab === t.id ? 800 : 600,
-              color: tab === t.id ? "#22C55E" : "var(--text3)",
-              borderBottom: tab === t.id ? "2.5px solid #22C55E" : "2.5px solid transparent",
+              color: tab === t.id ? "#10B981" : "var(--text3)",
+              borderBottom: tab === t.id ? "2.5px solid #10B981" : "2.5px solid transparent",
               marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif",
               whiteSpace: "nowrap",
             }}

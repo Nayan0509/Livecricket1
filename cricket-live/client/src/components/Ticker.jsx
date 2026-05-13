@@ -18,7 +18,7 @@ function MatchChip({ match, onClick }) {
         {team?.shortname || "TBD"}
       </span>
       {score
-        ? <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'Poppins',sans-serif", color: "#fff", lineHeight: 1 }}>
+        ? <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#fff", lineHeight: 1 }}>
             {score.r}/{score.w}
             <span style={{ fontSize: 9, fontWeight: 500, color: "rgba(255,255,255,0.45)", marginLeft: 3 }}>
               ({score.o})
@@ -39,26 +39,26 @@ function MatchChip({ match, onClick }) {
         gap: 10,
         padding: "6px 14px",
         borderRadius: 100,
-        background: "rgba(34,197,94,0.12)",
-        border: "1px solid rgba(34,197,94,0.28)",
+        background: "rgba(16,185,129,0.12)",
+        border: "1px solid rgba(16,185,129,0.28)",
         cursor: "pointer",
         transition: "all 0.2s",
         outline: "none",
         position: "relative",
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.background = "rgba(34,197,94,0.22)";
-        e.currentTarget.style.borderColor = "rgba(34,197,94,0.5)";
+        e.currentTarget.style.background = "rgba(16,185,129,0.22)";
+        e.currentTarget.style.borderColor = "rgba(16,185,129,0.5)";
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.background = "rgba(34,197,94,0.12)";
-        e.currentTarget.style.borderColor = "rgba(34,197,94,0.28)";
+        e.currentTarget.style.background = "rgba(16,185,129,0.12)";
+        e.currentTarget.style.borderColor = "rgba(16,185,129,0.28)";
       }}
     >
       {/* Live pulse dot */}
       <span style={{
         width: 5, height: 5, borderRadius: "50%",
-        background: "#22C55E",
+        background: "#10B981",
         animation: "livePulse 1.8s ease-in-out infinite",
         flexShrink: 0,
       }} />
@@ -75,9 +75,9 @@ function MatchChip({ match, onClick }) {
       {/* Status text */}
       {match.status && (
         <span style={{
-          fontSize: 9, fontWeight: 700, color: "rgba(34,197,94,0.8)",
+          fontSize: 9, fontWeight: 700, color: "rgba(16,185,129,0.8)",
           maxWidth: 100, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-          borderLeft: "1px solid rgba(34,197,94,0.2)", paddingLeft: 8,
+          borderLeft: "1px solid rgba(16,185,129,0.2)", paddingLeft: 8,
         }}>
           {match.status}
         </span>
@@ -122,12 +122,12 @@ export default function Ticker() {
   if (!matches.length) {
     return (
       <div style={{
-        background: "rgba(34,197,94,0.05)",
-        borderBottom: "1px solid rgba(34,197,94,0.1)",
+        background: "rgba(16,185,129,0.05)",
+        borderBottom: "1px solid rgba(16,185,129,0.1)",
         height: 36, display: "flex", alignItems: "center",
         padding: "0 16px", gap: 12,
       }}>
-        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#22C55E", background: "rgba(34,197,94,0.12)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>
+        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#10B981", background: "rgba(16,185,129,0.12)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>
           LIVE FEED
         </span>
         <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 600 }}>
@@ -143,7 +143,7 @@ export default function Ticker() {
   return (
     <div style={{
       background: "rgba(9,9,11,0.98)",
-      borderBottom: "1px solid rgba(34,197,94,0.12)",
+      borderBottom: "1px solid rgba(16,185,129,0.12)",
       height: 44,
       display: "flex",
       alignItems: "center",
@@ -158,9 +158,9 @@ export default function Ticker() {
         display: "flex",
         alignItems: "center",
         padding: "0 14px",
-        background: "linear-gradient(135deg,#16A34A,#22C55E)",
+        background: "linear-gradient(135deg,#059669,#10B981)",
         gap: 6,
-        borderRight: "1px solid rgba(34,197,94,0.2)",
+        borderRight: "1px solid rgba(16,185,129,0.2)",
       }}>
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff", animation: "livePulse 1.8s infinite" }} />
         <span style={{ fontSize: 10, fontWeight: 900, color: "#fff", letterSpacing: "1.2px", textTransform: "uppercase", whiteSpace: "nowrap" }}>

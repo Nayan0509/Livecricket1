@@ -62,7 +62,7 @@ export default function Stats() {
               <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 2 }}>{s.player}</div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ fontSize: 11, color: "var(--text3)" }}>{s.country}</span>
-                <span style={{ fontSize: 16, fontWeight: 900, color: "#22C55E", fontFamily: "'Poppins',sans-serif" }}>{s.value}</span>
+                <span style={{ fontSize: 16, fontWeight: 900, color: "#10B981", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{s.value}</span>
               </div>
             </div>
           ))}
@@ -72,16 +72,16 @@ export default function Stats() {
       {/* Player search */}
       <section style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
           Player Profiles
         </h2>
         <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
           {SEARCHES.map(s => (
             <button key={s} onClick={() => setActiveSearch(s)} style={{
               padding: "7px 18px", borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: "pointer",
-              background: activeSearch === s ? "rgba(34,197,94,0.15)" : "rgba(255,255,255,0.03)",
-              border: `1px solid ${activeSearch === s ? "rgba(34,197,94,0.35)" : "rgba(255,255,255,0.07)"}`,
-              color: activeSearch === s ? "#22C55E" : "var(--text3)",
+              background: activeSearch === s ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.03)",
+              border: `1px solid ${activeSearch === s ? "rgba(16,185,129,0.35)" : "rgba(255,255,255,0.07)"}`,
+              color: activeSearch === s ? "#10B981" : "var(--text3)",
               textTransform: "capitalize", transition: "all 0.15s",
             }}>
               {s}
@@ -100,17 +100,17 @@ export default function Stats() {
                   borderRadius: 10, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
                   transition: "all 0.15s",
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(34,197,94,0.05)"; e.currentTarget.style.borderColor = "rgba(34,197,94,0.2)"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.2)"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
                 >
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "1.5px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#22C55E", flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(16,185,129,0.1)", border: "1.5px solid rgba(16,185,129,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#10B981", flexShrink: 0 }}>
                     {p.name?.[0]?.toUpperCase()}
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 13, color: "var(--text)" }}>{p.name}</div>
                     <div style={{ fontSize: 11, color: "var(--text3)" }}>🌍 {p.country}</div>
                   </div>
-                  <span style={{ marginLeft: "auto", color: "#22C55E", fontSize: 14, flexShrink: 0 }}>→</span>
+                  <span style={{ marginLeft: "auto", color: "#10B981", fontSize: 14, flexShrink: 0 }}>→</span>
                 </div>
               </Link>
             ))}

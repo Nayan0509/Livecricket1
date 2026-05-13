@@ -123,7 +123,7 @@ export default function MatchCard({ match }) {
               <span style={{ color: "var(--text3)", fontWeight: 600, fontSize: 13 }}>
                 {s.inning?.replace(" Inning", "").replace(" INN 1", "").replace(" INN 2", "")}
               </span>
-              <span style={{ fontWeight: 900, fontSize: 16, color: isLive ? "#22C55E" : "var(--text)", fontFamily: "Roboto, sans-serif" }}>
+              <span style={{ fontWeight: 900, fontSize: 16, color: isLive ? "#10B981" : "var(--text)", fontFamily: "Roboto, sans-serif" }}>
                 {s.r}/{s.w}
                 {s.o > 0 && <span style={{ color: "var(--text3)", fontSize: 12, fontWeight: 500, marginLeft: 6 }}>({s.o})</span>}
               </span>
@@ -156,15 +156,15 @@ export default function MatchCard({ match }) {
           onClick={handleWatch}
           style={{
             display: "flex", alignItems: "center", gap: 6,
-            background: isLive ? "rgba(239,68,68,0.12)" : "rgba(34,197,94,0.07)",
-            border: `1px solid ${isLive ? "rgba(239,68,68,0.3)" : "rgba(34,197,94,0.18)"}`,
-            color: isLive ? "#F87171" : "#22C55E",
+            background: isLive ? "rgba(239,68,68,0.12)" : "rgba(16,185,129,0.07)",
+            border: `1px solid ${isLive ? "rgba(239,68,68,0.3)" : "rgba(16,185,129,0.18)"}`,
+            color: isLive ? "#F87171" : "#10B981",
             borderRadius: 100, padding: "8px 16px",
             fontSize: 13, fontWeight: 700, cursor: "pointer",
             transition: "all 0.2s cubic-bezier(0.2,0,0,1)", flexShrink: 0,
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.22)" : "rgba(34,197,94,0.16)"; e.currentTarget.style.color = "#fff"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.12)" : "rgba(34,197,94,0.07)"; e.currentTarget.style.color = isLive ? "#F87171" : "#22C55E"; }}
+          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.22)" : "rgba(16,185,129,0.16)"; e.currentTarget.style.color = "#fff"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.12)" : "rgba(16,185,129,0.07)"; e.currentTarget.style.color = isLive ? "#F87171" : "#10B981"; }}
         >
           ▶ Watch
         </button>

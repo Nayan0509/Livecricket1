@@ -97,16 +97,16 @@ export default function CricketMatchesToday() {
           {/* Recent Results */}
           {data.recent.length > 0 && (
             <section style={{ marginBottom: 28 }}>
-              <h2 style={{ fontSize: 16, fontWeight: 800, color: "#4ade80", marginBottom: 14 }}>✅ Recent Results</h2>
+              <h2 style={{ fontSize: 16, fontWeight: 800, color: "#34D399", marginBottom: 14 }}>✅ Recent Results</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {data.recent.slice(0, 8).map(m => (
                   <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
-                    <div style={{ padding: "14px 20px", borderRadius: 12, background: "rgba(74,222,128,0.04)", border: "1px solid rgba(74,222,128,0.12)", transition: "transform 0.15s" }}
+                    <div style={{ padding: "14px 20px", borderRadius: 12, background: "rgba(52,211,153,0.04)", border: "1px solid rgba(52,211,153,0.12)", transition: "transform 0.15s" }}
                       onMouseEnter={e => e.currentTarget.style.transform = "translateX(4px)"}
                       onMouseLeave={e => e.currentTarget.style.transform = "translateX(0)"}
                     >
                       <div style={{ fontWeight: 700, fontSize: 13, color: "var(--text)", marginBottom: 4 }}>{m.name}</div>
-                      <div style={{ fontSize: 12, color: "#4ade80" }}>{m.status}</div>
+                      <div style={{ fontSize: 12, color: "#34D399" }}>{m.status}</div>
                     </div>
                   </Link>
                 ))}
@@ -124,9 +124,9 @@ export default function CricketMatchesToday() {
       )}
 
       {/* Rich SEO content */}
-      <section style={{ padding: "24px 28px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)", marginTop: 20 }}>
+      <section style={{ padding: "24px 28px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)", marginTop: 20 }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
           Cricket Matches Today — Live Scores, Timings & Commentary
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

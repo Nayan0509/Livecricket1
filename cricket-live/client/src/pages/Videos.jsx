@@ -20,11 +20,11 @@ function VideoCard({ video, isActive, onClick }) {
         cursor: "pointer",
         borderRadius: 10,
         overflow: "hidden",
-        border: isActive ? "2px solid #22C55E" : "2px solid rgba(255,255,255,0.06)",
+        border: isActive ? "2px solid #10B981" : "2px solid rgba(255,255,255,0.06)",
         background: "rgba(255,255,255,0.02)",
         transition: "all 0.2s",
       }}
-      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(34,197,94,0.3)"; e.currentTarget.style.background = "rgba(34,197,94,0.04)"; }}}
+      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(16,185,129,0.3)"; e.currentTarget.style.background = "rgba(16,185,129,0.04)"; }}}
       onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}}
     >
       <div style={{ position: "relative", aspectRatio: "16/9", background: "#111" }}>
@@ -41,7 +41,7 @@ function VideoCard({ video, isActive, onClick }) {
         }}>
           <div style={{
             width: 40, height: 40, borderRadius: "50%",
-            background: isActive ? "rgba(34,197,94,0.9)" : "rgba(0,0,0,0.6)",
+            background: isActive ? "rgba(16,185,129,0.9)" : "rgba(0,0,0,0.6)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 16, color: "#fff", transition: "background 0.2s",
           }}>▶</div>
@@ -97,18 +97,18 @@ export default function Videos() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(34,197,94,0.09) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(34,197,94,0.15)",
+        background: "linear-gradient(135deg, rgba(16,185,129,0.09) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(16,185,129,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📺 Cricket <span style={{ color: "#22C55E" }}>Videos</span>
+          📺 Cricket <span style={{ color: "#10B981" }}>Videos</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
           IPL 2026 highlights · T20 World Cup · Best catches · Live streams
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {["IPL Highlights", "T20 WC", "Live Streams", "Free"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.18)", color: "#22C55E" }}>{t}</span>
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", color: "#10B981" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function Videos() {
         {SEARCH_QUERIES.map((tab, i) => (
           <button key={i} onClick={() => setActiveTab(i)} style={{
             flexShrink: 0, padding: "8px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
-            background: activeTab === i ? "#22C55E" : "rgba(255,255,255,0.04)",
+            background: activeTab === i ? "#10B981" : "rgba(255,255,255,0.04)",
             color: activeTab === i ? "#000" : "var(--text3)",
             border: activeTab === i ? "none" : "1px solid rgba(255,255,255,0.08)",
             cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif",
@@ -141,7 +141,7 @@ export default function Videos() {
           {featured && (
             <div style={{ marginBottom: 24 }}>
               <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>▶ Now Playing</div>
-              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(34,197,94,0.2)" }}>
+              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(16,185,129,0.2)" }}>
                 <div style={{ position: "relative", paddingTop: "56.25%", background: "#000" }}>
                   <iframe
                     key={featured.videoId}
@@ -178,8 +178,8 @@ export default function Videos() {
               rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
-                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#22C55E",
-                background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)",
+                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#10B981",
+                background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)",
                 textDecoration: "none", transition: "all 0.15s",
               }}
             >
@@ -195,7 +195,7 @@ export default function Videos() {
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(SEARCH_QUERIES[activeTab].q)}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 13, color: "#22C55E", fontWeight: 700, textDecoration: "none" }}
+            style={{ fontSize: 13, color: "#10B981", fontWeight: 700, textDecoration: "none" }}
           >
             Search on YouTube →
           </a>
@@ -205,9 +205,9 @@ export default function Videos() {
       <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#16A34A)", display: "inline-block" }} />
           Cricket Videos — Highlights, Live Streams & Replays
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

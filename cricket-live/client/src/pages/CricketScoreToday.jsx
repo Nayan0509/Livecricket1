@@ -37,16 +37,16 @@ export default function CricketScoreToday() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(34,197,94,0.09) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(34,197,94,0.15)",
+        background: "linear-gradient(135deg, rgba(16,185,129,0.09) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(16,185,129,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          Cricket Score <span style={{ color: "#22C55E" }}>Today</span>
+          Cricket Score <span style={{ color: "#10B981" }}>Today</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>{today}</p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {["Live Updates", "Every 15 Seconds", "Ball by Ball", "Free"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.18)", color: "#22C55E" }}>{t}</span>
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", color: "#10B981" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function CricketScoreToday() {
       {/* Live matches */}
       <section style={{ marginTop: 20, marginBottom: 28 }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22C55E", animation: "livePulse 1.8s infinite" }} />
+          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite" }} />
           Today's Live Cricket Scores
         </h2>
         {loading ? (
@@ -67,19 +67,19 @@ export default function CricketScoreToday() {
               <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
                 <div style={{
                   padding: "16px 20px", borderRadius: 12,
-                  background: "rgba(34,197,94,0.04)", border: "1px solid rgba(34,197,94,0.2)",
+                  background: "rgba(16,185,129,0.04)", border: "1px solid rgba(16,185,129,0.2)",
                   transition: "all 0.2s",
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(34,197,94,0.08)"; e.currentTarget.style.borderColor = "rgba(34,197,94,0.35)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "rgba(34,197,94,0.04)"; e.currentTarget.style.borderColor = "rgba(34,197,94,0.2)"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.08)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.35)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "rgba(16,185,129,0.04)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.2)"; }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div>
                       <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 4 }}>{m.name}</div>
-                      <div style={{ fontSize: 11, color: "#4ADE80", fontWeight: 600 }}>{m.status}</div>
+                      <div style={{ fontSize: 11, color: "#34D399", fontWeight: 600 }}>{m.status}</div>
                       {m.venue && <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 2 }}>📍 {m.venue}</div>}
                     </div>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: "#22C55E", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", padding: "5px 13px", borderRadius: 20, whiteSpace: "nowrap" }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#10B981", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", padding: "5px 13px", borderRadius: 20, whiteSpace: "nowrap" }}>
                       Live Score →
                     </span>
                   </div>
@@ -91,7 +91,7 @@ export default function CricketScoreToday() {
           <div style={{ padding: "32px 24px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)" }}>
             <div style={{ fontSize: 32, marginBottom: 10 }}>🏏</div>
             <p style={{ color: "var(--text3)", fontSize: 14, marginBottom: 12 }}>No matches live right now.</p>
-            <Link to="/upcoming" style={{ fontSize: 13, color: "#22C55E", fontWeight: 700 }}>View Upcoming Matches →</Link>
+            <Link to="/upcoming" style={{ fontSize: 13, color: "#10B981", fontWeight: 700 }}>View Upcoming Matches →</Link>
           </div>
         )}
       </section>
@@ -112,7 +112,7 @@ export default function CricketScoreToday() {
               background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
               color: "var(--text3)", textDecoration: "none", transition: "all 0.15s",
             }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(34,197,94,0.08)"; e.currentTarget.style.color = "#22C55E"; e.currentTarget.style.borderColor = "rgba(34,197,94,0.25)"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.08)"; e.currentTarget.style.color = "#10B981"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.25)"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; e.currentTarget.style.color = "var(--text3)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
             >
               {label}
@@ -124,9 +124,9 @@ export default function CricketScoreToday() {
       <AdBanner type="auto" />
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
           Cricket Score Today — All Live Matches
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

@@ -26,11 +26,11 @@ export default function Results() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(34,197,94,0.14)",
+        background: "linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(16,185,129,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          ✅ Cricket <span style={{ color: "#22C55E" }}>Results</span>
+          ✅ Cricket <span style={{ color: "#10B981" }}>Results</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Recent match results — IPL, T20, ODI & Test cricket with full scorecards
@@ -56,7 +56,7 @@ export default function Results() {
       )}
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)" }}>
+      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
           Cricket Match Results — Scorecards & Summaries

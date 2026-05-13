@@ -32,7 +32,7 @@ export default function SeriesDetail() {
   if (error) return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 16px" }}>
       <div style={{ padding: "24px", borderRadius: 12, background: "rgba(248,113,113,0.06)", border: "1px solid rgba(248,113,113,0.15)", color: "#f87171", textAlign: "center" }}>
-        Failed to load series. <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: "#22C55E", fontWeight: 700, cursor: "pointer" }}>← Go back</button>
+        Failed to load series. <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: "#10B981", fontWeight: 700, cursor: "pointer" }}>← Go back</button>
       </div>
     </div>
   );
@@ -69,7 +69,7 @@ export default function SeriesDetail() {
         background: "linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(9,9,11,0.98) 100%)",
         border: "1px solid rgba(34,197,94,0.15)",
       }}>
-        <div style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>🏆 Series</div>
+        <div style={{ fontSize: 11, color: "#10B981", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>🏆 Series</div>
         <h1 style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", margin: "0 0 10px", lineHeight: 1.3 }}>{seriesName}</h1>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {live.length > 0 && (
@@ -77,7 +77,7 @@ export default function SeriesDetail() {
               ● {live.length} Live
             </span>
           )}
-          <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.18)", color: "#22C55E" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.18)", color: "#10B981" }}>
             {schedule.length} Matches
           </span>
           {upcoming.length > 0 && (
@@ -97,8 +97,8 @@ export default function SeriesDetail() {
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               flexShrink: 0, background: "none", border: "none", cursor: "pointer",
               padding: "11px 20px", fontSize: 13, fontWeight: 700,
-              color: tab === t.id ? "#22C55E" : "var(--text3)",
-              borderBottom: tab === t.id ? "2px solid #22C55E" : "2px solid transparent",
+              color: tab === t.id ? "#10B981" : "var(--text3)",
+              borderBottom: tab === t.id ? "2px solid #10B981" : "2px solid transparent",
               marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif", whiteSpace: "nowrap",
             }}>
               {t.label}
@@ -130,7 +130,7 @@ export default function SeriesDetail() {
           {recent.length > 0 && (
             <section style={{ marginBottom: 24 }}>
               <h2 style={{ fontSize: 14, fontWeight: 800, color: "#4ade80", marginBottom: 12 }}>✅ Results</h2>
-              <MatchList matches={recent} accent="#22C55E" />
+              <MatchList matches={recent} accent="#10B981" />
             </section>
           )}
 
@@ -159,7 +159,7 @@ export default function SeriesDetail() {
                   onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.02)"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
-                  <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: i < 4 ? "#22C55E" : "var(--text3)", fontWeight: 700 }}>{i + 1}</td>
+                  <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: i < 4 ? "#10B981" : "var(--text3)", fontWeight: 700 }}>{i + 1}</td>
                   <td style={{ padding: "12px 14px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       {row.img && <img src={row.img} alt={row.team} style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />}
@@ -170,10 +170,10 @@ export default function SeriesDetail() {
                     </div>
                   </td>
                   <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: "var(--text2)" }}>{row.p}</td>
-                  <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: "#22C55E", fontWeight: 700 }}>{row.w}</td>
+                  <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: "#10B981", fontWeight: 700 }}>{row.w}</td>
                   <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: "#f87171" }}>{row.l}</td>
                   <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 13, color: "var(--text3)" }}>{row.nr}</td>
-                  <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 12, color: Number((row.nrr || "0").replace("+","")) >= 0 ? "#22C55E" : "#f87171" }}>{row.nrr}</td>
+                  <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 12, color: Number((row.nrr || "0").replace("+","")) >= 0 ? "#10B981" : "#f87171" }}>{row.nrr}</td>
                   <td style={{ padding: "12px 14px", textAlign: "right", fontSize: 14, fontWeight: 900, color: "var(--text)" }}>{row.pts}</td>
                 </tr>
               ))}
@@ -187,7 +187,7 @@ export default function SeriesDetail() {
         <div>
           {stats.batting?.length > 0 && (
             <section style={{ marginBottom: 28 }}>
-              <h2 style={{ fontSize: 14, fontWeight: 800, color: "#22C55E", marginBottom: 12 }}>🏏 Top Batsmen</h2>
+              <h2 style={{ fontSize: 14, fontWeight: 800, color: "#10B981", marginBottom: 12 }}>🏏 Top Batsmen</h2>
               <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
                   <thead>
@@ -208,7 +208,7 @@ export default function SeriesDetail() {
                         <td style={{ padding: "10px 12px", fontSize: 12, color: "var(--text3)", whiteSpace: "nowrap" }}>{p.country}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.matches}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.innings}</td>
-                        <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 14, fontWeight: 900, color: "#22C55E" }}>{p.runs}</td>
+                        <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 14, fontWeight: 900, color: "#10B981" }}>{p.runs}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.avg ?? "—"}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.sr ?? "—"}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.hs || "—"}</td>
@@ -222,7 +222,7 @@ export default function SeriesDetail() {
 
           {stats.bowling?.length > 0 && (
             <section>
-              <h2 style={{ fontSize: 14, fontWeight: 800, color: "#22C55E", marginBottom: 12 }}>🎳 Top Bowlers</h2>
+              <h2 style={{ fontSize: 14, fontWeight: 800, color: "#10B981", marginBottom: 12 }}>🎳 Top Bowlers</h2>
               <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 480 }}>
                   <thead>
@@ -242,7 +242,7 @@ export default function SeriesDetail() {
                         <td style={{ padding: "10px 12px", fontSize: 13, fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap" }}>{p.name}</td>
                         <td style={{ padding: "10px 12px", fontSize: 12, color: "var(--text3)", whiteSpace: "nowrap" }}>{p.country}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.matches}</td>
-                        <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 14, fontWeight: 900, color: "#22C55E" }}>{p.wickets}</td>
+                        <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 14, fontWeight: 900, color: "#10B981" }}>{p.wickets}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.avg ?? "—"}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.economy ?? "—"}</td>
                         <td style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{p.bestFig || "—"}</td>

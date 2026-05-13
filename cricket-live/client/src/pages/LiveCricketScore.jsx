@@ -29,7 +29,7 @@ export default function LiveCricketScore() {
 
   const TAB_CONFIG = [
     { key: "live",     label: "Live",     color: "#EF4444" },
-    { key: "recent",   label: "Recent",   color: "#22C55E" },
+    { key: "recent",   label: "Recent",   color: "#10B981" },
     { key: "upcoming", label: "Upcoming", color: "#F59E0B" },
   ];
 
@@ -52,18 +52,18 @@ export default function LiveCricketScore() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(34,197,94,0.09) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(34,197,94,0.15)",
+        background: "linear-gradient(135deg, rgba(16,185,129,0.09) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(16,185,129,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          Live Cricket <span style={{ color: "#22C55E" }}>Score</span>
+          Live Cricket <span style={{ color: "#10B981" }}>Score</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
           Real-time ball-by-ball updates — IPL 2026 · T20 World Cup · ODI · Test
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {["15s Refresh", "Ball by Ball", "All Formats", "Free Stream"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.18)", color: "#22C55E" }}>{t}</span>
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", color: "#10B981" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function LiveCricketScore() {
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {currentTabMatches.map(m => {
             const isLive = activeTab === "live";
-            const color = isLive ? "#EF4444" : activeTab === "recent" ? "#22C55E" : "#F59E0B";
+            const color = isLive ? "#EF4444" : activeTab === "recent" ? "#10B981" : "#F59E0B";
             return (
               <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
                 <div style={{
@@ -134,9 +134,9 @@ export default function LiveCricketScore() {
       <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
           Live Cricket Score — How It Works
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
