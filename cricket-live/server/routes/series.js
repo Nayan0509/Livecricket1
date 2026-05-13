@@ -63,4 +63,14 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// GET /api/series/archive/:year — past series list
+router.get("/archive/:year", async (req, res) => {
+  try {
+    const data = await scraper.scrapeSeriesArchive(req.params.year);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message, data: [] });
+  }
+});
+
 module.exports = router;

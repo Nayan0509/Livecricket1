@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const NodeCache = require("node-cache");
 const cheerio = require("cheerio");
+const scraper = require("../utils/scraper");
 
 const router = express.Router();
 const cache = new NodeCache({ stdTTL: 3600 }); // 1 hour cache
@@ -119,7 +120,8 @@ router.get("/", async (req, res) => {
 // GET /api/players/:id
 router.get("/:id", async (req, res) => {
   try {
-    const data = await getPlayerInfo(req.params.id);
+    const data = await scraper.scrapePlayerDetails(req.params.id);
+    if (!data) return res.status(404).json({ error: "Player not found" });
     res.json({ status: "success", data });
   } catch (err) {
     res.status(500).json({ error: err.message });

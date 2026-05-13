@@ -17,6 +17,18 @@ app.use("/api/players",  require("./routes/players"));
 app.use("/api/news",     require("./routes/news"));
 app.use("/api/rankings", require("./routes/rankings"));
 app.use("/api/teams",    require("./routes/teams"));
+app.use("/api/venues",   require("./routes/venues"));
+app.use("/api/browse-matches", (req, res, next) => {
+  const scraper = require("./utils/scraper");
+  const date = req.query.date;
+  if (!date) return res.status(400).json({ error: "Missing date param (YYYY-MM-DD)" });
+  scraper.scrapeBrowseMatches(date).then(data => res.json({ status: "success", data })).catch(next);
+});
+app.use("/api/schedule", (req, res, next) => {
+  const scraper = require("./utils/scraper");
+  const { type, month, year } = req.query;
+  scraper.scrapeDetailedSchedule(type, month, year).then(data => res.json({ status: "success", data })).catch(next);
+});
 app.use("/api/indexnow", require("./routes/indexnow"));
 app.use("/api/seo",      require("./routes/seo"));
 app.use("/api/youtube",  require("./routes/youtube"));

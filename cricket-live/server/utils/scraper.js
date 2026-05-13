@@ -1151,38 +1151,38 @@ async function getNewsFromGoogle() {
   }
 }
 
-async function scrapeCricbuzzNews() {
-  const key = "news:cricbuzz";
+async function scrapeCricbuzzNews(type = "latest-news") {
+  const key = `news:cricbuzz:${type}`;
   const cached = newsCache.get(key);
   if (cached) return cached;
 
   try {
     const { data: html } = await axios.get(
-      "https://www.cricbuzz.com/cricket-news/latest-news",
+      `https://www.cricbuzz.com/cricket-news/${type}`,
       { headers: htmlHeaders, timeout: 10000 }
     );
     const $ = cheerio.load(html);
-    const now = new Date();
-    const cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
     const news = [];
 
-    $(".cb-nws-lst-rt").each((i, el) => {
+    $(".cb-nws-lst-rt, .cb-lst-itm").each((i, el) => {
       if (i >= 30) return;
-      const title = $(el).find(".cb-nws-hdln a").text().trim();
-      const url   = $(el).find(".cb-nws-hdln a").attr("href");
+      const title = $(el).find(".cb-nws-hdln a, .cb-nws-intr").first().text().trim();
+      const url   = $(el).find("a").attr("href");
       const desc  = $(el).find(".cb-nws-intr").text().trim();
       const time  = $(el).find(".cb-nws-time").text().trim();
       if (!title || !url) return;
 
-      let publishedDate = now;
-      const hm = time.match(/(\d+)\s*hour/i);
-      const dm = time.match(/(\d+)\s*day/i);
-      if (hm) publishedDate = new Date(now.getTime() - parseInt(hm[1]) * 3600000);
-      else if (dm) publishedDate = new Date(now.getTime() - parseInt(dm[1]) * 86400000);
-
-      if (publishedDate >= cutoff) {
-        news.push({ id: `https://www.cricbuzz.com${url}`, title, description: desc || title, date: publishedDate.toLocaleDateString(), source: "Cricbuzz", url: `https://www.cricbuzz.com${url}`, publishedAt: publishedDate.toISOString(), daysAgo: Math.floor((now - publishedDate) / 86400000), hoursAgo: Math.floor((now - publishedDate) / 3600000) });
-      }
+      const publishedDate = new Date(); // Simplified time parsing for now
+      news.push({
+        id: `https://www.cricbuzz.com${url}`,
+        title,
+        description: desc || title,
+        date: publishedDate.toLocaleDateString(),
+        source: "Cricbuzz",
+        url: `https://www.cricbuzz.com${url}`,
+        publishedAt: publishedDate.toISOString(),
+        type: type.includes("editorial") ? "Editorial" : "News"
+      });
     });
 
     newsCache.set(key, news);
@@ -1194,8 +1194,12 @@ async function scrapeCricbuzzNews() {
 
 async function getNewsWithFallback() {
   try {
-    const [google, cricbuzz] = await Promise.all([getNewsFromGoogle(), scrapeCricbuzzNews()]);
-    const all = [...google, ...cricbuzz];
+    const [google, latest, editorial] = await Promise.all([
+      getNewsFromGoogle(),
+      scrapeCricbuzzNews("latest-news"),
+      scrapeCricbuzzNews("editorial")
+    ]);
+    const all = [...google, ...latest, ...editorial];
     const seen = new Set();
     const unique = all.filter(item => {
       const k = item.title.toLowerCase().replace(/[^\w]/g, "").slice(0, 60);
@@ -1518,6 +1522,170 @@ module.exports = {
 
   // News
   getNewsWithFallback,
+
+  // Player Details (Enhanced)
+  scrapePlayerDetails: async (id) => {
+    const key = `cricbuzz:player:${id}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data } = await axios.get(`https://www.cricbuzz.com/api/mcenter/v1/player/${id}`, { headers: apiHeaders, timeout: 8000 });
+      if (data && data.id) {
+        const res = {
+          id: data.id,
+          name: data.name,
+          fullName: data.fullName || data.name,
+          born: data.born,
+          birthPlace: data.birthPlace,
+          height: data.height,
+          role: data.role,
+          battingStyle: data.battingStyle,
+          bowlingStyle: data.bowlingStyle,
+          teams: data.intlTeam || data.teams,
+          image: data.faceImageId ? `https://static.cricbuzz.com/a/img/v1/152x152/i1/c${data.faceImageId}/i.jpg` : null,
+          bio: data.bio,
+          stats: []
+        };
+        // Map Cricbuzz stats to frontend format
+        if (data.stats && data.stats.batting) {
+          Object.entries(data.stats.batting).forEach(([fmt, s]) => {
+            Object.entries(s).forEach(([stat, value]) => {
+              res.stats.push({ fn: "batting", matchtype: fmt.toLowerCase(), stat, value: String(value) });
+            });
+          });
+        }
+        if (data.stats && data.stats.bowling) {
+          Object.entries(data.stats.bowling).forEach(([fmt, s]) => {
+            Object.entries(s).forEach(([stat, value]) => {
+              res.stats.push({ fn: "bowling", matchtype: fmt.toLowerCase(), stat, value: String(value) });
+            });
+          });
+        }
+        staticCache.set(key, res);
+        return res;
+      }
+    } catch (_) {}
+
+    // HTML Fallback for Player
+    try {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/profiles/${id}`, { headers: htmlHeaders });
+      const $ = cheerio.load(html);
+      const name = $("h1.cb-font-40").text().trim();
+      const info = {};
+      $(".cb-lst-itm-lbl").each((i, el) => {
+        const lbl = $(el).text().trim().replace(":", "");
+        const val = $(el).next().text().trim();
+        if (lbl && val) info[lbl.toLowerCase().replace(/\s+/g, "")] = val;
+      });
+      const res = { id, name, ...info, image: `https://static.cricbuzz.com/a/img/v1/152x152/i1/c${id}/i.jpg` };
+      staticCache.set(key, res);
+      return res;
+    } catch (_) {}
+    return null;
+  },
+
+  // Series Archive
+  scrapeSeriesArchive: async (year = 2026) => {
+    const key = `cricbuzz:archive:${year}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/cricket-scorecard-archives/${year}`, { headers: htmlHeaders });
+      const $ = cheerio.load(html);
+      const archive = [];
+      $(".cb-col-100.cb-col.cb-series-brdr").each((i, el) => {
+        const name = $(el).find("a").text().trim();
+        const url = $(el).find("a").attr("href");
+        const date = $(el).find(".text-gray").text().trim();
+        if (name && url) archive.push({ name, url: `https://www.cricbuzz.com${url}`, date, id: url.split("/")[2] });
+      });
+      staticCache.set(key, archive);
+      return archive;
+    } catch (_) { return []; }
+  },
+
+  // Browse Matches by Date
+  scrapeBrowseMatches: async (dateStr) => {
+    // dateStr: YYYY-MM-DD
+    const key = `cricbuzz:browse:${dateStr}`;
+    const cached = scrapeCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/cricket-scores/${dateStr}`, { headers: htmlHeaders });
+      const $ = cheerio.load(html);
+      const matches = [];
+      $(".cb-col-100.cb-col.cb-schdl").each((i, el) => {
+        const name = $(el).find("a").first().text().trim();
+        const url = $(el).find("a").first().attr("href");
+        const status = $(el).find(".cb-text-complete, .cb-text-live, .cb-text-preview").text().trim();
+        if (name && url) matches.push({ id: url.split("/")[2], name, status, url: `https://www.cricbuzz.com${url}` });
+      });
+      scrapeCache.set(key, matches);
+      return matches;
+    } catch (_) { return []; }
+  },
+
+  // Venue Info
+  scrapeVenueInfo: async (venueId) => {
+    const key = `cricbuzz:venue:${venueId}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/cricket-stats/venues/${venueId}`, { headers: htmlHeaders });
+      const $ = cheerio.load(html);
+      const name = $(".cb-nav-hdr").text().trim();
+      const details = {};
+      $(".cb-venue-lbl").each((i, el) => {
+        const lbl = $(el).text().trim().replace(":", "");
+        const val = $(el).next().text().trim();
+        details[lbl] = val;
+      });
+      const res = { id: venueId, name, ...details };
+      staticCache.set(key, res);
+      return res;
+    } catch (_) { return null; }
+  },
+
+  // Detailed Schedule (by month/year)
+  scrapeDetailedSchedule: async (type = "international", month = null, year = 2026) => {
+    // type: international, domestic, league, women
+    const key = `cricbuzz:schedule:${type}:${month}:${year}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const url = `https://www.cricbuzz.com/cricket-schedule/${type}/${month ? month.toLowerCase() + "-" : ""}${year}`;
+      const { data: html } = await axios.get(url, { headers: htmlHeaders });
+      const $ = cheerio.load(html);
+      const schedule = [];
+      let currentDate = "";
+      $(".cb-col-100.cb-col.cb-series-brdr").each((i, el) => {
+        const dateText = $(el).find(".cb-lv-grpy-date").text().trim();
+        if (dateText) currentDate = dateText;
+        
+        $(el).find(".cb-col-100.cb-col.cb-schdl").each((j, item) => {
+          const name = $(item).find("a").first().text().trim();
+          const href = $(item).find("a").first().attr("href");
+          const venue = $(item).find(".cb-font-12.text-gray").text().trim();
+          if (name && href) {
+             schedule.push({
+               id: href.split("/")[2],
+               name,
+               date: currentDate,
+               venue,
+               url: `https://www.cricbuzz.com${href}`
+             });
+          }
+        });
+      });
+      staticCache.set(key, schedule);
+      return schedule;
+    } catch (_) { return []; }
+  },
 
   // Legacy compat
   getScaledData,

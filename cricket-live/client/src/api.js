@@ -33,6 +33,9 @@ export const fetchTeams             = () => api.get("/teams").then(r => r.data);
 export const fetchRankings          = (type = "batting", format = "tests", category = "men") =>
   api.get("/rankings", { params: { type, format, category } }).then(r => r.data);
 export const fetchIPLStandings      = () => api.get("/matches/standings").then(r => r.data);
+export const fetchVenueInfo         = (id) => api.get(`/venues/${id}`).then(r => r.data);
+export const fetchSeriesArchive     = (year) => api.get(`/series/archive/${year}`).then(r => r.data);
+export const fetchDetailedSchedule  = (type, month, year) => api.get("/schedule", { params: { type, month, year } }).then(r => r.data);
 
 // ─── YouTube ─────────────────────────────────────────────────────────────────
 export const fetchYouTubeSearch     = (q) => api.get("/youtube/search", { params: { q } }).then(r => r.data);
