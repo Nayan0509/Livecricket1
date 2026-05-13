@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { cricGet, rapidGet, liveCache } = require("../controllers/cricapi");
 const scraper = require("../utils/scraper");
 
 // GET /api/matches/standings  — IPL 2026 points table
@@ -14,7 +13,6 @@ router.get("/standings", async (req, res) => {
 });
 
 // GET /api/matches/all
-// Returns all matches categorized: live, recent, upcoming
 router.get("/all", async (req, res) => {
   try {
     const data = await scraper.getAllMatches();
@@ -44,29 +42,17 @@ router.get("/upcoming", async (req, res) => {
   }
 });
 
-// GET /api/matches/schedule
-router.get("/schedule", async (req, res) => {
-  try {
-    const data = await rapidGet("/cricket-schedule");
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // GET /api/matches/:id/scorecard
-// Cricbuzz full scorecard scraper
 router.get("/:id/scorecard", async (req, res) => {
   try {
-    const data = await scraper.scrapeCricbuzzScorecard(req.params.id);
+    const data = await scraper.scrapeScorecard(req.params.id);
     res.json({ status: "success", data });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET /api/matches/:id/score
-// Live score scraper
+// GET /api/matches/:id/score  — quick live score
 router.get("/:id/score", async (req, res) => {
   try {
     const result = await scraper.getScaledData("cricScore", { id: req.params.id });
@@ -76,19 +62,38 @@ router.get("/:id/score", async (req, res) => {
   }
 });
 
-// GET /api/matches/:id/commentary
-// Live commentary from Cricbuzz
+// GET /api/matches/:id/live-data  — rich miniscore: batsmen, bowler, partnership, RRR
+router.get("/:id/live-data", async (req, res) => {
+  try {
+    const data = await scraper.scrapeMatchLiveData(req.params.id);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/matches/:id/squad  — playing XI
+router.get("/:id/squad", async (req, res) => {
+  try {
+    const data = await scraper.scrapeMatchSquad(req.params.id);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/matches/:id/commentary?page=0
 router.get("/:id/commentary", async (req, res) => {
   try {
-    const result = await scraper.scrapeCommentary(req.params.id);
+    const page   = parseInt(req.query.page) || 0;
+    const result = await scraper.scrapeCommentary(req.params.id, page);
     res.json({ status: "success", data: result });
   } catch (err) {
     res.status(500).json({ error: err.message, data: [] });
   }
 });
 
-// GET /api/matches/:id
-// Cricbuzz match info scraper
+// GET /api/matches/:id  — match info
 router.get("/:id", async (req, res) => {
   try {
     const data = await scraper.scrapeMatchInfo(req.params.id);

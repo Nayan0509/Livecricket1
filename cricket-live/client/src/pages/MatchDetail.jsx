@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary } from "../api";
+import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import WatchSection from "../components/WatchSection";
@@ -316,6 +316,135 @@ function MatchInfoTab({ match }) {
 }
 
 /* ── Main ── */
+/* ── Live Data Panel ── */
+function LiveDataPanel({ matchId, isLive }) {
+  const { data } = useQuery({
+    queryKey: ["liveData", matchId],
+    queryFn: () => fetchMatchLiveData(matchId),
+    refetchInterval: 10000,
+    enabled: !!isLive,
+  });
+  const ld = data?.data;
+  const ms = ld?.miniscore;
+  if (!ms || !isLive) return null;
+
+  return (
+    <div style={{ marginBottom: 16, padding: "16px 20px", borderRadius: 14, background: "rgba(34,197,94,0.05)", border: "1px solid rgba(34,197,94,0.18)" }}>
+      <div style={{ fontSize: 10, fontWeight: 900, color: "#22C55E", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
+        🟢 Live Match Situation
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+        {/* Batting */}
+        <div>
+          <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase" }}>Batting</div>
+          {[ms.batsman1, ms.batsman2].filter(b => b?.name).map((b, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: b.isStriker ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.03)", border: `1px solid ${b.isStriker ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.05)"}` }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: b.isStriker ? "#22C55E" : "var(--text2)" }}>
+                {b.name}{b.isStriker ? " *" : ""}
+              </span>
+              <span style={{ fontSize: 12, fontWeight: 900, color: "var(--text)" }}>{b.runs} <span style={{ fontSize: 10, color: "var(--text3)" }}>({b.balls}) SR:{b.sr}</span></span>
+            </div>
+          ))}
+        </div>
+        {/* Bowling */}
+        <div>
+          <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase" }}>Bowling</div>
+          {[ms.bowler, ms.bowler2].filter(b => b?.name).map((b, i) => (
+            <div key={i} style={{ padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: i === 0 ? "rgba(239,68,68,0.06)" : "rgba(255,255,255,0.03)", border: `1px solid ${i === 0 ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)"}` }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: i === 0 ? "#fb7185" : "var(--text2)" }}>{b.name}</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>{b.overs}-{b.maidens}-{b.runs}-{b.wickets} | Econ: {b.economy}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+        {ms.partnership?.balls > 0 && (
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)", fontSize: 11, color: "#F59E0B", fontWeight: 700 }}>
+            Partnership: {ms.partnership.runs}({ms.partnership.balls})
+          </div>
+        )}
+        {ms.currentRunRate && (
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(56,189,248,0.1)", border: "1px solid rgba(56,189,248,0.2)", fontSize: 11, color: "#38bdf8", fontWeight: 700 }}>
+            CRR: {ms.currentRunRate}
+          </div>
+        )}
+        {ms.requiredRunRate && (
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", fontSize: 11, color: "#f87171", fontWeight: 700 }}>
+            RRR: {ms.requiredRunRate}
+          </div>
+        )}
+        {ms.target && (
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.2)", fontSize: 11, color: "#a78bfa", fontWeight: 700 }}>
+            Target: {ms.target}
+            {ms.remRuns != null ? ` | Need ${ms.remRuns}` : ""}
+          </div>
+        )}
+      </div>
+
+      {ms.recentOvers && (
+        <div style={{ fontSize: 11, color: "var(--text3)" }}>
+          <span style={{ fontWeight: 700, marginRight: 6 }}>Recent:</span>
+          {ms.recentOvers}
+        </div>
+      )}
+      {ms.lastWicket && (
+        <div style={{ fontSize: 11, color: "#f87171", marginTop: 4 }}>
+          <span style={{ fontWeight: 700, marginRight: 6 }}>Last wicket:</span>
+          {ms.lastWicket}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Squad Tab ── */
+function SquadTab({ matchId }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["squad", matchId],
+    queryFn: () => fetchMatchSquad(matchId),
+  });
+  const squad = data?.data || {};
+  const teams = Object.entries(squad);
+
+  if (isLoading) return <div style={{ padding: "40px 0", textAlign: "center" }}><div className="spinner" style={{ margin: "0 auto" }} /></div>;
+  if (!teams.length) return <div style={{ padding: "40px 0", textAlign: "center" }}><p style={{ color: "var(--text3)" }}>Squad not yet announced.</p></div>;
+
+  return (
+    <div className="animate-fade-in">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+        {teams.map(([teamName, players]) => (
+          <div key={teamName} style={{ borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden" }}>
+            <div style={{ padding: "12px 16px", background: "rgba(34,197,94,0.07)", borderBottom: "1px solid rgba(34,197,94,0.15)", fontWeight: 800, fontSize: 14, color: "#22C55E" }}>
+              {teamName}
+            </div>
+            <div>
+              {players.map((p, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < players.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#22C55E", flexShrink: 0 }}>
+                    {i + 1}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
+                      {p.name}
+                      {p.isCaptain  && <span style={{ fontSize: 9, background: "#F59E0B", color: "#000", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>}
+                      {p.isVCaptain && <span style={{ fontSize: 9, background: "rgba(245,158,11,0.3)", color: "#F59E0B", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>VC</span>}
+                      {p.isWk       && <span style={{ fontSize: 9, background: "rgba(56,189,248,0.2)", color: "#38bdf8", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>WK</span>}
+                    </div>
+                    {p.role && <div style={{ fontSize: 11, color: "var(--text3)" }}>{p.role}</div>}
+                  </div>
+                  {!p.isPlayingXI && <span style={{ fontSize: 9, color: "var(--text3)", background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 4 }}>Sub</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function MatchDetail() {
   const { id }       = useParams();
   const navigate     = useNavigate();
@@ -535,6 +664,9 @@ export default function MatchDetail() {
         )}
       </div>
 
+      {/* Live data panel — current batsmen, bowler, partnership, RRR */}
+      <LiveDataPanel matchId={id} isLive={isLive} />
+
       {/* Watch Section */}
       <WatchSection match={match} autoOpen={true} />
       <StreamDisclaimer />
@@ -543,21 +675,23 @@ export default function MatchDetail() {
       <div style={{ marginBottom: 20 }}><AdBanner type="leaderboard" /></div>
 
       {/* ── Tabs ── */}
-      <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(255,255,255,0.07)", marginBottom: 24 }}>
+      <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(255,255,255,0.07)", marginBottom: 24, overflowX: "auto", scrollbarWidth: "none" }}>
         {[
           { id: "scorecard",   label: "Scorecard" },
           { id: "commentary",  label: "Commentary" },
+          { id: "squad",       label: "Squad" },
           { id: "info",        label: "Match Info" },
         ].map(t => (
           <button
             key={t.id}
             onClick={() => { setTab(t.id); trackTabSwitch(t.id, id); }}
             style={{
-              background: "transparent", border: "none", cursor: "pointer",
-              padding: "14px 22px", fontSize: 14, fontWeight: tab === t.id ? 800 : 600,
+              flexShrink: 0, background: "transparent", border: "none", cursor: "pointer",
+              padding: "14px 20px", fontSize: 13, fontWeight: tab === t.id ? 800 : 600,
               color: tab === t.id ? "#22C55E" : "var(--text3)",
               borderBottom: tab === t.id ? "2.5px solid #22C55E" : "2.5px solid transparent",
               marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif",
+              whiteSpace: "nowrap",
             }}
           >{t.label}</button>
         ))}
@@ -565,6 +699,7 @@ export default function MatchDetail() {
 
       {tab === "scorecard"  && <ScorecardTab matchId={id} />}
       {tab === "commentary" && <CommentaryTab matchId={id} />}
+      {tab === "squad"      && <SquadTab matchId={id} />}
       {tab === "info"       && <MatchInfoTab match={match} />}
 
       {/* Bottom ad */}
