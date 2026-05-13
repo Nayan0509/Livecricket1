@@ -15,6 +15,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET /api/teams/:id
+router.get("/:id", async (req, res) => {
+  try {
+    const scraper = require("../utils/scraper");
+    const data = await scraper.scrapeTeamDetail(req.params.id);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
 

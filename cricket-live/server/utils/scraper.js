@@ -403,8 +403,8 @@ async function scrapeMatchInfo(matchId) {
         tossWinner:   h.tossResults?.tossWinnerName || "",
         tossChoice:   h.tossResults?.decision || "",
         umpire:       h.umpire1?.name && h.umpire2?.name ? `${h.umpire1.name}, ${h.umpire2.name}` : (h.umpire1?.name || ""),
-        tvUmpire:     h.tvUmpire?.name || "",
-        referee:      h.matchReferee?.name || "",
+        tvUmpire:     h.umpire3?.name || h.tvUmpire?.name || "",
+        referee:      h.matchReferee?.name || h.referee?.name || "",
         dayNumber:    h.dayNumber || null,
         totalDays:    h.totalDays || null,
       };
@@ -566,7 +566,7 @@ async function scrapeCommentary(matchId, page = 0) {
     const list = data?.commentaryList;
     if (Array.isArray(list) && list.length) {
       const commentary = list
-        .filter(c => c.commText)
+        .filter(c => c.commText || c.overSeparator)
         .map(c => ({
           over:           c.overNumber !== undefined ? c.overNumber : "",
           ball:           c.ballNbr    !== undefined ? c.ballNbr    : "",
@@ -576,7 +576,13 @@ async function scrapeCommentary(matchId, page = 0) {
           bowlerStriker:  c.bowlerStriker?.bowlName || c.bowlName || "",
           runs:           c.runs !== undefined ? c.runs : 0,
           // over summary blocks
-          overSeparator:  c.overSeparator || null,
+          overSeparator:  c.overSeparator ? {
+            runs:   c.overSeparator.runs,
+            wickets: c.overSeparator.wickets,
+            o_summary: c.overSeparator.o_summary,
+            batStriker: c.overSeparator.batStriker?.batName,
+            bowlStriker: c.overSeparator.bowlStriker?.bowlName,
+          } : null,
         }));
       if (commentary.length) {
         scrapeCache.set(key, commentary);
@@ -672,6 +678,14 @@ async function scrapeScorecard(matchId) {
         const sd  = inn.scoreDetails || {};
         const ext = inn.extrasData   || {};
 
+        // Extract Partnerships
+        const partnerships = Object.values(inn.partnershipsData || {}).map(p => ({
+          batsman1: p.bat1Name,
+          batsman2: p.bat2Name,
+          runs:     p.runs,
+          balls:    p.balls,
+        }));
+
         return {
           team:   inn.batTeamDetails?.batTeamName || "Team",
           score:  `${sd.runs ?? 0}/${sd.wickets ?? 0}`,
@@ -689,6 +703,7 @@ async function scrapeScorecard(matchId) {
           },
           batsmen,
           bowlers,
+          partnerships,
           fow: Object.values(inn.wicketsData || {}).map(w =>
             `${w.batName} ${w.wktRuns}(${w.wktOvr})`
           ),
@@ -1684,6 +1699,105 @@ module.exports = {
       });
       staticCache.set(key, schedule);
       return schedule;
+    } catch (_) { return []; }
+  },
+
+  // Detailed Match Analysis (Preview/Report)
+  scrapeMatchAnalysis: async (matchId) => {
+    const key = `match:analysis:${matchId}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/live-cricket-scores/${matchId}`, { headers: htmlHeaders, timeout: 10000 });
+      const $ = cheerio.load(html);
+      let analysisUrl = "";
+      $(".cb-nav-tab").each((_, el) => {
+        const text = $(el).text().toLowerCase();
+        if (text.includes("preview") || text.includes("report")) { analysisUrl = "https://www.cricbuzz.com" + $(el).attr("href"); }
+      });
+      if (analysisUrl) {
+        const { data: aHtml } = await axios.get(analysisUrl, { headers: htmlHeaders, timeout: 10000 });
+        const $a = cheerio.load(aHtml);
+        const title = $a("h1").first().text().trim();
+        const content = $a(".cb-nws-dtl-itms").first().text().trim();
+        if (title && content) {
+          const res = { title, content: content.split("\n").filter(l => l.trim()).join("\n\n") };
+          staticCache.set(key, res);
+          return res;
+        }
+      }
+    } catch (_) {}
+    return null;
+  },
+
+  // Team detail
+  scrapeTeamDetail: async (teamId) => {
+    const key = `team:detail:${teamId}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data } = await axios.get(`https://www.cricbuzz.com/api/cricket-team/${teamId}`, { headers: apiHeaders });
+      const info = {
+        id: teamId,
+        name: data.teamName,
+        shortname: data.shortName,
+        img: data.imageId ? `https://static.cricbuzz.com/a/img/v1/75x75/i1/c${data.imageId}/i.jpg` : null,
+      };
+      
+      // Get Schedule/Results
+      const { data: schedData } = await axios.get(`https://www.cricbuzz.com/api/cricket-team/${teamId}/schedule`, { headers: apiHeaders });
+      info.schedule = (schedData?.matchList || []).map(m => ({
+        id: m.matchId,
+        name: m.matchDesc,
+        series: m.seriesName,
+        date: m.startDate ? new Date(Number(m.startDate)).toLocaleDateString() : "",
+        venue: m.venueInfo?.ground,
+        status: m.status
+      }));
+
+      staticCache.set(key, info);
+      return info;
+    } catch (_) { return null; }
+  },
+
+  // Match H2H
+  scrapeMatchH2H: async (matchId) => {
+    const key = `match:h2h:${matchId}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+
+    try {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/live-cricket-scores/${matchId}`, { headers: htmlHeaders });
+      const $ = cheerio.load(html);
+      const h2h = [];
+      $(".cb-h2h-itm").each((i, el) => {
+        const date   = $(el).find(".cb-h2h-date").text().trim();
+        const result = $(el).find(".cb-h2h-result").text().trim();
+        const series = $(el).find(".cb-h2h-series").text().trim();
+        if (date && result) h2h.push({ date, result, series });
+      });
+      staticCache.set(key, h2h);
+      return h2h;
+    } catch (_) { return []; }
+  },
+
+  // Search players
+  searchPlayers: async (query) => {
+    const key = `player:search:${query}`;
+    const cached = staticCache.get(key);
+    if (cached) return cached;
+    try {
+      const { data } = await axios.get(`https://www.cricbuzz.com/api/search/player?q=${encodeURIComponent(query)}`, { headers: apiHeaders });
+      const players = (data?.player || []).map(p => ({
+        id: p.id,
+        name: p.name,
+        team: p.teamName,
+        img: p.imageId ? `https://static.cricbuzz.com/a/img/v1/75x75/i1/c${p.imageId}/i.jpg` : null,
+      }));
+      staticCache.set(key, players);
+      return players;
     } catch (_) { return []; }
   },
 

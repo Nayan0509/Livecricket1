@@ -224,6 +224,31 @@ export default function Scorecard() {
             {innings[innIdx].bowlers?.length > 0 && (
               <BowlingTable bowlers={innings[innIdx].bowlers} />
             )}
+            {innings[innIdx].partnerships?.length > 0 && (
+              <div style={{ marginBottom: 32 }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Partnerships</div>
+                <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+                        {["Batsmen", "Runs", "Balls"].map(h => (
+                          <th key={h} style={{ padding: "12px 16px", textAlign: h === "Batsmen" ? "left" : "center", fontSize: 10, color: "var(--text3)", fontWeight: 900 }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {innings[innIdx].partnerships.map((p, i) => (
+                        <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                          <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text2)" }}>{p.batsman1} & {p.batsman2}</td>
+                          <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#10B981", textAlign: "center" }}>{p.runs}</td>
+                          <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text3)", textAlign: "center" }}>{p.balls}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
             {innings[innIdx].fow?.length > 0 && (
               <div style={{ padding: "16px 20px", borderRadius: 10, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", marginBottom: 20 }}>
                 <div style={{ fontSize: 11, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>

@@ -1,12 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad } from "../api";
+import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad, fetchMatchAnalysis, fetchMatchH2H } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import WatchSection from "../components/WatchSection";
 import StreamDisclaimer from "../components/StreamDisclaimer";
 import { trackMatchView, trackTabSwitch } from "../utils/analytics";
+
+/* ── Analysis Tab ── */
+function AnalysisTab({ matchId }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["analysis", matchId],
+    queryFn: () => fetchMatchAnalysis(matchId),
+  });
+  const analysis = data?.data;
+
+  if (isLoading) return <div style={{ display: "flex", justifyContent: "center", padding: "60px 0" }}><div className="spinner" /></div>;
+  if (!analysis) return (
+    <div style={{ padding: "60px 0", textAlign: "center" }}>
+      <div style={{ fontSize: 40, marginBottom: 12 }}>📝</div>
+      <p style={{ color: "var(--text3)" }}>No detailed analysis available for this match yet.</p>
+    </div>
+  );
+
+  return (
+    <div className="animate-fade-in" style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: "28px 32px" }}>
+      <h2 style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", marginBottom: 20, lineHeight: 1.3 }}>{analysis.title}</h2>
+      <div style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+        {analysis.content}
+      </div>
+      <div style={{ marginTop: 24, padding: "16px", borderRadius: 12, background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.1)", fontSize: 13, color: "var(--text3)" }}>
+        <strong>Note:</strong> This analysis is retrieved from live editorial feeds and professional match reporting services.
+      </div>
+    </div>
+  );
+}
 
 function eventColor(event) {
   if (!event) return "var(--text3)";
@@ -171,6 +200,33 @@ function ScorecardTab({ matchId }) {
           <span style={{ lineHeight: 2 }}>{inn.fow.join("  •  ")}</span>
         </div>
       )}
+      
+      {/* Partnerships */}
+      {inn.partnerships && inn.partnerships.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 10, paddingLeft: 4 }}>Partnerships</div>
+          <div style={{ overflowX: "auto", borderRadius: 16, border: "1px solid var(--border)", background: "var(--card)" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border)" }}>
+                  {["Batsmen", "Runs", "Balls"].map(h => (
+                    <th key={h} style={{ padding: "12px 16px", textAlign: h === "Batsmen" ? "left" : "center", fontSize: 11, color: "var(--text3)", fontWeight: 700 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {inn.partnerships.map((p, i) => (
+                  <tr key={i} style={{ borderBottom: i < inn.partnerships.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text2)" }}>{p.batsman1} & {p.batsman2}</td>
+                    <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#10B981", textAlign: "center" }}>{p.runs}</td>
+                    <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text3)", textAlign: "center" }}>{p.balls}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Bowling table */}
       <div>
@@ -231,7 +287,26 @@ function CommentaryTab({ matchId }) {
 
       {/* Ball entries */}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        {commentary.slice(0, 80).map((c, i) => {
+        {commentary.slice(0, 100).map((c, i) => {
+          if (c.overSeparator) {
+            return (
+              <div key={`sep-${i}`} style={{
+                margin: "12px 0 6px", padding: "12px 20px", borderRadius: 14,
+                background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+                display: "flex", justifyContent: "space-between", alignItems: "center"
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#10B981" }}>
+                  End of Over {c.over}
+                </div>
+                <div style={{ display: "flex", gap: 16, fontSize: 12, color: "var(--text2)" }}>
+                  <span>Runs: <strong>{c.overSeparator.runs}</strong></span>
+                  <span>Wkts: <strong>{c.overSeparator.wickets}</strong></span>
+                  <span style={{ color: "var(--text3)" }}>{c.overSeparator.o_summary}</span>
+                </div>
+              </div>
+            );
+          }
+
           const isKey = c.event === "SIX" || c.event === "FOUR" || c.event === "WICKET";
           return (
             <div
@@ -308,6 +383,36 @@ function MatchInfoTab({ match }) {
           >
             <div style={{ minWidth: 140, fontSize: 12, fontWeight: 700, color: "var(--text3)", paddingTop: 1 }}>{row.label}</div>
             <div style={{ fontSize: 14, color: "var(--text)", fontWeight: 500, flex: 1 }}>{row.value}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 24 }}>
+        <H2HSection matchId={match.id} />
+      </div>
+    </div>
+  );
+}
+
+function H2HSection({ matchId }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["h2h", matchId],
+    queryFn: () => fetchMatchH2H(matchId),
+  });
+  const h2h = data?.data || [];
+
+  if (isLoading || !h2h.length) return null;
+
+  return (
+    <div style={{ padding: "20px 24px", borderRadius: 18, background: "rgba(245,158,11,0.05)", border: "1px solid rgba(245,158,11,0.12)", marginBottom: 20 }}>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#F59E0B", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Head to Head (Last 5)</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {h2h.map((itm, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: i < h2h.length - 1 ? "1px solid rgba(245,158,11,0.1)" : "none", paddingBottom: 10 }}>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{itm.result}</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>{itm.series} • {itm.date}</div>
+            </div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "var(--text3)" }}>H2H</div>
           </div>
         ))}
       </div>
@@ -679,6 +784,7 @@ export default function MatchDetail() {
         {[
           { id: "scorecard",   label: "Scorecard" },
           { id: "commentary",  label: "Commentary" },
+          { id: "analysis",    label: "Analysis" },
           { id: "squad",       label: "Squad" },
           { id: "info",        label: "Match Info" },
         ].map(t => (
@@ -699,6 +805,7 @@ export default function MatchDetail() {
 
       {tab === "scorecard"  && <ScorecardTab matchId={id} />}
       {tab === "commentary" && <CommentaryTab matchId={id} />}
+      {tab === "analysis"   && <AnalysisTab matchId={id} />}
       {tab === "squad"      && <SquadTab matchId={id} />}
       {tab === "info"       && <MatchInfoTab match={match} />}
 

@@ -93,6 +93,26 @@ router.get("/:id/commentary", async (req, res) => {
   }
 });
 
+// GET /api/matches/:id/h2h — Head to Head history
+router.get("/:id/h2h", async (req, res) => {
+  try {
+    const data = await scraper.scrapeMatchH2H(req.params.id);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/matches/:id/analysis — Preview/Report
+router.get("/:id/analysis", async (req, res) => {
+  try {
+    const data = await scraper.scrapeMatchAnalysis(req.params.id);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/matches/:id  — match info
 router.get("/:id", async (req, res) => {
   try {

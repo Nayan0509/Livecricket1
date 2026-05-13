@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchAllMatches, fetchNews, fetchIPLStandings } from "../api";
+import { fetchAllMatches, fetchNews, fetchIPLStandings, fetchRankings } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import { trackMatchCardClick, trackWatchClick } from "../utils/analytics";
@@ -122,15 +122,13 @@ function IPLStandingsWidget() {
   );
 }
 
-/* ── ICC Rankings Mini Widget ── */
-const ICC_RANKS = [
-  { flag: "🏏", team: "Australia",    rank: 1, rating: 128, format: "Test" },
-  { flag: "🏏", team: "India",        rank: 2, rating: 119, format: "Test" },
-  { flag: "🏏", team: "England",      rank: 3, rating: 113, format: "Test" },
-  { flag: "🏏", team: "South Africa", rank: 4, rating: 107, format: "Test" },
-];
-
 function RankingsWidget() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["rankings", "teams", "tests", "men"],
+    queryFn: () => fetchRankings("teams", "tests", "men"),
+  });
+  const ranks = (data?.response || []).slice(0, 5);
+
   return (
     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
@@ -141,8 +139,8 @@ function RankingsWidget() {
         <Link to="/rankings" style={{ fontSize: 11, color: "#10B981", fontWeight: 700 }}>Full Rankings →</Link>
       </div>
       <div>
-        {ICC_RANKS.map(r => (
-          <div key={r.team} style={{
+        {isLoading ? <div className="spinner" style={{ width: 24, height: 24, margin: "20px auto" }} /> : ranks.map((r, i) => (
+          <div key={r.name || i} style={{
             display: "flex", alignItems: "center", gap: 10, padding: "9px 16px",
             borderBottom: "1px solid rgba(255,255,255,0.03)",
             transition: "background 0.15s",
@@ -150,8 +148,8 @@ function RankingsWidget() {
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           >
-            <span style={{ fontSize: 10, fontWeight: 900, color: "#10B981", minWidth: 14 }}>{r.rank}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text2)", flex: 1 }}>{r.team}</span>
+            <span style={{ fontSize: 10, fontWeight: 900, color: "#10B981", minWidth: 14 }}>{r.rank || i + 1}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text2)", flex: 1 }}>{r.name}</span>
             <span style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700 }}>{r.rating}</span>
           </div>
         ))}

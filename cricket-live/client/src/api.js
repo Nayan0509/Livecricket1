@@ -15,6 +15,8 @@ export const fetchMatchScorecard    = (id) => api.get(`/matches/${id}/scorecard`
 export const fetchMatchCommentary   = (id, page = 0) => api.get(`/matches/${id}/commentary`, { params: { page } }).then(r => r.data);
 export const fetchMatchLiveData     = (id) => api.get(`/matches/${id}/live-data`).then(r => r.data);
 export const fetchMatchSquad        = (id) => api.get(`/matches/${id}/squad`).then(r => r.data);
+export const fetchMatchAnalysis     = (id) => api.get(`/matches/${id}/analysis`).then(r => r.data);
+export const fetchMatchH2H          = (id) => api.get(`/matches/${id}/h2h`).then(r => r.data);
 
 // ─── Series ───────────────────────────────────────────────────────────────────
 export const fetchSeries            = () => api.get("/series").then(r => r.data);
@@ -30,6 +32,7 @@ export const fetchPlayerInfo        = (id) => api.get(`/players/${id}`).then(r =
 // ─── Static data ─────────────────────────────────────────────────────────────
 export const fetchNews              = () => api.get("/news").then(r => r.data);
 export const fetchTeams             = () => api.get("/teams").then(r => r.data);
+export const fetchTeamDetail        = (id) => api.get(`/teams/${id}`).then(r => r.data);
 export const fetchRankings          = (type = "batting", format = "tests", category = "men") =>
   api.get("/rankings", { params: { type, format, category } }).then(r => r.data);
 export const fetchIPLStandings      = () => api.get("/matches/standings").then(r => r.data);

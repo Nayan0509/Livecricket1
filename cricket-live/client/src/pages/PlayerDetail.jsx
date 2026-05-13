@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlayerInfo } from "../api";
+import { fetchPlayerInfo, fetchNews } from "../api";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import SEO from "../components/SEO";
 
@@ -88,10 +88,36 @@ export default function PlayerDetail() {
               🏏 {player.battingStyle} &nbsp;•&nbsp; 🎳 {player.bowlingStyle}
             </div>
             <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 2 }}>
-              🎂 {player.dateOfBirth?.split("T")[0]} &nbsp;•&nbsp; 📍 {player.placeOfBirth}
+              🎂 {player.born || player.dateOfBirth?.split("T")[0]} &nbsp;•&nbsp; 📍 {player.birthPlace || player.placeOfBirth}
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bio */}
+      {player.bio && (
+        <div style={{ marginBottom: 24, padding: "24px 28px", borderRadius: 20, background: "var(--card)", border: "1px solid var(--border)" }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 12, textTransform: "uppercase", letterSpacing: 1 }}>Biographical Summary</h3>
+          <div style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+            {player.bio}
+          </div>
+        </div>
+      )}
+
+      {/* Personal Info Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 24 }}>
+        {[
+          { label: "Role", value: player.role },
+          { label: "Batting Style", value: player.battingStyle },
+          { label: "Bowling Style", value: player.bowlingStyle },
+          { label: "Birth Place", value: player.birthPlace || player.placeOfBirth },
+          { label: "Height", value: player.height },
+        ].filter(i => i.value).map((item, i) => (
+          <div key={i} style={{ padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", marginBottom: 4 }}>{item.label}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text2)" }}>{item.value}</div>
+          </div>
+        ))}
       </div>
 
       {/* Batting Stats */}
@@ -167,6 +193,9 @@ export default function PlayerDetail() {
         </div>
       )}
 
+      {/* Player News */}
+      <PlayerNewsSection playerName={player.name} />
+
       {/* Chart */}
       {chartData.length > 0 && (
         <div className="card">
@@ -182,6 +211,33 @@ export default function PlayerDetail() {
           </ResponsiveContainer>
         </div>
       )}
+    </div>
+  );
+}
+
+function PlayerNewsSection({ playerName }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["news"],
+    queryFn: fetchNews,
+  });
+  const items = (data?.data || []).filter(n => n.title.toLowerCase().includes(playerName.toLowerCase()) || n.description?.toLowerCase().includes(playerName.toLowerCase())).slice(0, 4);
+
+  if (isLoading || !items.length) return null;
+
+  return (
+    <div style={{ marginBottom: 32 }}>
+      <h3 style={{ fontWeight: 800, fontSize: 16, color: "var(--text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 20 }}>📰</span> Latest news on {playerName}
+      </h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
+        {items.map((n, i) => (
+          <div key={i} style={{ padding: "16px", borderRadius: 14, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <div style={{ fontSize: 10, color: "#10B981", fontWeight: 800, marginBottom: 8, textTransform: "uppercase" }}>{n.source}</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text2)", lineHeight: 1.4, marginBottom: 8 }}>{n.title}</div>
+            <div style={{ fontSize: 11, color: "var(--text3)" }}>{n.hoursAgo}h ago</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
