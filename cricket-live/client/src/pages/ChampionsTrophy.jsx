@@ -8,7 +8,7 @@ export default function ChampionsTrophy() {
       name="ICC Champions Trophy 2025"
       shortName="Champions Trophy"
       filterKeywords={["Champions Trophy", "ICC Champions Trophy", "CT 2025"]}
-      accentColor="#818cf8"
+      accentColor="#A78BFA"
       seoTitle="Champions Trophy 2025 Live Score - ICC CT 2025"
       seoDesc="ICC Champions Trophy 2025 live score, ball-by-ball commentary, schedule and results. Real-time Champions Trophy 2025 updates."
       seoKeywords="Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy ball by ball, Champions Trophy schedule 2025, ICC CT 2025 live"

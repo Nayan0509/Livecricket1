@@ -1,83 +1,118 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 const NodeCache = require("node-cache");
 
-// Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "dummy_key");
-
-// Cache for generated articles (TTL: 24 hours)
+// Cache generated articles for 24 hours
 const articleCache = new NodeCache({ stdTTL: 86400 });
 
 /**
- * Generates an original SEO-optimized article based on a brief headline/description
+ * Generates an SEO-optimised cricket article from headline + description.
+ * Zero external API dependencies — uses smart template expansion.
  */
 async function generateArticle(title, description, source) {
   const cacheKey = `article:${title}`;
   const cached = articleCache.get(cacheKey);
   if (cached) return cached;
 
-  if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "dummy_key") {
-    return {
-      title,
-      content: `${description}\n\n[Note: This is a placeholder. Please set GEMINI_API_KEY in your server/.env file to automatically generate 500-word original articles from this news snippet.]`,
-      tags: ["Cricket", "News"],
-      isGenerated: false
-    };
-  }
+  const article = buildArticle(title, description, source);
+  articleCache.set(cacheKey, article);
+  return article;
+}
 
-  try {
-    // We use gemini-1.5-flash as it's the fastest and extremely cheap/free tier
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+function buildArticle(title, description, source) {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  const topic = detectTopic(title);
+  const players = extractPlayers(title + " " + description);
 
-    const prompt = `
-    You are an expert cricket journalist writing for a premium sports website. 
-    Write a 300-500 word original, engaging, and SEO-optimized news article based on the following information. 
-    DO NOT mention that you are an AI. DO NOT simply repeat the prompt. Add professional commentary, context, and insight.
-    Format the article in clean HTML paragraphs (<p>). Do not use Markdown backticks or markdown headers, just pure HTML tags for formatting.
-    Make it look like a highly professional editorial piece.
+  const intro = description
+    ? `<p>${description}</p>`
+    : `<p>In one of the most anticipated ${topic} matches, cricket fans across the globe are keeping a close eye on the latest developments as the action unfolds live.</p>`;
 
-    Original Headline: ${title}
-    Original Context: ${description}
-    Source Context: ${source}
+  const context = buildContextBlock(topic, title);
+  const analysis = buildAnalysisBlock(topic, players, title);
+  const outlook = buildOutlookBlock(topic);
 
-    Return JSON strictly in this format (no markdown code blocks, just raw JSON):
-    {
-      "title": "A slightly more engaging version of the original headline",
-      "content": "<p>Paragraph 1...</p><p>Paragraph 2...</p>...",
-      "tags": ["tag1", "tag2", "tag3"]
-    }
-    `;
+  const content = [intro, context, analysis, outlook].join("\n\n");
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text().trim();
-    
-    // Clean up potential markdown code blocks
-    let cleanedJson = responseText;
-    if (cleanedJson.startsWith("```json")) {
-      cleanedJson = cleanedJson.replace(/^```json/, "").replace(/```$/, "").trim();
-    } else if (cleanedJson.startsWith("```")) {
-      cleanedJson = cleanedJson.replace(/^```/, "").replace(/```$/, "").trim();
-    }
+  return {
+    title: title.length > 80 ? title : enhanceHeadline(title),
+    content,
+    tags: buildTags(topic, title, players),
+    source,
+    datePublished: now.toISOString(),
+    isGenerated: true,
+    wordCount: content.replace(/<[^>]+>/g, " ").split(/\s+/).length,
+  };
+}
 
-    const articleData = JSON.parse(cleanedJson);
-    
-    const finalArticle = {
-      ...articleData,
-      isGenerated: true,
-      timestamp: new Date().toISOString()
-    };
+function detectTopic(text) {
+  const t = text.toLowerCase();
+  if (t.includes("ipl")) return "IPL";
+  if (t.includes("t20 world cup") || t.includes("t20wc")) return "T20 World Cup";
+  if (t.includes("champions trophy")) return "Champions Trophy";
+  if (t.includes("world cup") || t.includes("cwc")) return "ODI World Cup";
+  if (t.includes("ashes")) return "The Ashes";
+  if (t.includes("psl")) return "PSL";
+  if (t.includes("bbl")) return "BBL";
+  if (t.includes("t20")) return "T20";
+  if (t.includes("test match") || t.includes("test cricket")) return "Test Cricket";
+  if (t.includes("odi")) return "ODI Cricket";
+  return "Cricket";
+}
 
-    articleCache.set(cacheKey, finalArticle);
-    return finalArticle;
+function extractPlayers(text) {
+  const known = [
+    "Virat Kohli", "Rohit Sharma", "Hardik Pandya", "MS Dhoni",
+    "Rishabh Pant", "Shubman Gill", "Yashasvi Jaiswal", "KL Rahul",
+    "Jasprit Bumrah", "Ravindra Jadeja", "Axar Patel",
+    "Pat Cummins", "Steve Smith", "David Warner", "Travis Head",
+    "Jos Buttler", "Ben Stokes", "Joe Root", "Jonny Bairstow",
+    "Babar Azam", "Mohammad Rizwan", "Shaheen Afridi",
+    "Heinrich Klaasen", "Kagiso Rabada", "Quinton de Kock",
+    "Mitchell Marsh", "Glenn Maxwell", "Kane Williamson",
+    "Sunil Narine", "Andre Russell",
+  ];
+  return known.filter(p => text.toLowerCase().includes(p.toLowerCase()));
+}
 
-  } catch (error) {
-    console.error("Gemini Generation Error:", error.message);
-    return {
-      title,
-      content: `<p>${description}</p><p><em>Our editorial team is currently expanding on this story. Check back later for the full analysis.</em></p>`,
-      tags: ["Update"],
-      isGenerated: false
-    };
-  }
+function buildContextBlock(topic, title) {
+  const contexts = {
+    IPL: `<p>The Indian Premier League continues to captivate the cricketing world with its unique blend of international stars and emerging talent. As one of the most-watched sporting leagues globally, the IPL 2026 season has already delivered extraordinary moments of skill, drama, and fierce competition. With ten franchises battling for supremacy across 84 matches, every game carries enormous weight in the points table standings.</p>`,
+    "T20 World Cup": `<p>The T20 World Cup is the pinnacle of franchise-free T20 cricket, bringing together nations in a sprint-format tournament where any team can triumph on any given day. Rapid scoring rates, death bowling innovations and match-defining moments in the powerplay have made this format a global spectacle.</p>`,
+    "Champions Trophy": `<p>The ICC Champions Trophy is elite ODI cricket at its finest — featuring the world's top eight ranked nations competing for one of cricket's most prestigious trophies. With limited overs and high stakes, tactical masterclasses from captains and pivotal individual performances often decide the tournament's outcome.</p>`,
+    "Test Cricket": `<p>Test cricket remains the ultimate examination of cricketing skill and character. Spanning five days across up to 450 overs of play, Test matches challenge batsmen's technique and bowlers' endurance in ways no other format can. The ebb and flow of a Test match — sessions lost and won, weathered comebacks, and last-wicket defiances — gives the format an emotional depth unmatched in sport.</p>`,
+    "ODI Cricket": `<p>One Day Internationals represent cricket's most complete format — balanced between the patience of Test batting and the explosiveness of T20 — offering 50-over battles where momentum shifts are common and match-winning performances demand all-round excellence from the competing nations.</p>`,
+    PSL: `<p>The Pakistan Super League has grown into one of world cricket's premier T20 competitions, showcasing Pakistani talent alongside international stars in stadium atmospheres that generate enormous passion. The league has played a significant role in reviving international cricket in Pakistan and developing the next generation of fast bowlers and big-hitting batsmen.</p>`,
+    Cricket: `<p>Cricket, the sport played in over 100 nations and followed by over two billion fans globally, continues to produce moments of genius, heartbreak, and brilliance. From the precision of a yorker to the elegance of a cover drive, every match writes new chapters in the sport's rich history.</p>`,
+  };
+  return contexts[topic] || contexts["Cricket"];
+}
+
+function buildAnalysisBlock(topic, players, title) {
+  const playerMentions = players.length > 0
+    ? `<p>Key performers to watch include ${players.slice(0, 3).join(", ")} ${players.length > 3 ? `and ${players.length - 3} other star ${players.length - 3 === 1 ? "player" : "players"}` : ""} who have been in exceptional form this season. Their contributions with both bat and ball will likely be decisive as the match progresses.</p>`
+    : `<p>Both sides boast match-winners capable of turning the game on its head — the battle between bat and ball promises to be highly competitive, with conditions likely playing a significant role in the final outcome.</p>`;
+
+  const titleContext = `<p>This latest development — ${title.toLowerCase().replace(/[.!?]$/, "")} — adds another compelling chapter to what has already been an action-packed season. Fans following the live score on Live Cricket Zone can track every ball, every run, and every wicket as it happens, with updates refreshed every 15 seconds.</p>`;
+
+  return [playerMentions, titleContext].join("\n\n");
+}
+
+function buildOutlookBlock(topic) {
+  return `<p>Cricket fans can follow all the live action, ball-by-ball commentary, scorecard, and match analysis exclusively on Live Cricket Zone — completely free, with no sign-up required. For ${topic} fixtures, schedules, points tables, and player statistics, navigate to the relevant section from our homepage. Whether you're watching from India, Pakistan, England, Australia, or anywhere in the cricket-following world, Live Cricket Zone has you covered in real time.</p>`;
+}
+
+function enhanceHeadline(title) {
+  if (title.endsWith("?") || title.endsWith("!")) return title;
+  if (title.toLowerCase().includes("vs")) return title + " — Live Score & Match Preview";
+  if (title.toLowerCase().includes("wins") || title.toLowerCase().includes("won")) return title + " — Match Report";
+  return title + " — Analysis & Updates";
+}
+
+function buildTags(topic, title, players) {
+  const base = ["Cricket", "Live Cricket", topic];
+  const titleWords = title.split(" ").filter(w => w.length > 5 && /^[A-Z]/.test(w));
+  const playerTags = players.slice(0, 3);
+  return [...new Set([...base, ...playerTags, ...titleWords.slice(0, 3)])].slice(0, 8);
 }
 
 module.exports = { generateArticle };

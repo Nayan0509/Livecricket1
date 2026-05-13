@@ -247,11 +247,13 @@ export default function TournamentPage({
           padding: "24px 28px", borderRadius: 14,
           background: "rgba(255,255,255,0.02)", border: `1px solid ${accentColor}15`
         }}>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ width: 3, height: 16, borderRadius: 2, background: `linear-gradient(180deg,${accentColor},${accentColor}99)`, display: "inline-block" }} />
             About {name} Live Score
           </h2>
-          <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.8 }}>{aboutText}</p>
+          {String(aboutText).split("\n\n").map((para, i) => (
+            <p key={i} style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>{para}</p>
+          ))}
         </section>
       )}
     </div>

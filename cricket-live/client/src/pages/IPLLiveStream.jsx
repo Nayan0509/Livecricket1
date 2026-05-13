@@ -354,7 +354,7 @@ export default function IPLLiveStream() {
           { q: "Can I watch IPL without JioCinema?",             a: "Yes. Live Cricket Zone provides free IPL streaming without JioCinema, Hotstar or any other paid subscription." },
           { q: "Which browser is best for IPL live stream?",     a: "Google Chrome gives the best IPL live stream experience. We recommend using Chrome on both mobile and desktop." },
           { q: "Can I watch IPL live stream in UK / USA?",       a: "Yes — IPL live stream works worldwide including UK, USA, Pakistan, Australia, UAE, Canada and South Africa. No geo-restrictions." },
-          { q: "What IPL matches can I watch live?",             a: "All 84 IPL 2026 matches — MI, CSK, RCB, KKR, GT, LSG, DC, PBKS, RR, SRH. Every match from March 28 to May 31, 2026." },
+          { q: "What IPL matches can I watch live?",             a: "All IPL 2026 league matches and playoff fixtures — MI, CSK, RCB, KKR, GT, LSG, DC, PBKS, RR, SRH. Every match streamed free on Live Cricket Zone." },
         ].map((f, i, arr) => (
           <div key={i} style={{ paddingBottom: 12, marginBottom: 12, borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
             <div style={{ fontWeight: 700, fontSize: 12, color: "#fff", marginBottom: 4 }}>Q: {f.q}</div>

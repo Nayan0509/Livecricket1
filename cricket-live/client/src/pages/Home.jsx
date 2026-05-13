@@ -55,7 +55,7 @@ function IPLStandingsWidget() {
     refetchInterval: 300000, // 5 minutes
   });
 
-  const rows = data?.data || [];
+  const rows = Array.isArray(data?.data) ? data.data : [];
 
   return (
     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
