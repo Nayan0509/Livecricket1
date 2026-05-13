@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMatchScore, fetchMatchInfo, fetchMatchScorecard } from "../api";
+import SEO from "../components/SEO";
+import { fetchMatchInfo, fetchMatchScorecard } from "../api";
 
 export default function LiveScore() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // cricScore returns list of all current scores; match_info gives full detail
   const { data: infoData, isLoading } = useQuery({
     queryKey: ["matchInfo", id],
     queryFn: () => fetchMatchInfo(id),
@@ -22,110 +22,178 @@ export default function LiveScore() {
 
   const match = infoData?.data;
   const innings = scorecardData?.data?.innings || [];
+  const isLive = match?.matchStarted && !match?.matchEnded;
 
   return (
-    <div className="container" style={{ paddingBottom: 40 }}>
-      <button onClick={() => navigate(-1)} className="btn btn-outline" style={{ marginBottom: 16, fontSize: 13 }}>← Back</button>
-      <h1 className="page-title">🔴 Live Score</h1>
+    <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
+      <SEO
+        title={match ? `${match.name} Live Score — Ball by Ball Updates` : "Live Cricket Score — Ball by Ball Updates"}
+        description={match ? `Live score for ${match.name}. ${match.status}. Real-time ball-by-ball updates every 15 seconds on Live Cricket Zone.` : "Live cricket score with real-time ball-by-ball updates every 15 seconds. Free, no sign-up required."}
+        url={`/match/${id}/live-score`}
+      />
 
-      {isLoading && <div className="spinner" />}
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          marginTop: 16, marginBottom: 16, padding: "8px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700,
+          background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+          color: "var(--text3)", cursor: "pointer", fontFamily: "'Inter',sans-serif",
+        }}
+      >
+        ← Back
+      </button>
+
+      {isLoading && !match && (
+        <div style={{ padding: "60px 0", textAlign: "center" }}>
+          <div className="spinner" style={{ margin: "0 auto" }} />
+          <p style={{ color: "var(--text3)", fontSize: 13, marginTop: 16 }}>Loading live score…</p>
+        </div>
+      )}
 
       {match && (
         <>
-          <div className="card" style={{ marginBottom: 20, background: "linear-gradient(135deg, var(--bg3), var(--card))" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-              <h2 style={{ fontSize: 18, fontWeight: 700, flex: 1 }}>{match.name}</h2>
-              {match.matchStarted && !match.matchEnded && (
-                <span className="badge badge-live"><span className="pulse">●</span> LIVE</span>
+          {/* Match header card */}
+          <div style={{
+            padding: "24px", borderRadius: 14, marginBottom: 16,
+            background: isLive
+              ? "linear-gradient(135deg, rgba(239,68,68,0.08) 0%, rgba(9,9,11,0.98) 100%)"
+              : "linear-gradient(135deg, rgba(34,197,94,0.07) 0%, rgba(9,9,11,0.98) 100%)",
+            border: isLive ? "1px solid rgba(239,68,68,0.2)" : "1px solid rgba(34,197,94,0.12)",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 16 }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>
+                  {match.matchType} · {match.series}
+                </div>
+                <h1 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", margin: 0, lineHeight: 1.3 }}>{match.name}</h1>
+              </div>
+              {isLive && (
+                <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 900, background: "#EF4444", color: "#fff", padding: "4px 10px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff", animation: "livePulse 1.5s infinite", display: "inline-block" }} />
+                  LIVE
+                </span>
               )}
             </div>
 
             {/* Team flags */}
-            <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
-              {match.teamInfo?.map((t, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {t.img && <img src={t.img} alt={t.shortname} style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }} />}
-                  <span style={{ fontWeight: 700, fontSize: 15 }}>{t.shortname}</span>
-                </div>
-              ))}
-            </div>
+            {match.teamInfo?.length > 0 && (
+              <div style={{ display: "flex", gap: 20, marginBottom: 16, flexWrap: "wrap" }}>
+                {match.teamInfo.map((t, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    {t.img && (
+                      <img src={t.img} alt={t.shortname} style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.1)" }} />
+                    )}
+                    <span style={{ fontWeight: 800, fontSize: 16, color: "var(--text)" }}>{t.shortname}</span>
+                    <span style={{ fontSize: 12, color: "var(--text3)" }}>{t.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Scores */}
-            {match.score?.map((s, i) => (
-              <div key={i} style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 12, color: "var(--text2)", marginBottom: 4 }}>{s.inning}</div>
-                <div style={{ fontSize: 40, fontWeight: 800, color: "var(--green)", lineHeight: 1 }}>
-                  {s.r}/{s.w}
-                  <span style={{ fontSize: 16, color: "var(--text2)", marginLeft: 10 }}>({s.o} ov)</span>
-                </div>
+            {match.score?.length > 0 && (
+              <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginBottom: 16 }}>
+                {match.score.map((s, i) => (
+                  <div key={i} style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 4 }}>{s.inning}</div>
+                    <div style={{ fontSize: 36, fontWeight: 900, color: "#22C55E", lineHeight: 1 }}>
+                      {s.r}/{s.w}
+                      <span style={{ fontSize: 14, color: "var(--text3)", marginLeft: 8 }}>({s.o} ov)</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
 
-            <div style={{ padding: "12px 16px", background: "rgba(0,200,83,0.08)", borderRadius: 8, marginBottom: 16 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: match.matchStarted && !match.matchEnded ? "var(--red)" : "var(--text2)" }}>
+            {/* Status */}
+            <div style={{ padding: "10px 14px", borderRadius: 8, background: isLive ? "rgba(239,68,68,0.08)" : "rgba(34,197,94,0.06)", border: isLive ? "1px solid rgba(239,68,68,0.15)" : "1px solid rgba(34,197,94,0.12)" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: isLive ? "#fb7185" : "#4ade80" }}>
                 {match.status}
               </div>
             </div>
+          </div>
 
-            {/* Quick Actions */}
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link to={`/match/${id}`} className="btn btn-outline" style={{ flex: 1, minWidth: 140 }}>
-                📊 Match Details
-              </Link>
-              <Link to={`/match/${id}/scorecard`} className="btn btn-primary" style={{ flex: 1, minWidth: 140 }}>
-                📋 Full Scorecard
-              </Link>
-            </div>
+          {/* Match info */}
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
+            {match.venue && (
+              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontSize: 12, color: "var(--text3)" }}>
+                📍 {match.venue}
+              </div>
+            )}
+            {match.date && (
+              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontSize: 12, color: "var(--text3)" }}>
+                📅 {match.date}
+              </div>
+            )}
+            {match.tossWinner && (
+              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontSize: 12, color: "var(--text3)" }}>
+                🪙 {match.tossWinner} won toss, chose to {match.tossChoice}
+              </div>
+            )}
+            {isLive && (
+              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.12)", fontSize: 11, color: "#4ade80" }}>
+                🔄 Auto-refreshes every 15s
+              </div>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
+            <Link to={`/match/${id}`} style={{
+              flex: 1, minWidth: 140, textAlign: "center", padding: "11px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+              color: "var(--text2)", textDecoration: "none",
+            }}>
+              📊 Match Details
+            </Link>
+            <Link to={`/match/${id}/scorecard`} style={{
+              flex: 1, minWidth: 140, textAlign: "center", padding: "11px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)",
+              color: "#22C55E", textDecoration: "none",
+            }}>
+              📋 Full Scorecard
+            </Link>
           </div>
 
           {/* Quick Scorecard Preview */}
           {innings.length > 0 && (
-            <div className="card" style={{ marginBottom: 20 }}>
-              <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Latest Batting</h3>
+            <div style={{ padding: "20px", borderRadius: 12, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <h3 style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 14 }}>Latest Batting</h3>
               {innings.slice(-1).map((inn, idx) => (
                 <div key={idx}>
-                  <div style={{ fontSize: 14, color: "var(--primary-light)", fontWeight: 700, marginBottom: 12 }}>
-                    {inn.team} - {inn.score}
+                  <div style={{ fontSize: 13, color: "#22C55E", fontWeight: 700, marginBottom: 12 }}>
+                    {inn.team} — {inn.score}
                   </div>
                   <div style={{ overflowX: "auto" }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 400 }}>
                       <thead>
-                        <tr style={{ background: "rgba(255,255,255,0.03)" }}>
-                          <th style={{ padding: 10, textAlign: "left", fontSize: 11, color: "var(--text3)" }}>BATSMAN</th>
-                          <th style={{ padding: 10, textAlign: "right", fontSize: 11, color: "var(--text3)" }}>R</th>
-                          <th style={{ padding: 10, textAlign: "right", fontSize: 11, color: "var(--text3)" }}>B</th>
-                          <th style={{ padding: 10, textAlign: "right", fontSize: 11, color: "var(--text3)" }}>SR</th>
+                        <tr>
+                          <th style={{ padding: "8px 12px", textAlign: "left", fontSize: 10, color: "var(--text3)", fontWeight: 800, textTransform: "uppercase" }}>Batsman</th>
+                          <th style={{ padding: "8px 12px", textAlign: "right", fontSize: 10, color: "var(--text3)", fontWeight: 800, textTransform: "uppercase" }}>R</th>
+                          <th style={{ padding: "8px 12px", textAlign: "right", fontSize: 10, color: "var(--text3)", fontWeight: 800, textTransform: "uppercase" }}>B</th>
+                          <th style={{ padding: "8px 12px", textAlign: "right", fontSize: 10, color: "var(--text3)", fontWeight: 800, textTransform: "uppercase" }}>SR</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {inn.batsmen.slice(0, 5).map((b, i) => (
-                          <tr key={i} style={{ borderTop: "1px solid var(--divider)" }}>
-                            <td style={{ padding: 10, fontWeight: 600 }}>{b.name}</td>
-                            <td style={{ padding: 10, textAlign: "right", fontWeight: 800 }}>{b.r}</td>
-                            <td style={{ padding: 10, textAlign: "right" }}>{b.b}</td>
-                            <td style={{ padding: 10, textAlign: "right", color: "var(--accent-teal)" }}>{b.sr}</td>
+                        {inn.batsmen?.slice(0, 6).map((b, i) => (
+                          <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                            <td style={{ padding: "9px 12px", fontWeight: 700, fontSize: 13, color: "var(--text)" }}>{b.name}</td>
+                            <td style={{ padding: "9px 12px", textAlign: "right", fontWeight: 900, fontSize: 14, color: "var(--text)" }}>{b.r}</td>
+                            <td style={{ padding: "9px 12px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.b}</td>
+                            <td style={{ padding: "9px 12px", textAlign: "right", fontSize: 12, color: "#38bdf8" }}>{b.sr}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  <Link to={`/match/${id}/scorecard`} className="link-primary" style={{ display: "block", marginTop: 12, fontSize: 13 }}>
+                  <Link to={`/match/${id}/scorecard`} style={{ display: "block", marginTop: 14, fontSize: 12, color: "#22C55E", fontWeight: 700, textDecoration: "none" }}>
                     View Full Scorecard →
                   </Link>
                 </div>
               ))}
             </div>
           )}
-
-          <div className="card">
-            <h3 style={{ fontWeight: 700, marginBottom: 12 }}>Match Info</h3>
-            <div style={{ fontSize: 13, color: "var(--text2)", display: "flex", flexDirection: "column", gap: 8 }}>
-              {match.tossWinner && <div>🪙 Toss: {match.tossWinner} won, chose to {match.tossChoice}</div>}
-              <div>📍 {match.venue}</div>
-              <div>📅 {match.date}</div>
-              <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 4 }}>Auto-refreshes every 15s</div>
-            </div>
-          </div>
         </>
       )}
     </div>

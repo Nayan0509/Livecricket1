@@ -1,83 +1,228 @@
-import React, { useState } from "react";
-import VideoPlayer from "../components/VideoPlayer";
+import React, { useState, useEffect } from "react";
+import SEO from "../components/SEO";
+import AdBanner from "../components/AdBanner";
+import { fetchYouTubeSearch } from "../api";
 
-const VIDEO_CATEGORIES = {
-  Highlights: [
-    { id: "Yd4XBXqFLAY", title: "ICC Cricket World Cup 2023 Final Highlights" },
-    { id: "9bZkp7q19f0", title: "IPL 2024 Best Moments" },
-    { id: "kJQP7kiw5Fk", title: "T20 World Cup 2024 Highlights" },
-    { id: "JGwWNGJdvx8", title: "Test Cricket Greatest Catches" },
-    { id: "RgKAFK5djSk", title: "ODI World Cup Classic Matches" },
-    { id: "fRh_vgS2dFE", title: "IPL Super Overs Collection" },
-  ],
-  "Live Streams": [
-    { id: "jNQXAC9IVRw", title: "Live Cricket Stream - Today's Match" },
-    { id: "dQw4w9WgXcQ", title: "Live Commentary - Test Match Day 1" },
-    { id: "9bZkp7q19f0", title: "Live Score Updates" },
-  ],
-  Interviews: [
-    { id: "kJQP7kiw5Fk", title: "Virat Kohli Post Match Interview" },
-    { id: "JGwWNGJdvx8", title: "Rohit Sharma Press Conference" },
-    { id: "RgKAFK5djSk", title: "MS Dhoni Exclusive Interview" },
-  ],
-};
+const SEARCH_QUERIES = [
+  { label: "IPL 2026 Highlights", q: "IPL 2026 match highlights" },
+  { label: "T20 World Cup", q: "T20 World Cup 2026 cricket highlights" },
+  { label: "Test Cricket", q: "Test cricket 2026 highlights" },
+  { label: "ODI Cricket", q: "ODI cricket 2026 best moments" },
+  { label: "Best Catches", q: "cricket best catches 2025 2026" },
+  { label: "Top Sixes", q: "cricket biggest sixes 2026 IPL T20" },
+];
+
+function VideoCard({ video, isActive, onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        cursor: "pointer",
+        borderRadius: 10,
+        overflow: "hidden",
+        border: isActive ? "2px solid #22C55E" : "2px solid rgba(255,255,255,0.06)",
+        background: "rgba(255,255,255,0.02)",
+        transition: "all 0.2s",
+      }}
+      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(34,197,94,0.3)"; e.currentTarget.style.background = "rgba(34,197,94,0.04)"; }}}
+      onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}}
+    >
+      <div style={{ position: "relative", aspectRatio: "16/9", background: "#111" }}>
+        <img
+          src={video.thumbnail || `https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
+          alt={video.title}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          loading="lazy"
+        />
+        <div style={{
+          position: "absolute", inset: 0, display: "flex",
+          alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.25)",
+        }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: "50%",
+            background: isActive ? "rgba(34,197,94,0.9)" : "rgba(0,0,0,0.6)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 16, color: "#fff", transition: "background 0.2s",
+          }}>▶</div>
+        </div>
+        {video.isLive && (
+          <div style={{ position: "absolute", top: 8, left: 8, background: "#EF4444", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 7px", borderRadius: 4 }}>
+            ● LIVE
+          </div>
+        )}
+      </div>
+      <div style={{ padding: "10px 12px" }}>
+        <div style={{ fontWeight: 700, fontSize: 12, color: "var(--text)", lineHeight: 1.35, marginBottom: 4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+          {video.title}
+        </div>
+        {video.channel && (
+          <div style={{ fontSize: 11, color: "var(--text3)" }}>{video.channel}</div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function Videos() {
-  const [category, setCategory] = useState("Highlights");
-  const [featured, setFeatured] = useState(VIDEO_CATEGORIES["Highlights"][0]);
+  const [activeTab, setActiveTab] = useState(0);
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [featured, setFeatured] = useState(null);
 
-  const videos = VIDEO_CATEGORIES[category] || [];
+  useEffect(() => {
+    const { q } = SEARCH_QUERIES[activeTab];
+    setLoading(true);
+    setVideos([]);
+    setFeatured(null);
+    fetchYouTubeSearch(q)
+      .then(data => {
+        const list = data?.videos || [];
+        setVideos(list);
+        if (list.length) setFeatured(list[0]);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [activeTab]);
 
   return (
-    <div className="container" style={{ paddingBottom: 40 }}>
-      <h1 className="page-title">📺 Cricket Videos</h1>
+    <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
+      <SEO
+        title="Cricket Videos — IPL 2026 Highlights, T20 World Cup & Live Streams"
+        description="Watch cricket videos — IPL 2026 match highlights, T20 World Cup 2026, best catches, biggest sixes, and live stream links. Updated daily with the latest cricket clips."
+        keywords="cricket videos, IPL 2026 highlights, cricket highlights today, T20 World Cup video, cricket live stream, IPL highlights video, cricket best catches, cricket sixes, cricket match video 2026, watch cricket online free"
+        url="/videos"
+      />
 
-      {/* Featured */}
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ fontSize: 13, color: "var(--text2)", marginBottom: 8 }}>Now Playing</div>
-        <VideoPlayer videoId={featured.id} title={featured.title} />
-        <div style={{ marginTop: 10, fontWeight: 700, fontSize: 16 }}>{featured.title}</div>
+      {/* Hero */}
+      <div style={{
+        margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
+        background: "linear-gradient(135deg, rgba(34,197,94,0.09) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(34,197,94,0.15)",
+      }}>
+        <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
+          📺 Cricket <span style={{ color: "#22C55E" }}>Videos</span>
+        </h1>
+        <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
+          IPL 2026 highlights · T20 World Cup · Best catches · Live streams
+        </p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {["IPL Highlights", "T20 WC", "Live Streams", "Free"].map(t => (
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.18)", color: "#22C55E" }}>{t}</span>
+          ))}
+        </div>
       </div>
 
-      {/* Category Tabs */}
-      <div className="tab-bar" style={{ marginBottom: 20 }}>
-        {Object.keys(VIDEO_CATEGORIES).map(c => (
-          <button key={c} className={`tab ${category === c ? "active" : ""}`} onClick={() => setCategory(c)}>
-            {c}
+      <AdBanner type="leaderboard" />
+
+      {/* Category tabs */}
+      <div style={{ display: "flex", overflowX: "auto", gap: 8, paddingBottom: 4, marginBottom: 20, scrollbarWidth: "none" }}>
+        {SEARCH_QUERIES.map((tab, i) => (
+          <button key={i} onClick={() => setActiveTab(i)} style={{
+            flexShrink: 0, padding: "8px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
+            background: activeTab === i ? "#22C55E" : "rgba(255,255,255,0.04)",
+            color: activeTab === i ? "#000" : "var(--text3)",
+            border: activeTab === i ? "none" : "1px solid rgba(255,255,255,0.08)",
+            cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif",
+          }}>
+            {tab.label}
           </button>
         ))}
       </div>
 
-      {/* Video Grid */}
-      <div className="grid-3">
-        {videos.map((v, i) => (
-          <div key={i} onClick={() => setFeatured(v)} style={{ cursor: "pointer" }}>
-            <div style={{
-              borderRadius: 10, overflow: "hidden", position: "relative",
-              border: featured.id === v.id ? "2px solid var(--green)" : "2px solid transparent",
-              transition: "border 0.2s"
-            }}>
-              <img
-                src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`}
-                alt={v.title}
-                style={{ width: "100%", display: "block", aspectRatio: "16/9", objectFit: "cover" }}
-              />
-              <div style={{
-                position: "absolute", inset: 0, display: "flex",
-                alignItems: "center", justifyContent: "center",
-                background: "rgba(0,0,0,0.3)"
-              }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: "50%",
-                  background: "rgba(0,200,83,0.85)",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16
-                }}>▶</div>
+      {loading ? (
+        <div style={{ padding: "60px 0", textAlign: "center" }}>
+          <div className="spinner" style={{ margin: "0 auto" }} />
+          <p style={{ color: "var(--text3)", fontSize: 13, marginTop: 16 }}>Loading videos…</p>
+        </div>
+      ) : videos.length > 0 ? (
+        <>
+          {/* Featured player */}
+          {featured && (
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>▶ Now Playing</div>
+              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(34,197,94,0.2)" }}>
+                <div style={{ position: "relative", paddingTop: "56.25%", background: "#000" }}>
+                  <iframe
+                    key={featured.videoId}
+                    src={`https://www.youtube.com/embed/${featured.videoId}?autoplay=0&rel=0`}
+                    title={featured.title}
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                  />
+                </div>
               </div>
+              <div style={{ marginTop: 10, fontWeight: 800, fontSize: 15, color: "var(--text)", lineHeight: 1.4 }}>{featured.title}</div>
+              {featured.channel && <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 3 }}>{featured.channel}</div>}
             </div>
-            <div style={{ marginTop: 8, fontSize: 13, fontWeight: 600, lineHeight: 1.4 }}>{v.title}</div>
+          )}
+
+          {/* Video grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
+            {videos.map((v, i) => (
+              <VideoCard
+                key={v.videoId || i}
+                video={v}
+                isActive={featured?.videoId === v.videoId}
+                onClick={() => setFeatured(v)}
+              />
+            ))}
           </div>
-        ))}
-      </div>
+
+          {/* Direct YouTube link */}
+          <div style={{ marginTop: 20, textAlign: "center" }}>
+            <a
+              href={`https://www.youtube.com/results?search_query=${encodeURIComponent(SEARCH_QUERIES[activeTab].q)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
+                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#22C55E",
+                background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)",
+                textDecoration: "none", transition: "all 0.15s",
+              }}
+            >
+              ▶ View More on YouTube →
+            </a>
+          </div>
+        </>
+      ) : (
+        <div style={{ padding: "40px 24px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>📺</div>
+          <p style={{ color: "var(--text3)", fontSize: 14, marginBottom: 16 }}>Videos could not be loaded right now.</p>
+          <a
+            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(SEARCH_QUERIES[activeTab].q)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 13, color: "#22C55E", fontWeight: 700, textDecoration: "none" }}
+          >
+            Search on YouTube →
+          </a>
+        </div>
+      )}
+
+      <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
+
+      {/* Rich SEO content */}
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)" }}>
+        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          Cricket Videos — Highlights, Live Streams & Replays
+        </h2>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
+          The Cricket Videos section on Live Cricket Zone pulls the latest cricket highlights, match replays, and live stream links directly from YouTube so you always see the freshest content. Whether you're looking for <strong style={{ color: "var(--text2)" }}>IPL 2026 match highlights</strong> from last night, the best sixes from the T20 World Cup 2026, or a live stream of today's Test match, the video library is updated continuously across all six categories.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
+          The <strong style={{ color: "var(--text2)" }}>IPL 2026 Highlights</strong> tab shows post-match highlight reels for every Indian Premier League fixture — typically uploaded within 90 minutes of the final ball. The <strong style={{ color: "var(--text2)" }}>T20 World Cup</strong> tab surfaces ICC official highlights from all group stage, Super 8 and knockout matches. The <strong style={{ color: "var(--text2)" }}>Test Cricket</strong> and <strong style={{ color: "var(--text2)" }}>ODI Cricket</strong> tabs cover international bilateral series highlights from every touring team throughout the year.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
+          The <strong style={{ color: "var(--text2)" }}>Best Catches</strong> tab compiles the most acrobatic outfield catches and diving boundary saves across all formats — a fan favourite for cricket fans who enjoy the fielding artistry of modern cricket. The <strong style={{ color: "var(--text2)" }}>Top Sixes</strong> tab curates the longest and most powerful hits from the current cricket season, from Rohit Sharma's trademark pulls to Chris Gayle-style flat-bat maximums.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
+          All videos play in an embedded YouTube player directly on this page — no separate app download or subscription required. Click any thumbnail to load the video in the featured player at the top of the page. Videos are sourced from official broadcaster channels including Star Sports, Sky Sports Cricket, ICC, and BCCI. Free, no sign-up, no paywall.
+        </p>
+      </section>
     </div>
   );
 }
