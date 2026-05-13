@@ -3,6 +3,16 @@ const router = express.Router();
 const { cricGet, rapidGet, liveCache } = require("../controllers/cricapi");
 const scraper = require("../utils/scraper");
 
+// GET /api/matches/standings  — IPL 2026 points table
+router.get("/standings", async (req, res) => {
+  try {
+    const data = await scraper.scrapeIPLStandings();
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message, data: [] });
+  }
+});
+
 // GET /api/matches/all
 // Returns all matches categorized: live, recent, upcoming
 router.get("/all", async (req, res) => {

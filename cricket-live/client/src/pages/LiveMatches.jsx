@@ -14,12 +14,9 @@ export default function LiveMatches() {
     refetchInterval: 30000,
   });
 
-  // data from backend is { status: "success", data: { live: [], recent: [], upcoming: [] } }
-  // fetchAllMatches returns the full object (usually r.data, which is this wrapper)
   const matchesMap = data?.data || data || { live: [], recent: [], upcoming: [] };
   const currentTabMatches = matchesMap[activeTab] || [];
 
-  // Group matches by Series
   const processGroupedMatches = (matchesList) => {
     const grouped = {};
     matchesList.forEach(match => {
@@ -29,13 +26,10 @@ export default function LiveMatches() {
       if (seriesMatchInfo && seriesMatchInfo[1]) {
         const slug = seriesMatchInfo[1];
         const extracted = slug.match(/-(ipl|psl|bbl|wt20|t20i|odi|test|league)-(\d{4})/i);
-        if (extracted) {
-           seriesName = `${extracted[1].toUpperCase()} ${extracted[2]}`;
-        } else {
+        if (extracted) seriesName = `${extracted[1].toUpperCase()} ${extracted[2]}`;
+        else {
            const generic = slug.match(/(?:match|t20is|odis|tests)-(.+)$/i);
-           if (generic && generic[1]) {
-              seriesName = generic[1].replace(/-/g, ' ').toUpperCase();
-           }
+           if (generic && generic[1]) seriesName = generic[1].replace(/-/g, ' ').toUpperCase();
         }
       }
 
@@ -43,22 +37,14 @@ export default function LiveMatches() {
       grouped[seriesName].push(match);
     });
     
-    // Sort logic to bubble "High Voltage" matches on top
-    const highVoltageKeywords = ["IPL", "PREMIER LEAGUE", "T20 WORLD CUP", "WORLD CUP", "INDIA", "PAKISTAN", "ASHES", "AUSTRALIA", "ENGLAND", "PSL"];
-    
+    const highVoltageKeywords = ["IPL", "WORLD CUP", "INDIA", "PAKISTAN", "ASHES", "AUSTRALIA", "ENGLAND", "PSL"];
     const sortedGrouped = {};
-    const keys = Object.keys(grouped).sort((a, b) => {
+    Object.keys(grouped).sort((a, b) => {
        const aHigh = highVoltageKeywords.some(kw => a.toUpperCase().includes(kw)) ? 1 : 0;
        const bHigh = highVoltageKeywords.some(kw => b.toUpperCase().includes(kw)) ? 1 : 0;
-       // Primary sort: High voltage first
        if (aHigh !== bHigh) return bHigh - aHigh;
-       // Secondary sort: Alphabetical
        return a.localeCompare(b);
-    });
-    
-    keys.forEach(k => {
-       sortedGrouped[k] = grouped[k];
-    });
+    }).forEach(k => { sortedGrouped[k] = grouped[k]; });
     
     return sortedGrouped;
   };
@@ -66,55 +52,29 @@ export default function LiveMatches() {
   const groupedMatches = processGroupedMatches(currentTabMatches);
 
   return (
-    <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
-      <SEO
-        title="Live Cricket Matches Today - Live Score & Streaming"
-        description="All live cricket matches today with real-time scores, ball-by-ball commentary and free live streaming. IPL 2026, domestic cricket, T20, ODI and Test matches live."
-        keywords="live cricket matches today, cricket live today, all live cricket matches, live cricket score today, IPL live today, domestic cricket live, T20 live today, ODI live today, Test live today, cricket match live now, live cricket score all matches, cricket live score all, today cricket live match, live cricket all matches today"
-        url="/live"
-      />
+    <div className="container animate-fade-in" style={{ paddingBottom: 80, paddingTop: 32, maxWidth: 1000, margin: "0 auto" }}>
+      <SEO title="Live Matches - CricketZone" url="/live" />
       
-      <div className="glass" style={{ padding: "40px", borderRadius: "var(--radius-xl)", marginBottom: 40, background: "linear-gradient(135deg, rgba(224, 45, 45, 0.1), transparent)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
-          <div>
-            <h1 className="page-title" style={{ marginBottom: 12 }}>
-              <span className="pulse" style={{ color: "var(--red)" }}>●</span> Live Center
-            </h1>
-            <p style={{ color: "var(--text2)", fontSize: 15 }}>Monitoring {currentTabMatches.length} engagements globally across {Object.keys(groupedMatches).length} series.</p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            {dataUpdatedAt > 0 && (
-              <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700 }}>
-                LAST HEARTBEAT: {new Date(dataUpdatedAt).toLocaleTimeString()}
-              </span>
-            )}
-            <button className="btn btn-primary" onClick={refetch} style={{ padding: "10px 20px", fontSize: 13 }}>↻ REFRESH PIPELINE</button>
-          </div>
+      <div style={{ padding: "40px 48px", borderRadius: 32, marginBottom: 40, background: "var(--card)", border: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 24 }}>
+        <div>
+          <h1 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 12px 0", color: "var(--text)" }}>Live Center</h1>
+          <p style={{ color: "var(--text2)", fontSize: 16, margin: 0 }}>Tracking {currentTabMatches.length} matches globally across {Object.keys(groupedMatches).length} series.</p>
         </div>
+        <button onClick={refetch} style={{ background: "var(--primary)", border: "none", color: "#161619", padding: "12px 24px", borderRadius: 100, fontSize: 14, fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "var(--primary-light)"} onMouseLeave={e => e.currentTarget.style.background = "var(--primary)"}>
+          Refresh Feeds
+        </button>
       </div>
 
-      {/* Tabs Layout matching Cricbuzz Live-Scores Page End-to-End */}
-      <div style={{ 
-        display: "flex", 
-        borderBottom: "1px solid var(--glass-border)", 
-        marginBottom: 32,
-        overflowX: "auto"
-      }}>
+      <div style={{ display: "flex", borderBottom: "1px solid var(--border)", marginBottom: 40, gap: 16, overflowX: "auto" }}>
         {["live", "recent", "upcoming"].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             style={{
-              background: "transparent",
-              border: "none",
-              fontWeight: 700,
-              fontSize: 15,
-              padding: "16px 32px",
-              color: activeTab === tab ? "var(--red)" : "var(--text2)",
-              borderBottom: activeTab === tab ? "3px solid var(--red)" : "3px solid transparent",
-              cursor: "pointer",
-              textTransform: "capitalize",
-              transition: "all 0.2s ease"
+              background: "transparent", border: "none", fontWeight: 600, fontSize: 15, padding: "16px 24px",
+              color: activeTab === tab ? "var(--primary)" : "var(--text3)",
+              borderBottom: activeTab === tab ? "3px solid var(--primary)" : "3px solid transparent",
+              cursor: "pointer", textTransform: "capitalize", transition: "color 0.2s ease", marginBottom: -1
             }}
           >
             {tab} Matches
@@ -122,57 +82,39 @@ export default function LiveMatches() {
         ))}
       </div>
 
-      {isLoading && <div className="spinner" />}
+      {isLoading && <div className="spinner" style={{ margin: "60px auto" }} />}
       
       {error && (
-        <div className="card glass" style={{ borderColor: "var(--error)", padding: 40, textAlign: "center" }}>
-          <h2 style={{ color: "var(--error)" }}>Data Link Failure</h2>
-          <p style={{ color: "var(--text2)", marginTop: 12 }}>{error.message}</p>
-          <button className="btn btn-primary" onClick={refetch} style={{ marginTop: 24 }}>Retry Connection</button>
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 24, padding: 40, textAlign: "center" }}>
+          <h2 style={{ color: "var(--live)" }}>Connection Failed</h2>
+          <p style={{ color: "var(--text2)" }}>{error.message}</p>
         </div>
       )}
 
       {!isLoading && !error && (
         Object.keys(groupedMatches).length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 48 }}>
             {Object.keys(groupedMatches).map(series => (
-              <div key={series} className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                {/* Series Banner */}
-                <h3 style={{ 
-                  background: "rgba(255, 255, 255, 0.05)",
-                  padding: "12px 20px", 
-                  borderRadius: "8px", 
-                  marginBottom: "20px",
-                  fontSize: 14,
-                  fontWeight: 800,
-                  letterSpacing: "1px",
-                  color: "var(--text)",
-                  borderLeft: "4px solid var(--primary-light)"
-                }}>
+              <div key={series}>
+                <h3 style={{ background: "var(--bg3)", padding: "12px 24px", borderRadius: 100, marginBottom: 24, fontSize: 13, fontWeight: 700, letterSpacing: 0.5, color: "var(--text)", display: "inline-block", textTransform: "uppercase" }}>
                   {series}
                 </h3>
-                
-                <div className="grid-2">
-                  {groupedMatches[series].map(m => (
-                    <MatchCard key={m.id} match={m} />
-                  ))}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
+                  {groupedMatches[series].map(m => <MatchCard key={m.id} match={m} />)}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="glass" style={{ textAlign: "center", padding: 80, borderRadius: "var(--radius-xl)" }}>
-            <div style={{ fontSize: 60, marginBottom: 20 }}>📊</div>
-            <h2 style={{ marginBottom: 16 }}>Market Neutral</h2>
-            <p style={{ color: "var(--text3)", maxWidth: 500, margin: "0 auto" }}>
-              No {activeTab} matches are currently transmitting. All global nodes are on standby. 
-              Check the upcoming schedule for the next data stream.
-            </p>
+          <div style={{ textAlign: "center", padding: "80px 24px", background: "var(--card)", borderRadius: 32, border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>📡</div>
+            <h2 style={{ fontSize: 24, marginBottom: 12 }}>No matches active</h2>
+            <p style={{ color: "var(--text3)", fontSize: 16 }}>Check the upcoming tab for scheduled streams.</p>
           </div>
         )
       )}
 
-      <AdBanner type="responsive" slot="12345678" style={{ marginTop: 40 }} />
+      <AdBanner type="responsive" slot="12345678" style={{ marginTop: 60 }} />
     </div>
   );
 }

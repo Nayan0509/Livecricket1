@@ -11,138 +11,237 @@ const PRIMARY_NAV = [
 ];
 
 const LEAGUES = [
-  { to: "/ipl",               label: "IPL 2026",           color: "#6366f1" },
-  { to: "/t20-world-cup",     label: "T20 World Cup",      color: "#f43f5e" },
-  { to: "/world-cup",         label: "World Cup",          color: "#fbbf24" },
-  { to: "/asia-cup",          label: "Asia Cup",           color: "#22d3ee" },
-  { to: "/champions-trophy",  label: "Champions Trophy",   color: "#2dd4bf" },
-  { to: "/county-championship", label: "County Championship 🏴󠁧󠁢󠁥󠁮󠁧󠁿", color: "#003087" },
-  { to: "/psl",               label: "PSL",                color: "#10b981" },
-  { to: "/bbl",               label: "BBL",                color: "#fb923c" },
-  { to: "/womens-cricket",    label: "Women's Cricket",    color: "#a78bfa" },
+  { to: "/ipl",               label: "IPL 2026",            dot: "#F59E0B" },
+  { to: "/t20-world-cup",     label: "T20 World Cup",       dot: "#EF4444" },
+  { to: "/world-cup",         label: "ODI World Cup",       dot: "#22C55E" },
+  { to: "/asia-cup",          label: "Asia Cup",            dot: "#38BDF8" },
+  { to: "/champions-trophy",  label: "Champions Trophy",    dot: "#A78BFA" },
+  { to: "/psl",               label: "PSL 2026",            dot: "#10B981" },
+  { to: "/county-championship", label: "County Championship", dot: "#F97316" },
 ];
 
+function CricketBallIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="14" cy="14" r="13" fill="#22C55E" />
+      <circle cx="14" cy="14" r="13" fill="url(#ballGrad)" />
+      {/* Seam lines */}
+      <path d="M7 14 Q10 9 14 9 Q18 9 21 14" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+      <path d="M7 14 Q10 19 14 19 Q18 19 21 14" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+      <defs>
+        <radialGradient id="ballGrad" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#4ADE80" />
+          <stop offset="100%" stopColor="#15803D" />
+        </radialGradient>
+      </defs>
+    </svg>
+  );
+}
+
 export default function Navbar() {
-  const [open, setOpen]           = useState(false);
+  const [open, setOpen]               = useState(false);
   const [showLeagues, setShowLeagues] = useState(false);
-  const [search, setSearch]       = useState("");
-  const [scrolled, setScrolled]   = useState(false);
+  const [search, setSearch]           = useState("");
+  const [scrolled, setScrolled]       = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (search.trim()) { navigate(`/players?search=${encodeURIComponent(search)}`); setSearch(""); }
+    if (search.trim()) {
+      navigate(`/players?search=${encodeURIComponent(search)}`);
+      setSearch("");
+      setOpen(false);
+    }
   };
 
   return (
     <>
-      <nav style={{
-        position: "sticky", top: 0, zIndex: 1000,
-        background: scrolled ? "rgba(8,12,26,0.92)" : "rgba(8,12,26,0.75)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
-        borderBottom: `1px solid ${scrolled ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.05)"}`,
-        boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.4)" : "none",
-        transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
-      }}>
-        <div className="container" style={{ display: "flex", alignItems: "center", height: 58, gap: 8 }}>
+      <nav
+        role="navigation"
+        aria-label="Main navigation"
+        style={{
+          position: "sticky", top: 0, zIndex: 1000,
+          background: scrolled ? "rgba(9,9,11,0.92)" : "var(--bg)",
+          backdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
+          borderBottom: scrolled
+            ? "1px solid rgba(34,197,94,0.12)"
+            : "1px solid rgba(255,255,255,0.04)",
+          boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.5)" : "none",
+          transition: "all 0.3s cubic-bezier(0.2,0,0,1)",
+        }}
+      >
+        {/* Brand accent bar */}
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 2,
+          background: "linear-gradient(90deg, #16A34A 0%, #22C55E 40%, #F59E0B 100%)",
+          opacity: scrolled ? 1 : 0.6,
+          transition: "opacity 0.3s",
+        }} />
 
-          {/* Brand */}
-          <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, marginRight: 8, flexShrink: 0 }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10,
-              background: "linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 18, boxShadow: "0 4px 12px rgba(244,63,94,0.4)",
-              transition: "transform 0.2s, box-shadow 0.2s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.08) rotate(-4deg)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(244,63,94,0.55)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(244,63,94,0.4)"; }}
-            >🏏</div>
-            <div>
-              <div style={{ fontWeight: 900, fontSize: 16, letterSpacing: "-0.5px", background: "linear-gradient(135deg, #fff 0%, #c7d2fe 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                CRICKET ZONE
+        <div
+          className="container"
+          style={{ display: "flex", alignItems: "center", height: 60, gap: 12 }}
+        >
+          {/* ── Brand Logo ── */}
+          <Link
+            to="/"
+            style={{ display: "flex", alignItems: "center", gap: 10, marginRight: 20, flexShrink: 0, textDecoration: "none" }}
+            aria-label="Live Cricket Zone Home"
+          >
+            <CricketBallIcon />
+            <div style={{ lineHeight: 1, fontFamily: "'Poppins', sans-serif" }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 0 }}>
+                <span style={{ fontWeight: 800, fontSize: 17, color: "#F4F4F5", letterSpacing: "-0.03em" }}>
+                  Live Cricket
+                </span>
+                <span style={{
+                  fontWeight: 900, fontSize: 17, letterSpacing: "-0.03em",
+                  background: "linear-gradient(135deg, #22C55E, #4ADE80)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  marginLeft: 4,
+                }}>
+                  Zone
+                </span>
               </div>
-              <div style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 700, letterSpacing: 2, marginTop: -1 }}>LIVE SCORES</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(34,197,94,0.7)", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: 1 }}>
+                Live Scores · News · Streams
+              </div>
             </div>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* ── Desktop Nav ── */}
           <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
             {PRIMARY_NAV.map(n => (
-              <NavLink key={n.to} to={n.to} style={({ isActive }) => ({
-                padding: "7px 14px", borderRadius: 8, fontSize: 13, fontWeight: 600,
-                color: isActive ? "#fff" : "var(--text3)",
-                background: isActive ? "rgba(244,63,94,0.15)" : "transparent",
-                border: isActive ? "1px solid rgba(244,63,94,0.3)" : "1px solid transparent",
-                transition: "all 0.2s",
-                display: "flex", alignItems: "center", gap: 5,
-              })}
-                onMouseEnter={e => { if (!e.currentTarget.classList.contains("active")) { e.currentTarget.style.color = "var(--text2)"; e.currentTarget.style.background = "rgba(255,255,255,0.05)"; } }}
-                onMouseLeave={e => { if (!e.currentTarget.classList.contains("active")) { e.currentTarget.style.color = "var(--text3)"; e.currentTarget.style.background = "transparent"; } }}
+              <NavLink
+                key={n.to}
+                to={n.to}
+                style={({ isActive }) => ({
+                  padding: "7px 14px",
+                  borderRadius: 100,
+                  fontSize: 13,
+                  fontWeight: isActive ? 700 : 500,
+                  color: isActive ? "#22C55E" : "var(--text2)",
+                  background: isActive ? "rgba(34,197,94,0.1)" : "transparent",
+                  border: isActive ? "1px solid rgba(34,197,94,0.25)" : "1px solid transparent",
+                  transition: "all 0.2s cubic-bezier(0.2,0,0,1)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  fontFamily: "'Inter', sans-serif",
+                  letterSpacing: "0.01em",
+                })}
+                onMouseEnter={e => {
+                  if (!e.currentTarget.style.color.includes("34,197")) {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                    e.currentTarget.style.color = "var(--text)";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!e.currentTarget.style.color.includes("34,197")) {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--text2)";
+                  }
+                }}
               >
                 {n.label}
               </NavLink>
             ))}
 
-            {/* Leagues dropdown */}
+            {/* ── Leagues Dropdown ── */}
             <div
               style={{ position: "relative" }}
               onMouseEnter={() => setShowLeagues(true)}
               onMouseLeave={() => setShowLeagues(false)}
             >
               <button style={{
-                padding: "7px 14px", borderRadius: 8, fontSize: 13, fontWeight: 600,
-                color: showLeagues ? "var(--text2)" : "var(--text3)",
-                background: showLeagues ? "rgba(255,255,255,0.05)" : "transparent",
-                border: "1px solid transparent",
-                cursor: "pointer", display: "flex", alignItems: "center", gap: 5,
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: showLeagues ? "#22C55E" : "var(--text2)",
+                background: showLeagues ? "rgba(34,197,94,0.1)" : "transparent",
+                border: showLeagues ? "1px solid rgba(34,197,94,0.25)" : "1px solid transparent",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
                 transition: "all 0.2s",
+                fontFamily: "'Inter', sans-serif",
               }}>
                 Leagues
-                <span style={{ fontSize: 9, transition: "transform 0.2s", transform: showLeagues ? "rotate(180deg)" : "rotate(0deg)", display: "inline-block" }}>▼</span>
+                <svg
+                  width="10" height="10" viewBox="0 0 10 10" fill="currentColor"
+                  style={{ transition: "transform 0.2s", transform: showLeagues ? "rotate(180deg)" : "rotate(0)" }}
+                >
+                  <path d="M1 3L5 7L9 3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
 
-              {/* Invisible bridge fills the gap so mouse doesn't leave the zone */}
+              {/* Bridge to prevent gap-flicker */}
               {showLeagues && (
-                <div style={{
-                  position: "absolute", top: "100%", left: 0,
-                  width: "100%", height: 12,
-                }} />
+                <div style={{ position: "absolute", top: "100%", left: 0, width: "100%", height: 10 }} />
               )}
 
-              {/* Dropdown */}
               <div style={{
-                position: "absolute", top: "calc(100% + 4px)", left: 0,
-                width: 230, borderRadius: 12,
-                background: "rgba(13,18,36,0.98)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
-                backdropFilter: "blur(20px)",
-                padding: "8px",
+                position: "absolute",
+                top: "calc(100% + 6px)",
+                left: 0,
+                width: 220,
+                borderRadius: 16,
+                background: "linear-gradient(145deg, #151519, #101014)",
+                border: "1px solid rgba(34,197,94,0.12)",
+                boxShadow: "0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)",
+                padding: "6px",
                 opacity: showLeagues ? 1 : 0,
                 transform: showLeagues ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.97)",
                 pointerEvents: showLeagues ? "all" : "none",
-                transition: "opacity 0.15s, transform 0.15s",
+                transition: "opacity 0.18s cubic-bezier(0.2,0,0,1), transform 0.18s cubic-bezier(0.2,0,0,1)",
                 zIndex: 100,
               }}>
+                {/* Dropdown header */}
+                <div style={{ padding: "6px 12px 8px", borderBottom: "1px solid rgba(255,255,255,0.05)", marginBottom: 4 }}>
+                  <span style={{ fontSize: 9, fontWeight: 800, color: "var(--text-muted)", letterSpacing: "1.5px", textTransform: "uppercase" }}>Leagues & Tournaments</span>
+                </div>
                 {LEAGUES.map(l => (
-                  <Link key={l.to} to={l.to} onClick={() => setShowLeagues(false)} style={{
-                    display: "flex", alignItems: "center", gap: 10,
-                    padding: "9px 12px", borderRadius: 8,
-                    fontSize: 13, fontWeight: 600, color: "var(--text2)",
-                    transition: "background 0.15s, color 0.15s",
-                  }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#fff"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    onClick={() => setShowLeagues(false)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "9px 12px",
+                      borderRadius: 10,
+                      fontSize: 13,
+                      fontWeight: 500,
+                      color: "var(--text2)",
+                      transition: "background 0.15s, color 0.15s",
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = "rgba(34,197,94,0.07)";
+                      e.currentTarget.style.color = "#22C55E";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "var(--text2)";
+                    }}
                   >
-                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: l.color, flexShrink: 0, boxShadow: `0 0 6px ${l.color}` }} />
+                    <span style={{
+                      width: 7, height: 7, borderRadius: "50%",
+                      background: l.dot,
+                      boxShadow: `0 0 6px ${l.dot}80`,
+                      flexShrink: 0,
+                    }} />
                     {l.label}
                   </Link>
                 ))}
@@ -150,74 +249,168 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Search */}
-          <form onSubmit={handleSearch} className="desktop-nav" style={{ position: "relative", flexShrink: 0 }}>
+          {/* ── Search Bar ── */}
+          <form
+            onSubmit={handleSearch}
+            className="desktop-nav"
+            style={{ position: "relative", flexShrink: 0 }}
+          >
+            <div style={{
+              position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
+              color: "var(--text3)", pointerEvents: "none",
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </div>
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search players..."
+              placeholder="Search players or teams…"
+              aria-label="Search players or teams"
               style={{
-                width: 200, padding: "8px 36px 8px 14px",
-                fontSize: 12, borderRadius: 8,
+                width: 260,
+                padding: "9px 16px 9px 36px",
+                fontSize: 13,
+                borderRadius: 100,
                 background: "rgba(255,255,255,0.05)",
                 border: "1px solid rgba(255,255,255,0.08)",
-                color: "#fff", outline: "none",
-                transition: "border-color 0.2s, background 0.2s, box-shadow 0.2s",
+                color: "var(--text)",
+                outline: "none",
+                transition: "all 0.2s cubic-bezier(0.2,0,0,1)",
+                fontFamily: "'Inter', sans-serif",
               }}
-              onFocus={e => { e.target.style.borderColor = "rgba(244,63,94,0.5)"; e.target.style.background = "rgba(255,255,255,0.08)"; e.target.style.boxShadow = "0 0 0 3px rgba(244,63,94,0.1)"; }}
-              onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.08)"; e.target.style.background = "rgba(255,255,255,0.05)"; e.target.style.boxShadow = "none"; }}
+              onFocus={e => {
+                e.target.style.background = "rgba(255,255,255,0.08)";
+                e.target.style.borderColor = "rgba(34,197,94,0.5)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(34,197,94,0.1)";
+              }}
+              onBlur={e => {
+                e.target.style.background = "rgba(255,255,255,0.05)";
+                e.target.style.borderColor = "rgba(255,255,255,0.08)";
+                e.target.style.boxShadow = "none";
+              }}
             />
-            <button type="submit" style={{
-              position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
-              background: "none", border: "none", cursor: "pointer", fontSize: 13, opacity: 0.5,
-              transition: "opacity 0.2s",
-            }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "1"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "0.5"}
-            >🔍</button>
           </form>
 
-          {/* Mobile toggle */}
+          {/* ── Mobile hamburger ── */}
           <button
             onClick={() => setOpen(!open)}
             className="mobile-toggle"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
             style={{
-              display: "none", background: "rgba(255,255,255,0.06)", border: "1px solid var(--border)",
-              color: "#fff", fontSize: 18, cursor: "pointer", borderRadius: 8,
-              width: 38, height: 38, alignItems: "center", justifyContent: "center",
-              transition: "background 0.2s",
+              display: "none",
+              background: open ? "rgba(34,197,94,0.1)" : "transparent",
+              border: "1px solid " + (open ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.08)"),
+              color: open ? "#22C55E" : "var(--text2)",
+              borderRadius: 10,
+              width: 38, height: 38,
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              flexShrink: 0,
             }}
-            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
-            onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
           >
-            {open ? "✕" : "☰"}
+            {open ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M3 12h18M3 6h18M3 18h18"/>
+              </svg>
+            )}
           </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* ── Mobile Menu ── */}
         <div style={{
           overflow: "hidden",
-          maxHeight: open ? "600px" : "0",
-          transition: "max-height 0.35s cubic-bezier(0.4,0,0.2,1)",
-          borderTop: open ? "1px solid rgba(255,255,255,0.06)" : "none",
+          maxHeight: open ? "700px" : "0",
+          transition: "max-height 0.35s cubic-bezier(0.2,0,0,1)",
+          background: "rgba(9,9,11,0.98)",
+          borderBottom: open ? "1px solid rgba(34,197,94,0.1)" : "none",
         }}>
-          <div style={{ padding: "12px 16px 20px", display: "flex", flexDirection: "column", gap: 2 }}>
-            {[...PRIMARY_NAV, ...LEAGUES].map(n => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} style={{
-                padding: "11px 14px", borderRadius: 8,
-                color: "var(--text2)", fontWeight: 600, fontSize: 14,
-                transition: "background 0.15s, color 0.15s",
-                display: "flex", alignItems: "center", gap: 8,
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#fff"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
-              >
-                {n.color && <span style={{ width: 7, height: 7, borderRadius: "50%", background: n.color, flexShrink: 0 }} />}
-                {n.label}
-              </Link>
-            ))}
-            <form onSubmit={handleSearch} style={{ marginTop: 8, position: "relative" }}>
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search players..." style={{ borderRadius: 8 }} />
+          <div style={{ padding: "12px 16px 20px", display: "flex", flexDirection: "column", gap: 3 }}>
+            {/* Primary nav */}
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 9, fontWeight: 800, color: "var(--text-muted)", letterSpacing: "1.5px", textTransform: "uppercase", padding: "4px 12px 8px" }}>Navigation</div>
+              {PRIMARY_NAV.map(n => (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    padding: "11px 14px",
+                    borderRadius: 10,
+                    color: "var(--text2)",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    transition: "background 0.15s, color 0.15s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(34,197,94,0.07)"; e.currentTarget.style.color = "#22C55E"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
+                >
+                  <span style={{ fontSize: 16 }}>{n.icon}</span>
+                  {n.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Leagues */}
+            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12, marginBottom: 8 }}>
+              <div style={{ fontSize: 9, fontWeight: 800, color: "var(--text-muted)", letterSpacing: "1.5px", textTransform: "uppercase", padding: "0 12px 8px" }}>Leagues</div>
+              {LEAGUES.map(l => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    padding: "10px 14px",
+                    borderRadius: 10,
+                    color: "var(--text2)",
+                    fontWeight: 500,
+                    fontSize: 14,
+                    transition: "background 0.15s, color 0.15s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(34,197,94,0.07)"; e.currentTarget.style.color = "#22C55E"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
+                >
+                  <span style={{ width: 7, height: 7, borderRadius: "50%", background: l.dot, boxShadow: `0 0 6px ${l.dot}80`, flexShrink: 0 }} />
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile search */}
+            <form onSubmit={handleSearch} style={{ position: "relative", marginTop: 4 }}>
+              <div style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text3)" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+              </div>
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search players or teams…"
+                style={{
+                  width: "100%",
+                  padding: "12px 16px 12px 40px",
+                  borderRadius: 100,
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(34,197,94,0.2)",
+                  color: "var(--text)",
+                  fontSize: 14,
+                }}
+              />
             </form>
           </div>
         </div>

@@ -1260,6 +1260,89 @@ async function scrapeCommentary(matchId) {
   }
 }
 
+/* ─────────────────────────────────────────────────────
+   IPL 2026 POINTS TABLE SCRAPER
+   Tries Cricbuzz live, falls back to season snapshot.
+   ───────────────────────────────────────────────────── */
+const IPL_FALLBACK_TABLE = [
+  { team:"Royal Challengers Bengaluru", short:"RCB", p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#EC1C24" },
+  { team:"Mumbai Indians",              short:"MI",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#004BA0" },
+  { team:"Kolkata Knight Riders",       short:"KKR", p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#3A225D" },
+  { team:"Sunrisers Hyderabad",         short:"SRH", p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#F7A721" },
+  { team:"Gujarat Titans",              short:"GT",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#1B8B4B" },
+  { team:"Rajasthan Royals",            short:"RR",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#254AA5" },
+  { team:"Lucknow Super Giants",        short:"LSG", p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#A72056" },
+  { team:"Chennai Super Kings",         short:"CSK", p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#F9CD05" },
+  { team:"Delhi Capitals",              short:"DC",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#0078BC" },
+  { team:"Punjab Kings",                short:"PBKS",p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#ED1B24" },
+];
+
+async function scrapeIPLStandings() {
+  const cacheKey = "ipl:standings:2026";
+  const cached = scrapeCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    // Step 1: find an IPL match to extract the Cricbuzz series ID
+    const allData = await scrapeCricbuzzAllMatches();
+    const allMatches = [
+      ...(allData.live     || []),
+      ...(allData.recent   || []),
+      ...(allData.upcoming || []),
+    ];
+    const iplMatch = allMatches.find(m =>
+      m.series?.toLowerCase().includes("indian premier league") ||
+      m.name?.toLowerCase().includes("ipl") ||
+      m.series?.toLowerCase().includes("ipl")
+    );
+
+    if (iplMatch?.seriesId || iplMatch?.series_id) {
+      const sid = iplMatch.seriesId || iplMatch.series_id;
+      const url = `https://www.cricbuzz.com/cricket-series/${sid}/points-table`;
+      const { data: html } = await axios.get(url, { headers, timeout: 12000 });
+      const $ = cheerio.load(html);
+
+      const rows = [];
+      // Cricbuzz points table uses .cb-srs-pnts or similar class
+      $("table.cb-srs-pnts tr, .cb-srs-pntslst tr").each((i, row) => {
+        if (i === 0) return;
+        const cells = $(row).find("td");
+        if (cells.length < 6) return;
+        const teamName = $(cells[0]).text().replace(/\s+/g, " ").trim();
+        if (!teamName || teamName.length < 2) return;
+
+        const fallbackTeam = IPL_FALLBACK_TABLE.find(t =>
+          teamName.toLowerCase().includes(t.short.toLowerCase()) ||
+          t.team.toLowerCase().includes(teamName.toLowerCase().slice(0, 6))
+        );
+
+        rows.push({
+          team:  teamName,
+          short: fallbackTeam?.short || teamName.slice(0, 3).toUpperCase(),
+          p:     parseInt($(cells[1]).text()) || 0,
+          w:     parseInt($(cells[2]).text()) || 0,
+          l:     parseInt($(cells[3]).text()) || 0,
+          nr:    parseInt($(cells[4]).text()) || 0,
+          nrr:   $(cells[5]).text().trim() || "+0.000",
+          pts:   parseInt($(cells[6])?.text()) || 0,
+          color: fallbackTeam?.color || "#22C55E",
+        });
+      });
+
+      if (rows.length >= 4) {
+        scrapeCache.set(cacheKey, rows, 300);
+        return rows;
+      }
+    }
+  } catch (e) {
+    console.log("IPL standings scrape failed:", e.message);
+  }
+
+  // Fallback: return template — will show "—" for all values
+  scrapeCache.set(cacheKey, IPL_FALLBACK_TABLE, 120);
+  return IPL_FALLBACK_TABLE;
+}
+
 module.exports = {
   getLiveMatchesWithFallback: scrapeCricbuzzLiveMatches,
   getAllMatches: scrapeCricbuzzAllMatches,
@@ -1272,6 +1355,7 @@ module.exports = {
   scrapeCricbuzzNews,
   scrapeMatchInfo,
   scrapeCommentary,
+  scrapeIPLStandings,
   getScaledData
 };
 
