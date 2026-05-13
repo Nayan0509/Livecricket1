@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "./SEO";
+import AdBanner from "./AdBanner";
 import { fetchLiveMatches, fetchUpcomingMatches } from "../api";
 
 /**
@@ -19,7 +20,7 @@ export default function TournamentPage({
   seoTitle,
   seoDesc,
   seoKeywords,
-  accentColor = "#6366f1",
+  accentColor = "#22C55E",
   teams = [],
   stats = [],
   aboutText,
@@ -119,6 +120,9 @@ export default function TournamentPage({
           </Link>
         </div>
       </div>
+
+      {/* Ad below hero */}
+      <AdBanner type="leaderboard" />
 
       {/* Stats row */}
       {stats.length > 0 && (
@@ -234,13 +238,19 @@ export default function TournamentPage({
         </section>
       )}
 
+      {/* Ad before SEO block */}
+      <div style={{ marginBottom: 20 }}><AdBanner type="auto" /></div>
+
       {/* SEO Content Block */}
       {aboutText && (
         <section aria-label={`About ${name}`} style={{
           padding: "24px 28px", borderRadius: 14,
-          background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)"
+          background: "rgba(255,255,255,0.02)", border: `1px solid ${accentColor}15`
         }}>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 10 }}>About {name} Live Score</h2>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ width: 3, height: 16, borderRadius: 2, background: `linear-gradient(180deg,${accentColor},${accentColor}99)`, display: "inline-block" }} />
+            About {name} Live Score
+          </h2>
           <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.8 }}>{aboutText}</p>
         </section>
       )}

@@ -34,7 +34,7 @@ export default function FantasyGuide() {
         </p>
       </div>
 
-      <AdBanner type="responsive" slot="1234567894" style={{ marginBottom: 32 }} />
+      <AdBanner type="auto" />
 
       {/* Introduction */}
       <div className="card" style={{ marginBottom: 24 }}>
@@ -103,7 +103,7 @@ export default function FantasyGuide() {
         </div>
       </div>
 
-      <AdBanner type="responsive" slot="1234567895" style={{ marginBottom: 24 }} />
+      <AdBanner type="auto" />
 
       {/* Strategy Guide */}
       <div className="card" style={{ marginBottom: 24 }}>
@@ -245,7 +245,7 @@ export default function FantasyGuide() {
         </div>
       </div>
 
-      <AdBanner type="responsive" slot="1234567896" style={{ marginBottom: 24 }} />
+      <AdBanner type="auto" />
 
       {/* Common Mistakes */}
       <div className="card" style={{ marginBottom: 24 }}>

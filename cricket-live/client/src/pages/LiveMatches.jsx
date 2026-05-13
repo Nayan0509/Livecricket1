@@ -53,7 +53,11 @@ export default function LiveMatches() {
 
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 80, paddingTop: 32, maxWidth: 1000, margin: "0 auto" }}>
-      <SEO title="Live Matches - CricketZone" url="/live" />
+      <SEO
+        title="Live Cricket Scores Today — All Matches Live Right Now"
+        description="Live cricket scores updated every 15 seconds. Live, recent and upcoming matches across IPL 2026, T20, ODI, Test and domestic cricket worldwide."
+        url="/live"
+      />
       
       <div style={{ padding: "40px 48px", borderRadius: 32, marginBottom: 40, background: "var(--card)", border: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 24 }}>
         <div>
@@ -114,7 +118,7 @@ export default function LiveMatches() {
         )
       )}
 
-      <AdBanner type="responsive" slot="12345678" style={{ marginTop: 60 }} />
+      <div style={{ marginTop: 48 }}><AdBanner type="auto" /></div>
     </div>
   );
 }

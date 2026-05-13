@@ -4,106 +4,149 @@ import AdBanner from "./AdBanner";
 
 export default function Footer() {
   return (
-    <footer style={{ background: "var(--bg2)", borderTop: "1px solid var(--border)", marginTop: 60, padding: "40px 0 0" }}>
-      {/* Leaderboard ad above footer links */}
-      <div className="container" style={{ marginBottom: 32 }}>
-        <AdBanner type="responsive" slot="1234567899" />
+    <footer style={{
+      background: "rgba(9,9,11,0.98)",
+      borderTop: "1px solid rgba(34,197,94,0.1)",
+      marginTop: 60,
+    }}>
+      {/* Ad above footer */}
+      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", padding: "16px" }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto" }}>
+          <AdBanner type="leaderboard" />
+        </div>
       </div>
-      <div className="container">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, marginBottom: 32 }}>
+
+      <div style={{ maxWidth: 1320, margin: "0 auto", padding: "40px 24px 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, marginBottom: 36 }}>
+
+          {/* Brand */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <span style={{ fontSize: 24 }}>🏏</span>
-              <span style={{ fontWeight: 800, fontSize: 18, color: "var(--green)" }}>CricketZone</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: "50%",
+                background: "linear-gradient(135deg,#16A34A,#22C55E)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="9" stroke="#fff" strokeWidth="1.5"/>
+                  <path d="M5 12 Q8 8 12 12 Q16 16 19 12" stroke="#fff" strokeWidth="1.5" fill="none"/>
+                  <path d="M12 3 Q16 8 12 12 Q8 16 12 21" stroke="rgba(255,255,255,0.5)" strokeWidth="1" fill="none"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontWeight: 900, fontSize: 15, color: "#fff", lineHeight: 1 }}>
+                  Live Cricket <span style={{ color: "#22C55E" }}>Zone</span>
+                </div>
+                <div style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.5px", marginTop: 2 }}>LIVE SCORES · NEWS · STREAMS</div>
+              </div>
             </div>
-            <p style={{ fontSize: 13, color: "var(--text2)", lineHeight: 1.6 }}>
-              Your go-to destination for live cricket scores, news, and stats.
+            <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.7, maxWidth: 200 }}>
+              Fastest live cricket scores, IPL 2026 points table, ball-by-ball commentary and free streaming.
             </p>
           </div>
+
+          {/* Matches */}
           <div>
-            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>Matches</div>
-            {[["Live", "/live"], ["Watch Live", "/watch-live"], ["Upcoming", "/upcoming"], ["Results", "/results"], ["Schedule", "/schedule"]].map(([l, h]) => (
-              <Link key={h} to={h} style={{ display: "block", color: "var(--text2)", fontSize: 13, marginBottom: 8 }}>{l}</Link>
-            ))}
-          </div>
-          <div>
-            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>Popular Leagues</div>
+            <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 14, color: "var(--text)", textTransform: "uppercase", letterSpacing: 0.8, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#22C55E", display: "inline-block" }} />
+              Matches
+            </div>
             {[
-              ["IPL 2026", "/ipl"],
-              ["T20 World Cup", "/t20-world-cup"],
-              ["County Championship", "/county-championship"],
-              ["Asia Cup", "/asia-cup"],
-              ["Champions Trophy", "/champions-trophy"],
-              ["PSL 2026", "/psl"],
-              ["BBL", "/bbl"]
-            ].map(([l, h]) => (
-              <Link key={h} to={h} style={{ display: "block", color: "var(--text2)", fontSize: 13, marginBottom: 8 }}>{l}</Link>
+              ["Live Scores",    "/live"],
+              ["Watch Cricket",  "/watch-live"],
+              ["Upcoming",       "/upcoming"],
+              ["Results",        "/results"],
+              ["Schedule",       "/schedule"],
+            ].map(([label, href]) => (
+              <Link key={href} to={href} style={{ display: "block", color: "var(--text3)", fontSize: 13, marginBottom: 8, textDecoration: "none", transition: "color 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#22C55E"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
+              >{label}</Link>
             ))}
           </div>
+
+          {/* Tournaments */}
           <div>
-            <div style={{ fontWeight: 700, marginBottom: 12, color: "var(--text)" }}>Resources</div>
-            {[["News", "/news"], ["Stats", "/stats"], ["Rankings", "/rankings"], ["About", "/about"]].map(([l, h]) => (
-              <Link key={h} to={h} style={{ display: "block", color: "var(--text2)", fontSize: 13, marginBottom: 8 }}>{l}</Link>
+            <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 14, color: "var(--text)", textTransform: "uppercase", letterSpacing: 0.8, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#F59E0B", display: "inline-block" }} />
+              Tournaments
+            </div>
+            {[
+              ["IPL 2026",           "/ipl"],
+              ["T20 World Cup",       "/t20-world-cup"],
+              ["County Championship", "/county-championship"],
+              ["Asia Cup",            "/asia-cup"],
+              ["Champions Trophy",    "/champions-trophy"],
+              ["PSL 2026",            "/psl"],
+              ["BBL",                 "/bbl"],
+            ].map(([label, href]) => (
+              <Link key={href} to={href} style={{ display: "block", color: "var(--text3)", fontSize: 13, marginBottom: 8, textDecoration: "none", transition: "color 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#F59E0B"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
+              >{label}</Link>
+            ))}
+          </div>
+
+          {/* Resources */}
+          <div>
+            <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 14, color: "var(--text)", textTransform: "uppercase", letterSpacing: 0.8, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#38BDF8", display: "inline-block" }} />
+              Resources
+            </div>
+            {[
+              ["News",        "/news"],
+              ["ICC Rankings","/rankings"],
+              ["Stats",       "/stats"],
+              ["Players",     "/players"],
+              ["Teams",       "/teams"],
+              ["All Series",  "/series"],
+              ["About Us",    "/about"],
+            ].map(([label, href]) => (
+              <Link key={href} to={href} style={{ display: "block", color: "var(--text3)", fontSize: 13, marginBottom: 8, textDecoration: "none", transition: "color 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "var(--text2)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
+              >{label}</Link>
             ))}
           </div>
         </div>
 
-        {/* YouTube / Video Content Disclaimer */}
-        <div style={{
-          borderTop: "1px solid var(--border)", paddingTop: 20, marginBottom: 0,
-          background: "rgba(255,0,0,0.04)", borderRadius: "0 0 0 0",
-          padding: "16px 0",
-        }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
-            <svg width="20" height="15" viewBox="0 0 20 15" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+        {/* Disclaimer */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "20px 0 16px" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 14 }}>
+            <svg width="18" height="14" viewBox="0 0 20 15" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
               <rect width="20" height="15" rx="3.5" fill="#FF0000"/>
               <polygon points="8,4.5 8,10.5 14,7.5" fill="white"/>
             </svg>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
-                YouTube Video Content — Copyright Disclaimer
-              </div>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", lineHeight: 1.7, margin: 0 }}>
-                All videos displayed on this website are sourced from{" "}
-                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>YouTube</a>{" "}
-                and are the sole property of their respective owners, channels, and content creators. Live Cricket Zone does not host, upload, store, or claim ownership of any video content. Videos are embedded using YouTube's official{" "}
-                <a href="https://developers.google.com/youtube/iframe_api_reference" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>IFrame Embed API</a>{" "}
-                in full compliance with{" "}
-                <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>YouTube's Terms of Service</a>{" "}
-                and{" "}
-                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>Google's Privacy Policy</a>.
-                All trademarks, logos, and brand names belong to their respective owners. If you are a content owner and wish to have your video removed, please contact the respective YouTube channel directly or{" "}
-                <a href="https://support.google.com/youtube/answer/2807622" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>submit a copyright claim to YouTube</a>.
-              </p>
-            </div>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", lineHeight: 1.7, margin: 0 }}>
+              All videos displayed on this website are sourced from{" "}
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>YouTube</a>{" "}
+              and are the sole property of their respective owners. Live Cricket Zone does not host, upload, store, or claim ownership of any video content. Videos are embedded using YouTube's official IFrame Embed API in full compliance with YouTube's Terms of Service. All trademarks, logos, and brand names belong to their respective owners.
+            </p>
           </div>
-
-          {/* Cricket data disclaimer */}
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 12, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-            <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>🏏</span>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", lineHeight: 1.7, margin: 0 }}>
-              Cricket scores and match data are sourced from publicly available information. Live Cricket Zone is an independent fan site and is not affiliated with, endorsed by, or officially connected to the ICC, BCCI, PCB, Cricket Australia, or any other cricket board or official body. All team names, logos, and tournament names are trademarks of their respective organizations.
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>🏏</span>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", lineHeight: 1.7, margin: 0 }}>
+              Cricket scores and match data are sourced from publicly available information. Live Cricket Zone is an independent fan site and is not affiliated with, endorsed by, or officially connected to the ICC, BCCI, PCB, Cricket Australia, or any other cricket board. All team names, logos, and tournament names are trademarks of their respective organizations.
             </p>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div style={{ borderTop: "1px solid var(--border)", padding: "16px 0", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-          <div style={{ fontSize: 12, color: "var(--text3)" }}>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "14px 0 20px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
             © {new Date().getFullYear()}{" "}
-            <a href="https://www.livecricketzone.com" style={{ color: "var(--green)" }}>LiveCricketZone.com</a>
+            <a href="https://www.livecricketzone.com" style={{ color: "#22C55E", textDecoration: "none" }}>LiveCricketZone.com</a>
             {" "}— Independent Cricket Score Engine
           </div>
-          <div style={{ display: "flex", gap: 16 }}>
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             {[
-              ["Privacy Policy", "/privacy-policy"],
-              ["Terms of Use", "/terms-of-use"],
+              ["Privacy Policy",   "/privacy-policy"],
+              ["Terms of Use",     "/terms-of-use"],
               ["DMCA / Copyright", "/dmca-copyright"],
-              ["Sitemap", "/sitemap.xml"],
             ].map(([label, href]) => (
-              <a key={label} href={href} style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", textDecoration: "none" }}
-                onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.6)"}
-                onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.3)"}
+              <a key={label} href={href} style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", textDecoration: "none", transition: "color 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.28)"; }}
               >{label}</a>
             ))}
           </div>

@@ -32,7 +32,7 @@ export default function Schedule() {
       {error && <div className="error-box">Failed to load: {error.message}</div>}
 
       {/* Ad above schedule */}
-      {!isLoading && <AdBanner type="responsive" slot="1234567897" style={{ marginBottom: 24 }} />}
+      {!isLoading && <AdBanner type="auto" />}
 
       {!isLoading && !error && schedules.map((s, si) => {
         const wrapper = s.scheduleAdWrapper;

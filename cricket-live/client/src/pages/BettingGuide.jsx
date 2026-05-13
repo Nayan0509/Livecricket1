@@ -34,7 +34,7 @@ export default function BettingGuide() {
         </p>
       </div>
 
-      <AdBanner type="responsive" slot="1234567897" style={{ marginBottom: 32 }} />
+      <AdBanner type="auto" />
 
       {/* Introduction */}
       <div className="card" style={{ marginBottom: 24 }}>
@@ -136,7 +136,7 @@ export default function BettingGuide() {
         </p>
       </div>
 
-      <AdBanner type="responsive" slot="1234567898" style={{ marginBottom: 24 }} />
+      <AdBanner type="auto" />
 
       {/* Betting Strategies */}
       <div className="card" style={{ marginBottom: 24 }}>

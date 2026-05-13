@@ -37,7 +37,7 @@ export default function Players() {
       {isLoading && <div className="spinner" />}
       {error && <div className="error-box">Failed to load: {error.message}</div>}
 
-      {!isLoading && <AdBanner type="responsive" slot="1234567898" style={{ marginBottom: 24 }} />}
+      {!isLoading && <AdBanner type="auto" />}
 
       {!isLoading && !error && (
         <div className="grid-3">
