@@ -123,11 +123,23 @@ export default function CricketMatchesToday() {
         </>
       )}
 
-      {/* SEO content */}
-      <section style={{ padding: "24px 28px", borderRadius: 14, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", marginTop: 20 }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 10 }}>Cricket Matches Today — Live Score & Schedule</h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.8 }}>
-          Get all <strong style={{ color: "var(--text2)" }}>cricket matches today</strong> with live scores, match timings and ball-by-ball commentary. Live Cricket Zone covers all formats — IPL, T20, ODI, Test cricket — with real-time updates every 15 seconds. Never miss a ball with our <strong style={{ color: "var(--text2)" }}>today cricket live score</strong> coverage.
+      {/* Rich SEO content */}
+      <section style={{ padding: "24px 28px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(34,197,94,0.07)", marginTop: 20 }}>
+        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#22C55E,#16A34A)", display: "inline-block" }} />
+          Cricket Matches Today — Live Scores, Timings & Commentary
+        </h2>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
+          Find every <strong style={{ color: "var(--text2)" }}>cricket match today</strong> on Live Cricket Zone — all live matches, upcoming fixtures scheduled for today, and recently completed results. Coverage spans every format and competition: IPL 2026, T20 internationals, bilateral ODI series, Test matches, County Championship, PSL, BBL, CPL and all ICC associate cricket.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
+          The <strong style={{ color: "var(--text2)" }}>Live Now</strong> section above shows all matches currently in progress with real-time scores updated every 15 seconds. <strong style={{ color: "var(--text2)" }}>Upcoming Today</strong> shows fixtures that haven't started yet — complete with the scheduled start time and venue. <strong style={{ color: "var(--text2)" }}>Recent Results</strong> shows matches that finished today with final scorecards and match summaries.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
+          Click any match card to open the live match centre with ball-by-ball commentary, full batting and bowling scorecards, toss information, current over summary and free YouTube stream links. Today's cricket coverage is updated automatically — the page refreshes match data in the background so you always see the latest scores without needing to manually reload.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
+          The number of cricket matches today varies by season — during the IPL 2026 season there are typically 1–2 evening matches each day. International series weeks can bring 1–2 Tests and up to 3 T20I or ODI matches across different time zones. The cricket calendar rarely has a completely quiet day, with domestic competitions from England, South Africa, New Zealand, India and the Caribbean filling gaps between major international events. All free, no account required.
         </p>
       </section>
     </div>
