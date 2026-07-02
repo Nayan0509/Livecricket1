@@ -331,12 +331,37 @@ async function getMatchScorecard(matchId) {
                 }))
             : [];
 
+          // Fall of wickets (ordered by wicket number)
+          const fow = inn.wicketsData
+            ? Object.values(inn.wicketsData)
+                .sort((a, b) => (a.wktNbr || 0) - (b.wktNbr || 0))
+                .map(w => `${w.wktRuns}-${w.wktNbr} (${w.batName}, ${w.wktOver} ov)`)
+            : [];
+
+          // Partnerships
+          const partnerships = inn.partnershipsData
+            ? Object.values(inn.partnershipsData).map(p => ({
+                batsman1: p.bat1Name, batsman2: p.bat2Name,
+                runs: String(p.totalRuns ?? 0), balls: String(p.totalBalls ?? 0),
+              }))
+            : [];
+
+          // Full extras breakdown
+          const ex = inn.extrasData || {};
+          const extrasBreakdown = `b ${ex.byes || 0}, lb ${ex.legByes || 0}, w ${ex.wides || 0}, nb ${ex.noBalls || 0}, p ${ex.penalty || 0}`;
+
+          const sd = inn.scoreDetails || {};
+          const oversStr = sd.overs ? ` (${sd.overs} Ov)` : "";
+
           innings.push({
             team: inn.batTeamDetails.batTeamName || "Team",
-            score: `${inn.scoreDetails?.runs || 0}/${inn.scoreDetails?.wickets || 0}`,
+            score: `${sd.runs || 0}/${sd.wickets || 0}${oversStr}`,
+            overs: String(sd.overs || ""),
+            runRate: sd.runRate ? String(sd.runRate) : "",
             batsmen, bowlers,
-            extras: String(inn.extrasData?.total || 0),
-            fow: [],
+            extras: `${ex.total || 0} (${extrasBreakdown})`,
+            partnerships,
+            fow,
           });
         });
         jsonExtracted = true;
