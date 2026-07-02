@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const scraper = require("../utils/scraper");
-const aiRewriter = require("../utils/aiRewriter");
 
 /**
  * GET /api/news
@@ -57,24 +56,4 @@ router.get("/recent", async (req, res) => {
 });
 
 module.exports = router;
-
-/**
- * POST /api/news/article
- * Generates an original article using Gemini API
- */
-router.post("/article", async (req, res) => {
-  try {
-    const { title, description, source } = req.body;
-    
-    if (!title) {
-      return res.status(400).json({ error: "Title is required" });
-    }
-
-    const article = await aiRewriter.generateArticle(title, description, source);
-    res.json({ status: "success", data: article });
-  } catch (err) {
-    console.error("Article Generation Error:", err.message);
-    res.status(500).json({ error: err.message });
-  }
-});
 

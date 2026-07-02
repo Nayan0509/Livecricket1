@@ -42,14 +42,14 @@ export default function TeamDetail() {
       {/* Hero */}
       <div style={{
         padding: "32px 40px", borderRadius: 24, marginBottom: 24,
-        background: "linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(9,9,11,1) 100%)",
-        border: "1px solid rgba(16,185,129,0.2)",
+        background: "linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(9,9,11,1) 100%)",
+        border: "1px solid rgba(59,130,246,0.2)",
         display: "flex", alignItems: "center", gap: 32,
       }}>
         {team.img ? (
-          <img src={team.img} alt={team.name} style={{ width: 100, height: 100, borderRadius: "50%", border: "4px solid rgba(16,185,129,0.3)", objectFit: "cover" }} />
+          <img src={team.img} alt={team.name} style={{ width: 100, height: 100, borderRadius: "50%", border: "4px solid rgba(59,130,246,0.3)", objectFit: "cover" }} />
         ) : (
-          <div style={{ width: 100, height: 100, borderRadius: "50%", background: "rgba(16,185,129,0.1)", border: "4px solid rgba(16,185,129,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40 }}>🏏</div>
+          <div style={{ width: 100, height: 100, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "4px solid rgba(59,130,246,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40 }}>🏏</div>
         )}
         <div>
           <h1 style={{ fontSize: 36, fontWeight: 900, color: "var(--text)", margin: "0 0 4px" }}>{team.name}</h1>
@@ -68,8 +68,8 @@ export default function TeamDetail() {
             style={{
               padding: "12px 4px", background: "none", border: "none", cursor: "pointer",
               fontSize: 14, fontWeight: tab === t ? 800 : 500,
-              color: tab === t ? "#10B981" : "var(--text3)",
-              borderBottom: tab === t ? "3px solid #10B981" : "3px solid transparent",
+              color: tab === t ? "#3B82F6" : "var(--text3)",
+              borderBottom: tab === t ? "3px solid #3B82F6" : "3px solid transparent",
               textTransform: "uppercase", letterSpacing: 1, transition: "all 0.2s",
             }}
           >{t}</button>
@@ -87,10 +87,10 @@ export default function TeamDetail() {
                     border: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", gap: 16,
                     transition: "transform 0.2s, border-color 0.2s",
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.3)"; }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}
                   >
-                    <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(16,185,129,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 900, color: "#10B981" }}>
+                    <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 900, color: "#3B82F6" }}>
                       {p.name?.[0]}
                     </div>
                     <div>
@@ -118,11 +118,11 @@ export default function TeamDetail() {
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                 >
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 800, color: "#10B981", marginBottom: 4 }}>{m.date}</div>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: "#3B82F6", marginBottom: 4 }}>{m.date}</div>
                     <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>{m.name}</div>
                     <div style={{ fontSize: 12, color: "var(--text3)" }}>{m.series} • {m.venue}</div>
                   </div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: "#F59E0B", background: "rgba(245,158,11,0.1)", padding: "4px 12px", borderRadius: 100 }}>{m.status}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#38BDF8", background: "rgba(56,189,248,0.1)", padding: "4px 12px", borderRadius: 100 }}>{m.status}</div>
                 </div>
               </Link>
             ))}

@@ -471,9 +471,7 @@ function serveMeta(url, res) {
       { loc: "/news",                    pri: "0.85", freq: "hourly" },
       { loc: "/stats",                   pri: "0.75", freq: "daily"  },
       { loc: "/videos",                  pri: "0.65", freq: "daily"  },
-      { loc: "/watch-live",              pri: "0.95", freq: "always" },
-      { loc: "/watch",                   pri: "0.9",  freq: "always" },
-      { loc: "/live-stream",             pri: "0.9",  freq: "always" },
+      { loc: "/watch-live",              pri: "0.7",  freq: "hourly" },
       { loc: "/county-championship",     pri: "0.95", freq: "hourly" },
       { loc: "/county-cricket",          pri: "0.92", freq: "hourly" },
       { loc: "/about",                   pri: "0.5",  freq: "monthly"},
@@ -686,24 +684,14 @@ function getPageMeta(pathname) {
       kw: "county cricket live score, county cricket 2026, county cricket today, county cricket results, county cricket schedule, english county cricket live",
     },
     "/watch-live": {
-      title: `Watch Live Cricket Online Free - Live Stream 2026 | ${SITE}`,
-      desc: "Watch live cricket free online. Stream IPL 2026, T20 World Cup, ODI, Test matches via YouTube. No signup — UK, India, Pakistan, Australia.",
-      kw: "watch live cricket, watch cricket live, live cricket streaming, watch live match, cricket live stream free, watch cricket online, stream cricket live, watch ipl live, free cricket streaming, cricket live tv, watch cricket online uk free",
-    },
-    "/watch": {
-      title: `Watch Live Cricket Stream Free - All Matches | ${SITE}`,
-      desc: "Watch live cricket stream free online. IPL 2026, T20 World Cup, ODI, Test cricket — stream via YouTube, no signup required.",
-      kw: "watch cricket live, watch live cricket, cricket live stream, watch cricket online free, cricket streaming free, live cricket watch",
-    },
-    "/live-stream": {
-      title: `Live Cricket Stream - Watch Cricket Online Free | ${SITE}`,
-      desc: "Live cricket stream for all matches. Watch cricket online free — IPL 2026, T20 World Cup, PSL, BBL, ODI, Test via YouTube.",
-      kw: "live cricket stream, cricket live stream, cricket streaming, watch cricket live stream, live cricket streaming free, cricket stream today",
+      title: `Cricket Highlights - Official Match Highlights & Live Scores | ${SITE}`,
+      desc: "Official cricket match highlights and live scores. Post-match highlights for IPL 2026, T20 World Cup, ODI and Test cricket, embedded from official YouTube channels.",
+      kw: "cricket highlights, match highlights, IPL highlights, T20 highlights, cricket live scores",
     },
     "/videos": {
-      title: `Cricket Videos - Highlights & Live Streams | ${SITE}`,
-      desc: "Cricket videos — match highlights, live streams and best moments. IPL 2026, T20 World Cup, ODI and Test highlights free.",
-      kw: "cricket videos, cricket highlights, cricket live stream video, IPL highlights, T20 World Cup highlights, cricket match video",
+      title: `Cricket Videos - Official Match Highlights | ${SITE}`,
+      desc: "Cricket videos — official match highlights and best moments for IPL 2026, T20 World Cup, ODI and Test cricket, embedded from official YouTube channels.",
+      kw: "cricket videos, cricket highlights, IPL highlights, T20 World Cup highlights, cricket match video",
     },
   };
 
@@ -715,16 +703,16 @@ function getPageMeta(pathname) {
       const t1 = vsMatch[1].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       const t2 = vsMatch[2].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       return {
-        title: `Watch ${t1} vs ${t2} Live Stream Free - Live Cricket Score | ${SITE}`,
-        desc: `Watch ${t1} vs ${t2} live stream free. Live score, ball-by-ball commentary and real-time scorecard. Stream cricket live — no signup.`,
-        kw: `${t1} vs ${t2} live stream, watch ${t1} vs ${t2} live, ${t1} vs ${t2} live score, live cricket stream free, ball by ball commentary`,
+        title: `${t1} vs ${t2} Live Score - Scorecard & Commentary | ${SITE}`,
+        desc: `${t1} vs ${t2} live score, ball-by-ball commentary and real-time scorecard. Plus official post-match highlights when available.`,
+        kw: `${t1} vs ${t2} live score, ${t1} vs ${t2} scorecard, ${t1} vs ${t2} commentary, cricket live score, ball by ball commentary`,
         canonical: `${BASE}${p}`,
       };
     }
     return {
-      title: `Watch Live Cricket Stream Free - Live Score & Commentary | ${SITE}`,
-      desc: "Watch live cricket stream free. Live score, full scorecard and ball-by-ball commentary. Stream cricket live — no signup required.",
-      kw: "watch live cricket, live cricket stream free, live cricket score, cricket scorecard, ball by ball commentary",
+      title: `Live Cricket Score - Scorecard & Commentary | ${SITE}`,
+      desc: "Live cricket score, full scorecard and ball-by-ball commentary, plus official post-match highlights when available.",
+      kw: "live cricket score, cricket scorecard, ball by ball commentary, cricket highlights",
       canonical: `${BASE}${p}`,
     };
   }
@@ -778,7 +766,7 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
   });
 
   const navLinks = [
-    ["/", "Home"], ["/live", "Live Scores"], ["/watch-live", "Watch Live"],
+    ["/", "Home"], ["/live", "Live Scores"], ["/watch-live", "Highlights"],
     ["/ipl", "IPL 2026"], ["/t20-world-cup", "T20 World Cup"],
     ["/cricket-matches-today", "Today's Matches"],
     ["/schedule", "Schedule"], ["/results", "Results"], ["/news", "News"],
@@ -794,7 +782,6 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>${meta.title}</title>
   <meta name="description" content="${meta.desc}"/>
-  <meta name="keywords" content="${meta.kw}"/>
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
   <meta name="googlebot" content="index,follow"/>
   <meta name="bingbot" content="index,follow"/>
@@ -820,11 +807,11 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
   <script type="application/ld+json">${sd}</script>
   <style>
     body{font-family:Arial,sans-serif;max-width:1200px;margin:0 auto;padding:16px;color:#1a1a1a;line-height:1.6}
-    header{border-bottom:2px solid #00c853;padding-bottom:12px;margin-bottom:20px}
-    h1{color:#00c853;margin:0 0 8px}
+    header{border-bottom:2px solid #3B82F6;padding-bottom:12px;margin-bottom:20px}
+    h1{color:#3B82F6;margin:0 0 8px}
     nav a{margin-right:12px;color:#1565c0;text-decoration:none;font-size:14px}
     nav a:hover{text-decoration:underline}
-    h2{color:#1a1a1a;border-left:4px solid #00c853;padding-left:10px}
+    h2{color:#1a1a1a;border-left:4px solid #3B82F6;padding-left:10px}
     article{border:1px solid #e0e0e0;border-radius:6px;padding:12px;margin-bottom:10px}
     article h3{margin:0 0 4px;font-size:15px}
     article h3 a{color:#1565c0;text-decoration:none}
@@ -837,7 +824,7 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
 </head>
 <body>
   <header>
-    <div style="font-size:22px;font-weight:bold"><a href="${BASE}" style="color:#00c853;text-decoration:none">🏏 Live Cricket Zone</a></div>
+    <div style="font-size:22px;font-weight:bold"><a href="${BASE}" style="color:#3B82F6;text-decoration:none">🏏 Live Cricket Zone</a></div>
     <p itemprop="description" style="margin:4px 0 10px;color:#555;font-size:14px">Fastest live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup &amp; all cricket updates</p>
     <nav aria-label="Main navigation">
       ${navLinks.map(([href, label]) => `<a href="${BASE}${href}">${label}</a>`).join("")}

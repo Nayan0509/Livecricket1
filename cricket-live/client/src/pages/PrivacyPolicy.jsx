@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
       </div>
 
       <div style={{
-        background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)",
+        background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
         borderRadius: 12, padding: "14px 18px", marginBottom: 32, fontSize: 13,
         color: "rgba(255,255,255,0.6)", lineHeight: 1.7,
       }}>

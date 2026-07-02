@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { fetchPlayers } from "../api";
+import { fetchPlayers, fetchRankings } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 
 const SEARCHES = ["virat", "rohit", "babar", "smith", "root"];
 
-const STAT_LEADERS = [
-  { category: "Most Test Runs (Active)", player: "Joe Root", value: "13,000+", country: "England" },
-  { category: "Most ODI Centuries", player: "Virat Kohli", value: "50+", country: "India" },
-  { category: "Most T20I Runs", player: "Virat Kohli", value: "4,100+", country: "India" },
-  { category: "Most Test Wickets (Active)", player: "James Anderson", value: "700+", country: "England" },
-  { category: "Best ODI Bowling Average", player: "Jasprit Bumrah", value: "24.31", country: "India" },
-  { category: "Highest T20I Strike Rate", player: "Jos Buttler", value: "141+", country: "England" },
+// Live ICC #1-ranked players, scraped per discipline+format from the rankings API.
+const RANK_CATS = [
+  { category: "ICC #1 Test Batter",   type: "batting", format: "tests" },
+  { category: "ICC #1 ODI Batter",    type: "batting", format: "odis"  },
+  { category: "ICC #1 T20I Batter",   type: "batting", format: "t20s"  },
+  { category: "ICC #1 Test Bowler",   type: "bowling", format: "tests" },
+  { category: "ICC #1 ODI Bowler",    type: "bowling", format: "odis"  },
+  { category: "ICC #1 T20I Bowler",   type: "bowling", format: "t20s"  },
 ];
 
 export default function Stats() {
@@ -25,6 +26,26 @@ export default function Stats() {
   });
 
   const players = Array.isArray(data?.data) ? data.data : [];
+
+  // Live ICC #1-ranked leader per discipline/format (real, scraped)
+  const rankQueries = useQueries({
+    queries: RANK_CATS.map((c) => ({
+      queryKey: ["rankings", c.type, c.format, "men"],
+      queryFn: () => fetchRankings(c.type, c.format, "men"),
+      staleTime: 3600000,
+    })),
+  });
+  const leaders = RANK_CATS.map((c, i) => {
+    const top = rankQueries[i]?.data?.response?.[0];
+    return {
+      category: c.category,
+      player: top?.name || null,
+      country: top?.country || "",
+      value: top?.rating ? `${top.rating} pts` : "",
+      loading: rankQueries[i]?.isLoading,
+    };
+  });
+  const anyLeader = leaders.some((l) => l.player);
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
@@ -38,50 +59,65 @@ export default function Stats() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(245,158,11,0.15)",
+        background: "linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(56,189,248,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📈 Player <span style={{ color: "#F59E0B" }}>Stats</span>
+          📈 Player <span style={{ color: "#38BDF8" }}>Stats</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Career batting & bowling statistics — Test, ODI and T20 formats
         </p>
       </div>
 
-      {/* Current record holders */}
+      {/* Live ICC #1-ranked leaders (scraped) */}
       <section style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
-          Record Holders (Active Players)
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
+          ICC #1 Ranked — Live
+          <span style={{ fontSize: 10, fontWeight: 700, color: "#3B82F6", background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.25)", borderRadius: 20, padding: "2px 8px", textTransform: "uppercase", letterSpacing: 0.5 }}>Live</span>
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
-          {STAT_LEADERS.map(s => (
-            <div key={s.category} style={{ padding: "14px 16px", borderRadius: 10, background: "rgba(245,158,11,0.04)", border: "1px solid rgba(245,158,11,0.12)" }}>
-              <div style={{ fontSize: 10, color: "#F59E0B", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{s.category}</div>
-              <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 2 }}>{s.player}</div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 11, color: "var(--text3)" }}>{s.country}</span>
-                <span style={{ fontSize: 16, fontWeight: 900, color: "#10B981", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{s.value}</span>
+        {!anyLeader && leaders.every((l) => !l.loading) ? (
+          <div style={{ padding: "20px 16px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)" }}>
+            <p style={{ color: "var(--text3)", fontSize: 13, margin: 0 }}>Rankings are updating — check back shortly.</p>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
+            {leaders.map(s => (
+              <div key={s.category} style={{ padding: "14px 16px", borderRadius: 10, background: "rgba(56,189,248,0.04)", border: "1px solid rgba(56,189,248,0.12)" }}>
+                <div style={{ fontSize: 10, color: "#38BDF8", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{s.category}</div>
+                {s.loading ? (
+                  <div style={{ height: 34, borderRadius: 6, background: "rgba(255,255,255,0.05)" }} />
+                ) : s.player ? (
+                  <>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 2 }}>{s.player}</div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 11, color: "var(--text3)" }}>{s.country}</span>
+                      <span style={{ fontSize: 15, fontWeight: 900, color: "#3B82F6", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{s.value}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ fontSize: 12, color: "var(--text-muted)" }}>—</div>
+                )}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Player search */}
       <section style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           Player Profiles
         </h2>
         <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
           {SEARCHES.map(s => (
             <button key={s} onClick={() => setActiveSearch(s)} style={{
               padding: "7px 18px", borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: "pointer",
-              background: activeSearch === s ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.03)",
-              border: `1px solid ${activeSearch === s ? "rgba(16,185,129,0.35)" : "rgba(255,255,255,0.07)"}`,
-              color: activeSearch === s ? "#10B981" : "var(--text3)",
+              background: activeSearch === s ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.03)",
+              border: `1px solid ${activeSearch === s ? "rgba(59,130,246,0.35)" : "rgba(255,255,255,0.07)"}`,
+              color: activeSearch === s ? "#3B82F6" : "var(--text3)",
               textTransform: "capitalize", transition: "all 0.15s",
             }}>
               {s}
@@ -100,17 +136,17 @@ export default function Stats() {
                   borderRadius: 10, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
                   transition: "all 0.15s",
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.2)"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.05)"; e.currentTarget.style.borderColor = "rgba(59,130,246,0.2)"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
                 >
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(16,185,129,0.1)", border: "1.5px solid rgba(16,185,129,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#10B981", flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "1.5px solid rgba(59,130,246,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#3B82F6", flexShrink: 0 }}>
                     {p.name?.[0]?.toUpperCase()}
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 13, color: "var(--text)" }}>{p.name}</div>
                     <div style={{ fontSize: 11, color: "var(--text3)" }}>🌍 {p.country}</div>
                   </div>
-                  <span style={{ marginLeft: "auto", color: "#10B981", fontSize: 14, flexShrink: 0 }}>→</span>
+                  <span style={{ marginLeft: "auto", color: "#3B82F6", fontSize: 14, flexShrink: 0 }}>→</span>
                 </div>
               </Link>
             ))}
@@ -121,9 +157,9 @@ export default function Stats() {
       <AdBanner type="auto" />
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(245,158,11,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(56,189,248,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
           Cricket Statistics Guide — Batting, Bowling & All-Round
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

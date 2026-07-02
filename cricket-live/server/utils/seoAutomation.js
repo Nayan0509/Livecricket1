@@ -334,7 +334,6 @@ function generateLongTailPages() {
     // Feature-specific
     { url: '/cricket-ball-by-ball-commentary-live', title: 'Cricket Ball by Ball Commentary Live - Real-Time Updates', priority: 0.9 },
     { url: '/cricket-scorecard-live', title: 'Cricket Scorecard Live - Detailed Match Scorecards', priority: 0.9 },
-    { url: '/cricket-live-streaming-free', title: 'Cricket Live Streaming Free - Watch Matches Online', priority: 0.85 },
   ];
   
   return templates;

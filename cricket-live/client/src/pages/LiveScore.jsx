@@ -58,8 +58,8 @@ export default function LiveScore() {
             padding: "24px", borderRadius: 14, marginBottom: 16,
             background: isLive
               ? "linear-gradient(135deg, rgba(239,68,68,0.08) 0%, rgba(9,9,11,0.98) 100%)"
-              : "linear-gradient(135deg, rgba(16,185,129,0.07) 0%, rgba(9,9,11,0.98) 100%)",
-            border: isLive ? "1px solid rgba(239,68,68,0.2)" : "1px solid rgba(16,185,129,0.12)",
+              : "linear-gradient(135deg, rgba(59,130,246,0.07) 0%, rgba(9,9,11,0.98) 100%)",
+            border: isLive ? "1px solid rgba(239,68,68,0.2)" : "1px solid rgba(59,130,246,0.12)",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 16 }}>
               <div style={{ minWidth: 0 }}>
@@ -97,7 +97,7 @@ export default function LiveScore() {
                 {match.score.map((s, i) => (
                   <div key={i} style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 4 }}>{s.inning}</div>
-                    <div style={{ fontSize: 36, fontWeight: 900, color: "#10B981", lineHeight: 1 }}>
+                    <div style={{ fontSize: 36, fontWeight: 900, color: "#3B82F6", lineHeight: 1 }}>
                       {s.r}/{s.w}
                       <span style={{ fontSize: 14, color: "var(--text3)", marginLeft: 8 }}>({s.o} ov)</span>
                     </div>
@@ -107,8 +107,8 @@ export default function LiveScore() {
             )}
 
             {/* Status */}
-            <div style={{ padding: "10px 14px", borderRadius: 8, background: isLive ? "rgba(239,68,68,0.08)" : "rgba(16,185,129,0.06)", border: isLive ? "1px solid rgba(239,68,68,0.15)" : "1px solid rgba(16,185,129,0.12)" }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: isLive ? "#fb7185" : "#34D399" }}>
+            <div style={{ padding: "10px 14px", borderRadius: 8, background: isLive ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.06)", border: isLive ? "1px solid rgba(239,68,68,0.15)" : "1px solid rgba(59,130,246,0.12)" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: isLive ? "#fb7185" : "#60A5FA" }}>
                 {match.status}
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function LiveScore() {
               </div>
             )}
             {isLive && (
-              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.12)", fontSize: 11, color: "#34D399" }}>
+              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.12)", fontSize: 11, color: "#60A5FA" }}>
                 🔄 Auto-refreshes every 15s
               </div>
             )}
@@ -149,8 +149,8 @@ export default function LiveScore() {
             </Link>
             <Link to={`/match/${id}/scorecard`} style={{
               flex: 1, minWidth: 140, textAlign: "center", padding: "11px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)",
-              color: "#10B981", textDecoration: "none",
+              background: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)",
+              color: "#3B82F6", textDecoration: "none",
             }}>
               📋 Full Scorecard
             </Link>
@@ -162,7 +162,7 @@ export default function LiveScore() {
               <h3 style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 14 }}>Latest Batting</h3>
               {innings.slice(-1).map((inn, idx) => (
                 <div key={idx}>
-                  <div style={{ fontSize: 13, color: "#10B981", fontWeight: 700, marginBottom: 12 }}>
+                  <div style={{ fontSize: 13, color: "#3B82F6", fontWeight: 700, marginBottom: 12 }}>
                     {inn.team} — {inn.score}
                   </div>
                   <div style={{ overflowX: "auto" }}>
@@ -187,7 +187,7 @@ export default function LiveScore() {
                       </tbody>
                     </table>
                   </div>
-                  <Link to={`/match/${id}/scorecard`} style={{ display: "block", marginTop: 14, fontSize: 12, color: "#10B981", fontWeight: 700, textDecoration: "none" }}>
+                  <Link to={`/match/${id}/scorecard`} style={{ display: "block", marginTop: 14, fontSize: 12, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}>
                     View Full Scorecard →
                   </Link>
                 </div>

@@ -11,7 +11,7 @@ export default function BPL() {
       accentColor="#a78bfa"
       seoTitle="BPL 2026 Live Score — Bangladesh Premier League T20"
       seoDesc="BPL 2026 live score with ball-by-ball commentary for all Bangladesh Premier League matches. Follow Comilla Victorians, Dhaka Dominators, Rangpur Riders, Sylhet Strikers and more. Updated every 15 seconds, free."
-      seoKeywords="BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball, BPL scorecard, BPL schedule 2026, Bangladesh Premier League live, BPL T20 live, BPL live stream, Comilla Victorians live, Rangpur Riders live, BPL 2026 points table, Shakib Al Hasan BPL"
+      seoKeywords="BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball, BPL scorecard, BPL schedule 2026, Bangladesh Premier League live, BPL T20 live, BPL highlights, Comilla Victorians live, Rangpur Riders live, BPL 2026 points table, Shakib Al Hasan BPL"
       stats={[
         { value: "7", label: "Teams" },
         { value: "46", label: "Matches" },
@@ -47,7 +47,7 @@ Seven franchises — Comilla Victorians, Dhaka Dominators, Rangpur Riders, Sylhe
 
 The BPL has long served as a showcase for Bangladesh's best cricketers alongside high-profile international signings. Shakib Al Hasan, one of the world's best all-rounders, Mustafizur Rahman with his unplayable slower balls, and keeper-batter Mushfiqur Rahim are among the Bangladeshi stars who have lit up the BPL alongside overseas marquee players from West Indies, South Africa, Pakistan and beyond. The tournament's high-pressure knockout format has helped develop a generation of Bangladeshi cricketers accustomed to performing in big-match situations, directly benefiting the national team.
 
-Live Cricket Zone covers all BPL 2026 matches with the same real-time ball-by-ball coverage as any international series — complete batting and bowling scorecards, toss updates, live stream links and over-by-over commentary. Follow every BPL 2026 match for free, with no account or subscription required.`}
+Live Cricket Zone covers all BPL 2026 matches with the same real-time ball-by-ball coverage as any international series — complete batting and bowling scorecards, toss updates, over-by-over commentary and official post-match highlights. Follow every BPL 2026 match for free, with no account or subscription required. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

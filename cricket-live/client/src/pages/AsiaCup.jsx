@@ -47,7 +47,7 @@ The tournament features India, Pakistan, Sri Lanka, Bangladesh, Afghanistan and 
 
 The marquee fixture of every Asia Cup is India vs Pakistan. These two cricketing giants, who do not play bilateral cricket outside of ICC tournaments, produce some of the most electric atmospheres in world sport. Their Asia Cup clashes consistently rank among the most-watched cricket broadcasts globally, with hundreds of millions tuning in from the subcontinent alone. Beyond this headline fixture, contests like India vs Sri Lanka and Pakistan vs Bangladesh have produced memorable cricket moments that live long in the memory of Asian cricket fans.
 
-Live Cricket Zone provides complete ball-by-ball coverage for all Asia Cup 2026 matches — full scorecard, batting and bowling figures, toss information, live stream links and match results. Follow every boundary, wicket and deciding over of Asia Cup 2026 completely free, with real-time updates every 15 seconds.`}
+Live Cricket Zone provides complete ball-by-ball coverage for all Asia Cup 2026 matches — full scorecard, batting and bowling figures, toss information, official post-match highlights and match results. Follow every boundary, wicket and deciding over of Asia Cup 2026 completely free, with real-time updates every 15 seconds. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

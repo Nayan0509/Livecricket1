@@ -113,7 +113,7 @@ export default function LiveMatches() {
           <div style={{ textAlign: "center", padding: "80px 24px", background: "var(--card)", borderRadius: 32, border: "1px solid var(--border)" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>📡</div>
             <h2 style={{ fontSize: 24, marginBottom: 12 }}>No matches active</h2>
-            <p style={{ color: "var(--text3)", fontSize: 16 }}>Check the upcoming tab for scheduled streams.</p>
+            <p style={{ color: "var(--text3)", fontSize: 16 }}>Check the upcoming tab for scheduled matches.</p>
           </div>
         )
       )}

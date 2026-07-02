@@ -17,7 +17,7 @@ export default function CountyChampionship() {
       accentColor="#003087"
       seoTitle="County Championship 2026 Live Score Today — Division One & Two Live"
       seoDesc="County Championship 2026 live scores with ball-by-ball commentary for all Division One and Division Two matches. All 18 English counties covered — Surrey, Essex, Yorkshire, Lancashire, Somerset and more. Updated every 15 seconds."
-      seoKeywords="county championship 2026 live score today, county championship live score, county cricket live today, county championship today, county cricket today, division one cricket live, division two cricket live, english county cricket live, county championship results, county championship schedule 2026, surrey cricket live, yorkshire cricket live, lancashire cricket live, hampshire cricket live, kent cricket live, essex cricket live, warwickshire cricket live, somerset cricket live, nottinghamshire cricket live, durham cricket live, sussex cricket live, middlesex cricket live, worcestershire cricket live, gloucestershire cricket live, northamptonshire cricket live, leicestershire cricket live, glamorgan cricket live, derbyshire cricket live, county championship 2026 table, county cricket scores today, watch county cricket live, county cricket live stream, county cricket live score uk, county cricket live score free, county cricket ball by ball, county championship 2026 points table"
+      seoKeywords="county championship 2026 live score today, county championship live score, county cricket live today, county championship today, county cricket today, division one cricket live, division two cricket live, english county cricket live, county championship results, county championship schedule 2026, surrey cricket live, yorkshire cricket live, lancashire cricket live, hampshire cricket live, kent cricket live, essex cricket live, warwickshire cricket live, somerset cricket live, nottinghamshire cricket live, durham cricket live, sussex cricket live, middlesex cricket live, worcestershire cricket live, gloucestershire cricket live, northamptonshire cricket live, leicestershire cricket live, glamorgan cricket live, derbyshire cricket live, county championship 2026 table, county cricket scores today, county cricket live score uk, county cricket ball by ball, county cricket highlights, county championship 2026 points table"
       stats={[
         { value: "18", label: "Counties" },
         { value: "2", label: "Divisions" },
@@ -48,8 +48,8 @@ export default function CountyChampionship() {
           a: "Division One of the County Championship 2026 includes the top 10 counties from the previous season's standings — typically Surrey, Essex, Yorkshire, Lancashire, Hampshire, Kent, Warwickshire, Nottinghamshire, Somerset and one promoted side.",
         },
         {
-          q: "Can I watch County Championship live on YouTube?",
-          a: "Yes — some County Championship matches are streamed live on YouTube by the ECB and individual county clubs. Use the Watch button on any live match page on Live Cricket Zone to find the available stream.",
+          q: "Can I follow County Championship matches on Live Cricket Zone?",
+          a: "Yes — Live Cricket Zone gives you live scores, ball-by-ball commentary, full scorecards and official match highlights for County Championship matches. We do not stream matches ourselves; to watch live coverage, use the ECB's official channels or your licensed broadcaster.",
         },
         {
           q: "How long does a County Championship match last?",

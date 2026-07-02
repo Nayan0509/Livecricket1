@@ -97,7 +97,7 @@ export default function CricketMatchesToday() {
           {/* Recent Results */}
           {data.recent.length > 0 && (
             <section style={{ marginBottom: 28 }}>
-              <h2 style={{ fontSize: 16, fontWeight: 800, color: "#34D399", marginBottom: 14 }}>✅ Recent Results</h2>
+              <h2 style={{ fontSize: 16, fontWeight: 800, color: "#60A5FA", marginBottom: 14 }}>✅ Recent Results</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {data.recent.slice(0, 8).map(m => (
                   <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
@@ -106,7 +106,7 @@ export default function CricketMatchesToday() {
                       onMouseLeave={e => e.currentTarget.style.transform = "translateX(0)"}
                     >
                       <div style={{ fontWeight: 700, fontSize: 13, color: "var(--text)", marginBottom: 4 }}>{m.name}</div>
-                      <div style={{ fontSize: 12, color: "#34D399" }}>{m.status}</div>
+                      <div style={{ fontSize: 12, color: "#60A5FA" }}>{m.status}</div>
                     </div>
                   </Link>
                 ))}
@@ -124,9 +124,9 @@ export default function CricketMatchesToday() {
       )}
 
       {/* Rich SEO content */}
-      <section style={{ padding: "24px 28px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)", marginTop: 20 }}>
+      <section style={{ padding: "24px 28px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)", marginTop: 20 }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           Cricket Matches Today — Live Scores, Timings & Commentary
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
@@ -136,7 +136,7 @@ export default function CricketMatchesToday() {
           The <strong style={{ color: "var(--text2)" }}>Live Now</strong> section above shows all matches currently in progress with real-time scores updated every 15 seconds. <strong style={{ color: "var(--text2)" }}>Upcoming Today</strong> shows fixtures that haven't started yet — complete with the scheduled start time and venue. <strong style={{ color: "var(--text2)" }}>Recent Results</strong> shows matches that finished today with final scorecards and match summaries.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Click any match card to open the live match centre with ball-by-ball commentary, full batting and bowling scorecards, toss information, current over summary and free YouTube stream links. Today's cricket coverage is updated automatically — the page refreshes match data in the background so you always see the latest scores without needing to manually reload.
+          Click any match card to open the live match centre with ball-by-ball commentary, full batting and bowling scorecards, toss information, current over summary and official post-match highlights. Today's cricket coverage is updated automatically — the page refreshes match data in the background so you always see the latest scores without needing to manually reload.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
           The number of cricket matches today varies by season — during the IPL 2026 season there are typically 1–2 evening matches each day. International series weeks can bring 1–2 Tests and up to 3 T20I or ODI matches across different time zones. The cricket calendar rarely has a completely quiet day, with domestic competitions from England, South Africa, New Zealand, India and the Caribbean filling gaps between major international events. All free, no account required.

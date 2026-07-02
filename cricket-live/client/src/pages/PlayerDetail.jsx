@@ -232,7 +232,7 @@ function PlayerNewsSection({ playerName }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
         {items.map((n, i) => (
           <div key={i} style={{ padding: "16px", borderRadius: 14, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
-            <div style={{ fontSize: 10, color: "#10B981", fontWeight: 800, marginBottom: 8, textTransform: "uppercase" }}>{n.source}</div>
+            <div style={{ fontSize: 10, color: "#3B82F6", fontWeight: 800, marginBottom: 8, textTransform: "uppercase" }}>{n.source}</div>
             <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text2)", lineHeight: 1.4, marginBottom: 8 }}>{n.title}</div>
             <div style={{ fontSize: 11, color: "var(--text3)" }}>{n.hoursAgo}h ago</div>
           </div>

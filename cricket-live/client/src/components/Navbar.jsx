@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const PRIMARY_NAV = [
-  { to: "/live",       label: "Live"      },
-  { to: "/watch-live", label: "Watch"     },
-  { to: "/news",       label: "News"      },
+  { to: "/live",       label: "Live"       },
+  { to: "/watch-live", label: "Highlights" },
+  { to: "/news",       label: "News"       },
   { to: "/rankings",   label: "Rankings"  },
   { to: "/series",     label: "Series"    },
   { to: "/teams",      label: "Teams"     },
 ];
 
 const LEAGUES = [
-  { to: "/ipl",                 label: "IPL 2026",            dot: "#F59E0B" },
+  { to: "/ipl",                 label: "IPL 2026",            dot: "#38BDF8" },
   { to: "/t20-world-cup",       label: "T20 World Cup",       dot: "#EF4444" },
-  { to: "/world-cup",           label: "ODI World Cup",       dot: "#10B981" },
+  { to: "/world-cup",           label: "ODI World Cup",       dot: "#3B82F6" },
   { to: "/asia-cup",            label: "Asia Cup",            dot: "#38BDF8" },
   { to: "/champions-trophy",    label: "Champions Trophy",    dot: "#A78BFA" },
-  { to: "/psl",                 label: "PSL 2026",            dot: "#34D399" },
-  { to: "/county-championship", label: "County Championship", dot: "#F97316" },
+  { to: "/psl",                 label: "PSL 2026",            dot: "#60A5FA" },
+  { to: "/county-championship", label: "County Championship", dot: "#0EA5E9" },
 ];
 
 /* ── Premium cricket logo mark ── */
@@ -25,12 +25,12 @@ function LogoMark() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="13" cy="13" r="12" fill="#0D1120" stroke="rgba(255,255,255,0.10)" strokeWidth="1" />
-      <circle cx="13" cy="13" r="8" fill="#10B981" opacity="0.15" />
+      <circle cx="13" cy="13" r="8" fill="#3B82F6" opacity="0.15" />
       {/* Cricket wickets */}
-      <rect x="10" y="7" width="1.5" height="9" rx="0.75" fill="#10B981" />
-      <rect x="13.25" y="7" width="1.5" height="9" rx="0.75" fill="#10B981" />
+      <rect x="10" y="7" width="1.5" height="9" rx="0.75" fill="#3B82F6" />
+      <rect x="13.25" y="7" width="1.5" height="9" rx="0.75" fill="#3B82F6" />
       {/* Bail */}
-      <rect x="9.5" y="7" width="7" height="1.2" rx="0.6" fill="#F59E0B" />
+      <rect x="9.5" y="7" width="7" height="1.2" rx="0.6" fill="#38BDF8" />
       <rect x="9.5" y="16" width="7" height="1.2" rx="0.6" fill="rgba(255,255,255,0.18)" />
     </svg>
   );
@@ -76,7 +76,7 @@ export default function Navbar() {
         {/* Subtle emerald accent line */}
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-          background: "#10B981",
+          background: "#3B82F6",
           opacity: 0.55,
         }} />
 
@@ -106,7 +106,7 @@ export default function Navbar() {
                 <span style={{
                   fontWeight: 700, fontSize: 15,
                   fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
-                  color: "#10B981", letterSpacing: "-0.025em",
+                  color: "#3B82F6", letterSpacing: "-0.025em",
                 }}>
                   Zone
                 </span>
@@ -115,7 +115,7 @@ export default function Navbar() {
                 fontSize: 9, fontWeight: 500, color: "var(--text-muted)",
                 letterSpacing: "1px", textTransform: "uppercase", marginTop: 2,
               }}>
-                Live Scores · News · Streams
+                Live Scores · News · Highlights
               </div>
             </div>
           </Link>
@@ -138,7 +138,7 @@ export default function Navbar() {
                   display: "flex",
                   alignItems: "center",
                   textDecoration: isActive ? "underline" : "none",
-                  textDecorationColor: "#10B981",
+                  textDecorationColor: "#3B82F6",
                   textUnderlineOffset: "5px",
                   textDecorationThickness: "2px",
                 })}
@@ -283,8 +283,8 @@ export default function Navbar() {
               }}
               onFocus={e => {
                 e.target.style.background = "rgba(255,255,255,0.07)";
-                e.target.style.borderColor = "rgba(16,185,129,0.45)";
-                e.target.style.boxShadow = "0 0 0 3px rgba(16,185,129,0.08)";
+                e.target.style.borderColor = "rgba(59,130,246,0.45)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(59,130,246,0.08)";
               }}
               onBlur={e => {
                 e.target.style.background = "rgba(255,255,255,0.04)";

@@ -29,15 +29,15 @@ export default function LiveCricketScore() {
 
   const TAB_CONFIG = [
     { key: "live",     label: "Live",     color: "#EF4444" },
-    { key: "recent",   label: "Recent",   color: "#10B981" },
-    { key: "upcoming", label: "Upcoming", color: "#F59E0B" },
+    { key: "recent",   label: "Recent",   color: "#3B82F6" },
+    { key: "upcoming", label: "Upcoming", color: "#38BDF8" },
   ];
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
         title="Live Cricket Score — Real-Time Ball by Ball Updates 2026"
-        description="Live cricket score with real-time ball-by-ball updates every 15 seconds. IPL 2026, T20 World Cup, ODI and Test matches. Watch live stream free — no sign-up required."
+        description="Live cricket score with real-time ball-by-ball updates every 15 seconds. IPL 2026, T20 World Cup, ODI and Test matches. Full scorecards and official match highlights — no sign-up required."
         keywords="live cricket score, cricket live score today, live cricket score today, cricket score live, live score cricket, cricket live score, real time cricket score, live cricket scores today, IPL live score, T20 live score, ODI live score, Test live score, live cricket ball by ball"
         url="/live-cricket-score"
         structuredData={{
@@ -52,18 +52,18 @@ export default function LiveCricketScore() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(16,185,129,0.09) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(16,185,129,0.15)",
+        background: "linear-gradient(135deg, rgba(59,130,246,0.09) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(59,130,246,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          Live Cricket <span style={{ color: "#10B981" }}>Score</span>
+          Live Cricket <span style={{ color: "#3B82F6" }}>Score</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
           Real-time ball-by-ball updates — IPL 2026 · T20 World Cup · ODI · Test
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          {["15s Refresh", "Ball by Ball", "All Formats", "Free Stream"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", color: "#10B981" }}>{t}</span>
+          {["15s Refresh", "Ball by Ball", "All Formats", "Highlights"].map(t => (
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)", color: "#3B82F6" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function LiveCricketScore() {
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {currentTabMatches.map(m => {
             const isLive = activeTab === "live";
-            const color = isLive ? "#EF4444" : activeTab === "recent" ? "#10B981" : "#F59E0B";
+            const color = isLive ? "#EF4444" : activeTab === "recent" ? "#3B82F6" : "#38BDF8";
             return (
               <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
                 <div style={{
@@ -134,9 +134,9 @@ export default function LiveCricketScore() {
       <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           Live Cricket Score — How It Works
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
@@ -146,7 +146,7 @@ export default function LiveCricketScore() {
           Use the <strong style={{ color: "var(--text2)" }}>Live tab</strong> to see all matches currently in progress across every format and competition worldwide. The <strong style={{ color: "var(--text2)" }}>Recent tab</strong> shows matches that have finished within the last 24 hours with final scorecards. The <strong style={{ color: "var(--text2)" }}>Upcoming tab</strong> shows fixtures that haven't yet started, with scheduled start times.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Click any match to open the full match centre — ball-by-ball commentary with every delivery described, batting scorecard with runs, balls, fours, sixes and strike rate, bowling figures with overs, maidens, runs conceded, wickets and economy rate, plus the current run rate and required run rate for the chasing team. Live stream links via YouTube are also provided on each match page so you can watch and score-follow simultaneously.
+          Click any match to open the full match centre — ball-by-ball commentary with every delivery described, batting scorecard with runs, balls, fours, sixes and strike rate, bowling figures with overs, maidens, runs conceded, wickets and economy rate, plus the current run rate and required run rate for the chasing team. Official post-match highlights are embedded on each match page so you can relive the key moments once play ends.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
           Coverage spans every cricket-playing nation — IPL 2026, T20 internationals, ODI bilateral series, Test matches, County Championship, PSL, BBL, CPL, BPL, Ranji Trophy and all ICC associate nation cricket. All completely free with no registration, no subscription and no paywalls.

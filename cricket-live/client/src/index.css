@@ -9,39 +9,39 @@
 :root {
   /* ══════════════════════════════════════════
      LIVE CRICKET ZONE — ENTERPRISE THEME
-     Deep Navy · Emerald · Amber Gold
-     Premium sports platform aesthetic
+     Deep Slate Navy · Azure · Sky Blue
+     Cool, premium sports-data platform aesthetic
      ══════════════════════════════════════════ */
 
-  /* Backgrounds — Deep navy, premium dark */
-  --bg:    #080C14;
-  --bg2:   #0C1221;
-  --bg3:   #101828;
-  --bg4:   #151F30;
-  --bg5:   #1A2538;
+  /* Backgrounds — Deep slate navy (cool) */
+  --bg:    #0A0E1A;
+  --bg2:   #0E1424;
+  --bg3:   #131B2E;
+  --bg4:   #182238;
+  --bg5:   #1E2A42;
 
   /* Cards */
-  --card:       #0C1221;
-  --card-hover: #101828;
+  --card:       #0E1424;
+  --card-hover: #131B2E;
 
-  /* ── PRIMARY — Emerald (refined cricket green) ── */
-  --primary:        #10B981;
-  --primary-dark:   #059669;
-  --primary-light:  #34D399;
-  --primary-glow:   rgba(16, 185, 129, 0.18);
+  /* ── PRIMARY — Azure ── */
+  --primary:        #3B82F6;
+  --primary-dark:   #2563EB;
+  --primary-light:  #60A5FA;
+  --primary-glow:   rgba(59,130,246, 0.20);
 
-  /* ── SECONDARY — Amber Gold ── */
-  --secondary:      #F59E0B;
-  --secondary-dark: #D97706;
-  --secondary-light:#FCD34D;
+  /* ── SECONDARY — Sky Blue ── */
+  --secondary:      #38BDF8;
+  --secondary-dark: #0EA5E9;
+  --secondary-light:#7DD3FC;
 
-  /* ── GREEN (alias for compatibility) ── */
-  --green:          #10B981;
-  --green-light:    #34D399;
-  --green-dark:     #059669;
-  --green-glow:     rgba(16, 185, 129, 0.14);
-  --green-bg:       rgba(16, 185, 129, 0.07);
-  --green-border:   rgba(16, 185, 129, 0.18);
+  /* ── Positive/brand alias (kept for compatibility) ── */
+  --green:          #3B82F6;
+  --green-light:    #60A5FA;
+  --green-dark:     #2563EB;
+  --green-glow:     rgba(59,130,246, 0.14);
+  --green-bg:       rgba(59,130,246, 0.07);
+  --green-border:   rgba(59,130,246, 0.18);
 
   /* ── LIVE RED ── */
   --live:           #EF4444;
@@ -51,14 +51,14 @@
 
   /* ── Full accent palette ── */
   --accent-cyan:    #22D3EE;
-  --accent-green:   #10B981;
-  --accent-emerald: #10B981;
-  --accent-orange:  #F97316;
-  --accent-amber:   #F59E0B;
+  --accent-green:   #3B82F6;
+  --accent-emerald: #3B82F6;
+  --accent-orange:  #0EA5E9;
+  --accent-amber:   #38BDF8;
   --accent-purple:  #A78BFA;
   --accent-violet:  #8B5CF6;
   --accent-sky:     #38BDF8;
-  --accent-gold:    #F59E0B;
+  --accent-gold:    #38BDF8;
 
   /* ── Borders ── */
   --border:       rgba(255,255,255,0.09);
@@ -66,7 +66,7 @@
   --divider:      rgba(255,255,255,0.055);
 
   /* ── Glass ── */
-  --glass:        rgba(12, 18, 33, 0.82);
+  --glass:        rgba(14, 20, 36, 0.82);
   --glass-border: rgba(255,255,255,0.08);
   --glass-shadow: 0 8px 32px rgba(0,0,0,0.5);
 
@@ -90,12 +90,13 @@
   --shadow-lg: 0 8px 24px rgba(0,0,0,0.55);
   --shadow-xl: 0 16px 40px rgba(0,0,0,0.65);
 
-  /* ── Brand Gradients ── */
-  --gradient-primary:   linear-gradient(135deg, #059669 0%, #10B981 100%);
-  --gradient-secondary: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
-  --gradient-brand:     linear-gradient(135deg, #059669 0%, #10B981 60%, #F59E0B 100%);
-  --gradient-card:      linear-gradient(145deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.005) 100%);
+  /* ── Brand Gradients — cool azure → sky ── */
+  --gradient-primary:   linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+  --gradient-secondary: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
+  --gradient-brand:     linear-gradient(135deg, #2563EB 0%, #3B82F6 55%, #38BDF8 100%);
+  --gradient-card:      linear-gradient(145deg, rgba(59,130,246,0.05) 0%, rgba(255,255,255,0.005) 100%);
   --gradient-live:      linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+  --gradient-mesh:      radial-gradient(1200px 500px at 80% -10%, rgba(59,130,246,0.10), transparent 60%), radial-gradient(900px 400px at 0% 0%, rgba(56,189,248,0.06), transparent 55%);
 
   /* ── Transitions ── */
   --ease:        cubic-bezier(0.2, 0, 0, 1);
@@ -111,7 +112,9 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg);
+  background: var(--gradient-mesh), var(--bg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
@@ -266,13 +269,13 @@ a:hover { color: var(--primary-light); }
 }
 
 .badge-completed {
-  background: rgba(16,185,129,0.07);
+  background: rgba(59,130,246,0.07);
   color: var(--green-light);
   border: 1px solid var(--green-border);
 }
 
 .badge-final {
-  background: rgba(16,185,129,0.07);
+  background: rgba(59,130,246,0.07);
   color: var(--green-light);
   border: 1px solid var(--green-border);
 }
@@ -307,32 +310,32 @@ a:hover { color: var(--primary-light); }
 .btn-primary {
   background: var(--primary);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(16,185,129,0.28);
+  box-shadow: 0 2px 8px rgba(59,130,246,0.28);
 }
 .btn-primary:hover {
   background: var(--primary-dark);
-  box-shadow: 0 4px 14px rgba(16,185,129,0.32);
+  box-shadow: 0 4px 14px rgba(59,130,246,0.32);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: var(--secondary);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(217,119,6,0.28);
+  box-shadow: 0 2px 8px rgba(14,165,233,0.28);
 }
 .btn-secondary:hover {
   background: var(--secondary-dark);
-  box-shadow: 0 4px 14px rgba(217,119,6,0.32);
+  box-shadow: 0 4px 14px rgba(14,165,233,0.32);
   transform: translateY(-1px);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--primary-light);
-  border: 1.5px solid rgba(16,185,129,0.28);
+  border: 1.5px solid rgba(59,130,246,0.28);
 }
 .btn-outline:hover {
-  background: rgba(16,185,129,0.07);
+  background: rgba(59,130,246,0.07);
   border-color: var(--primary);
   transform: translateY(-1px);
 }
@@ -415,7 +418,7 @@ input:hover, select:hover { border-color: var(--border-light); }
 input:focus, select:focus, textarea:focus {
   border-color: var(--primary);
   background: rgba(255,255,255,0.06);
-  box-shadow: 0 0 0 3px rgba(16,185,129,0.09);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.09);
 }
 input::placeholder, textarea::placeholder { color: var(--text-muted); }
 
@@ -425,7 +428,7 @@ input::placeholder, textarea::placeholder { color: var(--text-muted); }
 .spinner {
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(16,185,129,0.10);
+  border: 2px solid rgba(59,130,246,0.10);
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
@@ -533,7 +536,7 @@ input::placeholder, textarea::placeholder { color: var(--text-muted); }
 }
 
 .premium-gradient-text {
-  background: linear-gradient(135deg, #fff 0%, #a7f3d0 100%);
+  background: linear-gradient(135deg, #fff 0%, #BFDBFE 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -623,8 +626,8 @@ input::placeholder, textarea::placeholder { color: var(--text-muted); }
   50%      { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
 }
 @keyframes greenGlow {
-  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.18); }
-  50%      { box-shadow: 0 0 0 4px rgba(16,185,129,0); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.18); }
+  50%      { box-shadow: 0 0 0 4px rgba(59,130,246,0); }
 }
 
 /* ── Score chip ── */
@@ -737,13 +740,13 @@ tr:last-child td { border-bottom: none; }
 }
 .feature-card:hover {
   box-shadow: var(--shadow-xl);
-  border-color: rgba(16,185,129,0.18);
+  border-color: rgba(59,130,246,0.18);
 }
 .feature-icon {
   width: 48px;
   height: 48px;
-  background: rgba(16,185,129,0.09);
-  border: 1px solid rgba(16,185,129,0.16);
+  background: rgba(59,130,246,0.09);
+  border: 1px solid rgba(59,130,246,0.16);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
@@ -753,7 +756,7 @@ tr:last-child td { border-bottom: none; }
   transition: background 0.18s var(--ease);
 }
 .feature-card:hover .feature-icon {
-  background: rgba(16,185,129,0.14);
+  background: rgba(59,130,246,0.14);
 }
 
 /* ============================================
@@ -867,7 +870,7 @@ tr:last-child td { border-bottom: none; }
   letter-spacing: 1px;
   padding: 2px 7px;
   border-radius: 4px;
-  background: rgba(245,158,11,0.08);
+  background: rgba(56,189,248,0.08);
   color: var(--secondary);
-  border: 1px solid rgba(245,158,11,0.16);
+  border: 1px solid rgba(56,189,248,0.16);
 }

@@ -20,7 +20,7 @@ export default function TournamentPage({
   seoTitle,
   seoDesc,
   seoKeywords,
-  accentColor = "#10B981",
+  accentColor = "#3B82F6",
   teams = [],
   stats = [],
   aboutText,

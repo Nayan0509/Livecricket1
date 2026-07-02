@@ -47,7 +47,7 @@ The format is deliberately compact and high-quality: 8 elite nations split into 
 
 India vs Pakistan in the Champions Trophy is a match of extraordinary significance. The two nations rarely meet in bilateral cricket, meaning ICC events provide the only regular competitive platform. Their 2017 Champions Trophy final — Pakistan's stunning victory by 180 runs against a dominant India side — remains one of ODI cricket's most dramatic results. The prospect of an India vs Pakistan Champions Trophy final or semi-final generates global viewership figures that rival any sporting event.
 
-Live Cricket Zone covers every Champions Trophy 2025 match with full ball-by-ball commentary, complete scorecards, batting and bowling figures, toss updates, live stream links and match results. Whether it's the opening group match or the final itself, follow all ICC Champions Trophy 2025 action completely free — real-time updates every 15 seconds with no account required.`}
+Live Cricket Zone covers every Champions Trophy 2025 match with full ball-by-ball commentary, complete scorecards, batting and bowling figures, toss updates, official post-match highlights and match results. Whether it's the opening group match or the final itself, follow all ICC Champions Trophy 2025 action completely free — real-time updates every 15 seconds with no account required. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

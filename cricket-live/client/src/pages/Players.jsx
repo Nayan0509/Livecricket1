@@ -40,11 +40,11 @@ export default function Players() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(16,185,129,0.14)",
+        background: "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          👤 Cricket <span style={{ color: "#10B981" }}>Players</span>
+          👤 Cricket <span style={{ color: "#3B82F6" }}>Players</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Search player profiles, career stats and records across all formats
@@ -60,7 +60,7 @@ export default function Players() {
           placeholder="Search player name (e.g. Virat, Babar, Root)..."
           style={{ flex: 1, padding: "10px 16px", borderRadius: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--text)", fontSize: 13 }}
         />
-        <button type="submit" style={{ padding: "10px 20px", borderRadius: 10, background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)", color: "#10B981", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+        <button type="submit" style={{ padding: "10px 20px", borderRadius: 10, background: "rgba(59,130,246,0.15)", border: "1px solid rgba(59,130,246,0.3)", color: "#3B82F6", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
           Search
         </button>
       </form>
@@ -70,9 +70,9 @@ export default function Players() {
         {STAR_PLAYERS.map(p => (
           <button key={p.search} onClick={() => { setInput(p.search); setSearch(p.search); }} style={{
             padding: "5px 14px", borderRadius: 20, fontSize: 11, fontWeight: 700, cursor: "pointer",
-            background: search === p.search ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.03)",
-            border: `1px solid ${search === p.search ? "rgba(16,185,129,0.35)" : "rgba(255,255,255,0.07)"}`,
-            color: search === p.search ? "#10B981" : "var(--text3)",
+            background: search === p.search ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.03)",
+            border: `1px solid ${search === p.search ? "rgba(59,130,246,0.35)" : "rgba(255,255,255,0.07)"}`,
+            color: search === p.search ? "#3B82F6" : "var(--text3)",
             transition: "all 0.15s",
           }}>
             {p.name}
@@ -94,10 +94,10 @@ export default function Players() {
                 borderRadius: 10, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
                 transition: "border-color 0.15s, background 0.15s",
               }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.2)"; }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.05)"; e.currentTarget.style.borderColor = "rgba(59,130,246,0.2)"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(16,185,129,0.1)", border: "1.5px solid rgba(16,185,129,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 900, color: "#10B981", flexShrink: 0 }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "1.5px solid rgba(59,130,246,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 900, color: "#3B82F6", flexShrink: 0 }}>
                   {p.name?.[0]?.toUpperCase()}
                 </div>
                 <div style={{ minWidth: 0 }}>
@@ -116,9 +116,9 @@ export default function Players() {
       )}
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
+      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           Cricket Player Stats & Profiles
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

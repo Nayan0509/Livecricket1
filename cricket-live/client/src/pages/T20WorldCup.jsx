@@ -49,7 +49,7 @@ The ICC Men's T20 World Cup 2026 features 16 nations split into four groups of f
 
 The T20 World Cup has crowned different champions in almost every edition, reflecting the format's unpredictable nature. Past winners include India (2007, 2024), West Indies (2012, 2016), England (2010, 2022), Australia (2021), Sri Lanka (2014) and Pakistan (2009). This diversity of champions highlights how the 20-over format can produce different outcomes regardless of rankings and form. The 2026 edition promises the same drama, with new batting and bowling talents emerging to challenge the established order.
 
-Live Cricket Zone covers every ball of T20 World Cup 2026 with full commentary, scorecards, player statistics, match reports and live stream links. Whether it's a group-stage classic or the final itself, follow all the T20 World Cup 2026 action completely free — updated every 15 seconds with no account required.`}
+Live Cricket Zone covers every ball of T20 World Cup 2026 with full commentary, scorecards, player statistics, match reports and official post-match highlights. Whether it's a group-stage classic or the final itself, follow all the T20 World Cup 2026 action completely free — updated every 15 seconds with no account required. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

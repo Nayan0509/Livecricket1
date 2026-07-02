@@ -24,11 +24,11 @@ export default function Teams() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(16,185,129,0.14)",
+        background: "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          👥 Cricket <span style={{ color: "#10B981" }}>Teams</span>
+          👥 Cricket <span style={{ color: "#3B82F6" }}>Teams</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           International teams, IPL franchises, domestic sides and women's cricket teams
@@ -49,8 +49,8 @@ export default function Teams() {
       {!isLoading && !error && Object.keys(categories).map(catKey => {
         const filtered = filterList(categories[catKey]);
         if (!filtered.length) return null;
-        const catColors = { international: "#10B981", domestic: "#F59E0B", league: "#F87171", women: "#e879f9" };
-        const catColor = catColors[catKey] || "#10B981";
+        const catColors = { international: "#3B82F6", domestic: "#38BDF8", league: "#F87171", women: "#e879f9" };
+        const catColor = catColors[catKey] || "#3B82F6";
         return (
           <section key={catKey} style={{ marginBottom: 32 }}>
             <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 14, textTransform: "capitalize", display: "flex", alignItems: "center", gap: 8 }}>
@@ -90,9 +90,9 @@ export default function Teams() {
       <AdBanner type="auto" />
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           Cricket Teams — International, Franchise & Domestic
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

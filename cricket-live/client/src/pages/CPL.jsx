@@ -11,7 +11,7 @@ export default function CPL() {
       accentColor="#38bdf8"
       seoTitle="CPL 2026 Live Score — Caribbean Premier League T20"
       seoDesc="CPL 2026 live score with ball-by-ball commentary for all Caribbean Premier League matches. Follow Trinbago Knight Riders, Barbados Royals, Guyana Amazon Warriors, Jamaica Tallawahs and more. Updated every 15 seconds, free."
-      seoKeywords="CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball, CPL scorecard, CPL schedule 2026, Caribbean Premier League live, CPL T20 live, CPL live stream, Trinbago Knight Riders live, Barbados Royals live, Guyana Amazon Warriors live, Jamaica Tallawahs live, CPL 2026 points table"
+      seoKeywords="CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball, CPL scorecard, CPL schedule 2026, Caribbean Premier League live, CPL T20 live, CPL highlights, Trinbago Knight Riders live, Barbados Royals live, Guyana Amazon Warriors live, Jamaica Tallawahs live, CPL 2026 points table"
       stats={[
         { value: "6", label: "Teams" },
         { value: "34", label: "Matches" },
@@ -47,7 +47,7 @@ Founded in 2013, the Caribbean Premier League has established itself as one of t
 
 The CPL follows a T20 franchise format: a double round-robin league stage where every team plays each other twice, followed by knockout semi-finals and a final. The tournament typically runs through August and September, filling the cricket calendar during the Caribbean summer. Matches are played at iconic grounds such as the Queen's Park Oval in Trinidad, Kensington Oval in Barbados and Sabina Park in Jamaica. Legendary West Indian players including Chris Gayle, Kieron Pollard, Dwayne Bravo, Sunil Narine and Andre Russell have all been pivotal figures in CPL history, and the tournament continues to serve as an important showcase for the next generation of West Indies international talent.
 
-Live Cricket Zone covers all CPL 2026 matches with the same real-time ball-by-ball detail as any international series — full scorecard, batting and bowling figures, toss information, live stream links and match results. Follow every six, wicket and boundary from the Caribbean live, completely free with no account required.`}
+Live Cricket Zone covers all CPL 2026 matches with the same real-time ball-by-ball detail as any international series — full scorecard, batting and bowling figures, toss information, official post-match highlights and match results. Follow every six, wicket and boundary from the Caribbean, completely free with no account required. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

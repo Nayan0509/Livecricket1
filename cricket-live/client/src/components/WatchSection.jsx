@@ -1,310 +1,41 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fetchYouTubeSearch } from "../api";
-import { trackWatchClick, trackVideoPlay, trackVideoSearch } from "../utils/analytics";
+import { trackVideoPlay, trackVideoSearch } from "../utils/analytics";
 
-// ── Custom stream URL for IPL matches ──────────────────────────────────────
-const IPL_STREAM_URL = "https://streamsbyfinally.pages.dev/jio?id=SS1";
-
-function isIPLMatch(match) {
-  const name   = (match?.name   || "").toLowerCase();
-  const series = (match?.series || "").toLowerCase();
-  return (
-    name.includes("ipl") ||
-    name.includes("indian premier league") ||
-    series.includes("ipl") ||
-    series.includes("indian premier league") ||
-    // IPL team names
-    ["mumbai indians","chennai super kings","royal challengers","kolkata knight riders",
-     "gujarat titans","lucknow super giants","delhi capitals","punjab kings",
-     "rajasthan royals","sunrisers hyderabad"].some(t => name.includes(t))
-  );
-}
-// ──────────────────────────────────────────────────────────────────────────
-
-// Official broadcaster channels per region — improves search relevance
-const OFFICIAL_CHANNELS = {
-  india:        ["Star Sports", "JioCinema", "Sony LIV"],
-  pakistan:     ["PTV Sports", "A Sports", "Geo Super"],
-  england:      ["Sky Sports Cricket", "BBC Sport"],
-  australia:    ["Fox Cricket", "Channel 7 Cricket"],
-  westindies:   ["Flow Sports", "ESPN Caribbean"],
-  default:      ["Sky Sports Cricket", "Willow TV", "Star Sports"],
-};
-
-const INTL_TEAMS = [
-  "india","australia","england","pakistan","south africa","new zealand",
-  "west indies","sri lanka","bangladesh","afghanistan","zimbabwe","ireland",
-  "netherlands","scotland","nepal","usa","canada","kenya","oman","uae",
-  "namibia","papua new guinea","hong kong","singapore",
-];
-
-function isInternationalMatch(match) {
-  const t1 = (match?.teamInfo?.[0]?.name || match?.teams?.[0] || "").toLowerCase();
-  const t2 = (match?.teamInfo?.[1]?.name || match?.teams?.[1] || "").toLowerCase();
-  return INTL_TEAMS.some(t => t1.includes(t)) && INTL_TEAMS.some(t => t2.includes(t));
-}
-
-// Build multiple search queries — try live first, fall back to highlights
+// Build highlight search queries for a match. We only ever look for
+// post-match HIGHLIGHTS from official channels — never live streams.
 function buildQueries(match) {
-  const t1 = match?.teamInfo?.[0]?.name || match?.teams?.[0] || match?.teamInfo?.[0]?.shortname || "";
-  const t2 = match?.teamInfo?.[1]?.name || match?.teams?.[1] || match?.teamInfo?.[1]?.shortname || "";
-  const isLive = match?.matchStarted && !match?.matchEnded;
-  const isIntl = isInternationalMatch(match);
-  const matchType = match?.matchType || "";
-
-  if (isLive && isIntl) {
-    return [
-      `${t1} vs ${t2} live cricket stream`,
-      `${t1} vs ${t2} live ${matchType}`,
-      `${t1} vs ${t2} live today`,
-    ];
-  }
-  if (isLive) {
-    return [
-      `${t1} vs ${t2} live`,
-      `${t1} vs ${t2} live cricket`,
-      `${t1} vs ${t2} ${matchType} live`,
-    ];
-  }
+  const t1 =
+    match?.teamInfo?.[0]?.name ||
+    match?.teams?.[0] ||
+    match?.teamInfo?.[0]?.shortname ||
+    "";
+  const t2 =
+    match?.teamInfo?.[1]?.name ||
+    match?.teams?.[1] ||
+    match?.teamInfo?.[1]?.shortname ||
+    "";
   return [
     `${t1} vs ${t2} highlights`,
     `${t1} vs ${t2} cricket highlights`,
-    `${t1} vs ${t2} full match`,
+    `${t1} vs ${t2} match highlights`,
   ];
 }
 
-function buildQuery(match) {
-  return buildQueries(match)[0];
-}
-
-export default function WatchSection({ match }) {
-  const isIPL = isIPLMatch(match);
-
-  // ── IPL: render custom stream player ──────────────────────────────────
-  if (isIPL) {
-    return <IPLStreamPlayer match={match} />;
-  }
-
-  // ── Non-IPL: YouTube search flow ──────────────────────────────────────
-  return <YouTubeWatchSection match={match} />;
-}
-
-// ── IPL custom stream player — 5s countdown then opens in new tab ─────────
-function IPLStreamPlayer({ match }) {
-  const [countdown, setCountdown] = useState(5);
-  const [launched, setLaunched] = useState(false);
-  const isLive = match?.matchStarted && !match?.matchEnded;
-  const shareUrl = `https://www.livecricketzone.com/match/${match?.id}`;
-
-  // Detect Chrome (includes Chromium-based: Edge, Brave, Opera also pass but that's fine)
-  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-  const [dismissedWarning, setDismissedWarning] = useState(false);
-
-  useEffect(() => {
-    if (launched) return;
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          window.open(IPL_STREAM_URL, "_blank", "noopener,noreferrer");
-          setLaunched(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleWatchNow = () => {
-    window.open(IPL_STREAM_URL, "_blank", "noopener,noreferrer");
-    setLaunched(true);
-    setCountdown(0);
-  };
-
-  return (
-    <div style={{ marginBottom: 28 }}>
-      {/* Header */}
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "12px 18px",
-        background: isLive
-          ? "linear-gradient(90deg, rgba(239,68,68,0.18) 0%, rgba(239,68,68,0.06) 100%)"
-          : "linear-gradient(90deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.04) 100%)",
-        border: `1px solid ${isLive ? "rgba(239,68,68,0.35)" : "rgba(245,158,11,0.3)"}`,
-        borderRadius: 14,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            background: "linear-gradient(135deg,#f59e0b,#ef4444)",
-            borderRadius: 6, padding: "4px 10px",
-            fontWeight: 900, fontSize: 13, color: "#fff", letterSpacing: 0.5,
-          }}>IPL</div>
-          <div>
-            <div style={{ fontWeight: 900, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
-              {isLive ? "🔴 Watch IPL Live Stream" : "▶ Watch IPL Stream"}
-            </div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", marginTop: 1 }}>
-              Free · No signup · Opens in new tab
-            </div>
-          </div>
-          {isLive && (
-            <span style={{
-              fontSize: 9, fontWeight: 900, background: "#ef4444",
-              color: "#fff", padding: "2px 7px", borderRadius: 20,
-              textTransform: "uppercase", letterSpacing: 0.8,
-              animation: "livePulse 2s infinite",
-            }}>● LIVE</span>
-          )}
-        </div>
-        {match?.id && (
-          <button
-            onClick={() => {
-              if (navigator.share) navigator.share({ title: match.name, url: shareUrl });
-              else navigator.clipboard?.writeText(shareUrl);
-            }}
-            style={{
-              background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
-              color: "rgba(255,255,255,0.6)", borderRadius: 7, padding: "4px 10px",
-              fontSize: 11, fontWeight: 600, cursor: "pointer",
-            }}
-          >🔗 Share</button>
-        )}
-      </div>
-
-      {/* Chrome warning banner */}
-      {!isChrome && !dismissedWarning && (
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
-          margin: "8px 0 0", padding: "12px 16px", borderRadius: 10,
-          background: "linear-gradient(90deg, rgba(234,179,8,0.18) 0%, rgba(234,179,8,0.06) 100%)",
-          border: "1px solid rgba(234,179,8,0.45)",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {/* Chrome icon */}
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="11" fill="#fff"/>
-              <circle cx="11" cy="11" r="4.5" fill="#4285F4"/>
-              <path d="M11 6.5h8.5A11 11 0 0 0 2.5 6.5H11z" fill="#EA4335"/>
-              <path d="M6.5 11A4.5 4.5 0 0 0 11 15.5L7 21.5A11 11 0 0 1 .5 11H6.5z" fill="#34A853"/>
-              <path d="M15.5 11A4.5 4.5 0 0 1 11 15.5l4 6A11 11 0 0 0 21.5 11H15.5z" fill="#FBBC05"/>
-            </svg>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#fde047" }}>
-                ⚠️ Best viewed on Google Chrome
-              </div>
-              <div style={{ fontSize: 11, color: "rgba(253,224,71,0.7)", marginTop: 2 }}>
-                For the best live stream experience, please open this page in Chrome browser.
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={() => setDismissedWarning(true)}
-            style={{
-              flexShrink: 0, background: "none", border: "none",
-              color: "rgba(253,224,71,0.6)", fontSize: 18, cursor: "pointer",
-              lineHeight: 1, padding: "0 4px",
-            }}
-            title="Dismiss"
-          >×</button>
-        </div>
-      )}
-
-      {/* Countdown / launched card */}
-      <div style={{
-        marginTop: 2,
-        background: "rgba(5,8,20,0.98)",
-        border: `1px solid ${isLive ? "rgba(239,68,68,0.2)" : "rgba(245,158,11,0.2)"}`,
-        borderRadius: 14, padding: "40px 24px",
-        textAlign: "center",
-      }}>
-        {!launched ? (
-          <>
-            {/* Circular countdown ring */}
-            <div style={{ position: "relative", width: 90, height: 90, margin: "0 auto 20px" }}>
-              <svg width="90" height="90" style={{ transform: "rotate(-90deg)" }}>
-                <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="5" />
-                <circle
-                  cx="45" cy="45" r="38" fill="none"
-                  stroke={isLive ? "#ef4444" : "#f59e0b"}
-                  strokeWidth="5"
-                  strokeDasharray={`${2 * Math.PI * 38}`}
-                  strokeDashoffset={`${2 * Math.PI * 38 * (1 - countdown / 5)}`}
-                  strokeLinecap="round"
-                  style={{ transition: "stroke-dashoffset 0.9s linear" }}
-                />
-              </svg>
-              <div style={{
-                position: "absolute", inset: 0,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 32, fontWeight: 900, color: "#fff",
-              }}>{countdown}</div>
-            </div>
-
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
-              Opening stream in {countdown} second{countdown !== 1 ? "s" : ""}...
-            </div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>
-              Stream will open in a new browser tab
-            </div>
-
-            <button
-              onClick={handleWatchNow}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                background: isLive ? "#ef4444" : "linear-gradient(135deg,#f59e0b,#ef4444)",
-                border: "none", color: "#fff",
-                padding: "12px 32px", borderRadius: 10,
-                fontSize: 14, fontWeight: 800, cursor: "pointer",
-                boxShadow: isLive ? "0 4px 20px rgba(239,68,68,0.4)" : "0 4px 20px rgba(245,158,11,0.4)",
-              }}
-            >
-              ▶ Watch Now
-            </button>
-          </>
-        ) : (
-          <>
-            <div style={{ fontSize: 44, marginBottom: 14 }}>📺</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
-              Stream opened in a new tab!
-            </div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>
-              If it didn't open, click the button below
-            </div>
-            <button
-              onClick={handleWatchNow}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
-                color: "#fff", padding: "10px 24px", borderRadius: 10,
-                fontSize: 13, fontWeight: 700, cursor: "pointer",
-              }}
-            >
-              🔁 Open Again
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── YouTube watch section (non-IPL) ──────────────────────────────────────
-function YouTubeWatchSection({ match }) {
+// Official match highlights embedded from YouTube. No live streams are shown.
+export default function WatchSection({ match, autoOpen = true }) {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeId, setActiveId] = useState(null);
   const [activeVideo, setActiveVideo] = useState(null);
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(autoOpen);
   const [queryIdx, setQueryIdx] = useState(0);
   const fetchedRef = useRef(false);
   const sectionRef = useRef(null);
 
-  const isLive = match?.matchStarted && !match?.matchEnded;
   const queries = match ? buildQueries(match) : [];
-  const query = queries[queryIdx] || buildQuery(match);
+  const query = queries[queryIdx] || queries[0] || "";
 
-  // Fetch on match load — try next query if no results
   useEffect(() => {
     if (!match?.id || fetchedRef.current) return;
     fetchedRef.current = true;
@@ -319,7 +50,6 @@ function YouTubeWatchSection({ match }) {
         const vids = res?.videos || [];
         trackVideoSearch(q, vids.length);
         if (vids.length === 0 && idx < queries.length - 1) {
-          // Try next query
           setQueryIdx(idx + 1);
           doSearch(queries[idx + 1], idx + 1);
           return;
@@ -334,15 +64,6 @@ function YouTubeWatchSection({ match }) {
       .catch(() => setVideos([]))
       .finally(() => setLoading(false));
   };
-
-  // Scroll into view once first video is ready
-  useEffect(() => {
-    if (activeId && sectionRef.current) {
-      setTimeout(() => {
-        sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 250);
-    }
-  }, [activeId]);
 
   const selectVideo = (v) => {
     setActiveId(v.videoId);
@@ -362,110 +83,79 @@ function YouTubeWatchSection({ match }) {
     }
   };
 
-  const shareUrl = `https://www.livecricketzone.com/match/${match?.id}`;
-
   return (
     <div ref={sectionRef} style={{ marginBottom: 28 }}>
-
       {/* Header bar */}
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "12px 18px",
-        background: isLive
-          ? "linear-gradient(90deg, rgba(239,68,68,0.18) 0%, rgba(239,68,68,0.06) 100%)"
-          : "linear-gradient(90deg, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0.04) 100%)",
-        border: `1px solid ${isLive ? "rgba(239,68,68,0.35)" : "rgba(99,102,241,0.3)"}`,
-        borderRadius: opened ? "14px 14px 0 0" : 14,
-        cursor: "pointer",
-        transition: "all 0.2s",
-      }}
-        onClick={() => setOpened(o => !o)}
+      <div
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "12px 18px",
+          background: "linear-gradient(90deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.04) 100%)",
+          border: "1px solid rgba(59,130,246,0.3)",
+          borderRadius: opened ? "14px 14px 0 0" : 14,
+          cursor: "pointer", transition: "all 0.2s",
+        }}
+        onClick={() => setOpened((o) => !o)}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {/* YouTube logo */}
           <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
-            <rect width="28" height="20" rx="4" fill="#FF0000"/>
-            <polygon points="11,5.5 11,14.5 19,10" fill="white"/>
+            <rect width="28" height="20" rx="4" fill="#FF0000" />
+            <polygon points="11,5.5 11,14.5 19,10" fill="white" />
           </svg>
           <div>
             <div style={{ fontWeight: 900, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
-              {isLive ? "🔴 Watch Live on YouTube" : "▶ Watch Highlights on YouTube"}
+              ▶ Match Highlights
             </div>
             <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", marginTop: 1 }}>
-              {loading ? "Searching..." : videos.length > 0 ? `${videos.length} video${videos.length > 1 ? "s" : ""} found` : "Free · No signup required"}
+              {loading
+                ? "Finding official highlights..."
+                : videos.length > 0
+                ? `${videos.length} official highlight${videos.length > 1 ? "s" : ""}`
+                : "From official YouTube channels"}
             </div>
           </div>
-          {isLive && (
-            <span style={{
-              fontSize: 9, fontWeight: 900, background: "#ef4444",
-              color: "#fff", padding: "2px 7px", borderRadius: 20,
-              textTransform: "uppercase", letterSpacing: 0.8,
-              animation: "livePulse 2s infinite",
-            }}>● LIVE</span>
-          )}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {/* Share button */}
-          {match?.id && (
-            <button
-              onClick={e => {
-                e.stopPropagation();
-                if (navigator.share) {
-                  navigator.share({ title: match.name, url: shareUrl });
-                } else {
-                  navigator.clipboard?.writeText(shareUrl);
-                }
-              }}
-              style={{
-                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
-                color: "rgba(255,255,255,0.6)", borderRadius: 7, padding: "4px 10px",
-                fontSize: 11, fontWeight: 600, cursor: "pointer",
-              }}
-              title="Share this match"
-            >
-              🔗 Share
-            </button>
-          )}
-          <span style={{
+        <span
+          style={{
             color: "rgba(255,255,255,0.4)", fontSize: 16,
             transform: opened ? "rotate(180deg)" : "none",
             transition: "transform 0.2s", display: "inline-block",
-          }}>▾</span>
-        </div>
+          }}
+        >
+          ▾
+        </span>
       </div>
 
       {/* Body */}
       {opened && (
-        <div style={{
-          background: "rgba(5,8,20,0.95)",
-          border: `1px solid ${isLive ? "rgba(239,68,68,0.2)" : "rgba(99,102,241,0.2)"}`,
-          borderTop: "none", borderRadius: "0 0 14px 14px",
-          overflow: "hidden",
-        }}>
-
+        <div
+          style={{
+            background: "rgba(5,8,20,0.95)",
+            border: "1px solid rgba(59,130,246,0.2)",
+            borderTop: "none", borderRadius: "0 0 14px 14px", overflow: "hidden",
+          }}
+        >
           {loading ? (
             <div style={{ padding: "48px 20px", textAlign: "center" }}>
-              <div style={{
-                width: 40, height: 40, border: "3px solid rgba(255,255,255,0.06)",
-                borderTopColor: "#FF0000", borderRadius: "50%",
-                animation: "spin 0.7s linear infinite", margin: "0 auto 14px",
-              }} />
+              <div
+                style={{
+                  width: 40, height: 40, border: "3px solid rgba(255,255,255,0.06)",
+                  borderTopColor: "#FF0000", borderRadius: "50%",
+                  animation: "spin 0.7s linear infinite", margin: "0 auto 14px",
+                }}
+              />
               <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>
-                Searching YouTube for <em style={{ color: "rgba(255,255,255,0.7)" }}>"{query}"</em>
-              </div>
-              <div style={{ color: "rgba(255,255,255,0.25)", fontSize: 11, marginTop: 6 }}>
-                Checking official broadcaster channels...
+                Searching official channels for highlights…
               </div>
             </div>
-
           ) : videos.length === 0 ? (
             <div style={{ padding: "40px 20px", textAlign: "center" }}>
               <div style={{ fontSize: 44, marginBottom: 12 }}>📺</div>
               <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 6 }}>
-                No stream found for this match yet.
+                No official highlights published for this match yet.
               </div>
               <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, marginBottom: 20 }}>
-                Try searching directly — official channels may be streaming live.
+                Official channels usually upload highlights a few hours after play ends.
               </div>
               <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <a
@@ -477,7 +167,6 @@ function YouTubeWatchSection({ match }) {
                     borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: "none",
                   }}
                 >
-                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><rect width="14" height="10" rx="2" fill="white" fillOpacity="0.3"/><polygon points="5.5,2.5 5.5,7.5 9.5,5" fill="white"/></svg>
                   Search on YouTube
                 </a>
                 <button
@@ -492,17 +181,15 @@ function YouTubeWatchSection({ match }) {
                 </button>
               </div>
             </div>
-
           ) : (
             <div style={{ display: "flex", flexDirection: "column" }}>
-
-              {/* Main player — full width */}
+              {/* Main player */}
               <div style={{ position: "relative", background: "#000", aspectRatio: "16/9" }}>
                 <iframe
                   key={activeId}
-                  src={`https://www.youtube-nocookie.com/embed/${activeId}?autoplay=1&mute=1&rel=0&modestbranding=1&iv_load_policy=3`}
-                  title={activeVideo?.title || "Cricket Match Video"}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  src={`https://www.youtube-nocookie.com/embed/${activeId}?rel=0&modestbranding=1&iv_load_policy=3`}
+                  title={activeVideo?.title || "Cricket Match Highlights"}
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   style={{ width: "100%", height: "100%", border: "none", display: "block" }}
                 />
@@ -510,22 +197,24 @@ function YouTubeWatchSection({ match }) {
 
               {/* Now playing bar */}
               {activeVideo && (
-                <div style={{
-                  padding: "10px 16px",
-                  background: "rgba(255,255,255,0.03)",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
-                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
-                }}>
+                <div
+                  style={{
+                    padding: "10px 16px", background: "rgba(255,255,255,0.03)",
+                    borderBottom: "1px solid rgba(255,255,255,0.06)",
+                    display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+                  }}
+                >
                   <div style={{ minWidth: 0 }}>
-                    <div style={{
-                      fontSize: 12, fontWeight: 700, color: "#fff",
-                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                    }}>{activeVideo.title}</div>
+                    <div
+                      style={{
+                        fontSize: 12, fontWeight: 700, color: "#fff",
+                        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                      }}
+                    >
+                      {activeVideo.title}
+                    </div>
                     <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
                       📺 {activeVideo.channel || "YouTube"}
-                      {activeVideo.isLive && (
-                        <span style={{ marginLeft: 8, color: "#ef4444", fontWeight: 800 }}>● LIVE</span>
-                      )}
                     </div>
                   </div>
                   <a
@@ -541,11 +230,16 @@ function YouTubeWatchSection({ match }) {
                 </div>
               )}
 
-              {/* Video list — horizontal scroll on mobile, vertical on desktop */}
+              {/* More highlights */}
               {videos.length > 1 && (
                 <div style={{ padding: "12px 16px" }}>
-                  <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>
-                    More Videos
+                  <div
+                    style={{
+                      fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.3)",
+                      textTransform: "uppercase", letterSpacing: 1, marginBottom: 10,
+                    }}
+                  >
+                    More Highlights
                   </div>
                   <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "thin" }}>
                     {videos.map((v) => (
@@ -555,46 +249,25 @@ function YouTubeWatchSection({ match }) {
                         style={{
                           flexShrink: 0, width: 160, cursor: "pointer",
                           borderRadius: 8, overflow: "hidden",
-                          border: `2px solid ${activeId === v.videoId ? "#ef4444" : "rgba(255,255,255,0.06)"}`,
-                          transition: "border-color 0.15s",
-                          background: "rgba(255,255,255,0.03)",
+                          border: `2px solid ${activeId === v.videoId ? "#3B82F6" : "rgba(255,255,255,0.06)"}`,
+                          transition: "border-color 0.15s", background: "rgba(255,255,255,0.03)",
                         }}
                       >
-                        <div style={{ position: "relative" }}>
-                          <img
-                            src={v.thumbnail} alt={v.title}
-                            style={{ width: "100%", height: 90, objectFit: "cover", display: "block" }}
-                          />
-                          {v.isLive && (
-                            <span style={{
-                              position: "absolute", top: 4, left: 4,
-                              background: "#ef4444", color: "#fff",
-                              fontSize: 8, fontWeight: 900, padding: "2px 5px",
-                              borderRadius: 3, textTransform: "uppercase",
-                            }}>● LIVE</span>
-                          )}
-                          {activeId === v.videoId && (
-                            <div style={{
-                              position: "absolute", inset: 0,
-                              background: "rgba(239,68,68,0.25)",
-                              display: "flex", alignItems: "center", justifyContent: "center",
-                            }}>
-                              <div style={{
-                                width: 28, height: 28, borderRadius: "50%",
-                                background: "#ef4444", display: "flex",
-                                alignItems: "center", justifyContent: "center",
-                                fontSize: 10,
-                              }}>▶</div>
-                            </div>
-                          )}
-                        </div>
+                        <img
+                          src={v.thumbnail} alt={v.title}
+                          style={{ width: "100%", height: 90, objectFit: "cover", display: "block" }}
+                        />
                         <div style={{ padding: "6px 8px" }}>
-                          <div style={{
-                            fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.8)",
-                            overflow: "hidden", textOverflow: "ellipsis",
-                            display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-                            lineHeight: 1.4,
-                          }}>{v.title}</div>
+                          <div
+                            style={{
+                              fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.8)",
+                              overflow: "hidden", textOverflow: "ellipsis",
+                              display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                              lineHeight: 1.4,
+                            }}
+                          >
+                            {v.title}
+                          </div>
                           <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>{v.channel}</div>
                         </div>
                       </div>
@@ -603,29 +276,29 @@ function YouTubeWatchSection({ match }) {
                 </div>
               )}
 
-              {/* YouTube legal credit */}
-              <div style={{
-                padding: "10px 16px",
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                display: "flex", alignItems: "flex-start", gap: 8,
-                background: "rgba(255,0,0,0.04)",
-              }}>
+              {/* Attribution / legal credit */}
+              <div
+                style={{
+                  padding: "10px 16px", borderTop: "1px solid rgba(255,255,255,0.05)",
+                  display: "flex", alignItems: "flex-start", gap: 8, background: "rgba(255,0,0,0.04)",
+                }}
+              >
                 <svg width="14" height="10" viewBox="0 0 14 10" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
-                  <rect width="14" height="10" rx="2" fill="#FF0000"/>
-                  <polygon points="5.5,2.5 5.5,7.5 9.5,5" fill="white"/>
+                  <rect width="14" height="10" rx="2" fill="#FF0000" />
+                  <polygon points="5.5,2.5 5.5,7.5 9.5,5" fill="white" />
                 </svg>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>
-                  Videos are owned by their respective YouTube channels and content creators. Live Cricket Zone does not host or own any video content. Embedded via{" "}
-                  <a href="https://developers.google.com/youtube/iframe_api_reference" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,100,100,0.7)", textDecoration: "none" }}>YouTube IFrame API</a>
-                  {" "}per{" "}
-                  <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,100,100,0.7)", textDecoration: "none" }}>YouTube ToS</a>.
-                  {" "}
-                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,100,100,0.7)", textDecoration: "none" }}>
-                    More videos on YouTube ↗
-                  </a>
+                  Highlights are owned by their respective official channels and rights holders.
+                  Live Cricket Zone does not host or own any video content. Clips are embedded via the{" "}
+                  <a href="https://developers.google.com/youtube/iframe_api_reference" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,100,100,0.7)", textDecoration: "none" }}>
+                    YouTube IFrame API
+                  </a>{" "}
+                  in line with{" "}
+                  <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,100,100,0.7)", textDecoration: "none" }}>
+                    YouTube's Terms of Service
+                  </a>.
                 </div>
               </div>
-
             </div>
           )}
         </div>

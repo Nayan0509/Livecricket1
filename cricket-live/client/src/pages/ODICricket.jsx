@@ -27,7 +27,7 @@ export default function ODICricket() {
       faqItems={[
         {
           q: "Where can I watch ODI cricket live score today?",
-          a: "Watch any live ODI match on Live Cricket Zone — click the match to get a real-time ball-by-ball scorecard, live commentary, and free streaming links. Updated every 15 seconds, no sign-up needed.",
+          a: "Follow any live ODI match on Live Cricket Zone — click the match to get a real-time ball-by-ball scorecard, live commentary and official post-match highlights. Updated every 15 seconds, no sign-up needed. To watch matches live, use your official licensed broadcaster.",
         },
         {
           q: "What is the ICC CWC League 2?",

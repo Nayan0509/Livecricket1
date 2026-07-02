@@ -25,11 +25,11 @@ export default function Schedule() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(16,185,129,0.14)",
+        background: "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📅 Cricket <span style={{ color: "#10B981" }}>Schedule 2026</span>
+          📅 Cricket <span style={{ color: "#3B82F6" }}>Schedule 2026</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           All upcoming cricket fixtures — IPL, T20 World Cup, ODI & Test series
@@ -47,9 +47,9 @@ export default function Schedule() {
         return (
           <div key={si} style={{ marginBottom: 28 }}>
             <div style={{
-              background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)",
+              background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.15)",
               borderRadius: 8, padding: "8px 16px", marginBottom: 12,
-              fontWeight: 700, fontSize: 13, color: "#10B981",
+              fontWeight: 700, fontSize: 13, color: "#3B82F6",
             }}>
               📅 {wrapper.date}
             </div>
@@ -74,7 +74,7 @@ export default function Schedule() {
                             </div>
                             <div style={{ fontSize: 11, color: "var(--text-muted)" }}>⏰ {startDate}</div>
                           </div>
-                          <span style={{ fontSize: 10, fontWeight: 800, padding: "3px 10px", borderRadius: 20, background: "rgba(245,158,11,0.1)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.25)", flexShrink: 0 }}>
+                          <span style={{ fontSize: 10, fontWeight: 800, padding: "3px 10px", borderRadius: 20, background: "rgba(56,189,248,0.1)", color: "#38BDF8", border: "1px solid rgba(56,189,248,0.25)", flexShrink: 0 }}>
                             {m.matchFormat}
                           </span>
                         </div>
@@ -96,9 +96,9 @@ export default function Schedule() {
       )}
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
+      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           Cricket Schedule 2026 — Complete Fixtures Guide
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
@@ -108,14 +108,14 @@ export default function Schedule() {
           The 2026 cricket calendar is packed with major events. The <strong style={{ color: "var(--text2)" }}>ICC T20 World Cup 2026</strong> runs in June 2026 with 16 nations competing across 45 matches. The IPL 2026 runs from March through May with 10 franchises playing 74 matches. County Championship 2026 runs throughout the English summer, while PSL, BBL, CPL and BPL fill the global T20 league calendar. The ICC Future Tours Programme also schedules bilateral ODI and Test series between all major nations throughout the year.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          For each upcoming fixture, Live Cricket Zone shows the match name, venue, date and local time. Once a match begins, click through to get real-time ball-by-ball live score, full scorecard, toss information and free live stream links. The schedule refreshes automatically — you never need to reload the page to see updated fixtures.
+          For each upcoming fixture, Live Cricket Zone shows the match name, venue, date and local time. Once a match begins, click through to get real-time ball-by-ball live score, full scorecard and toss information, plus official post-match highlights when play ends. The schedule refreshes automatically — you never need to reload the page to see updated fixtures.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
           Use the format filter to view only Test matches, ODIs or T20Is. Check back daily as new fixtures are added to the schedule — all completely free with no account or subscription required.
         </p>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 14 }}>
           {["IPL 2026 Schedule", "T20 World Cup 2026 Fixtures", "ODI Series 2026", "Test Schedule 2026", "PSL 2026 Schedule", "BBL 2026 Fixtures", "CPL 2026 Schedule", "Cricket Calendar 2026"].map(tag => (
-            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20, background: "rgba(16,185,129,0.07)", border: "1px solid rgba(16,185,129,0.14)", color: "rgba(52,211,153,0.8)" }}>{tag}</span>
+            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20, background: "rgba(59,130,246,0.07)", border: "1px solid rgba(59,130,246,0.14)", color: "rgba(52,211,153,0.8)" }}>{tag}</span>
           ))}
         </div>
       </section>

@@ -8,7 +8,7 @@ export default function WorldCup() {
       name="ICC Cricket World Cup 2027"
       shortName="World Cup"
       filterKeywords={["World Cup", "ODI World Cup", "ICC World Cup", "Cricket World Cup"]}
-      accentColor="#fbbf24"
+      accentColor="#38BDF8"
       seoTitle="Cricket World Cup 2027 Live Score — ICC ODI World Cup"
       seoDesc="ICC Cricket World Cup 2027 live score with ball-by-ball commentary. All 48 matches across South Africa, Zimbabwe and Namibia covered — India, Australia, Pakistan, England and 14 nations. Updated every 15 seconds, free."
       seoKeywords="Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule 2027, World Cup ball by ball, ICC World Cup 2027, cricket world cup today match, India World Cup 2027, World Cup South Africa 2027, ODI World Cup qualifier, ICC CWC 2027 live, Cricket World Cup final live"
@@ -47,7 +47,7 @@ Fourteen nations will compete in the ICC Cricket World Cup 2027, beginning with 
 
 Qualification for the 2027 World Cup runs through the ICC's global ranking system for established nations, while associate nations must navigate the ICC CWC League 2 and Global Qualifier. This pathway — covered comprehensively by Live Cricket Zone — gives cricketing nations from Africa, Asia, the Americas and Europe the chance to earn a place on the world's biggest ODI stage. Nations like Ireland, Afghanistan, Netherlands, Scotland and Zimbabwe have all produced memorable World Cup moments by upsetting established cricket powers.
 
-Live Cricket Zone will provide full ball-by-ball commentary for every ICC Cricket World Cup 2027 match — complete scorecard, batting and bowling figures, toss information, player statistics, live stream links and match reports. Follow every delivery of the 2027 World Cup completely free, with real-time updates every 15 seconds.`}
+Live Cricket Zone will provide full ball-by-ball commentary for every ICC Cricket World Cup 2027 match — complete scorecard, batting and bowling figures, toss information, player statistics, official post-match highlights and match reports. Follow every delivery of the 2027 World Cup completely free, with real-time updates every 15 seconds. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

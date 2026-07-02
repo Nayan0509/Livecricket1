@@ -47,7 +47,7 @@ The ICC Women's T20 World Cup and ICC Women's ODI World Cup are the pinnacle eve
 
 Beyond the flagship ICC events, women's cricket fills the calendar with meaningful bilateral series. The Women's Ashes between Australia and England is a historic multi-format contest of Test, ODI and T20I cricket. The West Indies Women, Pakistan Women, Sri Lanka Women, Bangladesh Women and Ireland Women are all competing to narrow the gap with the top nations, aided by ICC investment in women's cricket development programmes. The Women's IPL has been a landmark moment, giving Indian women cricketers a franchise platform equivalent to the men's T20 world.
 
-Live Cricket Zone covers all women's cricket with the same real-time ball-by-ball detail as any men's international series — complete scorecard, batting and bowling figures, live stream links and toss updates. Follow every women's cricket match in 2026 completely free with no sign-up required, updated every 15 seconds.`}
+Live Cricket Zone covers all women's cricket with the same real-time ball-by-ball detail as any men's international series — complete scorecard, batting and bowling figures, toss updates and official post-match highlights. Follow every women's cricket match in 2026 completely free with no sign-up required, updated every 15 seconds. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

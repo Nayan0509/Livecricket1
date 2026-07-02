@@ -20,11 +20,11 @@ function VideoCard({ video, isActive, onClick }) {
         cursor: "pointer",
         borderRadius: 10,
         overflow: "hidden",
-        border: isActive ? "2px solid #10B981" : "2px solid rgba(255,255,255,0.06)",
+        border: isActive ? "2px solid #3B82F6" : "2px solid rgba(255,255,255,0.06)",
         background: "rgba(255,255,255,0.02)",
         transition: "all 0.2s",
       }}
-      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(16,185,129,0.3)"; e.currentTarget.style.background = "rgba(16,185,129,0.04)"; }}}
+      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"; e.currentTarget.style.background = "rgba(59,130,246,0.04)"; }}}
       onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}}
     >
       <div style={{ position: "relative", aspectRatio: "16/9", background: "#111" }}>
@@ -41,7 +41,7 @@ function VideoCard({ video, isActive, onClick }) {
         }}>
           <div style={{
             width: 40, height: 40, borderRadius: "50%",
-            background: isActive ? "rgba(16,185,129,0.9)" : "rgba(0,0,0,0.6)",
+            background: isActive ? "rgba(59,130,246,0.9)" : "rgba(0,0,0,0.6)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 16, color: "#fff", transition: "background 0.2s",
           }}>▶</div>
@@ -88,27 +88,27 @@ export default function Videos() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Videos — IPL 2026 Highlights, T20 World Cup & Live Streams"
-        description="Watch cricket videos — IPL 2026 match highlights, T20 World Cup 2026, best catches, biggest sixes, and live stream links. Updated daily with the latest cricket clips."
-        keywords="cricket videos, IPL 2026 highlights, cricket highlights today, T20 World Cup video, cricket live stream, IPL highlights video, cricket best catches, cricket sixes, cricket match video 2026, watch cricket online free"
+        title="Cricket Videos — IPL 2026 Highlights, T20 World Cup & Replays"
+        description="Watch cricket videos — IPL 2026 official match highlights, T20 World Cup 2026, best catches, biggest sixes and match replays. Updated daily with the latest cricket clips."
+        keywords="cricket videos, IPL 2026 highlights, cricket highlights today, T20 World Cup video, cricket match highlights, IPL highlights video, cricket best catches, cricket sixes, cricket match video 2026, cricket replays"
         url="/videos"
       />
 
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(16,185,129,0.09) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(16,185,129,0.15)",
+        background: "linear-gradient(135deg, rgba(59,130,246,0.09) 0%, rgba(9,9,11,0.98) 100%)",
+        border: "1px solid rgba(59,130,246,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📺 Cricket <span style={{ color: "#10B981" }}>Videos</span>
+          📺 Cricket <span style={{ color: "#3B82F6" }}>Videos</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
-          IPL 2026 highlights · T20 World Cup · Best catches · Live streams
+          IPL 2026 highlights · T20 World Cup · Best catches · Replays
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          {["IPL Highlights", "T20 WC", "Live Streams", "Free"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", color: "#10B981" }}>{t}</span>
+          {["IPL Highlights", "T20 WC", "Replays", "Free"].map(t => (
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)", color: "#3B82F6" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function Videos() {
         {SEARCH_QUERIES.map((tab, i) => (
           <button key={i} onClick={() => setActiveTab(i)} style={{
             flexShrink: 0, padding: "8px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
-            background: activeTab === i ? "#10B981" : "rgba(255,255,255,0.04)",
+            background: activeTab === i ? "#3B82F6" : "rgba(255,255,255,0.04)",
             color: activeTab === i ? "#000" : "var(--text3)",
             border: activeTab === i ? "none" : "1px solid rgba(255,255,255,0.08)",
             cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif",
@@ -141,7 +141,7 @@ export default function Videos() {
           {featured && (
             <div style={{ marginBottom: 24 }}>
               <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>▶ Now Playing</div>
-              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(16,185,129,0.2)" }}>
+              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(59,130,246,0.2)" }}>
                 <div style={{ position: "relative", paddingTop: "56.25%", background: "#000" }}>
                   <iframe
                     key={featured.videoId}
@@ -178,8 +178,8 @@ export default function Videos() {
               rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
-                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#10B981",
-                background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)",
+                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#3B82F6",
+                background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
                 textDecoration: "none", transition: "all 0.15s",
               }}
             >
@@ -195,7 +195,7 @@ export default function Videos() {
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(SEARCH_QUERIES[activeTab].q)}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 13, color: "#10B981", fontWeight: 700, textDecoration: "none" }}
+            style={{ fontSize: 13, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}
           >
             Search on YouTube →
           </a>
@@ -205,13 +205,13 @@ export default function Videos() {
       <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
 
       {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.07)" }}>
+      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#16A34A)", display: "inline-block" }} />
-          Cricket Videos — Highlights, Live Streams & Replays
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
+          Cricket Videos — Highlights & Replays
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          The Cricket Videos section on Live Cricket Zone pulls the latest cricket highlights, match replays, and live stream links directly from YouTube so you always see the freshest content. Whether you're looking for <strong style={{ color: "var(--text2)" }}>IPL 2026 match highlights</strong> from last night, the best sixes from the T20 World Cup 2026, or a live stream of today's Test match, the video library is updated continuously across all six categories.
+          The Cricket Videos section on Live Cricket Zone pulls the latest official cricket highlights and match replays directly from the rights holders' YouTube channels so you always see the freshest content. Whether you're looking for <strong style={{ color: "var(--text2)" }}>IPL 2026 match highlights</strong> from last night, the best sixes from the T20 World Cup 2026, or replays from today's Test match, the video library is updated continuously across all six categories.
         </p>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
           The <strong style={{ color: "var(--text2)" }}>IPL 2026 Highlights</strong> tab shows post-match highlight reels for every Indian Premier League fixture — typically uploaded within 90 minutes of the final ball. The <strong style={{ color: "var(--text2)" }}>T20 World Cup</strong> tab surfaces ICC official highlights from all group stage, Super 8 and knockout matches. The <strong style={{ color: "var(--text2)" }}>Test Cricket</strong> and <strong style={{ color: "var(--text2)" }}>ODI Cricket</strong> tabs cover international bilateral series highlights from every touring team throughout the year.

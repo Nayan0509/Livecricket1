@@ -11,7 +11,7 @@ export default function ICCCWCLeague2() {
         "CWC League", "ICC CWC", "Namibia", "Scotland", "Oman",
         "CWC League 2", "World Cup League", "Cricket World Cup League",
       ]}
-      accentColor="#10b981"
+      accentColor="#3B82F6"
       seoTitle="ICC CWC League 2 Live Score — ODI World Cup Qualifying"
       seoDesc="ICC Cricket World Cup League 2 live scores and ball-by-ball commentary. Follow all qualifying ODI matches as nations compete for ICC ODI World Cup berths. Updated every 15 seconds."
       seoKeywords="ICC CWC League 2 live score, ICC Cricket World Cup League 2, CWC League 2 ODI, World Cup qualifier live score, Namibia cricket live, Scotland cricket live, Oman cricket live, ODI qualifier live, cricket world cup qualifying, ICC CWC 2026"
@@ -36,8 +36,8 @@ export default function ICCCWCLeague2() {
           a: "ICC CWC League 2 typically features 8 nations including Namibia, Scotland, Oman, Nepal, UAE, Canada, Kenya and Singapore. These associate cricket nations compete in tri-series across multiple host countries.",
         },
         {
-          q: "Can I watch ICC CWC League 2 live free?",
-          a: "Yes — Live Cricket Zone provides free live score, ball-by-ball commentary and streaming links for all ICC CWC League 2 matches. No sign-up or subscription required.",
+          q: "Can I follow ICC CWC League 2 for free?",
+          a: "Yes — Live Cricket Zone provides free live scores, ball-by-ball commentary, full scorecards and official match highlights for all ICC CWC League 2 matches. No sign-up or subscription required. To watch matches live, use your official licensed broadcaster.",
         },
       ]}
       aboutText={`Live Cricket Zone delivers real-time live scores and ball-by-ball commentary for all ICC Cricket World Cup League 2 matches. The CWC League 2 is the pathway for associate cricket nations to qualify for the ICC ODI World Cup — arguably the most important qualifying series in world cricket outside the ICC full-member nations.
@@ -46,7 +46,7 @@ The ICC CWC League 2 features eight associate cricket nations competing across a
 
 Matches are played in 50-over ODI format, giving associate nations the opportunity to hone their skills against competitive opposition. Nations like Namibia, Scotland, Oman, Nepal, UAE, Canada, Kenya and Singapore regularly participate, and these contests have produced memorable upsets and record performances as smaller cricket nations grow in strength.
 
-Live Cricket Zone provides the same real-time ball-by-ball coverage for ICC CWC League 2 matches as it does for full international series — complete scorecard, batting and bowling figures, live stream links, and toss information. Follow every qualifying match free, no sign-up required.`}
+Live Cricket Zone provides the same real-time ball-by-ball coverage for ICC CWC League 2 matches as it does for full international series — complete scorecard, batting and bowling figures, toss information and official match highlights. Follow every qualifying match free, no sign-up required. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

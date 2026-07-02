@@ -8,10 +8,10 @@ export default function PSL() {
       name="PSL 2026"
       shortName="PSL"
       filterKeywords={["PSL", "Pakistan Super League", "HBL PSL"]}
-      accentColor="#4ade80"
+      accentColor="#60A5FA"
       seoTitle="PSL 2026 Live Score — Pakistan Super League T20"
       seoDesc="PSL 2026 live score with ball-by-ball commentary for all Pakistan Super League matches. Follow Karachi Kings, Lahore Qalandars, Multan Sultans, Islamabad United and all 6 teams. Updated every 15 seconds, free."
-      seoKeywords="PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard, PSL points table 2026, PSL schedule 2026, PSL match today, HBL PSL live score, Karachi Kings live, Lahore Qalandars live, Multan Sultans live, Islamabad United live, Babar Azam PSL, Shaheen Afridi PSL, PSL live stream free"
+      seoKeywords="PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard, PSL points table 2026, PSL schedule 2026, PSL match today, HBL PSL live score, Karachi Kings live, Lahore Qalandars live, Multan Sultans live, Islamabad United live, Babar Azam PSL, Shaheen Afridi PSL, PSL highlights"
       stats={[
         { value: "6", label: "Teams" },
         { value: "34", label: "Matches" },
@@ -37,8 +37,8 @@ export default function PSL() {
           a: "PSL 2026 features Pakistan's elite cricketers including Babar Azam, Shaheen Shah Afridi, Shadab Khan, Mohammad Rizwan and Fakhar Zaman, alongside international T20 specialists from Australia, England, West Indies and beyond.",
         },
         {
-          q: "How can I watch PSL 2026 live stream free?",
-          a: "Live Cricket Zone provides free live streaming links for all PSL 2026 matches. Click any live PSL match on the site to find available free stream links — no account or subscription required.",
+          q: "How can I follow PSL 2026 matches on Live Cricket Zone?",
+          a: "Live Cricket Zone gives you PSL 2026 live scores, ball-by-ball commentary, full scorecards and the points table, plus official post-match highlights embedded from the league's YouTube channel. To watch matches live, use your official licensed broadcaster.",
         },
       ]}
       aboutText={`Live Cricket Zone delivers real-time PSL 2026 live scores with ball-by-ball commentary for every Pakistan Super League match. The PSL is Pakistan's premier T20 franchise tournament and one of the fastest-growing cricket leagues in the world. Launched in 2016 and initially held in the UAE before successfully moving to Pakistan in 2018, the PSL has become a major event in the global T20 cricket calendar.
@@ -47,7 +47,7 @@ Six franchises representing Pakistan's cricket heartlands compete for the PSL tr
 
 Pakistan's best cricketers are the heartbeat of PSL — Babar Azam, the world's top-ranked white-ball batter, Shaheen Shah Afridi's searing pace, Shadab Khan's wrist spin, Mohammad Rizwan's explosive keeping and batting, and Fakhar Zaman's devastating left-hand stroke-play. These domestic stars are joined by international marquee signings who add world-class depth across all six franchises.
 
-Live Cricket Zone provides full ball-by-ball commentary, complete scorecards, points table, player stats and live stream links for every PSL 2026 match. Whether you're in Pakistan or following from abroad, track the PSL live — completely free, updated every 15 seconds with no account required.`}
+Live Cricket Zone provides full ball-by-ball commentary, complete scorecards, points table, player stats and official post-match highlights for every PSL 2026 match. Whether you're in Pakistan or following from abroad, track the PSL — completely free, updated every 15 seconds with no account required. To watch matches live, use your official licensed broadcaster.`}
     />
   );
 }

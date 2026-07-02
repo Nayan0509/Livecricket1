@@ -37,7 +37,7 @@ export default function DMCACopyright() {
 
       {/* Key statement */}
       <div style={{
-        background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)",
+        background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
         borderRadius: 12, padding: "16px 20px", marginBottom: 32,
         display: "flex", gap: 12, alignItems: "flex-start",
       }}>

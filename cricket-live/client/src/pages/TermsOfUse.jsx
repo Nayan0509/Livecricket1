@@ -23,7 +23,7 @@ export default function TermsOfUse() {
     <div className="container" style={{ maxWidth: 860, paddingBottom: 80 }}>
       <SEO
         title="Terms of Use - Live Cricket Zone"
-        description="Terms of Use for Live Cricket Zone. Read our terms and conditions for using our live cricket scores, streaming, and content services."
+        description="Terms of Use for Live Cricket Zone. Read our terms and conditions for using our live cricket scores, highlights, and content services."
         url="/terms-of-use"
         noindex={false}
       />
@@ -51,7 +51,7 @@ export default function TermsOfUse() {
         <p>Live Cricket Zone provides:</p>
         <ul style={{ paddingLeft: 20, marginTop: 8 }}>
           <li style={{ marginBottom: 6 }}>Live cricket scores and ball-by-ball commentary aggregated from publicly available sources</li>
-          <li style={{ marginBottom: 6 }}>Embedded YouTube videos for cricket match streams and highlights</li>
+          <li style={{ marginBottom: 6 }}>Embedded official YouTube videos for post-match highlights and cricket clips (we do not host or stream live matches)</li>
           <li style={{ marginBottom: 6 }}>Cricket news aggregated from public RSS feeds</li>
           <li style={{ marginBottom: 6 }}>Player statistics, ICC rankings, and match schedules</li>
         </ul>
@@ -95,7 +95,7 @@ export default function TermsOfUse() {
         <ul style={{ paddingLeft: 20, marginTop: 8 }}>
           <li style={{ marginBottom: 6 }}>Live scores and data are 100% accurate or up to date at all times</li>
           <li style={{ marginBottom: 6 }}>The Website will be uninterrupted, error-free, or free of viruses</li>
-          <li style={{ marginBottom: 6 }}>Any particular video stream will be available at any given time</li>
+          <li style={{ marginBottom: 6 }}>Any particular embedded video will be available at any given time</li>
         </ul>
         <p style={{ marginTop: 10 }}>Cricket data is sourced from publicly available information and may occasionally contain errors or delays.</p>
       </Section>

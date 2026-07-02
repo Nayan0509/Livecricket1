@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Ticker from "./components/Ticker";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { trackPageView } from "./utils/analytics";
 
 import Home from "./pages/Home";
@@ -43,7 +44,6 @@ import LiveCricketScore from "./pages/LiveCricketScore";
 import CricketScoreToday from "./pages/CricketScoreToday";
 import CricketMatchesToday from "./pages/CricketMatchesToday";
 import WatchLive from "./pages/WatchLive";
-import IPLLiveStream from "./pages/IPLLiveStream";
 import Videos from "./pages/Videos";
 import CountyChampionship from "./pages/CountyChampionship";
 import ICCCWCLeague2 from "./pages/ICCCWCLeague2";
@@ -53,23 +53,21 @@ import TermsOfUse from "./pages/TermsOfUse";
 import DMCACopyright from "./pages/DMCACopyright";
 
 
-// Tracks every SPA route change as a GA4 page_view
-function RouteTracker() {
+function AppShell() {
   const location = useLocation();
+
+  // Track every SPA route change as a GA4 page_view
   useEffect(() => {
     trackPageView(location.pathname + location.search, document.title);
   }, [location]);
-  return null;
-}
 
-export default function App() {
   return (
-    <BrowserRouter>
-      <RouteTracker />
-      <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
-        <Navbar />
-        <Ticker />
-        <main style={{ minHeight: "calc(100vh - 140px)", paddingTop: "16px" }} className="animate-fade-in">
+    <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
+      <Navbar />
+      <Ticker />
+      <main style={{ minHeight: "calc(100vh - 140px)", paddingTop: "16px" }} className="animate-fade-in">
+        {/* Keyed by path so a crashed page auto-recovers on navigation */}
+        <ErrorBoundary resetKey={location.pathname}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/live" element={<LiveMatches />} />
@@ -78,12 +76,14 @@ export default function App() {
             <Route path="/cricket-matches-today" element={<CricketMatchesToday />} />
             <Route path="/ball-by-ball" element={<BallByBall />} />
             <Route path="/watch-live" element={<WatchLive />} />
-            <Route path="/watch" element={<WatchLive />} />
-            <Route path="/live-stream" element={<WatchLive />} />
-            <Route path="/ipl-live-stream" element={<IPLLiveStream />} />
-            <Route path="/ipl-live" element={<IPLLiveStream />} />
-            <Route path="/watch-ipl-live" element={<IPLLiveStream />} />
-            <Route path="/ipl-stream" element={<IPLLiveStream />} />
+            <Route path="/highlights" element={<WatchLive />} />
+            <Route path="/watch" element={<Navigate to="/watch-live" replace />} />
+            <Route path="/live-stream" element={<Navigate to="/watch-live" replace />} />
+            {/* Retired IPL live-stream doorway pages → canonical IPL page */}
+            <Route path="/ipl-live-stream" element={<Navigate to="/ipl" replace />} />
+            <Route path="/ipl-live" element={<Navigate to="/ipl" replace />} />
+            <Route path="/watch-ipl-live" element={<Navigate to="/ipl" replace />} />
+            <Route path="/ipl-stream" element={<Navigate to="/ipl" replace />} />
             <Route path="/videos" element={<Videos />} />
 
             <Route path="/match/:id" element={<MatchDetail />} />
@@ -128,23 +128,31 @@ export default function App() {
             
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </main>
-        <Footer />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "url": "https://www.livecricketzone.com/",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://www.livecricketzone.com/players?search={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
+        </ErrorBoundary>
+      </main>
+      <Footer />
+      <script type="application/ld+json">
+        {`
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://www.livecricketzone.com/",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://www.livecricketzone.com/players?search={search_term_string}",
+              "query-input": "required name=search_term_string"
             }
-          `}
-        </script>
-      </div>
+          }
+        `}
+      </script>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
     </BrowserRouter>
   );
 }

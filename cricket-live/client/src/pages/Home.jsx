@@ -5,7 +5,6 @@ import { fetchAllMatches, fetchNews, fetchIPLStandings, fetchRankings } from "..
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import { trackMatchCardClick, trackWatchClick } from "../utils/analytics";
-import StreamDisclaimer from "../components/StreamDisclaimer";
 
 /* ── Structured data ── */
 const SITE_SD = [
@@ -20,7 +19,7 @@ const SITE_SD = [
   {
     "@context": "https://schema.org", "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "How to watch live cricket free?", "acceptedAnswer": { "@type": "Answer", "text": "Click any live match on Live Cricket Zone and hit Watch to stream free via YouTube — no signup needed." } },
+      { "@type": "Question", "name": "How can I follow live cricket free on Live Cricket Zone?", "acceptedAnswer": { "@type": "Answer", "text": "Open any live match on Live Cricket Zone for free live scores, ball-by-ball commentary and full scorecards, plus official post-match highlights from the rights holders' YouTube channels. To watch matches live, use your official licensed broadcaster." } },
       { "@type": "Question", "name": "Where is the IPL 2026 points table?", "acceptedAnswer": { "@type": "Answer", "text": "The IPL 2026 points table is on livecricketzone.com/ipl with live standings updated after every match." } }
     ]
   }
@@ -61,10 +60,10 @@ function IPLStandingsWidget() {
     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
           IPL 2026 — Points Table
         </span>
-        <Link to="/ipl" style={{ fontSize: 11, color: "#F59E0B", fontWeight: 700 }}>Full Table →</Link>
+        <Link to="/ipl" style={{ fontSize: 11, color: "#38BDF8", fontWeight: 700 }}>Full Table →</Link>
       </div>
 
       {isLoading ? (
@@ -75,7 +74,7 @@ function IPLStandingsWidget() {
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "rgba(245,158,11,0.06)" }}>
+              <tr style={{ background: "rgba(56,189,248,0.06)" }}>
                 {["#", "Team", "P", "W", "L", "NRR", "Pts"].map(h => (
                   <th key={h} style={{ padding: "7px 10px", fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.5, color: "var(--text3)", textAlign: h === "Team" ? "left" : "center", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                     {h}
@@ -89,13 +88,13 @@ function IPLStandingsWidget() {
                   key={r.short || i}
                   style={{
                     borderBottom: "1px solid rgba(255,255,255,0.03)",
-                    background: i < 4 ? "rgba(16,185,129,0.03)" : "transparent",
+                    background: i < 4 ? "rgba(59,130,246,0.03)" : "transparent",
                     transition: "background 0.15s",
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(16,185,129,0.03)" : "transparent"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(59,130,246,0.03)" : "transparent"; }}
                 >
-                  <td style={{ padding: "8px 10px", fontSize: 10, color: i < 4 ? "#10B981" : "var(--text-muted)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
+                  <td style={{ padding: "8px 10px", fontSize: 10, color: i < 4 ? "#3B82F6" : "var(--text-muted)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
                   <td style={{ padding: "8px 10px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                       <div style={{ width: 22, height: 22, borderRadius: "50%", background: `${r.color}22`, border: `1.5px solid ${r.color}50`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7, fontWeight: 900, color: r.color, flexShrink: 0 }}>
@@ -105,16 +104,16 @@ function IPLStandingsWidget() {
                     </div>
                   </td>
                   <td style={{ padding: "8px 6px", fontSize: 11, color: "var(--text3)", textAlign: "center" }}>{r.p || "—"}</td>
-                  <td style={{ padding: "8px 6px", fontSize: 11, color: "#10B981", fontWeight: 700, textAlign: "center" }}>{r.w || "—"}</td>
+                  <td style={{ padding: "8px 6px", fontSize: 11, color: "#3B82F6", fontWeight: 700, textAlign: "center" }}>{r.w || "—"}</td>
                   <td style={{ padding: "8px 6px", fontSize: 11, color: "#F87171", textAlign: "center" }}>{r.l || "—"}</td>
                   <td style={{ padding: "8px 6px", fontSize: 10, color: "var(--text3)", textAlign: "center", whiteSpace: "nowrap" }}>{r.nrr || "—"}</td>
-                  <td style={{ padding: "8px 10px", fontSize: 12, fontWeight: 900, color: i < 4 ? "#F59E0B" : "var(--text)", textAlign: "center" }}>{r.pts || "—"}</td>
+                  <td style={{ padding: "8px 10px", fontSize: 12, fontWeight: 900, color: i < 4 ? "#38BDF8" : "var(--text)", textAlign: "center" }}>{r.pts || "—"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div style={{ padding: "6px 12px", fontSize: 9, color: "var(--text-muted)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-            <span style={{ color: "#10B981" }}>●</span> Qualify for Playoffs (Top 4)
+            <span style={{ color: "#3B82F6" }}>●</span> Qualify for Playoffs (Top 4)
           </div>
         </div>
       )}
@@ -133,10 +132,10 @@ function RankingsWidget() {
     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
           ICC Test Rankings
         </span>
-        <Link to="/rankings" style={{ fontSize: 11, color: "#10B981", fontWeight: 700 }}>Full Rankings →</Link>
+        <Link to="/rankings" style={{ fontSize: 11, color: "#3B82F6", fontWeight: 700 }}>Full Rankings →</Link>
       </div>
       <div>
         {isLoading ? <div className="spinner" style={{ width: 24, height: 24, margin: "20px auto" }} /> : ranks.map((r, i) => (
@@ -148,7 +147,7 @@ function RankingsWidget() {
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           >
-            <span style={{ fontSize: 10, fontWeight: 900, color: "#10B981", minWidth: 14 }}>{r.rank || i + 1}</span>
+            <span style={{ fontSize: 10, fontWeight: 900, color: "#3B82F6", minWidth: 14 }}>{r.rank || i + 1}</span>
             <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text2)", flex: 1 }}>{r.name}</span>
             <span style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700 }}>{r.rating}</span>
           </div>
@@ -170,8 +169,8 @@ function FeaturedMatch({ match }) {
     <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: align === "right" ? "flex-end" : "flex-start", gap: 8 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexDirection: align === "right" ? "row-reverse" : "row" }}>
         {team?.img
-          ? <img src={team.img} alt={team.name} style={{ width: 52, height: 52, borderRadius: "50%", border: "2px solid rgba(16,185,129,0.3)", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(16,185,129,0.1)", border: "2px solid rgba(16,185,129,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#10B981" }}>
+          ? <img src={team.img} alt={team.name} style={{ width: 52, height: 52, borderRadius: "50%", border: "2px solid rgba(59,130,246,0.3)", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
+          : <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "2px solid rgba(59,130,246,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#3B82F6" }}>
               {team?.shortname?.slice(0, 2) || "?"}
             </div>
         }
@@ -182,7 +181,7 @@ function FeaturedMatch({ match }) {
       </div>
       {score ? (
         <div style={{ textAlign: align === "right" ? "right" : "left" }}>
-          <span style={{ fontSize: 34, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#10B981", lineHeight: 1 }}>
+          <span style={{ fontSize: 34, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#3B82F6", lineHeight: 1 }}>
             {score.r}/{score.w}
           </span>
           <span style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", fontWeight: 500, marginLeft: 6 }}>
@@ -201,20 +200,20 @@ function FeaturedMatch({ match }) {
       style={{
         borderRadius: 18,
         background: "linear-gradient(135deg, rgba(5,150,105,0.12) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(16,185,129,0.3)",
+        border: "1px solid rgba(59,130,246,0.3)",
         padding: "24px 28px",
         marginBottom: 14,
         cursor: "pointer",
         position: "relative",
         overflow: "hidden",
-        boxShadow: "0 0 40px rgba(16,185,129,0.08)",
+        boxShadow: "0 0 40px rgba(59,130,246,0.08)",
         transition: "all 0.3s",
       }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(16,185,129,0.5)"; e.currentTarget.style.boxShadow = "0 0 60px rgba(16,185,129,0.15)"; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(16,185,129,0.3)"; e.currentTarget.style.boxShadow = "0 0 40px rgba(16,185,129,0.08)"; }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(59,130,246,0.5)"; e.currentTarget.style.boxShadow = "0 0 60px rgba(59,130,246,0.15)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"; e.currentTarget.style.boxShadow = "0 0 40px rgba(59,130,246,0.08)"; }}
     >
       {/* Decorative pitch lines */}
-      <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "repeating-linear-gradient(90deg, #10B981 0 1px, transparent 1px 40px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "repeating-linear-gradient(90deg, #3B82F6 0 1px, transparent 1px 40px)", pointerEvents: "none" }} />
 
       {/* Top meta */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
@@ -235,7 +234,7 @@ function FeaturedMatch({ match }) {
           onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.28)"; e.currentTarget.style.color = "#fff"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.15)"; e.currentTarget.style.color = "#F87171"; }}
         >
-          ▶ Watch Live
+          ▶ Highlights
         </button>
       </div>
 
@@ -253,11 +252,11 @@ function FeaturedMatch({ match }) {
       {/* Status */}
       <div style={{
         marginTop: 18, padding: "9px 14px", borderRadius: 10,
-        background: "rgba(16,185,129,0.07)", border: "1px solid rgba(16,185,129,0.15)",
-        fontSize: 13, fontWeight: 700, color: "#34D399",
+        background: "rgba(59,130,246,0.07)", border: "1px solid rgba(59,130,246,0.15)",
+        fontSize: 13, fontWeight: 700, color: "#60A5FA",
         display: "flex", alignItems: "center", gap: 8,
       }}>
-        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />
+        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#3B82F6", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />
         {match.status}
       </div>
     </div>
@@ -273,7 +272,7 @@ function MatchRow({ match }) {
   const t2 = match.teamInfo?.[1];
   const s1 = match.score?.[0];
   const s2 = match.score?.[1];
-  const scoreColor = isLive ? "#10B981" : isCompleted ? "#34D399" : "var(--text)";
+  const scoreColor = isLive ? "#3B82F6" : isCompleted ? "#60A5FA" : "var(--text)";
 
   return (
     <div
@@ -282,17 +281,17 @@ function MatchRow({ match }) {
         display: "grid", gridTemplateColumns: "1fr 48px 1fr auto",
         alignItems: "center", gap: 6, padding: "13px 16px", cursor: "pointer",
         borderBottom: "1px solid rgba(255,255,255,0.04)",
-        background: isLive ? "rgba(16,185,129,0.03)" : "transparent",
+        background: isLive ? "rgba(59,130,246,0.03)" : "transparent",
         transition: "background 0.15s",
       }}
-      onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(16,185,129,0.07)" : "rgba(255,255,255,0.025)"; }}
-      onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(16,185,129,0.03)" : "transparent"; }}
+      onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(59,130,246,0.07)" : "rgba(255,255,255,0.025)"; }}
+      onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(59,130,246,0.03)" : "transparent"; }}
     >
       {/* Team 1 */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
         {t1?.img
-          ? <img src={t1.img} alt={t1.name} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", border: `1.5px solid rgba(16,185,129,0.2)`, flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(16,185,129,0.1)", border: "1.5px solid rgba(16,185,129,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#10B981", flexShrink: 0 }}>{t1?.shortname?.slice(0, 2) || "?"}</div>
+          ? <img src={t1.img} alt={t1.name} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", border: `1.5px solid rgba(59,130,246,0.2)`, flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
+          : <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "1.5px solid rgba(59,130,246,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#3B82F6", flexShrink: 0 }}>{t1?.shortname?.slice(0, 2) || "?"}</div>
         }
         <div style={{ minWidth: 0 }}>
           <div style={{ fontWeight: 800, fontSize: 12, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -307,17 +306,17 @@ function MatchRow({ match }) {
       {/* VS centre */}
       <div style={{ textAlign: "center" }}>
         <div style={{ fontSize: 9, fontWeight: 900, color: "var(--text-muted)", background: "rgba(255,255,255,0.04)", borderRadius: 5, padding: "2px 4px", display: "inline-block" }}>VS</div>
-        {isLive && <div style={{ marginTop: 2, fontSize: 8, color: "#10B981", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
-          <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#10B981", animation: "livePulse 1.8s infinite" }} />LIVE
+        {isLive && <div style={{ marginTop: 2, fontSize: 8, color: "#3B82F6", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
+          <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#3B82F6", animation: "livePulse 1.8s infinite" }} />LIVE
         </div>}
-        {isCompleted && <div style={{ marginTop: 2, fontSize: 8, color: "#34D399", fontWeight: 800 }}>FIN</div>}
+        {isCompleted && <div style={{ marginTop: 2, fontSize: 8, color: "#60A5FA", fontWeight: 800 }}>FIN</div>}
       </div>
 
       {/* Team 2 */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexDirection: "row-reverse", minWidth: 0 }}>
         {t2?.img
-          ? <img src={t2.img} alt={t2.name} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(245,158,11,0.2)", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(245,158,11,0.1)", border: "1.5px solid rgba(245,158,11,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#F59E0B", flexShrink: 0 }}>{t2?.shortname?.slice(0, 2) || "?"}</div>
+          ? <img src={t2.img} alt={t2.name} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(56,189,248,0.2)", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
+          : <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(56,189,248,0.1)", border: "1.5px solid rgba(56,189,248,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#38BDF8", flexShrink: 0 }}>{t2?.shortname?.slice(0, 2) || "?"}</div>
         }
         <div style={{ minWidth: 0, textAlign: "right" }}>
           <div style={{ fontWeight: 800, fontSize: 12, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -334,14 +333,14 @@ function MatchRow({ match }) {
         onClick={e => { e.stopPropagation(); trackWatchClick(match.id, match.name); navigate(`/match/${match.id}?watch=1`); }}
         style={{
           display: "flex", alignItems: "center",
-          background: isLive ? "rgba(239,68,68,0.12)" : "rgba(16,185,129,0.07)",
-          border: `1px solid ${isLive ? "rgba(239,68,68,0.3)" : "rgba(16,185,129,0.18)"}`,
-          color: isLive ? "#F87171" : "#10B981",
+          background: isLive ? "rgba(239,68,68,0.12)" : "rgba(59,130,246,0.07)",
+          border: `1px solid ${isLive ? "rgba(239,68,68,0.3)" : "rgba(59,130,246,0.18)"}`,
+          color: isLive ? "#F87171" : "#3B82F6",
           borderRadius: 7, padding: "5px 9px", fontSize: 11, fontWeight: 700,
           cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.2s", flexShrink: 0,
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.22)" : "rgba(16,185,129,0.16)"; e.currentTarget.style.color = "#fff"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.12)" : "rgba(16,185,129,0.07)"; e.currentTarget.style.color = isLive ? "#F87171" : "#10B981"; }}
+        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.22)" : "rgba(59,130,246,0.16)"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.12)" : "rgba(59,130,246,0.07)"; e.currentTarget.style.color = isLive ? "#F87171" : "#3B82F6"; }}
       >▶</button>
     </div>
   );
@@ -397,9 +396,9 @@ function NewsCard({ item, compact = false }) {
         <Link
           to="/news"
           onClick={e => e.stopPropagation()}
-          style={{ display: "inline-block", marginTop: 8, fontSize: 11, color: "#10B981", fontWeight: 700, textDecoration: "none" }}
+          style={{ display: "inline-block", marginTop: 8, fontSize: 11, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}
         >
-          Read AI Article →
+          More cricket news →
         </Link>
       </div>
     </a>
@@ -407,13 +406,13 @@ function NewsCard({ item, compact = false }) {
 }
 
 const QUICK_LINKS = [
-  { to: "/ipl",              label: "IPL 2026",          color: "#F59E0B" },
+  { to: "/ipl",              label: "IPL 2026",          color: "#38BDF8" },
   { to: "/t20-world-cup",    label: "T20 World Cup",     color: "#EF4444" },
   { to: "/county-championship", label: "County 2026",   color: "#38BDF8" },
-  { to: "/world-cup",        label: "ODI World Cup",     color: "#10B981" },
+  { to: "/world-cup",        label: "ODI World Cup",     color: "#3B82F6" },
   { to: "/champions-trophy", label: "Champions Trophy",  color: "#A78BFA" },
-  { to: "/psl",              label: "PSL 2026",          color: "#10B981" },
-  { to: "/bbl",              label: "BBL",               color: "#F97316" },
+  { to: "/psl",              label: "PSL 2026",          color: "#3B82F6" },
+  { to: "/bbl",              label: "BBL",               color: "#0EA5E9" },
   { to: "/womens-cricket",   label: "Women's",           color: "#EC4899" },
 ];
 
@@ -452,9 +451,9 @@ export default function Home() {
     <div style={{ maxWidth: 1320, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
         title="Live Cricket Score Today — IPL 2026 Points Table, T20, ODI, Test Ball-by-Ball"
-        description="Live Cricket Zone: IPL 2026 live score, points table, ball-by-ball commentary. T20 World Cup, ODI & Test matches. Watch live cricket free — updated every 15 seconds."
+        description="Live Cricket Zone: IPL 2026 live score, points table, ball-by-ball commentary. T20 World Cup, ODI & Test matches. Free live scores and official highlights — updated every 15 seconds."
         url="/"
-        keywords="live cricket score today, IPL 2026 live score, IPL 2026 points table, T20 World Cup live, cricket score today, watch cricket free, ball by ball cricket, IPL standings 2026"
+        keywords="live cricket score today, IPL 2026 live score, IPL 2026 points table, T20 World Cup live, cricket score today, cricket highlights, ball by ball cricket, IPL standings 2026"
         structuredData={SITE_SD}
       />
 
@@ -489,8 +488,8 @@ export default function Home() {
             <div style={{ display: "flex", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
               {[
                 { key: "live",     label: "Live",     count: liveMatches.length,     color: "#EF4444" },
-                { key: "recent",   label: "Recent",   count: recentMatches.length,   color: "#10B981" },
-                { key: "upcoming", label: "Upcoming", count: upcomingMatches.length, color: "#F59E0B" },
+                { key: "recent",   label: "Recent",   count: recentMatches.length,   color: "#3B82F6" },
+                { key: "upcoming", label: "Upcoming", count: upcomingMatches.length, color: "#38BDF8" },
               ].map(tab => (
                 <button key={tab.key} onClick={() => setMatchTab(tab.key)} style={{
                   flex: 1, background: "none", border: "none", cursor: "pointer",
@@ -513,8 +512,8 @@ export default function Home() {
                 <button key={f.key} onClick={() => setFormatTab(f.key)} style={{
                   background: "none", border: "none", cursor: "pointer", padding: "8px 12px",
                   fontSize: 11, fontWeight: formatTab === f.key ? 800 : 600,
-                  color: formatTab === f.key ? "#10B981" : "var(--text3)",
-                  borderBottom: formatTab === f.key ? "2px solid #10B981" : "2px solid transparent",
+                  color: formatTab === f.key ? "#3B82F6" : "var(--text3)",
+                  borderBottom: formatTab === f.key ? "2px solid #3B82F6" : "2px solid transparent",
                   marginBottom: -1, transition: "color 0.2s", whiteSpace: "nowrap",
                   fontFamily: "'Inter',sans-serif",
                 }}>
@@ -544,10 +543,10 @@ export default function Home() {
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden", marginTop: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
               <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
+                <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
                 Cricket News Today
               </span>
-              <Link to="/news" style={{ fontSize: 11, color: "#10B981", fontWeight: 700 }}>View All →</Link>
+              <Link to="/news" style={{ fontSize: 11, color: "#3B82F6", fontWeight: 700 }}>View All →</Link>
             </div>
 
             {newsItems.length === 0
@@ -567,14 +566,14 @@ export default function Home() {
           {/* Today stats */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
             <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
               Today's Cricket
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
               {[
                 { label: "Live",   v: liveMatches.length,     c: "#EF4444", bg: "rgba(239,68,68,0.07)" },
-                { label: "Recent", v: recentMatches.length,   c: "#10B981", bg: "rgba(16,185,129,0.07)" },
-                { label: "Soon",   v: upcomingMatches.length, c: "#F59E0B", bg: "rgba(245,158,11,0.07)" },
+                { label: "Recent", v: recentMatches.length,   c: "#3B82F6", bg: "rgba(59,130,246,0.07)" },
+                { label: "Soon",   v: upcomingMatches.length, c: "#38BDF8", bg: "rgba(56,189,248,0.07)" },
               ].map((s, i) => (
                 <div key={i} style={{ padding: "12px 6px", textAlign: "center", background: s.bg, borderRight: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
                   <div style={{ fontSize: 24, fontWeight: 900, color: s.c, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{s.v}</div>
@@ -596,7 +595,7 @@ export default function Home() {
           {/* Series & Leagues */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
             <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#F59E0B,#D97706)", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
               Series &amp; Leagues
             </div>
             <div style={{ padding: "4px 0" }}>
@@ -606,7 +605,7 @@ export default function Home() {
                   padding: "8px 14px", fontSize: 12, fontWeight: 600, color: "var(--text2)",
                   transition: "background 0.15s, color 0.15s",
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.color = "#10B981"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.05)"; e.currentTarget.style.color = "#3B82F6"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
                 >
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: l.color, boxShadow: `0 0 5px ${l.color}70`, flexShrink: 0 }} />
@@ -619,7 +618,7 @@ export default function Home() {
           {/* Quick nav */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
             <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#10B981,#059669)", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
               Quick Access
             </div>
             <div style={{ padding: "4px 0" }}>
@@ -637,7 +636,7 @@ export default function Home() {
                   display: "block", padding: "8px 14px", fontSize: 12, fontWeight: 600, color: "var(--text2)",
                   transition: "background 0.15s, color 0.15s",
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.color = "#10B981"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.05)"; e.currentTarget.style.color = "#3B82F6"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
                 >
                   {label}
@@ -650,7 +649,7 @@ export default function Home() {
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
               <span style={{ fontSize: 11, fontWeight: 800, color: "var(--text)" }}>Latest News</span>
-              <Link to="/news" style={{ fontSize: 10, color: "#10B981", fontWeight: 700 }}>More →</Link>
+              <Link to="/news" style={{ fontSize: 10, color: "#3B82F6", fontWeight: 700 }}>More →</Link>
             </div>
             {newsItems.slice(0, 6).map((item, i) => (
               <NewsCard key={item.id || i} item={item} compact />
@@ -659,29 +658,27 @@ export default function Home() {
         </div>
       </div>
 
-      <StreamDisclaimer />
-
       {/* ── Ad above SEO section ── */}
       <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
 
       {/* ── SEO Content Block ── */}
       <section aria-label="About Live Cricket Zone" style={{
         marginTop: 16, padding: "22px 24px", borderRadius: 14,
-        background: "rgba(255,255,255,0.015)", border: "1px solid rgba(16,185,129,0.06)",
+        background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.06)",
       }}>
         <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 3, background: "linear-gradient(180deg,#059669,#10B981)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 3, background: "linear-gradient(180deg,#2563EB,#3B82F6)", display: "inline-block" }} />
           Live Cricket Score Today — IPL 2026, T20 &amp; All Formats
         </h2>
         <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8, marginBottom: 8 }}>
-          Live Cricket Zone delivers the fastest live cricket scores updated every 15 seconds with full ball-by-ball commentary. Follow <strong style={{ color: "var(--text2)" }}>IPL 2026 live score and points table</strong>, T20 World Cup, ODI & Test matches worldwide. Watch live cricket streaming free via YouTube — no account needed.
+          Live Cricket Zone delivers fast live cricket scores updated every 15 seconds with full ball-by-ball commentary. Follow <strong style={{ color: "var(--text2)" }}>IPL 2026 live score and points table</strong>, T20 World Cup, ODI & Test matches worldwide, plus official post-match highlights embedded from YouTube.
         </p>
         <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8 }}>
           Coverage includes: <strong style={{ color: "var(--text2)" }}>IPL 2026, T20 World Cup, ODI World Cup, Asia Cup, Champions Trophy, PSL, BBL, CPL, County Championship</strong>, Ranji Trophy, and all international series between all ICC member nations.
         </p>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
-          {["IPL 2026 Points Table", "IPL Live Score", "T20 Live Score", "Cricket Score Today", "Ball by Ball", "Watch Cricket Free", "ODI Live", "Test Match Live", "ICC Rankings 2026", "Cricket News Today"].map(tag => (
-            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20, background: "rgba(16,185,129,0.07)", border: "1px solid rgba(16,185,129,0.14)", color: "rgba(52,211,153,0.8)" }}>{tag}</span>
+          {["IPL 2026 Points Table", "IPL Live Score", "T20 Live Score", "Cricket Score Today", "Ball by Ball", "Match Highlights", "ODI Live", "Test Match Live", "ICC Rankings 2026", "Cricket News Today"].map(tag => (
+            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20, background: "rgba(59,130,246,0.07)", border: "1px solid rgba(59,130,246,0.14)", color: "rgba(52,211,153,0.8)" }}>{tag}</span>
           ))}
         </div>
       </section>
