@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const NodeCache = require("node-cache");
+const scraper = require("./scraper");
 
 // Suppress noisy deprecation warnings
 process.removeAllListeners("warning");
@@ -61,6 +62,54 @@ function parseScore(s) {
     w: r ? parseInt(r[2]) : 0,
     o: o ? parseFloat(o[1]) : 0,
   };
+}
+
+// ─── Query-param helper ──────────────────────────────────────────────────────
+function qp(req, name) {
+  try { return new URL(req.url, `http://${req.headers.host || "localhost"}`).searchParams.get(name); }
+  catch { return null; }
+}
+
+// ─── Player search (Cricbuzz search API + curated fallback) ──────────────────
+const KNOWN_PLAYERS = [
+  { id: "338", name: "Virat Kohli", country: "India", role: "Batsman" },
+  { id: "107", name: "Rohit Sharma", country: "India", role: "Batsman" },
+  { id: "277", name: "MS Dhoni", country: "India", role: "Wicket-keeper" },
+  { id: "445", name: "Jasprit Bumrah", country: "India", role: "Bowler" },
+  { id: "371", name: "Ravindra Jadeja", country: "India", role: "All-rounder" },
+  { id: "8733", name: "Shubman Gill", country: "India", role: "Batsman" },
+  { id: "7527", name: "Yashasvi Jaiswal", country: "India", role: "Batsman" },
+  { id: "6538", name: "Rishabh Pant", country: "India", role: "Wicket-keeper" },
+  { id: "185", name: "Steve Smith", country: "Australia", role: "Batsman" },
+  { id: "170", name: "David Warner", country: "Australia", role: "Batsman" },
+  { id: "5765", name: "Pat Cummins", country: "Australia", role: "Bowler" },
+  { id: "8917", name: "Travis Head", country: "Australia", role: "Batsman" },
+  { id: "7179", name: "Jos Buttler", country: "England", role: "Wicket-keeper" },
+  { id: "9", name: "Joe Root", country: "England", role: "Batsman" },
+  { id: "308", name: "Babar Azam", country: "Pakistan", role: "Batsman" },
+  { id: "7476", name: "Shaheen Afridi", country: "Pakistan", role: "Bowler" },
+  { id: "10430", name: "Mohammad Rizwan", country: "Pakistan", role: "Wicket-keeper" },
+  { id: "7693", name: "Kagiso Rabada", country: "South Africa", role: "Bowler" },
+  { id: "8672", name: "Sunil Narine", country: "West Indies", role: "All-rounder" },
+  { id: "102", name: "Andre Russell", country: "West Indies", role: "All-rounder" },
+];
+
+async function searchPlayers(query) {
+  const key = `players:search:${query}`;
+  const hit = staticCache.get(key);
+  if (hit) return hit;
+  try {
+    const url = `https://www.cricbuzz.com/api/cricket-search/v2?action=cricketers&q=${encodeURIComponent(query)}&callback=`;
+    const { data } = await axios.get(url, { headers, timeout: 8000 });
+    const json = data.replace(/^[^(]+\(/, "").replace(/\);?\s*$/, "");
+    const parsed = JSON.parse(json);
+    const results = (parsed?.player || []).map(p => ({ id: p.id, name: p.name, country: p.teamName || "", role: p.role || "" }));
+    if (results.length) { staticCache.set(key, results); return results; }
+  } catch (_) {}
+  return KNOWN_PLAYERS.filter(p =>
+    p.name.toLowerCase().includes(query.toLowerCase()) ||
+    p.country.toLowerCase().includes(query.toLowerCase())
+  );
 }
 
 // ─── ALL MATCHES (JSON extraction from Cricbuzz) ─────────────────────────────
@@ -990,6 +1039,12 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data });
     }
 
+    // ── IPL points table ──────────────────────────────────────────────────────
+    if (path === "matches/standings") {
+      const data = await scraper.scrapeIPLStandings();
+      return res.json({ status: "success", data });
+    }
+
     // ── Live matches ────────────────────────────────────────────────────────
     if (path === "matches/live" || path === "matches/current") {
       const all = await getAllMatches();
@@ -997,7 +1052,7 @@ module.exports = async (req, res) => {
     }
 
     // ── Upcoming matches ────────────────────────────────────────────────────
-    if (path === "matches/upcoming" || path === "matches/schedule" || path === "schedule") {
+    if (path === "matches/upcoming" || path === "matches/schedule") {
       const all = await getAllMatches();
       return res.json({ status: "success", data: all.upcoming });
     }
@@ -1020,15 +1075,115 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data: info.score || [] });
     }
 
+    // ── Match live-data (batsmen, bowler, partnership, RRR) ───────────────────
+    if (parts[0] === "matches" && parts[2] === "live-data") {
+      const data = await scraper.scrapeMatchLiveData(parts[1]);
+      return res.json({ status: "success", data });
+    }
+
+    // ── Match squad / playing XI ─────────────────────────────────────────────
+    if (parts[0] === "matches" && parts[2] === "squad") {
+      const data = await scraper.scrapeMatchSquad(parts[1]);
+      return res.json({ status: "success", data });
+    }
+
+    // ── Match head-to-head ───────────────────────────────────────────────────
+    if (parts[0] === "matches" && parts[2] === "h2h") {
+      const data = await scraper.scrapeMatchH2H(parts[1]);
+      return res.json({ status: "success", data });
+    }
+
+    // ── Match analysis (preview / report) ────────────────────────────────────
+    if (parts[0] === "matches" && parts[2] === "analysis") {
+      const data = await scraper.scrapeMatchAnalysis(parts[1]);
+      return res.json({ status: "success", data });
+    }
+
     // ── Match info ───────────────────────────────────────────────────────────
     if (parts[0] === "matches" && parts[1] && !parts[2]) {
       const data = await getMatchInfo(parts[1]);
       return res.json({ status: "success", data });
     }
 
-    // ── Rankings / Teams / Series / Players — stubs ─────────────────────────
-    if (["rankings", "teams", "series", "players"].includes(parts[0])) {
-      return res.json({ status: "success", data: [] });
+    // ── Rankings (ICC) ────────────────────────────────────────────────────────
+    if (parts[0] === "rankings") {
+      const type = qp(req, "type") || "batting";
+      const format = qp(req, "format") || "tests";
+      const category = qp(req, "category") || "men";
+      const arr = await scraper.scrapeCricbuzzRankings(category, type, format);
+      return res.json({ status: true, response: Array.isArray(arr) ? arr : [] });
+    }
+
+    // ── Teams ───────────────────────────────────────────────────────────────
+    if (parts[0] === "teams" && parts[1]) {
+      const data = await scraper.scrapeTeamDetail(parts[1]);
+      return res.json({ status: "success", data });
+    }
+    if (parts[0] === "teams") {
+      const data = await scraper.scrapeCricbuzzTeams();
+      return res.json({ status: true, response: data });
+    }
+
+    // ── Series ──────────────────────────────────────────────────────────────
+    if (parts[0] === "series" && parts[1] === "archive" && parts[2]) {
+      const data = await scraper.scrapeSeriesArchive(parts[2]);
+      return res.json({ status: "success", data });
+    }
+    if (parts[0] === "series" && parts[1] && parts[2] === "schedule") {
+      const data = await scraper.scrapeSeriesSchedule(parts[1]);
+      return res.json({ status: "success", data });
+    }
+    if (parts[0] === "series" && parts[1] && parts[2] === "standings") {
+      const data = await scraper.scrapeSeriesStandings(parts[1]);
+      return res.json({ status: "success", data });
+    }
+    if (parts[0] === "series" && parts[1] && parts[2] === "stats") {
+      const data = await scraper.scrapeSeriesStats(parts[1]);
+      return res.json({ status: "success", data });
+    }
+    if (parts[0] === "series" && parts[1] && !parts[2]) {
+      const [schedule, standings, stats] = await Promise.allSettled([
+        scraper.scrapeSeriesSchedule(parts[1]),
+        scraper.scrapeSeriesStandings(parts[1]),
+        scraper.scrapeSeriesStats(parts[1]),
+      ]);
+      return res.json({ status: "success", data: {
+        schedule:  schedule.status  === "fulfilled" ? schedule.value  : [],
+        standings: standings.status === "fulfilled" ? standings.value : [],
+        stats:     stats.status     === "fulfilled" ? stats.value     : { batting: [], bowling: [] },
+      }});
+    }
+    if (parts[0] === "series") {
+      const data = await scraper.scrapeCricbuzzSeries();
+      return res.json({ status: "success", data });
+    }
+
+    // ── Players ───────────────────────────────────────────────────────────────
+    if (parts[0] === "players" && parts[1]) {
+      const data = await scraper.scrapePlayerDetails(parts[1]);
+      if (!data) return res.status(404).json({ error: "Player not found" });
+      return res.json({ status: "success", data });
+    }
+    if (parts[0] === "players") {
+      const query = qp(req, "search") || "india";
+      const data = await searchPlayers(query);
+      return res.json({ status: "success", data });
+    }
+
+    // ── Venue info ──────────────────────────────────────────────────────────
+    if (parts[0] === "venues" && parts[1]) {
+      const data = await scraper.scrapeVenueInfo(parts[1]);
+      if (!data) return res.status(404).json({ error: "Venue not found" });
+      return res.json({ status: "success", data });
+    }
+
+    // ── Detailed schedule (by type/month/year) ───────────────────────────────
+    if (path === "schedule") {
+      const type = qp(req, "type") || "international";
+      const month = qp(req, "month");
+      const year = qp(req, "year") || 2026;
+      const data = await scraper.scrapeDetailedSchedule(type, month, year);
+      return res.json({ status: "success", data });
     }
 
     // ── IndexNow submit-all ──────────────────────────────────────────────────
@@ -1063,7 +1218,8 @@ module.exports = async (req, res) => {
       const ytCached = cache.get(cacheKey);
       if (ytCached) return res.json(ytCached);
       try {
-        const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}&sp=EgJAAQ%3D%3D`;
+        // Plain search (no live filter). Only official-channel HIGHLIGHTS are returned.
+        const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
         const { data: ytHtml } = await axios.get(searchUrl, {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36", "Accept-Language": "en-US,en;q=0.9" },
           timeout: 10000,
@@ -1072,21 +1228,32 @@ module.exports = async (req, res) => {
         if (!ytMatch) throw new Error("ytInitialData not found");
         const ytData = JSON.parse(ytMatch[1]);
         const contents = ytData?.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.[0]?.itemSectionRenderer?.contents || [];
+        const OFFICIAL_CHANNELS = [
+          "ipl", "bcci", "icc", "star sports", "sony sports", "sony liv", "sony ten",
+          "jiocinema", "jiohotstar", "sky sports cricket", "cricket australia",
+          "ecb", "england cricket", "pcb", "pakistan cricket", "cricket west indies",
+          "sri lanka cricket", "bangladesh cricket", "willow", "espncricinfo", "espn cricinfo",
+        ];
+        const isOfficial = (c = "") => OFFICIAL_CHANNELS.some(n => c.toLowerCase().includes(n));
         const videos = [];
         for (const item of contents) {
           const vr = item.videoRenderer;
           if (!vr?.videoId) continue;
+          const isLive = !!vr.badges?.some(b => b.metadataBadgeRenderer?.label === "LIVE");
+          if (isLive) continue; // never surface live rebroadcasts
+          const channel = vr.ownerText?.runs?.[0]?.text || "";
+          if (!isOfficial(channel)) continue; // official highlights only
           videos.push({
             videoId: vr.videoId,
             title: vr.title?.runs?.[0]?.text || "",
             thumbnail: `https://img.youtube.com/vi/${vr.videoId}/mqdefault.jpg`,
-            isLive: !!vr.badges?.some(b => b.metadataBadgeRenderer?.label === "LIVE"),
-            channel: vr.ownerText?.runs?.[0]?.text || "",
+            isLive: false,
+            channel,
           });
-          if (videos.length >= 5) break;
+          if (videos.length >= 6) break;
         }
         const ytResult = { videos };
-        cache.set(cacheKey, ytResult, 300);
+        cache.set(cacheKey, ytResult, 600);
         return res.json(ytResult);
       } catch (e) {
         return res.json({ videos: [], error: e.message });
