@@ -8,7 +8,7 @@ export default function BPL() {
       name="BPL 2026"
       shortName="BPL"
       filterKeywords={["BPL", "Bangladesh Premier League", "Bangladesh Premier"]}
-      accentColor="#a78bfa"
+      accentColor="#FF2E9A"
       seoTitle="BPL 2026 Live Score — Bangladesh Premier League T20"
       seoDesc="BPL 2026 live score with ball-by-ball commentary for all Bangladesh Premier League matches. Follow Comilla Victorians, Dhaka Dominators, Rangpur Riders, Sylhet Strikers and more. Updated every 15 seconds, free."
       seoKeywords="BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball, BPL scorecard, BPL schedule 2026, Bangladesh Premier League live, BPL T20 live, BPL highlights, Comilla Victorians live, Rangpur Riders live, BPL 2026 points table, Shakib Al Hasan BPL"

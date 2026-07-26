@@ -24,7 +24,7 @@ export default function Footer() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <div style={{
                 width: 32, height: 32, borderRadius: "50%",
-                background: "linear-gradient(135deg,#2563EB,#3B82F6)",
+                background: "linear-gradient(135deg,#8B00FF,#B026FF)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -35,7 +35,7 @@ export default function Footer() {
               </div>
               <div>
                 <div style={{ fontWeight: 900, fontSize: 15, color: "#fff", lineHeight: 1 }}>
-                  Live Cricket <span style={{ color: "#3B82F6" }}>Zone</span>
+                  Live Cricket <span style={{ color: "#B026FF" }}>Zone</span>
                 </div>
                 <div style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.5px", marginTop: 2 }}>LIVE SCORES · NEWS · HIGHLIGHTS</div>
               </div>
@@ -48,7 +48,7 @@ export default function Footer() {
           {/* Matches */}
           <div>
             <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 14, color: "var(--text)", textTransform: "uppercase", letterSpacing: 0.8, display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#3B82F6", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#B026FF", display: "inline-block" }} />
               Matches
             </div>
             {[
@@ -59,7 +59,7 @@ export default function Footer() {
               ["Schedule",       "/schedule"],
             ].map(([label, href]) => (
               <Link key={href} to={href} style={{ display: "block", color: "var(--text3)", fontSize: 13, marginBottom: 8, textDecoration: "none", transition: "color 0.15s" }}
-                onMouseEnter={e => { e.currentTarget.style.color = "#3B82F6"; }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#B026FF"; }}
                 onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
               >{label}</Link>
             ))}
@@ -68,7 +68,7 @@ export default function Footer() {
           {/* Tournaments */}
           <div>
             <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 14, color: "var(--text)", textTransform: "uppercase", letterSpacing: 0.8, display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#38BDF8", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
               Tournaments
             </div>
             {[
@@ -81,7 +81,7 @@ export default function Footer() {
               ["BBL",                 "/bbl"],
             ].map(([label, href]) => (
               <Link key={href} to={href} style={{ display: "block", color: "var(--text3)", fontSize: 13, marginBottom: 8, textDecoration: "none", transition: "color 0.15s" }}
-                onMouseEnter={e => { e.currentTarget.style.color = "#38BDF8"; }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#00F0FF"; }}
                 onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
               >{label}</Link>
             ))}
@@ -90,7 +90,7 @@ export default function Footer() {
           {/* Resources */}
           <div>
             <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 14, color: "var(--text)", textTransform: "uppercase", letterSpacing: 0.8, display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#38BDF8", display: "inline-block" }} />
+              <span style={{ width: 3, height: 12, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
               Resources
             </div>
             {[
@@ -119,7 +119,7 @@ export default function Footer() {
             </svg>
             <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", lineHeight: 1.7, margin: 0 }}>
               All videos displayed on this website are sourced from{" "}
-              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171", textDecoration: "none" }}>YouTube</a>{" "}
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A", textDecoration: "none" }}>YouTube</a>{" "}
               and are the sole property of their respective owners. Live Cricket Zone does not host, upload, store, or claim ownership of any video content. Videos are embedded using YouTube's official IFrame Embed API in full compliance with YouTube's Terms of Service. All trademarks, logos, and brand names belong to their respective owners.
             </p>
           </div>
@@ -135,7 +135,7 @@ export default function Footer() {
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "14px 0 20px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
           <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
             © {new Date().getFullYear()}{" "}
-            <a href="https://www.livecricketzone.com" style={{ color: "#3B82F6", textDecoration: "none" }}>LiveCricketZone.com</a>
+            <a href="https://www.livecricketzone.com" style={{ color: "#B026FF", textDecoration: "none" }}>LiveCricketZone.com</a>
             {" "}— Independent Cricket Score Engine
           </div>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>

@@ -28,7 +28,7 @@ export default function Series() {
         border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          🏆 Cricket <span style={{ color: "#3B82F6" }}>Series</span>
+          🏆 Cricket <span style={{ color: "#B026FF" }}>Series</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           All international series, leagues and domestic competitions in 2026
@@ -44,13 +44,13 @@ export default function Series() {
       />
 
       {isLoading && <div className="spinner" style={{ margin: "40px auto" }} />}
-      {error && <div style={{ padding: "16px", color: "#f87171", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 16 }}>Failed to load series.</div>}
+      {error && <div style={{ padding: "16px", color: "#FF5C8A", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 16 }}>Failed to load series.</div>}
 
       {!isLoading && !error && Object.keys(categories).map(catKey => {
         const filtered = filterList(categories[catKey]);
         if (!filtered.length) return null;
-        const catColors = { international: "#3B82F6", domestic: "#38BDF8", league: "#F87171", women: "#e879f9" };
-        const catColor = catColors[catKey] || "#3B82F6";
+        const catColors = { international: "#B026FF", domestic: "#00F0FF", league: "#FF5C8A", women: "#e879f9" };
+        const catColor = catColors[catKey] || "#B026FF";
         return (
           <section key={catKey} style={{ marginBottom: 40 }}>
             <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 14, textTransform: "capitalize", display: "flex", alignItems: "center", gap: 8 }}>
@@ -97,7 +97,7 @@ export default function Series() {
       {/* Rich SEO content */}
       <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
           Cricket Series 2026 — Complete Guide
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

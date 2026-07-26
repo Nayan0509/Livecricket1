@@ -58,7 +58,7 @@ function MatchChip({ match, onClick }) {
       {/* Live pulse dot */}
       <span style={{
         width: 5, height: 5, borderRadius: "50%",
-        background: "#3B82F6",
+        background: "#B026FF",
         animation: "livePulse 1.8s ease-in-out infinite",
         flexShrink: 0,
       }} />
@@ -127,7 +127,7 @@ export default function Ticker() {
         height: 36, display: "flex", alignItems: "center",
         padding: "0 16px", gap: 12,
       }}>
-        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#3B82F6", background: "rgba(59,130,246,0.12)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>
+        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#B026FF", background: "rgba(59,130,246,0.12)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>
           LIVE FEED
         </span>
         <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 600 }}>
@@ -158,7 +158,7 @@ export default function Ticker() {
         display: "flex",
         alignItems: "center",
         padding: "0 14px",
-        background: "linear-gradient(135deg,#2563EB,#3B82F6)",
+        background: "linear-gradient(135deg,#8B00FF,#B026FF)",
         gap: 6,
         borderRight: "1px solid rgba(59,130,246,0.2)",
       }}>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { fetchAllMatches, fetchNews, fetchIPLStandings, fetchRankings, fetchSportMatches, fetchSportNews } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
+import { MotionGrid, MotionItem } from "../components/MotionGrid";
 import { trackMatchCardClick } from "../utils/analytics";
 
 /* ── Structured data ── */
@@ -49,7 +51,7 @@ function filterByFormat(matches, fmt) {
 /* ── Live Dot ── */
 function LiveDot() {
   return (
-    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#ef4444", display: "inline-block", animation: "livePulse 1.5s infinite", marginRight: 5 }} />
+    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#FF1053", display: "inline-block", animation: "livePulse 1.5s infinite", marginRight: 5 }} />
   );
 }
 
@@ -73,7 +75,7 @@ function MatchCard({ match, onClick }) {
   const isCompleted = match.matchEnded;
   const [t1, t2] = match.teamInfo || [];
 
-  const statusColor = isLive ? "#ef4444" : isCompleted ? "var(--text3)" : "#60a5fa";
+  const statusColor = isLive ? "#FF1053" : isCompleted ? "var(--text3)" : "#D896FF";
   const statusBg = isLive ? "rgba(239,68,68,0.1)" : isCompleted ? "rgba(255,255,255,0.04)" : "rgba(96,165,250,0.1)";
 
   return (
@@ -85,7 +87,7 @@ function MatchCard({ match, onClick }) {
       onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
     >
       {/* Top strip */}
-      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#ef4444,#f97316)" : isCompleted ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#3b82f6,#60a5fa)" }} />
+      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#FF1053,#FF6B00)" : isCompleted ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#B026FF,#D896FF)" }} />
 
       <div style={{ padding: "12px 14px" }}>
         {/* Series + status */}
@@ -129,7 +131,7 @@ function MatchCard({ match, onClick }) {
 
         {/* Status text */}
         <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--divider)" }}>
-          <p style={{ fontSize: 11, color: isLive ? "#f87171" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
+          <p style={{ fontSize: 11, color: isLive ? "#FF5C8A" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
             {match.status || (match.matchStarted ? "In Progress" : `${match.date || ""}`)}
           </p>
         </div>
@@ -142,12 +144,12 @@ function MatchCard({ match, onClick }) {
 function GenericMatchCard({ match }) {
   const [a, b] = match.teams || [];
   const isLive = match.isLive;
-  const statusColor = isLive ? "#ef4444" : match.matchEnded ? "var(--text3)" : "#60a5fa";
+  const statusColor = isLive ? "#FF1053" : match.matchEnded ? "var(--text3)" : "#D896FF";
   const statusBg = isLive ? "rgba(239,68,68,0.1)" : match.matchEnded ? "rgba(255,255,255,0.04)" : "rgba(96,165,250,0.1)";
 
   return (
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
-      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#ef4444,#f97316)" : match.matchEnded ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#3b82f6,#60a5fa)" }} />
+      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#FF1053,#FF6B00)" : match.matchEnded ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#B026FF,#D896FF)" }} />
       <div style={{ padding: "12px 14px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, maxWidth: "70%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -167,7 +169,7 @@ function GenericMatchCard({ match }) {
           ))}
         </div>
         <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--divider)" }}>
-          <p style={{ fontSize: 11, color: isLive ? "#f87171" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
+          <p style={{ fontSize: 11, color: isLive ? "#FF5C8A" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
             {match.status}{match.venue ? ` — ${match.venue}` : ""}
           </p>
         </div>
@@ -197,10 +199,10 @@ function OtherSportContent({ sport, data, news, loading }) {
     <>
       {live.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <SectionHeader title={`${name} — Live Now`} link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#ef4444" />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
-            {live.map(m => <GenericMatchCard key={m.id} match={m} />)}
-          </div>
+          <SectionHeader title={`${name} — Live Now`} link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#FF1053" />
+          <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+            {live.map(m => <MotionItem key={m.id}><GenericMatchCard match={m} /></MotionItem>)}
+          </MotionGrid>
         </section>
       )}
 
@@ -208,7 +210,7 @@ function OtherSportContent({ sport, data, news, loading }) {
 
       {news.length > 0 && (
         <section style={{ marginBottom: 24, marginTop: 20 }}>
-          <SectionHeader title={`${name} News`} accent="#3b82f6" />
+          <SectionHeader title={`${name} News`} accent="#B026FF" />
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {news.slice(0, 6).map(n => (
               <a key={n.id} href={n.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
@@ -223,26 +225,26 @@ function OtherSportContent({ sport, data, news, loading }) {
 
       {recent.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <SectionHeader title="Recent Results" accent="#6366f1" />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
-            {recent.slice(0, 6).map(m => <GenericMatchCard key={m.id} match={m} />)}
-          </div>
+          <SectionHeader title="Recent Results" accent="#9D00FF" />
+          <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+            {recent.slice(0, 6).map(m => <MotionItem key={m.id}><GenericMatchCard match={m} /></MotionItem>)}
+          </MotionGrid>
         </section>
       )}
 
       {upcoming.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <SectionHeader title="Upcoming" link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#f59e0b" />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
-            {upcoming.slice(0, 6).map(m => <GenericMatchCard key={m.id} match={m} />)}
-          </div>
+          <SectionHeader title="Upcoming" link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#FFEA00" />
+          <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+            {upcoming.slice(0, 6).map(m => <MotionItem key={m.id}><GenericMatchCard match={m} /></MotionItem>)}
+          </MotionGrid>
         </section>
       )}
 
       {live.length === 0 && upcoming.length === 0 && recent.length === 0 && (
         <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card)", borderRadius: 14, border: "1px solid var(--border)" }}>
           <h3 style={{ color: "var(--text)", marginBottom: 8, fontSize: 18 }}>No {name.toLowerCase()} matches found right now</h3>
-          <p style={{ color: "var(--text3)", fontSize: 13 }}>Check back soon, or visit the full <Link to={SPORT_PAGE[sport]} style={{ color: "#3b82f6" }}>{name} page</Link>.</p>
+          <p style={{ color: "var(--text3)", fontSize: 13 }}>Check back soon, or visit the full <Link to={SPORT_PAGE[sport]} style={{ color: "#B026FF" }}>{name} page</Link>.</p>
         </div>
       )}
     </>
@@ -262,13 +264,17 @@ function IPLStandingsWidget() {
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderBottom: "1px solid var(--divider)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#ef4444", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FF1053", display: "inline-block" }} />
           IPL 2026 Points Table
         </span>
-        <Link to="/ipl" style={{ fontSize: 11, color: "#ef4444", fontWeight: 700, textDecoration: "none" }}>Full Table →</Link>
+        <Link to="/ipl" style={{ fontSize: 11, color: "#FF1053", fontWeight: 700, textDecoration: "none" }}>Full Table →</Link>
       </div>
       {isLoading ? (
         <div style={{ padding: 20, textAlign: "center" }}><div className="spinner" style={{ width: 20, height: 20, margin: "0 auto" }} /></div>
+      ) : rows.length === 0 ? (
+        <div style={{ padding: "24px 16px", textAlign: "center" }}>
+          <p style={{ color: "var(--text3)", fontSize: 13 }}>Points table unavailable right now.</p>
+        </div>
       ) : (
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -284,7 +290,7 @@ function IPLStandingsWidget() {
                 <tr key={r.short || i} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)", background: i < 4 ? "rgba(239,68,68,0.03)" : "transparent", transition: "background 0.15s" }}
                   onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(239,68,68,0.03)" : "transparent"; }}>
-                  <td style={{ padding: "8px 10px", fontSize: 11, color: i < 4 ? "#ef4444" : "var(--text3)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
+                  <td style={{ padding: "8px 10px", fontSize: 11, color: i < 4 ? "#FF1053" : "var(--text3)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
                   <td style={{ padding: "8px 10px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                       <div style={{ width: 20, height: 20, borderRadius: "50%", background: `${r.color}22`, border: `1.5px solid ${r.color}60`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7, fontWeight: 900, color: r.color, flexShrink: 0 }}>
@@ -294,7 +300,7 @@ function IPLStandingsWidget() {
                     </div>
                   </td>
                   {["p", "w", "l", "nrr", "pts"].map(k => (
-                    <td key={k} style={{ padding: "8px 10px", textAlign: "center", fontSize: 11, fontWeight: k === "pts" ? 900 : 600, color: k === "pts" ? "#ef4444" : k === "nrr" ? (String(r[k]).startsWith("+") ? "#4ade80" : "#f87171") : "var(--text2)" }}>
+                    <td key={k} style={{ padding: "8px 10px", textAlign: "center", fontSize: 11, fontWeight: k === "pts" ? 900 : 600, color: k === "pts" ? "#FF1053" : k === "nrr" ? (String(r[k]).startsWith("+") ? "#39FF14" : "#FF5C8A") : "var(--text2)" }}>
                       {r[k]}
                     </td>
                   ))}
@@ -322,14 +328,14 @@ function RankingsWidget() {
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderBottom: "1px solid var(--divider)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#3b82f6", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#B026FF", display: "inline-block" }} />
           ICC Rankings — Batting
         </span>
-        <Link to="/rankings" style={{ fontSize: 11, color: "#3b82f6", fontWeight: 700, textDecoration: "none" }}>Full →</Link>
+        <Link to="/rankings" style={{ fontSize: 11, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}>Full →</Link>
       </div>
       <div style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--divider)" }}>
         {["tests", "odis", "t20s"].map(f => (
-          <button key={f} onClick={() => setFormat(f)} style={{ flex: 1, background: "none", border: "none", padding: "8px 4px", fontSize: 10, fontWeight: format === f ? 800 : 600, color: format === f ? "#3b82f6" : "var(--text3)", borderBottom: format === f ? "2px solid #3b82f6" : "2px solid transparent", cursor: "pointer", textTransform: "uppercase", letterSpacing: 0.5 }}>
+          <button key={f} onClick={() => setFormat(f)} style={{ flex: 1, background: "none", border: "none", padding: "8px 4px", fontSize: 10, fontWeight: format === f ? 800 : 600, color: format === f ? "#B026FF" : "var(--text3)", borderBottom: format === f ? "2px solid #B026FF" : "2px solid transparent", cursor: "pointer", textTransform: "uppercase", letterSpacing: 0.5 }}>
             {f === "tests" ? "Test" : f === "odis" ? "ODI" : "T20"}
           </button>
         ))}
@@ -340,12 +346,12 @@ function RankingsWidget() {
         <div>
           {ranks.slice(0, 5).map((r, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 14px", borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-              <span style={{ width: 18, textAlign: "center", fontSize: 11, fontWeight: 800, color: i < 3 ? "#ef4444" : "var(--text3)" }}>{i + 1}</span>
+              <span style={{ width: 18, textAlign: "center", fontSize: 11, fontWeight: 800, color: i < 3 ? "#FF1053" : "var(--text3)" }}>{i + 1}</span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{r.name}</div>
                 <div style={{ fontSize: 10, color: "var(--text3)" }}>{r.country}</div>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 900, color: "#3b82f6", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{r.rating}</span>
+              <span style={{ fontSize: 13, fontWeight: 900, color: "#B026FF", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{r.rating}</span>
             </div>
           ))}
         </div>
@@ -377,7 +383,7 @@ function NewsCardSidebar({ item, idx }) {
 
 /* ── News Featured Card (large) ── */
 function NewsCardFeatured({ item, idx }) {
-  const colors = ["#ef4444", "#3b82f6", "#f59e0b", "#8b5cf6"];
+  const colors = ["#FF1053", "#B026FF", "#FFEA00", "#9D00FF"];
   const color = colors[idx % colors.length];
   return (
     <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "flex", flexDirection: "column", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", transition: "all 0.2s" }}
@@ -403,19 +409,27 @@ function NewsCardFeatured({ item, idx }) {
   );
 }
 
-/* ── Trending Topics ── */
-const TRENDING = [
-  "IPL 2026", "T20 World Cup", "India vs Australia", "Virat Kohli", "Rohit Sharma",
-  "Jasprit Bumrah", "Ben Stokes", "Champions Trophy", "PSL 2026", "County Cricket"
-];
+/* ── Trending Topics — derived from real live/upcoming/recent series, not a fixed list ── */
+function deriveTrendingTopics(matches) {
+  const counts = {};
+  matches.forEach(m => {
+    const s = (m.series || m.matchType || "").trim();
+    if (s) counts[s] = (counts[s] || 0) + 1;
+  });
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([name]) => name);
+}
 
-function TrendingChips() {
+function TrendingChips({ topics }) {
   const navigate = useNavigate();
+  if (!topics.length) return null;
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-      {TRENDING.map(t => (
+      {topics.map(t => (
         <button key={t} onClick={() => navigate(`/players?search=${encodeURIComponent(t)}`)} style={{ padding: "6px 13px", borderRadius: 20, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "var(--text2)", fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.25)"; e.currentTarget.style.color = "#ef4444"; }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.25)"; e.currentTarget.style.color = "#FF1053"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "var(--text2)"; }}>
           {t}
         </button>
@@ -425,7 +439,7 @@ function TrendingChips() {
 }
 
 /* ── Section Header ── */
-function SectionHeader({ title, link, linkLabel, accent = "#ef4444" }) {
+function SectionHeader({ title, link, linkLabel, accent = "#FF1053" }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
       <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
@@ -443,10 +457,10 @@ function SectionHeader({ title, link, linkLabel, accent = "#ef4444" }) {
 function FantasyPromoCard() {
   return (
     <div style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.08) 100%)", border: "1px solid rgba(139,92,246,0.2)", borderRadius: 12, padding: "16px 18px", marginTop: 16 }}>
-      <div style={{ fontSize: 10, fontWeight: 800, color: "#a78bfa", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>🏆 Fantasy Cricket</div>
+      <div style={{ fontSize: 10, fontWeight: 800, color: "#FF2E9A", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>🏆 Fantasy Cricket</div>
       <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", margin: "0 0 8px", lineHeight: 1.4 }}>Build Your Dream Team</h3>
       <p style={{ fontSize: 12, color: "var(--text3)", margin: "0 0 12px", lineHeight: 1.6 }}>Get expert picks, captain suggestions & player form analysis.</p>
-      <Link to="/fantasy" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.35)", color: "#a78bfa", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>
+      <Link to="/fantasy" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.35)", color: "#FF2E9A", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>
         Fantasy Guide →
       </Link>
     </div>
@@ -527,7 +541,7 @@ function HomeEditorialSection() {
       {/* FAQ Accordion */}
       <section style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px" }}>
         <h2 style={{ fontSize: 18, fontWeight: 900, color: "var(--text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ color: "#ef4444" }}>❓</span> Frequently Asked Questions (FAQ)
+          <span style={{ color: "#FF1053" }}>❓</span> Frequently Asked Questions (FAQ)
         </h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {faqs.map((faq, i) => {
@@ -623,24 +637,34 @@ export default function Home() {
 
       {/* Sport Switcher */}
       <div style={{ display: "flex", gap: 8, marginBottom: 14, marginTop: 8, flexWrap: "wrap" }}>
-        {SPORT_SWITCH.map(s => (
-          <button key={s.key} onClick={() => setActiveSport(s.key)} style={{
-            padding: "7px 16px", borderRadius: 20, fontSize: 13, fontWeight: activeSport === s.key ? 800 : 600,
-            background: activeSport === s.key ? "rgba(239,68,68,0.12)" : "rgba(255,255,255,0.04)",
-            border: `1px solid ${activeSport === s.key ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.09)"}`,
-            color: activeSport === s.key ? "#ef4444" : "var(--text2)", cursor: "pointer", transition: "all 0.18s",
-            fontFamily: "'Inter',sans-serif",
-          }}>
-            {s.label}
-          </button>
-        ))}
+        {SPORT_SWITCH.map(s => {
+          const active = activeSport === s.key;
+          return (
+            <button key={s.key} onClick={() => setActiveSport(s.key)} className="font-hud" style={{
+              position: "relative", padding: "7px 18px", borderRadius: 20, fontSize: 14,
+              fontWeight: active ? 700 : 500,
+              background: "rgba(255,255,255,0.03)",
+              border: `1px solid ${active ? "rgba(0,240,255,0.35)" : "rgba(255,255,255,0.09)"}`,
+              color: active ? "#F5F0FF" : "var(--text2)", cursor: "pointer", overflow: "hidden",
+            }}>
+              {active && (
+                <motion.div
+                  layoutId="sport-switch-pill"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  style={{ position: "absolute", inset: 0, background: "var(--gradient-primary)", opacity: 0.28 }}
+                />
+              )}
+              <span style={{ position: "relative" }}>{s.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Format Tabs (cricket only) */}
       {activeSport === "cricket" && (
         <div style={{ display: "flex", gap: 0, marginBottom: 16, borderBottom: "1px solid var(--divider)", overflowX: "auto", scrollbarWidth: "none" }}>
           {FORMAT_TABS.map(t => (
-            <button key={t.key} onClick={() => setFmt(t.key)} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", padding: "10px 18px", fontSize: 13, fontWeight: fmt === t.key ? 800 : 600, color: fmt === t.key ? "#ef4444" : "var(--text3)", borderBottom: `2px solid ${fmt === t.key ? "#ef4444" : "transparent"}`, transition: "all 0.18s", fontFamily: "'Inter',sans-serif" }}>
+            <button key={t.key} onClick={() => setFmt(t.key)} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", padding: "10px 18px", fontSize: 13, fontWeight: fmt === t.key ? 800 : 600, color: fmt === t.key ? "#FF1053" : "var(--text3)", borderBottom: `2px solid ${fmt === t.key ? "#FF1053" : "transparent"}`, transition: "all 0.18s", fontFamily: "'Inter',sans-serif" }}>
               {t.label}
             </button>
           ))}
@@ -668,10 +692,10 @@ export default function Home() {
               {/* LIVE MATCHES */}
               {!isLoading && filteredLive.length > 0 && (
                 <section style={{ marginBottom: 24 }}>
-                  <SectionHeader title="Live Matches" link="/live" linkLabel="All Live →" accent="#ef4444" />
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
-                    {filteredLive.map(m => <MatchCard key={m.id} match={m} onClick={() => goToMatch(m)} />)}
-                  </div>
+                  <SectionHeader title="Live Matches" link="/live" linkLabel="All Live →" accent="#FF1053" />
+                  <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+                    {filteredLive.map(m => <MotionItem key={m.id}><MatchCard match={m} onClick={() => goToMatch(m)} /></MotionItem>)}
+                  </MotionGrid>
                 </section>
               )}
 
@@ -681,7 +705,7 @@ export default function Home() {
               {/* NEWS GRID (featured articles) */}
               {newsItems.length > 0 && (
                 <section style={{ marginBottom: 24, marginTop: 20 }}>
-                  <SectionHeader title="Top Stories" link="/news" linkLabel="All News →" accent="#3b82f6" />
+                  <SectionHeader title="Top Stories" link="/news" linkLabel="All News →" accent="#B026FF" />
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 }}>
                     {newsItems.slice(0, 6).map((n, i) => <NewsCardFeatured key={n.id || i} item={n} idx={i} />)}
                   </div>
@@ -691,27 +715,27 @@ export default function Home() {
               {/* RECENT RESULTS */}
               {!isLoading && filteredRecent.length > 0 && (
                 <section style={{ marginBottom: 24 }}>
-                  <SectionHeader title="Recent Results" link="/results" linkLabel="All Results →" accent="#6366f1" />
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
-                    {filteredRecent.slice(0, 6).map(m => <MatchCard key={m.id} match={m} onClick={() => goToMatch(m)} />)}
-                  </div>
+                  <SectionHeader title="Recent Results" link="/results" linkLabel="All Results →" accent="#9D00FF" />
+                  <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+                    {filteredRecent.slice(0, 6).map(m => <MotionItem key={m.id}><MatchCard match={m} onClick={() => goToMatch(m)} /></MotionItem>)}
+                  </MotionGrid>
                 </section>
               )}
 
               {/* UPCOMING MATCHES */}
               {!isLoading && filteredUpcoming.length > 0 && (
                 <section style={{ marginBottom: 24 }}>
-                  <SectionHeader title="Upcoming Matches" link="/upcoming" linkLabel="Full Schedule →" accent="#f59e0b" />
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
-                    {filteredUpcoming.slice(0, 6).map(m => <MatchCard key={m.id} match={m} onClick={() => goToMatch(m)} />)}
-                  </div>
+                  <SectionHeader title="Upcoming Matches" link="/upcoming" linkLabel="Full Schedule →" accent="#FFEA00" />
+                  <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+                    {filteredUpcoming.slice(0, 6).map(m => <MotionItem key={m.id}><MatchCard match={m} onClick={() => goToMatch(m)} /></MotionItem>)}
+                  </MotionGrid>
                 </section>
               )}
 
               {/* Trending */}
               <section style={{ marginBottom: 24 }}>
-                <SectionHeader title="Trending" accent="#f59e0b" />
-                <TrendingChips />
+                <SectionHeader title="Trending" accent="#FFEA00" />
+                <TrendingChips topics={deriveTrendingTopics(allList)} />
               </section>
 
               {/* All-format empty state */}
@@ -750,10 +774,10 @@ export default function Home() {
                 <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
                   <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#f59e0b", display: "inline-block" }} />
+                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FFEA00", display: "inline-block" }} />
                       Latest News
                     </span>
-                    <Link to="/news" style={{ fontSize: 11, color: "#f59e0b", fontWeight: 700, textDecoration: "none" }}>All →</Link>
+                    <Link to="/news" style={{ fontSize: 11, color: "#FFEA00", fontWeight: 700, textDecoration: "none" }}>All →</Link>
                   </div>
                   <div style={{ padding: "4px 14px" }}>
                     {newsItems.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} idx={i} />)}
@@ -766,15 +790,15 @@ export default function Home() {
               {/* Featured Tournaments */}
               <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px" }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#22d3ee", display: "inline-block" }} />
+                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
                   Featured Tournaments
                 </div>
                 {[
-                  { to: "/ipl", label: "IPL 2026", dot: "#ef4444" },
-                  { to: "/t20-world-cup", label: "T20 World Cup", dot: "#f59e0b" },
-                  { to: "/champions-trophy", label: "Champions Trophy", dot: "#a78bfa" },
-                  { to: "/psl", label: "PSL 2026", dot: "#60a5fa" },
-                  { to: "/world-cup", label: "ODI World Cup", dot: "#4ade80" },
+                  { to: "/ipl", label: "IPL 2026", dot: "#FF1053" },
+                  { to: "/t20-world-cup", label: "T20 World Cup", dot: "#FFEA00" },
+                  { to: "/champions-trophy", label: "Champions Trophy", dot: "#FF2E9A" },
+                  { to: "/psl", label: "PSL 2026", dot: "#D896FF" },
+                  { to: "/world-cup", label: "ODI World Cup", dot: "#39FF14" },
                   { to: "/asia-cup", label: "Asia Cup", dot: "#f472b6" },
                   { to: "/bbl", label: "Big Bash League", dot: "#fb923c" },
                   { to: "/womens-cricket", label: "Women's Cricket", dot: "#e879f9" },
@@ -793,7 +817,7 @@ export default function Home() {
                 <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
                   <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#f59e0b", display: "inline-block" }} />
+                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FFEA00", display: "inline-block" }} />
                       Latest News
                     </span>
                   </div>
@@ -806,7 +830,7 @@ export default function Home() {
               {/* Other Sports quick links */}
               <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px" }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#22d3ee", display: "inline-block" }} />
+                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
                   More Sports
                 </div>
                 {SPORT_SWITCH.filter(s => s.key !== activeSport).map(s => (

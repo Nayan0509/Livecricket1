@@ -9,7 +9,7 @@ export default function Football() {
       name="Football"
       icon="⚽"
       leagues={["Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1", "Champions League", "MLS"]}
-      accentColor="#22C55E"
+      accentColor="#39FF14"
       seoTitle="Football Live Scores Today — Premier League, La Liga, Champions League | Live Cricket Zone"
       seoDesc="Live football scores today across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA Champions League and MLS, updated in real time."
       seoKeywords="football live score, premier league live score, la liga live score, champions league live score, football scores today"

@@ -9,7 +9,7 @@ export default function Basketball() {
       name="Basketball"
       icon="🏀"
       leagues={["NBA", "NCAA Men's", "NCAA Women's"]}
-      accentColor="#F97316"
+      accentColor="#FF6B00"
       seoTitle="Basketball Live Scores Today — NBA & NCAA | Live Cricket Zone"
       seoDesc="Live basketball scores today for the NBA, NCAA Men's and NCAA Women's basketball, with live, upcoming and recent results updated in real time."
       seoKeywords="basketball live score, NBA live score, NBA scores today, NCAA basketball live score, basketball scores today"

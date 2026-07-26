@@ -20,7 +20,7 @@ function VideoCard({ video, isActive, onClick }) {
         cursor: "pointer",
         borderRadius: 10,
         overflow: "hidden",
-        border: isActive ? "2px solid #3B82F6" : "2px solid rgba(255,255,255,0.06)",
+        border: isActive ? "2px solid #B026FF" : "2px solid rgba(255,255,255,0.06)",
         background: "rgba(255,255,255,0.02)",
         transition: "all 0.2s",
       }}
@@ -47,7 +47,7 @@ function VideoCard({ video, isActive, onClick }) {
           }}>▶</div>
         </div>
         {video.isLive && (
-          <div style={{ position: "absolute", top: 8, left: 8, background: "#EF4444", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 7px", borderRadius: 4 }}>
+          <div style={{ position: "absolute", top: 8, left: 8, background: "#FF1053", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 7px", borderRadius: 4 }}>
             ● LIVE
           </div>
         )}
@@ -101,14 +101,14 @@ export default function Videos() {
         border: "1px solid rgba(59,130,246,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📺 Cricket <span style={{ color: "#3B82F6" }}>Videos</span>
+          📺 Cricket <span style={{ color: "#B026FF" }}>Videos</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
           IPL 2026 highlights · T20 World Cup · Best catches · Replays
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {["IPL Highlights", "T20 WC", "Replays", "Free"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)", color: "#3B82F6" }}>{t}</span>
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)", color: "#B026FF" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function Videos() {
         {SEARCH_QUERIES.map((tab, i) => (
           <button key={i} onClick={() => setActiveTab(i)} style={{
             flexShrink: 0, padding: "8px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
-            background: activeTab === i ? "#3B82F6" : "rgba(255,255,255,0.04)",
+            background: activeTab === i ? "#B026FF" : "rgba(255,255,255,0.04)",
             color: activeTab === i ? "#000" : "var(--text3)",
             border: activeTab === i ? "none" : "1px solid rgba(255,255,255,0.08)",
             cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif",
@@ -178,7 +178,7 @@ export default function Videos() {
               rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
-                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#3B82F6",
+                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#B026FF",
                 background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
                 textDecoration: "none", transition: "all 0.15s",
               }}
@@ -195,7 +195,7 @@ export default function Videos() {
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(SEARCH_QUERIES[activeTab].q)}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 13, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}
+            style={{ fontSize: 13, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}
           >
             Search on YouTube →
           </a>
@@ -207,7 +207,7 @@ export default function Videos() {
       {/* Rich SEO content */}
       <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
           Cricket Videos — Highlights & Replays
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

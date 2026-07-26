@@ -8,7 +8,7 @@ export default function PSL() {
       name="PSL 2026"
       shortName="PSL"
       filterKeywords={["PSL", "Pakistan Super League", "HBL PSL"]}
-      accentColor="#60A5FA"
+      accentColor="#D896FF"
       seoTitle="PSL 2026 Live Score — Pakistan Super League T20"
       seoDesc="PSL 2026 live score with ball-by-ball commentary for all Pakistan Super League matches. Follow Karachi Kings, Lahore Qalandars, Multan Sultans, Islamabad United and all 6 teams. Updated every 15 seconds, free."
       seoKeywords="PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard, PSL points table 2026, PSL schedule 2026, PSL match today, HBL PSL live score, Karachi Kings live, Lahore Qalandars live, Multan Sultans live, Islamabad United live, Babar Azam PSL, Shaheen Afridi PSL, PSL highlights"

@@ -29,7 +29,7 @@ export default function Schedule() {
         border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📅 Cricket <span style={{ color: "#3B82F6" }}>Schedule 2026</span>
+          📅 Cricket <span style={{ color: "#B026FF" }}>Schedule 2026</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           All upcoming cricket fixtures — IPL, T20 World Cup, ODI & Test series
@@ -37,7 +37,7 @@ export default function Schedule() {
       </div>
 
       {isLoading && <div className="spinner" style={{ margin: "40px auto" }} />}
-      {error && <div style={{ padding: "20px", color: "#f87171", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load schedule. Try refreshing.</div>}
+      {error && <div style={{ padding: "20px", color: "#FF5C8A", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load schedule. Try refreshing.</div>}
 
       {!isLoading && <AdBanner type="auto" />}
 
@@ -49,7 +49,7 @@ export default function Schedule() {
             <div style={{
               background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.15)",
               borderRadius: 8, padding: "8px 16px", marginBottom: 12,
-              fontWeight: 700, fontSize: 13, color: "#3B82F6",
+              fontWeight: 700, fontSize: 13, color: "#B026FF",
             }}>
               📅 {wrapper.date}
             </div>
@@ -74,7 +74,7 @@ export default function Schedule() {
                             </div>
                             <div style={{ fontSize: 11, color: "var(--text-muted)" }}>⏰ {startDate}</div>
                           </div>
-                          <span style={{ fontSize: 10, fontWeight: 800, padding: "3px 10px", borderRadius: 20, background: "rgba(56,189,248,0.1)", color: "#38BDF8", border: "1px solid rgba(56,189,248,0.25)", flexShrink: 0 }}>
+                          <span style={{ fontSize: 10, fontWeight: 800, padding: "3px 10px", borderRadius: 20, background: "rgba(56,189,248,0.1)", color: "#00F0FF", border: "1px solid rgba(56,189,248,0.25)", flexShrink: 0 }}>
                             {m.matchFormat}
                           </span>
                         </div>
@@ -98,7 +98,7 @@ export default function Schedule() {
       {/* Rich SEO content */}
       <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
           Cricket Schedule 2026 — Complete Fixtures Guide
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

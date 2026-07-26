@@ -11,7 +11,7 @@ export default function ICCCWCLeague2() {
         "CWC League", "ICC CWC", "Namibia", "Scotland", "Oman",
         "CWC League 2", "World Cup League", "Cricket World Cup League",
       ]}
-      accentColor="#3B82F6"
+      accentColor="#B026FF"
       seoTitle="ICC CWC League 2 Live Score — ODI World Cup Qualifying"
       seoDesc="ICC Cricket World Cup League 2 live scores and ball-by-ball commentary. Follow all qualifying ODI matches as nations compete for ICC ODI World Cup berths. Updated every 15 seconds."
       seoKeywords="ICC CWC League 2 live score, ICC Cricket World Cup League 2, CWC League 2 ODI, World Cup qualifier live score, Namibia cricket live, Scotland cricket live, Oman cricket live, ODI qualifier live, cricket world cup qualifying, ICC CWC 2026"

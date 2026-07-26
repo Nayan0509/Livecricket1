@@ -71,30 +71,7 @@ function qp(req, name) {
   catch { return null; }
 }
 
-// ─── Player search (Cricbuzz search API + curated fallback) ──────────────────
-const KNOWN_PLAYERS = [
-  { id: "338", name: "Virat Kohli", country: "India", role: "Batsman" },
-  { id: "107", name: "Rohit Sharma", country: "India", role: "Batsman" },
-  { id: "277", name: "MS Dhoni", country: "India", role: "Wicket-keeper" },
-  { id: "445", name: "Jasprit Bumrah", country: "India", role: "Bowler" },
-  { id: "371", name: "Ravindra Jadeja", country: "India", role: "All-rounder" },
-  { id: "8733", name: "Shubman Gill", country: "India", role: "Batsman" },
-  { id: "7527", name: "Yashasvi Jaiswal", country: "India", role: "Batsman" },
-  { id: "6538", name: "Rishabh Pant", country: "India", role: "Wicket-keeper" },
-  { id: "185", name: "Steve Smith", country: "Australia", role: "Batsman" },
-  { id: "170", name: "David Warner", country: "Australia", role: "Batsman" },
-  { id: "5765", name: "Pat Cummins", country: "Australia", role: "Bowler" },
-  { id: "8917", name: "Travis Head", country: "Australia", role: "Batsman" },
-  { id: "7179", name: "Jos Buttler", country: "England", role: "Wicket-keeper" },
-  { id: "9", name: "Joe Root", country: "England", role: "Batsman" },
-  { id: "308", name: "Babar Azam", country: "Pakistan", role: "Batsman" },
-  { id: "7476", name: "Shaheen Afridi", country: "Pakistan", role: "Bowler" },
-  { id: "10430", name: "Mohammad Rizwan", country: "Pakistan", role: "Wicket-keeper" },
-  { id: "7693", name: "Kagiso Rabada", country: "South Africa", role: "Bowler" },
-  { id: "8672", name: "Sunil Narine", country: "West Indies", role: "All-rounder" },
-  { id: "102", name: "Andre Russell", country: "West Indies", role: "All-rounder" },
-];
-
+// ─── Player search (Cricbuzz search API) ──────────────────────────────────────
 async function searchPlayers(query) {
   const key = `players:search:${query}`;
   const hit = staticCache.get(key);
@@ -107,10 +84,9 @@ async function searchPlayers(query) {
     const results = (parsed?.player || []).map(p => ({ id: p.id, name: p.name, country: p.teamName || "", role: p.role || "" }));
     if (results.length) { staticCache.set(key, results); return results; }
   } catch (_) {}
-  return KNOWN_PLAYERS.filter(p =>
-    p.name.toLowerCase().includes(query.toLowerCase()) ||
-    p.country.toLowerCase().includes(query.toLowerCase())
-  );
+  // Real search failed — return empty rather than substituting a fixed
+  // fake result set.
+  return [];
 }
 
 // ─── ALL MATCHES (JSON extraction from Cricbuzz) ─────────────────────────────

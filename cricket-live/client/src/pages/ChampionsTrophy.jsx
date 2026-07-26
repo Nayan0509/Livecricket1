@@ -8,7 +8,7 @@ export default function ChampionsTrophy() {
       name="ICC Champions Trophy 2025"
       shortName="Champions Trophy"
       filterKeywords={["Champions Trophy", "ICC Champions Trophy", "CT 2025"]}
-      accentColor="#A78BFA"
+      accentColor="#FF2E9A"
       seoTitle="Champions Trophy 2025 Live Score — ICC CT 2025 All Matches"
       seoDesc="ICC Champions Trophy 2025 live score with ball-by-ball commentary. All 15 matches covered — India, Pakistan, Australia, England, South Africa and all 8 teams. Updated every 15 seconds, free."
       seoKeywords="Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy ball by ball, Champions Trophy schedule 2025, ICC CT 2025 live, India vs Pakistan Champions Trophy live, Champions Trophy final live, ICC Champions Trophy 2025 winner, Champions Trophy India live, India Champions Trophy 2025"

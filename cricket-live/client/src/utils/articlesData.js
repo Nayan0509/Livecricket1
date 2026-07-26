@@ -11,9 +11,9 @@ export const ORIGINAL_ARTICLES = [
     img: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop",
     description: "An in-depth analysis of team auction strategies for IPL 2026. How franchises prioritized powerplay pace bowlers and spin-bowling all-rounders for subcontinental pitches.",
     takeaways: [
-      "Spin-bowling all-rounders fetched 35% higher bids compared to previous seasons.",
+      "Spin-bowling all-rounders commanded some of the fiercest bidding wars of the auction.",
       "Powerplay bowling specialists were prioritized by franchises with home grounds featuring short boundaries.",
-      "Young domestic talents received record contracts following strong Ranji and Syed Mushtaq Ali Trophy performances."
+      "Young domestic talents received notable contracts following strong Ranji and Syed Mushtaq Ali Trophy performances."
     ],
     content: [
       {
@@ -22,7 +22,7 @@ export const ORIGINAL_ARTICLES = [
       },
       {
         heading: "Powerplay Pace Tactics on Flat Decks",
-        text: "Analyzing venue statistics from the previous season revealed that early wickets in overs 1 to 6 reduced opponents' total run expectations by an average of 28 runs. Consequently, franchises heavily invested in seamers with natural seam movement and sub-145km/h variation control. The emphasis shifted from pure speed to tactical bowling under field restrictions."
+        text: "Venue trends from the previous season showed that early wickets in overs 1 to 6 consistently suppressed the chasing team's eventual total. Consequently, franchises heavily invested in seamers with natural seam movement and sub-145km/h variation control. The emphasis shifted from pure speed to tactical bowling under field restrictions."
       },
       {
         heading: "Squad Depth & The Impact Player Equation",
@@ -55,7 +55,7 @@ export const ORIGINAL_ARTICLES = [
       },
       {
         heading: "The Role of Fourth-Innings Batting Averages",
-        text: "Pitch degradation on Day 4 and Day 5 continues to test top-order technical discipline. Statistical trends reveal that teams averaging above 24 runs per wicket in fourth-innings chases win 62% more contested Test matches."
+        text: "Pitch degradation on Day 4 and Day 5 continues to test top-order technical discipline. Recent WTC cycles reinforce that batting depth and technical discipline in the fourth innings remain among the clearest differentiators between teams that convert winning positions and those that don't."
       }
     ]
   },
@@ -69,8 +69,8 @@ export const ORIGINAL_ARTICLES = [
     img: "https://images.unsplash.com/photo-1624526267942-ab0ff8a3e972?w=800&auto=format&fit=crop",
     description: "Statistical dive into T20 international powerplay scoring rates. Why intent-based opening partnerships outperform traditional anchor roles in modern white-ball cricket.",
     takeaways: [
-      "Average powerplay run rates have surged from 7.2 to 8.8 in T20 Internationals over the past 3 years.",
-      "Boundary percentage in overs 1-6 is now the strongest statistical predictor of T20 match victories.",
+      "Powerplay run rates in T20 Internationals have climbed steadily as teams embrace higher-risk opening approaches.",
+      "Boundary-scoring in overs 1-6 has become one of the clearest indicators of a team's momentum into the middle overs.",
       "Wrist spinners bowling in the 6th over are becoming a primary counter-tactic against aggressive openers."
     ],
     content: [

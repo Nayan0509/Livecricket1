@@ -8,7 +8,7 @@ export default function BBL() {
       name="BBL 2026"
       shortName="BBL"
       filterKeywords={["BBL", "Big Bash", "Big Bash League"]}
-      accentColor="#38BDF8"
+      accentColor="#00F0FF"
       seoTitle="BBL 2026 Live Score — Big Bash League Cricket Australia"
       seoDesc="BBL 2026 live score with ball-by-ball commentary for all Big Bash League matches. Follow Sydney Sixers, Perth Scorchers, Melbourne Stars, Brisbane Heat and all 8 teams. Updated every 15 seconds, free."
       seoKeywords="BBL 2026 live score, Big Bash League live score, BBL live today, BBL ball by ball, BBL scorecard, BBL schedule 2026, Big Bash live score, BBL match today, Sydney Sixers live, Perth Scorchers live, Melbourne Stars live, Brisbane Heat live, BBL 2026 table, Big Bash 2026 live"

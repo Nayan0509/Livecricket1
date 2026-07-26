@@ -42,7 +42,7 @@ export default function SEO({
       <meta httpEquiv="content-language" content="en-US" />
       
       {/* Mobile & Design */}
-      <meta name="theme-color" content="#3B82F6" />
+      <meta name="theme-color" content="#B026FF" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

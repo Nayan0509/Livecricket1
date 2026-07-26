@@ -680,17 +680,8 @@ async function scrapeMatchH2H(matchId) {
   const cached = staticCache.get(key);
   if (cached) return cached;
 
-  // Get match info to know the teams
-  const info = await scrapeMatchInfo(matchId).catch(() => null);
-  if (!info || !info.teams?.length) return [];
-
-  // Build fake H2H data from ESPN
-  const h2h = [
-    { series: "Last 5 Meetings", description: `${info.teams[0]} vs ${info.teams[1]}`, matches: 5 },
-  ];
-
-  staticCache.set(key, h2h);
-  return h2h;
+  // No real head-to-head history available from this data source.
+  return [];
 }
 
 // ─── 10. MATCH FULL INFO (toss, umpires, venue details) ──────────────────────
@@ -1108,75 +1099,8 @@ async function scrapeCricbuzzRankings(category = "men", type = "batting", format
     }
   } catch (_) {}
 
-  // Static fallback data for rankings
-  const staticRankings = {
-    "batting:tests": [
-      { rank: 1, name: "Joe Root",          team: "England",   rating: 924, points: 924 },
-      { rank: 2, name: "Marnus Labuschagne",team: "Australia",  rating: 895, points: 895 },
-      { rank: 3, name: "Steve Smith",       team: "Australia",  rating: 880, points: 880 },
-      { rank: 4, name: "Virat Kohli",       team: "India",      rating: 866, points: 866 },
-      { rank: 5, name: "Kane Williamson",   team: "New Zealand",rating: 861, points: 861 },
-      { rank: 6, name: "Rohit Sharma",      team: "India",      rating: 844, points: 844 },
-      { rank: 7, name: "Ben Duckett",       team: "England",    rating: 835, points: 835 },
-      { rank: 8, name: "David Warner",      team: "Australia",  rating: 820, points: 820 },
-      { rank: 9, name: "Travis Head",       team: "Australia",  rating: 815, points: 815 },
-      { rank: 10,name: "Yashasvi Jaiswal",  team: "India",      rating: 808, points: 808 },
-    ],
-    "batting:odis": [
-      { rank: 1, name: "Virat Kohli",       team: "India",      rating: 884, points: 884 },
-      { rank: 2, name: "Babar Azam",        team: "Pakistan",   rating: 872, points: 872 },
-      { rank: 3, name: "Shubman Gill",      team: "India",      rating: 858, points: 858 },
-      { rank: 4, name: "Rohit Sharma",      team: "India",      rating: 845, points: 845 },
-      { rank: 5, name: "Travis Head",       team: "Australia",  rating: 837, points: 837 },
-      { rank: 6, name: "Devon Conway",      team: "New Zealand",rating: 823, points: 823 },
-      { rank: 7, name: "Rachin Ravindra",   team: "New Zealand",rating: 815, points: 815 },
-      { rank: 8, name: "David Warner",      team: "Australia",  rating: 808, points: 808 },
-      { rank: 9, name: "Quinton de Kock",   team: "South Africa",rating: 799, points: 799 },
-      { rank: 10,name: "Shreyas Iyer",      team: "India",      rating: 791, points: 791 },
-    ],
-    "batting:t20is": [
-      { rank: 1, name: "Suryakumar Yadav",  team: "India",      rating: 908, points: 908 },
-      { rank: 2, name: "Travis Head",       team: "Australia",  rating: 875, points: 875 },
-      { rank: 3, name: "Phil Salt",         team: "England",    rating: 852, points: 852 },
-      { rank: 4, name: "Rohit Sharma",      team: "India",      rating: 838, points: 838 },
-      { rank: 5, name: "Babar Azam",        team: "Pakistan",   rating: 830, points: 830 },
-      { rank: 6, name: "Tilak Varma",       team: "India",      rating: 821, points: 821 },
-      { rank: 7, name: "Virat Kohli",       team: "India",      rating: 815, points: 815 },
-      { rank: 8, name: "Jos Buttler",       team: "England",    rating: 808, points: 808 },
-      { rank: 9, name: "Heinrich Klaasen",  team: "South Africa",rating: 799, points: 799 },
-      { rank: 10,name: "Saurabh Netravalkar",team: "USA",       rating: 791, points: 791 },
-    ],
-    "bowling:tests": [
-      { rank: 1, name: "Jasprit Bumrah",    team: "India",      rating: 916, points: 916 },
-      { rank: 2, name: "Pat Cummins",       team: "Australia",  rating: 887, points: 887 },
-      { rank: 3, name: "Kagiso Rabada",     team: "South Africa",rating: 875, points: 875 },
-      { rank: 4, name: "Nathan Lyon",       team: "Australia",  rating: 862, points: 862 },
-      { rank: 5, name: "James Anderson",    team: "England",    rating: 854, points: 854 },
-      { rank: 6, name: "Stuart Broad",      team: "England",    rating: 841, points: 841 },
-      { rank: 7, name: "Ravichandran Ashwin",team: "India",     rating: 836, points: 836 },
-      { rank: 8, name: "Mitchell Starc",    team: "Australia",  rating: 828, points: 828 },
-      { rank: 9, name: "Tim Southee",       team: "New Zealand",rating: 820, points: 820 },
-      { rank: 10,name: "Mohammed Siraj",    team: "India",      rating: 812, points: 812 },
-    ],
-    "bowling:odis": [
-      { rank: 1, name: "Jasprit Bumrah",    team: "India",      rating: 899, points: 899 },
-      { rank: 2, name: "Trent Boult",       team: "New Zealand",rating: 876, points: 876 },
-      { rank: 3, name: "Shaheen Afridi",    team: "Pakistan",   rating: 862, points: 862 },
-      { rank: 4, name: "Rashid Khan",       team: "Afghanistan",rating: 851, points: 851 },
-      { rank: 5, name: "Mitchell Starc",    team: "Australia",  rating: 843, points: 843 },
-    ],
-    "bowling:t20is": [
-      { rank: 1, name: "Rashid Khan",       team: "Afghanistan",rating: 892, points: 892 },
-      { rank: 2, name: "Jasprit Bumrah",    team: "India",      rating: 872, points: 872 },
-      { rank: 3, name: "Anrich Nortje",     team: "South Africa",rating: 858, points: 858 },
-      { rank: 4, name: "Adil Rashid",       team: "England",    rating: 845, points: 845 },
-      { rank: 5, name: "Axar Patel",        team: "India",      rating: 834, points: 834 },
-    ],
-  };
-
-  const fallback = staticRankings[`${type}:${format}`] || staticRankings["batting:tests"];
-  staticCache.set(key, fallback);
-  return fallback;
+  // Real rankings unavailable from any source right now.
+  return [];
 }
 
 // ─── 16. ALL SERIES ───────────────────────────────────────────────────────────

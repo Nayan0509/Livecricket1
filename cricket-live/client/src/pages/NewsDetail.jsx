@@ -62,7 +62,7 @@ export default function NewsDetail() {
       <article style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: "32px", overflow: "hidden" }}>
         {/* Category & Date */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 11, fontWeight: 800, color: "#ef4444", background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)", padding: "3px 10px", borderRadius: 20, textTransform: "uppercase" }}>
+          <span style={{ fontSize: 11, fontWeight: 800, color: "#FF1053", background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)", padding: "3px 10px", borderRadius: 20, textTransform: "uppercase" }}>
             {articleCategory}
           </span>
           <span style={{ fontSize: 13, color: "var(--text3)" }}>
@@ -82,7 +82,7 @@ export default function NewsDetail() {
 
         {/* Summary / Description */}
         {newsItem.description && (
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--text2)", fontWeight: 500, marginBottom: 24, borderLeft: "3px solid #3b82f6", paddingLeft: 16 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--text2)", fontWeight: 500, marginBottom: 24, borderLeft: "3px solid #B026FF", paddingLeft: 16 }}>
             {newsItem.description}
           </p>
         )}
@@ -90,7 +90,7 @@ export default function NewsDetail() {
         {/* Key Takeaways Box */}
         {newsItem.takeaways && (
           <div style={{ background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.2)", borderRadius: 12, padding: "20px", marginBottom: 28 }}>
-            <h3 style={{ fontSize: 14, fontWeight: 800, color: "#3b82f6", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 800, color: "#B026FF", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>
               📌 Key Highlights & Takeaways
             </h3>
             <ul style={{ paddingLeft: 18, margin: 0, color: "var(--text2)", fontSize: 14, lineHeight: 1.7 }}>
@@ -123,7 +123,7 @@ export default function NewsDetail() {
               href={newsItem.url}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ fontSize: 13, fontWeight: 700, color: "#3b82f6", textDecoration: "none" }}
+              style={{ fontSize: 13, fontWeight: 700, color: "#B026FF", textDecoration: "none" }}
             >
               View original bulletin source ↗
             </a>

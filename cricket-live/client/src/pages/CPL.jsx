@@ -8,7 +8,7 @@ export default function CPL() {
       name="CPL 2026"
       shortName="CPL"
       filterKeywords={["CPL", "Caribbean Premier League", "Caribbean Premier"]}
-      accentColor="#38bdf8"
+      accentColor="#00F0FF"
       seoTitle="CPL 2026 Live Score — Caribbean Premier League T20"
       seoDesc="CPL 2026 live score with ball-by-ball commentary for all Caribbean Premier League matches. Follow Trinbago Knight Riders, Barbados Royals, Guyana Amazon Warriors, Jamaica Tallawahs and more. Updated every 15 seconds, free."
       seoKeywords="CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball, CPL scorecard, CPL schedule 2026, Caribbean Premier League live, CPL T20 live, CPL highlights, Trinbago Knight Riders live, Barbados Royals live, Guyana Amazon Warriors live, Jamaica Tallawahs live, CPL 2026 points table"

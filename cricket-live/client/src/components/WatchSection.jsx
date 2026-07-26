@@ -249,7 +249,7 @@ export default function WatchSection({ match, autoOpen = true }) {
                         style={{
                           flexShrink: 0, width: 160, cursor: "pointer",
                           borderRadius: 8, overflow: "hidden",
-                          border: `2px solid ${activeId === v.videoId ? "#3B82F6" : "rgba(255,255,255,0.06)"}`,
+                          border: `2px solid ${activeId === v.videoId ? "#B026FF" : "rgba(255,255,255,0.06)"}`,
                           transition: "border-color 0.15s", background: "rgba(255,255,255,0.03)",
                         }}
                       >

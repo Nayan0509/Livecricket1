@@ -30,7 +30,7 @@ export default function Results() {
         border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          ✅ Cricket <span style={{ color: "#3B82F6" }}>Results</span>
+          ✅ Cricket <span style={{ color: "#B026FF" }}>Results</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Recent match results — IPL, T20, ODI & Test cricket with full scorecards
@@ -38,7 +38,7 @@ export default function Results() {
       </div>
 
       {isLoading && <div className="spinner" style={{ margin: "40px auto" }} />}
-      {error && <div style={{ padding: "20px", color: "#f87171", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load results.</div>}
+      {error && <div style={{ padding: "20px", color: "#FF5C8A", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load results.</div>}
 
       <AdBanner type="auto" />
 
@@ -58,7 +58,7 @@ export default function Results() {
       {/* Rich SEO content */}
       <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#00F0FF,#00B8D9)", display: "inline-block" }} />
           Cricket Match Results — Scorecards & Summaries
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

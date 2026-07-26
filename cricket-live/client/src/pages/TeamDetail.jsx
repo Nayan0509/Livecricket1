@@ -68,8 +68,8 @@ export default function TeamDetail() {
             style={{
               padding: "12px 4px", background: "none", border: "none", cursor: "pointer",
               fontSize: 14, fontWeight: tab === t ? 800 : 500,
-              color: tab === t ? "#3B82F6" : "var(--text3)",
-              borderBottom: tab === t ? "3px solid #3B82F6" : "3px solid transparent",
+              color: tab === t ? "#B026FF" : "var(--text3)",
+              borderBottom: tab === t ? "3px solid #B026FF" : "3px solid transparent",
               textTransform: "uppercase", letterSpacing: 1, transition: "all 0.2s",
             }}
           >{t}</button>
@@ -90,7 +90,7 @@ export default function TeamDetail() {
                   onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}
                   >
-                    <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 900, color: "#3B82F6" }}>
+                    <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 900, color: "#B026FF" }}>
                       {p.name?.[0]}
                     </div>
                     <div>
@@ -118,11 +118,11 @@ export default function TeamDetail() {
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                 >
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 800, color: "#3B82F6", marginBottom: 4 }}>{m.date}</div>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: "#B026FF", marginBottom: 4 }}>{m.date}</div>
                     <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>{m.name}</div>
                     <div style={{ fontSize: 12, color: "var(--text3)" }}>{m.series} • {m.venue}</div>
                   </div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: "#38BDF8", background: "rgba(56,189,248,0.1)", padding: "4px 12px", borderRadius: 100 }}>{m.status}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#00F0FF", background: "rgba(56,189,248,0.1)", padding: "4px 12px", borderRadius: 100 }}>{m.status}</div>
                 </div>
               </Link>
             ))}

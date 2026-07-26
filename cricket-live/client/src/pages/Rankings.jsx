@@ -51,7 +51,7 @@ export default function Rankings() {
         border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          ICC <span style={{ color: "#3B82F6" }}>Rankings</span> 2026
+          ICC <span style={{ color: "#B026FF" }}>Rankings</span> 2026
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Official ICC player & team rankings across all formats
@@ -71,7 +71,7 @@ export default function Rankings() {
               padding: "9px 22px", borderRadius: 100, cursor: "pointer",
               fontWeight: 700, fontSize: 13, textTransform: "capitalize",
               background: category === c ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.04)",
-              color: category === c ? "#3B82F6" : "var(--text3)",
+              color: category === c ? "#B026FF" : "var(--text3)",
               border: `1.5px solid ${category === c ? "rgba(59,130,246,0.4)" : "rgba(255,255,255,0.08)"}`,
               transition: "all 0.2s",
             }}
@@ -90,8 +90,8 @@ export default function Rankings() {
               style={{
                 flex: 1, background: "none", border: "none", cursor: "pointer",
                 padding: "12px 16px", fontSize: 13, fontWeight: type === t ? 800 : 600,
-                color: type === t ? "#3B82F6" : "var(--text3)",
-                borderBottom: type === t ? "2px solid #3B82F6" : "2px solid transparent",
+                color: type === t ? "#B026FF" : "var(--text3)",
+                borderBottom: type === t ? "2px solid #B026FF" : "2px solid transparent",
                 marginBottom: -1, transition: "color 0.2s", whiteSpace: "nowrap",
                 fontFamily: "'Inter',sans-serif",
               }}
@@ -105,13 +105,13 @@ export default function Rankings() {
             <label key={f} style={{
               display: "flex", alignItems: "center", gap: 6, cursor: "pointer",
               fontSize: 12, fontWeight: format === f ? 800 : 600,
-              color: format === f ? "#38BDF8" : "var(--text3)",
+              color: format === f ? "#00F0FF" : "var(--text3)",
             }}>
               <input
                 type="radio" name="format"
                 checked={format === f}
                 onChange={() => setFormat(f)}
-                style={{ accentColor: "#38BDF8", width: 13, height: 13 }}
+                style={{ accentColor: "#00F0FF", width: 13, height: 13 }}
               />
               {f.toUpperCase()}
             </label>
@@ -155,13 +155,13 @@ export default function Rankings() {
                         background: i < 3 ? "rgba(56,189,248,0.12)" : "rgba(255,255,255,0.04)",
                         border: i < 3 ? "1px solid rgba(56,189,248,0.3)" : "1px solid rgba(255,255,255,0.06)",
                         fontSize: 12, fontWeight: 900,
-                        color: i < 3 ? "#38BDF8" : "var(--text3)",
+                        color: i < 3 ? "#00F0FF" : "var(--text3)",
                       }}>{r.rank || i + 1}</div>
                     </td>
                     <td style={{ ...tdStyle, textAlign: "left", fontWeight: 700, fontSize: 14, color: "var(--text)" }}>{r.name}</td>
                     {type !== "teams" && <td style={{ ...tdStyle, color: "var(--text3)", fontSize: 13 }}>{r.country}</td>}
                     <td style={{ ...tdStyle }}>
-                      <span style={{ fontWeight: 900, fontSize: 15, color: "#3B82F6", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{r.rating}</span>
+                      <span style={{ fontWeight: 900, fontSize: 15, color: "#B026FF", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{r.rating}</span>
                     </td>
                   </tr>
                 )) : (

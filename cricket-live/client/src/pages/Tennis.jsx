@@ -9,7 +9,7 @@ export default function Tennis() {
       name="Tennis"
       icon="🎾"
       leagues={["ATP Tour", "WTA Tour"]}
-      accentColor="#EAB308"
+      accentColor="#FFEA00"
       seoTitle="Tennis Live Scores Today — ATP & WTA Tour | Live Cricket Zone"
       seoDesc="Live tennis scores today from the ATP and WTA tours, with set-by-set scores for matches in progress, upcoming fixtures and recent results."
       seoKeywords="tennis live score, ATP live score, WTA live score, tennis scores today, tennis results"

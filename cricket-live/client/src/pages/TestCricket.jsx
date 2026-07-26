@@ -8,7 +8,7 @@ export default function TestCricket() {
       name="Test Cricket 2026"
       shortName="Test"
       filterKeywords={["Test", "Test Match", "Test cricket"]}
-      accentColor="#f87171"
+      accentColor="#FF5C8A"
       seoTitle="Test Cricket Live Score Today - Test Match Commentary"
       seoDesc="Test cricket live score today. Real-time Test match updates with ball-by-ball commentary, day-by-day scorecard and session reports. All Test series covered."
       seoKeywords="Test cricket live score, Test match live score today, Test cricket today, Test match today, Test cricket ball by ball, Test cricket score, live Test score, Test cricket 2026, Ashes live score, Test match commentary"

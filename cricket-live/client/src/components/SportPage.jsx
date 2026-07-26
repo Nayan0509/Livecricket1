@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import SEO from "./SEO";
 import AdBanner from "./AdBanner";
+import { MotionGrid, MotionItem } from "./MotionGrid";
 import { fetchSportMatches, fetchSportNews } from "../api";
 
 /**
@@ -18,7 +20,7 @@ export default function SportPage({
   seoTitle,
   seoDesc,
   seoKeywords,
-  accentColor = "#3B82F6",
+  accentColor = "#B026FF",
   aboutText,
   faqItems = [],
 }) {
@@ -82,18 +84,23 @@ export default function SportPage({
       )}
 
       {/* Hero */}
-      <div style={{
-        padding: "40px 32px", borderRadius: 20, marginBottom: 28, textAlign: "center",
-        background: `linear-gradient(135deg, ${accentColor}18 0%, rgba(13,20,38,0.95) 100%)`,
-        border: `1px solid ${accentColor}30`,
-      }}>
-        <h1 style={{ fontSize: 34, fontWeight: 900, marginBottom: 8, color: "var(--text)" }}>
+      <motion.div
+        className="hero"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+        style={{
+          padding: "40px 32px", marginBottom: 28, textAlign: "center",
+          background: `linear-gradient(135deg, ${accentColor}20 0%, rgba(13,20,38,0.95) 100%)`,
+        }}
+      >
+        <h1 className="font-display" style={{ fontSize: 34, fontWeight: 900, marginBottom: 8, color: "var(--text)" }}>
           {icon} {name} Live Scores
         </h1>
-        <p style={{ fontSize: 15, color: "var(--text2)" }}>
+        <p className="font-hud" style={{ fontSize: 16, color: "var(--text2)" }}>
           {leagues.length > 0 ? leagues.join(" · ") : `Real-time ${name.toLowerCase()} scores worldwide`}
         </p>
-      </div>
+      </motion.div>
 
       <AdBanner type="leaderboard" />
 
@@ -104,13 +111,13 @@ export default function SportPage({
           {/* Live */}
           <section aria-label={`${name} live matches`} style={{ marginTop: 28, marginBottom: 28 }}>
             <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#ef4444", display: "inline-block", animation: "livePulse 2s infinite" }} />
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#FF1053", display: "inline-block", animation: "livePulse 2s infinite" }} />
               Live Now
             </h2>
             {matches.live.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
-                {matches.live.map(m => <MatchCard key={m.id} match={m} live />)}
-              </div>
+              <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
+                {matches.live.map(m => <MotionItem key={m.id}><MatchCard match={m} live /></MotionItem>)}
+              </MotionGrid>
             ) : (
               <EmptyState text={`No ${name.toLowerCase()} matches live right now.`} />
             )}
@@ -120,9 +127,9 @@ export default function SportPage({
           <section aria-label={`${name} upcoming matches`} style={{ marginBottom: 28 }}>
             <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", marginBottom: 14 }}>📅 Upcoming</h2>
             {matches.upcoming.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
-                {matches.upcoming.slice(0, 12).map(m => <MatchCard key={m.id} match={m} />)}
-              </div>
+              <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
+                {matches.upcoming.slice(0, 12).map(m => <MotionItem key={m.id}><MatchCard match={m} /></MotionItem>)}
+              </MotionGrid>
             ) : (
               <EmptyState text={`No upcoming ${name.toLowerCase()} matches found.`} />
             )}
@@ -132,9 +139,9 @@ export default function SportPage({
           <section aria-label={`${name} recent results`} style={{ marginBottom: 28 }}>
             <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", marginBottom: 14 }}>✅ Recent Results</h2>
             {matches.recent.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
-                {matches.recent.slice(0, 12).map(m => <MatchCard key={m.id} match={m} />)}
-              </div>
+              <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
+                {matches.recent.slice(0, 12).map(m => <MotionItem key={m.id}><MatchCard match={m} /></MotionItem>)}
+              </MotionGrid>
             ) : (
               <EmptyState text={`No recent ${name.toLowerCase()} results yet.`} />
             )}
@@ -211,15 +218,15 @@ function MatchCard({ match: m, live }) {
     <div style={{ padding: "16px 18px", borderRadius: 12, background: bg, border: `1px solid ${border}` }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
         <span style={{ fontSize: 10, fontWeight: 800, color: "var(--text3)", background: "rgba(255,255,255,0.05)", padding: "2px 7px", borderRadius: 5 }}>{m.league}</span>
-        {live && <span style={{ fontSize: 10, color: "#fb7185", fontWeight: 800 }}>🔴 LIVE</span>}
+        {live && <span style={{ fontSize: 10, color: "#FF5C8A", fontWeight: 800 }}>🔴 LIVE</span>}
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{a?.name || "TBD"}</span>
-        {a?.score && <span style={{ fontSize: 13, fontWeight: 800, color: live ? "#fb7185" : "var(--text2)" }}>{a.score}</span>}
+        {a?.score && <span style={{ fontSize: 13, fontWeight: 800, color: live ? "#FF5C8A" : "var(--text2)" }}>{a.score}</span>}
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{b?.name || "TBD"}</span>
-        {b?.score && <span style={{ fontSize: 13, fontWeight: 800, color: live ? "#fb7185" : "var(--text2)" }}>{b.score}</span>}
+        {b?.score && <span style={{ fontSize: 13, fontWeight: 800, color: live ? "#FF5C8A" : "var(--text2)" }}>{b.score}</span>}
       </div>
       <div style={{ fontSize: 11, color: "var(--text3)" }}>{m.status}{m.venue ? ` — ${m.venue}` : ""}</div>
     </div>

@@ -8,7 +8,7 @@ export default function WorldCup() {
       name="ICC Cricket World Cup 2027"
       shortName="World Cup"
       filterKeywords={["World Cup", "ODI World Cup", "ICC World Cup", "Cricket World Cup"]}
-      accentColor="#38BDF8"
+      accentColor="#00F0FF"
       seoTitle="Cricket World Cup 2027 Live Score — ICC ODI World Cup"
       seoDesc="ICC Cricket World Cup 2027 live score with ball-by-ball commentary. All 48 matches across South Africa, Zimbabwe and Namibia covered — India, Australia, Pakistan, England and 14 nations. Updated every 15 seconds, free."
       seoKeywords="Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule 2027, World Cup ball by ball, ICC World Cup 2027, cricket world cup today match, India World Cup 2027, World Cup South Africa 2027, ODI World Cup qualifier, ICC CWC 2027 live, Cricket World Cup final live"

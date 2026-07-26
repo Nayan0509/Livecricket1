@@ -33,7 +33,7 @@ export default function UpcomingMatches() {
         border: "1px solid rgba(56,189,248,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📅 Upcoming <span style={{ color: "#38BDF8" }}>Matches</span>
+          📅 Upcoming <span style={{ color: "#00F0FF" }}>Matches</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           All upcoming cricket fixtures — IPL, T20 World Cup, ODI & Test series
@@ -47,7 +47,7 @@ export default function UpcomingMatches() {
             padding: "7px 18px", borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: "pointer",
             background: format === f ? "rgba(56,189,248,0.15)" : "rgba(255,255,255,0.03)",
             border: `1px solid ${format === f ? "rgba(56,189,248,0.4)" : "rgba(255,255,255,0.08)"}`,
-            color: format === f ? "#38BDF8" : "var(--text3)",
+            color: format === f ? "#00F0FF" : "var(--text3)",
             transition: "all 0.15s",
           }}>
             {f.toUpperCase()}
@@ -56,7 +56,7 @@ export default function UpcomingMatches() {
       </div>
 
       {isLoading && <div className="spinner" style={{ margin: "40px auto" }} />}
-      {error && <div style={{ padding: "20px", color: "#f87171", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load matches.</div>}
+      {error && <div style={{ padding: "20px", color: "#FF5C8A", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load matches.</div>}
 
       <AdBanner type="auto" />
 
@@ -76,7 +76,7 @@ export default function UpcomingMatches() {
       {/* Rich SEO content */}
       <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(56,189,248,0.07)" }}>
         <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
+          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#00F0FF,#00B8D9)", display: "inline-block" }} />
           Upcoming Cricket Matches — What's Coming Up
         </h2>
         <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>

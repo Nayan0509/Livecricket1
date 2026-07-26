@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
       <div style={{ marginBottom: 36, paddingTop: 8 }}>
         <h1 style={{ fontSize: 28, fontWeight: 900, color: "#fff", marginBottom: 8 }}>Privacy Policy</h1>
         <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>
-          Last updated: {UPDATED} · <a href={`mailto:${CONTACT}`} style={{ color: "#f87171", textDecoration: "none" }}>{CONTACT}</a>
+          Last updated: {UPDATED} · <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A", textDecoration: "none" }}>{CONTACT}</a>
         </p>
       </div>
 
@@ -45,7 +45,7 @@ export default function PrivacyPolicy() {
       </div>
 
       <Section title="1. Who We Are">
-        <p>Live Cricket Zone ("<strong style={{ color: "#fff" }}>we</strong>", "<strong style={{ color: "#fff" }}>us</strong>", "<strong style={{ color: "#fff" }}>our</strong>") operates the website at <a href={SITE_URL} style={{ color: "#f87171" }}>{SITE_URL}</a>. We provide live cricket scores, match commentary, news, and video content aggregation. We are the data controller for personal data collected through this website.</p>
+        <p>Live Cricket Zone ("<strong style={{ color: "#fff" }}>we</strong>", "<strong style={{ color: "#fff" }}>us</strong>", "<strong style={{ color: "#fff" }}>our</strong>") operates the website at <a href={SITE_URL} style={{ color: "#FF5C8A" }}>{SITE_URL}</a>. We provide live cricket scores, match commentary, news, and video content aggregation. We are the data controller for personal data collected through this website.</p>
       </Section>
 
       <Section title="2. What Data We Collect">
@@ -79,7 +79,7 @@ export default function PrivacyPolicy() {
           ].map(s => (
             <div key={s.name} style={{ padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 8, border: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ fontWeight: 700, color: "#fff", marginBottom: 2 }}>{s.name}</div>
-              <div style={{ fontSize: 13 }}>{s.purpose} · <a href={s.policy} target="_blank" rel="noopener noreferrer" style={{ color: "#f87171" }}>Privacy Policy ↗</a></div>
+              <div style={{ fontSize: 13 }}>{s.purpose} · <a href={s.policy} target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>Privacy Policy ↗</a></div>
             </div>
           ))}
         </div>
@@ -93,11 +93,11 @@ export default function PrivacyPolicy() {
           <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Analytics cookies</strong> — Google Analytics (_ga, _gid) to understand how visitors use the site.</li>
           <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Advertising cookies</strong> — Google AdSense to serve personalised ads based on your interests.</li>
         </ul>
-        <p style={{ marginTop: 10 }}>You can control cookies through your browser settings or opt out of Google advertising cookies at <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171" }}>adssettings.google.com</a>.</p>
+        <p style={{ marginTop: 10 }}>You can control cookies through your browser settings or opt out of Google advertising cookies at <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>adssettings.google.com</a>.</p>
       </Section>
 
       <Section title="6. YouTube Embedded Videos">
-        <p>This website embeds videos from YouTube using the official YouTube IFrame API. When you watch an embedded video, YouTube (Google) may set cookies and collect data about your viewing. This is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171" }}>Google's Privacy Policy</a>. We use <code style={{ background: "rgba(255,255,255,0.08)", padding: "1px 5px", borderRadius: 4 }}>youtube-nocookie.com</code> embeds to minimise cookie usage until you interact with the player.</p>
+        <p>This website embeds videos from YouTube using the official YouTube IFrame API. When you watch an embedded video, YouTube (Google) may set cookies and collect data about your viewing. This is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>Google's Privacy Policy</a>. We use <code style={{ background: "rgba(255,255,255,0.08)", padding: "1px 5px", borderRadius: 4 }}>youtube-nocookie.com</code> embeds to minimise cookie usage until you interact with the player.</p>
       </Section>
 
       <Section title="7. Your Rights (UK/EU GDPR)">
@@ -108,9 +108,9 @@ export default function PrivacyPolicy() {
           <li style={{ marginBottom: 6 }}>Request deletion of your data ("right to be forgotten")</li>
           <li style={{ marginBottom: 6 }}>Object to processing of your data</li>
           <li style={{ marginBottom: 6 }}>Withdraw consent at any time</li>
-          <li style={{ marginBottom: 6 }}>Lodge a complaint with the ICO (UK) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171" }}>ico.org.uk</a></li>
+          <li style={{ marginBottom: 6 }}>Lodge a complaint with the ICO (UK) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>ico.org.uk</a></li>
         </ul>
-        <p style={{ marginTop: 10 }}>To exercise any of these rights, contact us at <a href={`mailto:${CONTACT}`} style={{ color: "#f87171" }}>{CONTACT}</a>.</p>
+        <p style={{ marginTop: 10 }}>To exercise any of these rights, contact us at <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a>.</p>
       </Section>
 
       <Section title="8. Data Retention">
@@ -118,7 +118,7 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title="9. Children's Privacy">
-        <p>This website is not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us immediately at <a href={`mailto:${CONTACT}`} style={{ color: "#f87171" }}>{CONTACT}</a>.</p>
+        <p>This website is not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us immediately at <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a>.</p>
       </Section>
 
       <Section title="10. Changes to This Policy">
@@ -126,8 +126,8 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title="11. Contact">
-        <p>For any privacy-related questions or requests: <a href={`mailto:${CONTACT}`} style={{ color: "#f87171" }}>{CONTACT}</a></p>
-        <p style={{ marginTop: 6 }}>Website: <a href={SITE_URL} style={{ color: "#f87171" }}>{SITE_URL}</a></p>
+        <p>For any privacy-related questions or requests: <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a></p>
+        <p style={{ marginTop: 6 }}>Website: <a href={SITE_URL} style={{ color: "#FF5C8A" }}>{SITE_URL}</a></p>
       </Section>
     </div>
   );

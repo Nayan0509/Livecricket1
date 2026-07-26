@@ -17,7 +17,7 @@ const FANTASY_TIPS = [
   { emoji: "🔄", title: "Differential Picks", tip: "Low-ownership players who perform can win leagues. Take calculated risks.", priority: "Bonus" },
 ];
 
-const PRIORITY_COLORS = { Must: "#ef4444", Key: "#f59e0b", Bonus: "#3b82f6" };
+const PRIORITY_COLORS = { Must: "#FF1053", Key: "#FFEA00", Bonus: "#B026FF" };
 
 /* Dream Team Template */
 function DreamTeamTemplate({ format }) {
@@ -44,16 +44,16 @@ function DreamTeamTemplate({ format }) {
 
   const team = templates[format] || templates.t20;
   const rows = [
-    { label: "Wicket Keeper", color: "#3b82f6", players: team.wk },
-    { label: "Batsmen", color: "#ef4444", players: team.bat },
-    { label: "All-Rounders", color: "#f59e0b", players: team.ar },
-    { label: "Bowlers", color: "#8b5cf6", players: team.bowl },
+    { label: "Wicket Keeper", color: "#B026FF", players: team.wk },
+    { label: "Batsmen", color: "#FF1053", players: team.bat },
+    { label: "All-Rounders", color: "#FFEA00", players: team.ar },
+    { label: "Bowlers", color: "#9D00FF", players: team.bowl },
   ];
 
   return (
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden" }}>
       <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--divider)", background: "rgba(34,197,94,0.05)" }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: "#10b981", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#00FFA3", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>
           🏏 Dream XI Template — {format.toUpperCase()}
         </div>
         <div style={{ fontSize: 11, color: "var(--text3)" }}>Based on current form and tournament data</div>
@@ -75,7 +75,7 @@ function DreamTeamTemplate({ format }) {
                     <div style={{ fontSize: 9, color: "var(--text3)", fontWeight: 600 }}>{p.team}</div>
                   </div>
                   {pi === 0 && r.label === "All-Rounders" && (
-                    <span style={{ fontSize: 9, background: "#f59e0b", color: "#000", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>
+                    <span style={{ fontSize: 9, background: "#FFEA00", color: "#000", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>
                   )}
                 </div>
               ))}
@@ -108,25 +108,25 @@ function ScoringSystem({ format }) {
   return (
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
       <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--divider)", fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ width: 3, height: 14, borderRadius: 2, background: "#ef4444", display: "inline-block" }} />
+        <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FF1053", display: "inline-block" }} />
         Scoring Guide — {format.toUpperCase()}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
         <div style={{ padding: "14px 18px", borderRight: "1px solid var(--divider)" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#3b82f6", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.5 }}>🏏 Batting</div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#B026FF", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.5 }}>🏏 Batting</div>
           {batting.map(([lbl, pts], i) => (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: i < batting.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
               <span style={{ fontSize: 12, color: "var(--text2)" }}>{lbl}</span>
-              <span style={{ fontSize: 12, fontWeight: 800, color: pts.startsWith("-") ? "#f87171" : "#4ade80" }}>{pts}</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: pts.startsWith("-") ? "#FF5C8A" : "#39FF14" }}>{pts}</span>
             </div>
           ))}
         </div>
         <div style={{ padding: "14px 18px" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#ef4444", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.5 }}>🎳 Bowling</div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#FF1053", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.5 }}>🎳 Bowling</div>
           {bowling.map(([lbl, pts], i) => (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: i < bowling.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
               <span style={{ fontSize: 12, color: "var(--text2)" }}>{lbl}</span>
-              <span style={{ fontSize: 12, fontWeight: 800, color: "#4ade80" }}>{pts}</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: "#39FF14" }}>{pts}</span>
             </div>
           ))}
         </div>
@@ -166,9 +166,9 @@ export default function Fantasy() {
         position: "relative", overflow: "hidden",
       }}>
         <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, borderRadius: "50%", background: "rgba(139,92,246,0.08)", pointerEvents: "none" }} />
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#a78bfa", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 8 }}>✨ Fantasy Cricket Hub</div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#FF2E9A", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 8 }}>✨ Fantasy Cricket Hub</div>
         <h1 style={{ fontSize: 32, fontWeight: 900, color: "var(--text)", margin: "0 0 10px", lineHeight: 1.2 }}>
-          Build Your <span style={{ color: "#a78bfa" }}>Dream Team</span>
+          Build Your <span style={{ color: "#FF2E9A" }}>Dream Team</span>
         </h1>
         <p style={{ fontSize: 14, color: "var(--text3)", margin: "0 0 20px", lineHeight: 1.7 }}>
           Expert picks, captain suggestions, scoring guides, and player form analysis for every format.
@@ -179,7 +179,7 @@ export default function Fantasy() {
               padding: "9px 20px", borderRadius: 8, fontWeight: 800, fontSize: 13,
               background: format === f ? "rgba(139,92,246,0.25)" : "rgba(255,255,255,0.06)",
               border: `1px solid ${format === f ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.1)"}`,
-              color: format === f ? "#a78bfa" : "var(--text3)", cursor: "pointer", textTransform: "uppercase",
+              color: format === f ? "#FF2E9A" : "var(--text3)", cursor: "pointer", textTransform: "uppercase",
             }}>
               {f}
             </button>
@@ -200,8 +200,8 @@ export default function Fantasy() {
           <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
             flexShrink: 0, background: "none", border: "none", cursor: "pointer", padding: "12px 20px",
             fontSize: 13, fontWeight: activeTab === t.id ? 800 : 600,
-            color: activeTab === t.id ? "#a78bfa" : "var(--text3)",
-            borderBottom: `2px solid ${activeTab === t.id ? "#a78bfa" : "transparent"}`,
+            color: activeTab === t.id ? "#FF2E9A" : "var(--text3)",
+            borderBottom: `2px solid ${activeTab === t.id ? "#FF2E9A" : "transparent"}`,
             marginBottom: -1, transition: "color 0.18s",
           }}>
             {t.label}
@@ -240,7 +240,7 @@ export default function Fantasy() {
       {/* Dream XI Tab */}
       {activeTab === "dream11" && (
         <div>
-          <div style={{ marginBottom: 16, padding: "12px 16px", borderRadius: 10, background: "rgba(245,158,11,0.07)", border: "1px solid rgba(245,158,11,0.18)", fontSize: 12, color: "#f59e0b", fontWeight: 600 }}>
+          <div style={{ marginBottom: 16, padding: "12px 16px", borderRadius: 10, background: "rgba(245,158,11,0.07)", border: "1px solid rgba(245,158,11,0.18)", fontSize: 12, color: "#FFEA00", fontWeight: 600 }}>
             ⚠️ These are suggested template picks based on player statistics and form. Always check the latest squad announcements before finalizing.
           </div>
           <DreamTeamTemplate format={format} />
@@ -259,7 +259,7 @@ export default function Fantasy() {
             {[["Catch", "+8"], ["Stumping", "+12"], ["Run out (direct)", "+12"], ["Run out (indirect)", "+6"]].map(([lbl, pts], i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
                 <span style={{ fontSize: 12, color: "var(--text2)" }}>{lbl}</span>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "#4ade80" }}>{pts}</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#39FF14" }}>{pts}</span>
               </div>
             ))}
           </div>
@@ -291,7 +291,7 @@ export default function Fantasy() {
                           {m.series || m.matchType} · {m.venue || ""} · {m.date || ""}
                         </div>
                       </div>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "#a78bfa", background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)", padding: "5px 12px", borderRadius: 20, flexShrink: 0, marginLeft: 12 }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "#FF2E9A", background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)", padding: "5px 12px", borderRadius: 20, flexShrink: 0, marginLeft: 12 }}>
                         {m.matchStarted ? "LIVE →" : "Preview →"}
                       </span>
                     </div>

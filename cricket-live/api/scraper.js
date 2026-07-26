@@ -1507,17 +1507,19 @@ async function scrapeCricbuzzSeries() {
 }
 
 // ─── 16. IPL STANDINGS ────────────────────────────────────────────────────────
-const IPL_FALLBACK_TABLE = [
-  { team: "Royal Challengers Bengaluru", short: "RCB",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#EC1C24" },
-  { team: "Mumbai Indians",              short: "MI",   p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#004BA0" },
-  { team: "Kolkata Knight Riders",       short: "KKR",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#3A225D" },
-  { team: "Sunrisers Hyderabad",         short: "SRH",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#F7A721" },
-  { team: "Gujarat Titans",              short: "GT",   p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#1B8B4B" },
-  { team: "Rajasthan Royals",            short: "RR",   p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#254AA5" },
-  { team: "Lucknow Super Giants",        short: "LSG",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#A72056" },
-  { team: "Chennai Super Kings",         short: "CSK",  p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#F9CD05" },
-  { team: "Delhi Capitals",              short: "DC",   p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#0078BC" },
-  { team: "Punjab Kings",                short: "PBKS", p:0, w:0, l:0, nr:0, nrr:"+0.000", pts:0, color:"#ED1B24" },
+// Real team brand colors only (metadata, not standings) — merged onto real
+// scraped rows below. Never returned as a substitute for actual standings.
+const IPL_TEAM_COLORS = [
+  { short: "RCB",  team: "Royal Challengers Bengaluru", color: "#EC1C24" },
+  { short: "MI",   team: "Mumbai Indians",              color: "#004BA0" },
+  { short: "KKR",  team: "Kolkata Knight Riders",       color: "#3A225D" },
+  { short: "SRH",  team: "Sunrisers Hyderabad",         color: "#F7A721" },
+  { short: "GT",   team: "Gujarat Titans",              color: "#1B8B4B" },
+  { short: "RR",   team: "Rajasthan Royals",            color: "#254AA5" },
+  { short: "LSG",  team: "Lucknow Super Giants",        color: "#A72056" },
+  { short: "CSK",  team: "Chennai Super Kings",         color: "#F9CD05" },
+  { short: "DC",   team: "Delhi Capitals",              color: "#0078BC" },
+  { short: "PBKS", team: "Punjab Kings",                color: "#ED1B24" },
 ];
 
 async function scrapeIPLStandings() {
@@ -1540,22 +1542,23 @@ async function scrapeIPLStandings() {
   if (seriesId) {
     const rows = await scrapeSeriesStandings(seriesId);
     if (rows.length >= 4) {
-      // Merge color from fallback table
       const withColors = rows.map(r => {
-        const fb = IPL_FALLBACK_TABLE.find(t =>
+        const fb = IPL_TEAM_COLORS.find(t =>
           r.short === t.short ||
           r.team.toLowerCase().includes(t.short.toLowerCase()) ||
           t.team.toLowerCase().includes((r.team || "").toLowerCase().slice(0, 8))
         );
-        return { ...r, color: fb?.color || "#22C55E" };
+        return { ...r, color: fb?.color || "#39FF14" };
       });
       scrapeCache.set(key, withColors, 300);
       return withColors;
     }
   }
 
-  scrapeCache.set(key, IPL_FALLBACK_TABLE, 120);
-  return IPL_FALLBACK_TABLE;
+  // Real standings unavailable right now — return empty rather than a fake
+  // zeroed table, so the UI can show a genuine "not available" state.
+  scrapeCache.set(key, [], 60);
+  return [];
 }
 
 // ─── 17. getScaledData (legacy compat) ───────────────────────────────────────

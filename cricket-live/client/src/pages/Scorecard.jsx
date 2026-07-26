@@ -8,10 +8,10 @@ function BattingTable({ team, score, batsmen }) {
   return (
     <div style={{ marginBottom: 32 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-        <span style={{ width: 3, height: 18, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
+        <span style={{ width: 3, height: 18, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
         <div>
           <span style={{ fontSize: 15, fontWeight: 900, color: "var(--text)" }}>{team}</span>
-          {score && <span style={{ marginLeft: 12, fontSize: 14, fontWeight: 700, color: "#3B82F6" }}>{score}</span>}
+          {score && <span style={{ marginLeft: 12, fontSize: 14, fontWeight: 700, color: "#B026FF" }}>{score}</span>}
         </div>
       </div>
       <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
@@ -43,7 +43,7 @@ function BattingTable({ team, score, batsmen }) {
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.b}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.fours}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.sixes}</td>
-                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: 12, color: "#38bdf8" }}>{b.sr}</td>
+                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: 12, color: "#00F0FF" }}>{b.sr}</td>
               </tr>
             ))}
           </tbody>
@@ -85,7 +85,7 @@ function BowlingTable({ bowlers }) {
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{b.o}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{b.m}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{b.r}</td>
-                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 900, fontSize: 15, color: "#3B82F6" }}>{b.w}</td>
+                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 900, fontSize: 15, color: "#B026FF" }}>{b.w}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: 12, color: "var(--text2)" }}>{b.eco}</td>
               </tr>
             ))}
@@ -152,7 +152,7 @@ export default function Scorecard() {
               {match?.name || "Loading scorecard…"}
             </h1>
             {match?.status && (
-              <div style={{ fontSize: 12, color: isLive ? "#fb7185" : "#60A5FA", fontWeight: 700 }}>
+              <div style={{ fontSize: 12, color: isLive ? "#FF5C8A" : "#D896FF", fontWeight: 700 }}>
                 {isLive && "● "}{match.status}
               </div>
             )}
@@ -169,7 +169,7 @@ export default function Scorecard() {
               <Link to={`/match/${id}/live-score`} style={{
                 padding: "7px 14px", borderRadius: 8, fontSize: 11, fontWeight: 700,
                 background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)",
-                color: "#fb7185", textDecoration: "none",
+                color: "#FF5C8A", textDecoration: "none",
               }}>
                 ● Live
               </Link>
@@ -188,7 +188,7 @@ export default function Scorecard() {
       {error && (
         <div style={{ padding: "40px 24px", textAlign: "center", background: "rgba(248,113,113,0.06)", borderRadius: 12, border: "1px solid rgba(248,113,113,0.15)" }}>
           <div style={{ fontSize: 32, marginBottom: 10 }}>⚠️</div>
-          <h2 style={{ color: "#f87171", fontSize: 16, fontWeight: 800, marginBottom: 6 }}>Scorecard Unavailable</h2>
+          <h2 style={{ color: "#FF5C8A", fontSize: 16, fontWeight: 800, marginBottom: 6 }}>Scorecard Unavailable</h2>
           <p style={{ color: "var(--text3)", fontSize: 13 }}>Scorecard data for match {id} could not be loaded. Try again shortly.</p>
         </div>
       )}
@@ -204,7 +204,7 @@ export default function Scorecard() {
                 style={{
                   padding: "8px 18px", borderRadius: 8, fontSize: 12, fontWeight: 700,
                   background: innIdx === i ? "rgba(34,197,94,0.15)" : "transparent",
-                  color: innIdx === i ? "#3B82F6" : "var(--text3)",
+                  color: innIdx === i ? "#B026FF" : "var(--text3)",
                   border: innIdx === i ? "1px solid rgba(34,197,94,0.3)" : "1px solid transparent",
                   cursor: "pointer", transition: "all 0.15s", fontFamily: "'Inter',sans-serif",
                 }}
@@ -240,7 +240,7 @@ export default function Scorecard() {
                       {innings[innIdx].partnerships.map((p, i) => (
                         <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
                           <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text2)" }}>{p.batsman1} & {p.batsman2}</td>
-                          <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#3B82F6", textAlign: "center" }}>{p.runs}</td>
+                          <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#B026FF", textAlign: "center" }}>{p.runs}</td>
                           <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text3)", textAlign: "center" }}>{p.balls}</td>
                         </tr>
                       ))}
@@ -277,7 +277,7 @@ export default function Scorecard() {
           <p style={{ color: "var(--text3)", fontSize: 13, marginBottom: 16 }}>
             {isLive ? "The match is live — scorecard data is initialising." : "Scorecard will be available once the match begins."}
           </p>
-          <Link to={`/match/${id}`} style={{ fontSize: 13, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}>
+          <Link to={`/match/${id}`} style={{ fontSize: 13, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}>
             View Match Details →
           </Link>
         </div>

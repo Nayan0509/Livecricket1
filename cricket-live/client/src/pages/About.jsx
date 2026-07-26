@@ -72,10 +72,10 @@ export default function About() {
             { cat: "Women's Cricket", items: ["Women's T20 World Cup", "Women's ODI World Cup", "Women's IPL", "Women's Big Bash", "Women's County Cricket", "ICC Women's Rankings"] },
           ].map(c => (
             <div key={c.cat} style={{ padding: "14px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div style={{ fontWeight: 800, fontSize: 12, color: "#a78bfa", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>{c.cat}</div>
+              <div style={{ fontWeight: 800, fontSize: 12, color: "#FF2E9A", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>{c.cat}</div>
               {c.items.map(i => (
                 <div key={i} style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ color: "#60A5FA", fontSize: 10 }}>✓</span> {i}
+                  <span style={{ color: "#D896FF", fontSize: 10 }}>✓</span> {i}
                 </div>
               ))}
             </div>
@@ -96,7 +96,7 @@ export default function About() {
             { q: "No ads interrupting scores", a: "We keep the live score experience clean and fast. Ads are placed thoughtfully so they never interrupt your match viewing." },
           ].map((r, i) => (
             <div key={i} style={{ display: "flex", gap: 12, padding: "12px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)" }}>
-              <span style={{ color: "#60A5FA", fontWeight: 900, fontSize: 14, flexShrink: 0, marginTop: 1 }}>✓</span>
+              <span style={{ color: "#D896FF", fontWeight: 900, fontSize: 14, flexShrink: 0, marginTop: 1 }}>✓</span>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 13, color: "#fff", marginBottom: 3 }}>{r.q}</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{r.a}</div>
@@ -113,9 +113,9 @@ export default function About() {
           We welcome feedback, suggestions, and partnership enquiries. If you have found an error in our scores or have a technical issue, please reach out.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>📧 General: <a href="mailto:contact@livecricketzone.com" style={{ color: "#a78bfa" }}>contact@livecricketzone.com</a></div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>🔒 Privacy: <a href="mailto:privacy@livecricketzone.com" style={{ color: "#a78bfa" }}>privacy@livecricketzone.com</a></div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>⚖️ Legal / DMCA: <a href="mailto:legal@livecricketzone.com" style={{ color: "#a78bfa" }}>legal@livecricketzone.com</a></div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>📧 General: <a href="mailto:contact@livecricketzone.com" style={{ color: "#FF2E9A" }}>contact@livecricketzone.com</a></div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>🔒 Privacy: <a href="mailto:privacy@livecricketzone.com" style={{ color: "#FF2E9A" }}>privacy@livecricketzone.com</a></div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>⚖️ Legal / DMCA: <a href="mailto:legal@livecricketzone.com" style={{ color: "#FF2E9A" }}>legal@livecricketzone.com</a></div>
         </div>
       </div>
 

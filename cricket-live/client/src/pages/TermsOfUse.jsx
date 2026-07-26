@@ -31,7 +31,7 @@ export default function TermsOfUse() {
       <div style={{ marginBottom: 36, paddingTop: 8 }}>
         <h1 style={{ fontSize: 28, fontWeight: 900, color: "#fff", marginBottom: 8 }}>Terms of Use</h1>
         <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>
-          Last updated: {UPDATED} · <a href={`mailto:${CONTACT}`} style={{ color: "#f87171", textDecoration: "none" }}>{CONTACT}</a>
+          Last updated: {UPDATED} · <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A", textDecoration: "none" }}>{CONTACT}</a>
         </p>
       </div>
 
@@ -72,7 +72,7 @@ export default function TermsOfUse() {
           <li style={{ marginBottom: 6 }}>Embeds videos in compliance with YouTube's Terms of Service</li>
           <li style={{ marginBottom: 6 }}>Provides direct links to original YouTube videos</li>
         </ul>
-        <p style={{ marginTop: 10 }}>If you are a content owner and have concerns about embedded content, please refer to our <a href="/dmca-copyright" style={{ color: "#f87171" }}>DMCA / Copyright page</a> or contact YouTube directly via their <a href="https://support.google.com/youtube/answer/2807622" target="_blank" rel="noopener noreferrer" style={{ color: "#f87171" }}>copyright complaint process ↗</a>.</p>
+        <p style={{ marginTop: 10 }}>If you are a content owner and have concerns about embedded content, please refer to our <a href="/dmca-copyright" style={{ color: "#FF5C8A" }}>DMCA / Copyright page</a> or contact YouTube directly via their <a href="https://support.google.com/youtube/answer/2807622" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>copyright complaint process ↗</a>.</p>
       </Section>
 
       <Section title="5. Acceptable Use">
@@ -87,7 +87,7 @@ export default function TermsOfUse() {
       </Section>
 
       <Section title="6. Advertising">
-        <p>This Website displays advertisements served by Google AdSense. Advertisements are clearly distinguishable from editorial content. We are not responsible for the content of third-party advertisements. Ad targeting is based on your browsing behaviour as described in our <a href="/privacy-policy" style={{ color: "#f87171" }}>Privacy Policy</a>.</p>
+        <p>This Website displays advertisements served by Google AdSense. Advertisements are clearly distinguishable from editorial content. We are not responsible for the content of third-party advertisements. Ad targeting is based on your browsing behaviour as described in our <a href="/privacy-policy" style={{ color: "#FF5C8A" }}>Privacy Policy</a>.</p>
       </Section>
 
       <Section title="7. Disclaimer of Warranties">
@@ -117,7 +117,7 @@ export default function TermsOfUse() {
       </Section>
 
       <Section title="12. Contact">
-        <p>For any questions regarding these Terms: <a href={`mailto:${CONTACT}`} style={{ color: "#f87171" }}>{CONTACT}</a></p>
+        <p>For any questions regarding these Terms: <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a></p>
       </Section>
     </div>
   );

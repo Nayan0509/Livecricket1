@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import SEO from "./SEO";
 import AdBanner from "./AdBanner";
+import { MotionGrid, MotionItem } from "./MotionGrid";
 import { fetchLiveMatches, fetchUpcomingMatches } from "../api";
 
 /**
@@ -20,7 +22,7 @@ export default function TournamentPage({
   seoTitle,
   seoDesc,
   seoKeywords,
-  accentColor = "#3B82F6",
+  accentColor = "#B026FF",
   teams = [],
   stats = [],
   aboutText,
@@ -97,19 +99,24 @@ export default function TournamentPage({
       )}
 
       {/* Hero */}
-      <div style={{
-        padding: "44px 32px", borderRadius: 20, marginBottom: 28, textAlign: "center",
-        background: `linear-gradient(135deg, ${accentColor}18 0%, rgba(13,20,38,0.95) 100%)`,
-        border: `1px solid ${accentColor}30`
-      }}>
-        <h1 style={{ fontSize: 38, fontWeight: 900, marginBottom: 8, color: "var(--text)" }}>
+      <motion.div
+        className="hero"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+        style={{
+          padding: "44px 32px", marginBottom: 28, textAlign: "center",
+          background: `linear-gradient(135deg, ${accentColor}20 0%, rgba(13,20,38,0.95) 100%)`,
+        }}
+      >
+        <h1 className="font-display" style={{ fontSize: 38, fontWeight: 900, marginBottom: 8, color: "var(--text)" }}>
           {name} Live Score
         </h1>
-        <p style={{ fontSize: 15, color: "var(--text2)", marginBottom: 20 }}>
+        <p className="font-hud" style={{ fontSize: 16, color: "var(--text2)", marginBottom: 20 }}>
           Ball-by-Ball Commentary &amp; Real-Time Scorecard
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link to="/live" style={{ padding: "10px 22px", borderRadius: 10, background: accentColor, color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none" }}>
+          <Link to="/live" style={{ padding: "10px 22px", borderRadius: 10, background: accentColor, color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none", boxShadow: `0 0 18px ${accentColor}55` }}>
             🔴 Live Updates
           </Link>
           <Link to="/schedule" style={{ padding: "10px 22px", borderRadius: 10, border: `1px solid ${accentColor}50`, color: accentColor, fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
@@ -119,7 +126,7 @@ export default function TournamentPage({
             📋 Results
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* Ad below hero */}
       <AdBanner type="leaderboard" />
@@ -143,31 +150,33 @@ export default function TournamentPage({
           {/* Live Matches */}
           <section aria-label={`${name} Live Matches`} style={{ marginBottom: 28 }}>
             <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#ef4444", display: "inline-block", animation: "livePulse 2s infinite" }} />
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#FF1053", display: "inline-block", animation: "livePulse 2s infinite" }} />
               {shortName} Live Matches
             </h2>
             {liveMatches.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
+              <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
                 {liveMatches.map(m => (
-                  <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
-                    <div style={{
-                      padding: "18px", borderRadius: 12,
-                      background: "rgba(244,63,94,0.05)", border: "1px solid rgba(244,63,94,0.2)",
-                      transition: "transform 0.2s"
-                    }}
-                      onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-                      onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
-                    >
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                        <span style={{ fontSize: 10, color: "#fb7185", fontWeight: 800, background: "rgba(244,63,94,0.1)", padding: "2px 7px", borderRadius: 5 }}>🔴 LIVE</span>
-                        <span style={{ fontSize: 11, color: "var(--text3)" }}>{m.matchType}</span>
+                  <MotionItem key={m.id}>
+                    <Link to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
+                      <div style={{
+                        padding: "18px", borderRadius: 12,
+                        background: "rgba(255,16,83,0.06)", border: "1px solid rgba(255,16,83,0.25)",
+                        transition: "transform 0.2s, box-shadow 0.2s"
+                      }}
+                        onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(255,16,83,0.25)"; }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                          <span style={{ fontSize: 10, color: "#FF5C8A", fontWeight: 800, background: "rgba(255,16,83,0.12)", padding: "2px 7px", borderRadius: 5 }}>🔴 LIVE</span>
+                          <span style={{ fontSize: 11, color: "var(--text3)" }}>{m.matchType}</span>
+                        </div>
+                        <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6, color: "var(--text)" }}>{m.name}</div>
+                        <div style={{ color: "#FF5C8A", fontWeight: 600, fontSize: 12 }}>{m.status}</div>
                       </div>
-                      <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6, color: "var(--text)" }}>{m.name}</div>
-                      <div style={{ color: "#fb7185", fontWeight: 600, fontSize: 12 }}>{m.status}</div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </MotionItem>
                 ))}
-              </div>
+              </MotionGrid>
             ) : (
               <div style={{ padding: "28px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
                 <p style={{ color: "var(--text3)", fontSize: 13 }}>No {shortName} matches live right now.</p>
@@ -181,15 +190,17 @@ export default function TournamentPage({
               📅 {shortName} Upcoming Matches
             </h2>
             {upcomingMatches.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
+              <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
                 {upcomingMatches.map(m => (
-                  <div key={m.id} style={{ padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                    <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 5, fontWeight: 700 }}>{m.date}</div>
-                    <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 5, color: "var(--text)" }}>{m.name}</div>
-                    <div style={{ fontSize: 12, color: "var(--text2)" }}>{m.status}</div>
-                  </div>
+                  <MotionItem key={m.id}>
+                    <div style={{ padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                      <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 5, fontWeight: 700 }}>{m.date}</div>
+                      <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 5, color: "var(--text)" }}>{m.name}</div>
+                      <div style={{ fontSize: 12, color: "var(--text2)" }}>{m.status}</div>
+                    </div>
+                  </MotionItem>
                 ))}
-              </div>
+              </MotionGrid>
             ) : (
               <div style={{ padding: "24px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
                 <p style={{ color: "var(--text3)", fontSize: 13 }}>No upcoming {shortName} matches found.</p>

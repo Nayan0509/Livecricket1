@@ -69,7 +69,7 @@ export default function LiveScore() {
                 <h1 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", margin: 0, lineHeight: 1.3 }}>{match.name}</h1>
               </div>
               {isLive && (
-                <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 900, background: "#EF4444", color: "#fff", padding: "4px 10px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 900, background: "#FF1053", color: "#fff", padding: "4px 10px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff", animation: "livePulse 1.5s infinite", display: "inline-block" }} />
                   LIVE
                 </span>
@@ -97,7 +97,7 @@ export default function LiveScore() {
                 {match.score.map((s, i) => (
                   <div key={i} style={{ padding: "12px 16px", borderRadius: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 4 }}>{s.inning}</div>
-                    <div style={{ fontSize: 36, fontWeight: 900, color: "#3B82F6", lineHeight: 1 }}>
+                    <div style={{ fontSize: 36, fontWeight: 900, color: "#B026FF", lineHeight: 1 }}>
                       {s.r}/{s.w}
                       <span style={{ fontSize: 14, color: "var(--text3)", marginLeft: 8 }}>({s.o} ov)</span>
                     </div>
@@ -108,7 +108,7 @@ export default function LiveScore() {
 
             {/* Status */}
             <div style={{ padding: "10px 14px", borderRadius: 8, background: isLive ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.06)", border: isLive ? "1px solid rgba(239,68,68,0.15)" : "1px solid rgba(59,130,246,0.12)" }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: isLive ? "#fb7185" : "#60A5FA" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: isLive ? "#FF5C8A" : "#D896FF" }}>
                 {match.status}
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function LiveScore() {
               </div>
             )}
             {isLive && (
-              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.12)", fontSize: 11, color: "#60A5FA" }}>
+              <div style={{ padding: "8px 14px", borderRadius: 8, background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.12)", fontSize: 11, color: "#D896FF" }}>
                 🔄 Auto-refreshes every 15s
               </div>
             )}
@@ -150,7 +150,7 @@ export default function LiveScore() {
             <Link to={`/match/${id}/scorecard`} style={{
               flex: 1, minWidth: 140, textAlign: "center", padding: "11px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
               background: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)",
-              color: "#3B82F6", textDecoration: "none",
+              color: "#B026FF", textDecoration: "none",
             }}>
               📋 Full Scorecard
             </Link>
@@ -162,7 +162,7 @@ export default function LiveScore() {
               <h3 style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 14 }}>Latest Batting</h3>
               {innings.slice(-1).map((inn, idx) => (
                 <div key={idx}>
-                  <div style={{ fontSize: 13, color: "#3B82F6", fontWeight: 700, marginBottom: 12 }}>
+                  <div style={{ fontSize: 13, color: "#B026FF", fontWeight: 700, marginBottom: 12 }}>
                     {inn.team} — {inn.score}
                   </div>
                   <div style={{ overflowX: "auto" }}>
@@ -181,13 +181,13 @@ export default function LiveScore() {
                             <td style={{ padding: "9px 12px", fontWeight: 700, fontSize: 13, color: "var(--text)" }}>{b.name}</td>
                             <td style={{ padding: "9px 12px", textAlign: "right", fontWeight: 900, fontSize: 14, color: "var(--text)" }}>{b.r}</td>
                             <td style={{ padding: "9px 12px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.b}</td>
-                            <td style={{ padding: "9px 12px", textAlign: "right", fontSize: 12, color: "#38bdf8" }}>{b.sr}</td>
+                            <td style={{ padding: "9px 12px", textAlign: "right", fontSize: 12, color: "#00F0FF" }}>{b.sr}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  <Link to={`/match/${id}/scorecard`} style={{ display: "block", marginTop: 14, fontSize: 12, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}>
+                  <Link to={`/match/${id}/scorecard`} style={{ display: "block", marginTop: 14, fontSize: 12, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}>
                     View Full Scorecard →
                   </Link>
                 </div>

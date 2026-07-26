@@ -74,8 +74,8 @@ export default function WatchLive() {
         {liveMatches.length > 0 && (
           <div style={{ marginBottom: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
-              <h2 style={{ fontSize: 14, fontWeight: 800, color: "#ef4444", margin: 0, textTransform: "uppercase", letterSpacing: 0.8 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF1053", display: "inline-block" }} />
+              <h2 style={{ fontSize: 14, fontWeight: 800, color: "#FF1053", margin: 0, textTransform: "uppercase", letterSpacing: 0.8 }}>
                 Live Now
               </h2>
               <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>
@@ -98,13 +98,13 @@ export default function WatchLive() {
                     <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>
                       {match.matchType} · {match.venue?.split(",")[0] || ""}
                       {match.score?.length > 0 && (
-                        <span style={{ marginLeft: 8, color: "#f87171", fontWeight: 700 }}>
+                        <span style={{ marginLeft: 8, color: "#FF5C8A", fontWeight: 700 }}>
                           {match.score.map((s) => `${s.r}/${s.w}`).join(" | ")}
                         </span>
                       )}
                     </div>
                   </div>
-                  <span style={{ fontSize: 10, color: "#f87171", fontWeight: 700, flexShrink: 0 }}>Live Score →</span>
+                  <span style={{ fontSize: 10, color: "#FF5C8A", fontWeight: 700, flexShrink: 0 }}>Live Score →</span>
                 </div>
               ))}
             </div>
@@ -165,7 +165,7 @@ export default function WatchLive() {
                       }}
                       style={{
                         display: "flex", alignItems: "center", gap: 5,
-                        background: expandedMatch === match.id ? "#3B82F6" : "rgba(59,130,246,0.2)",
+                        background: expandedMatch === match.id ? "#B026FF" : "rgba(59,130,246,0.2)",
                         border: "none", color: "#fff", borderRadius: 7, padding: "5px 12px",
                         fontSize: 11, fontWeight: 700, cursor: "pointer", flexShrink: 0,
                       }}

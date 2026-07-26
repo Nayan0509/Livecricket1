@@ -27,12 +27,12 @@ function getCat(title) {
 }
 
 const CAT_COLORS = {
-  IPL: "#ef4444",
-  Test: "#8b5cf6",
-  ODI: "#3b82f6",
-  T20: "#f59e0b",
-  "Women's": "#ec4899",
-  Cricket: "#10b981",
+  IPL: "#FF1053",
+  Test: "#9D00FF",
+  ODI: "#B026FF",
+  T20: "#FFEA00",
+  "Women's": "#FF36AB",
+  Cricket: "#00FFA3",
   All: "#6b7280",
 };
 
@@ -87,7 +87,7 @@ export default function News() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div>
             <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-              Cricket <span style={{ color: "#ef4444" }}>News</span>
+              Cricket <span style={{ color: "#FF1053" }}>News</span>
             </h1>
             <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
               Latest headlines · IPL 2026 · Aggregated from trusted sources
@@ -99,7 +99,7 @@ export default function News() {
               <button key={v} onClick={() => setView(v)} style={{
                 padding: "7px 14px", borderRadius: 8, background: view === v ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",
                 border: `1px solid ${view === v ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.1)"}`,
-                color: view === v ? "#ef4444" : "var(--text3)", fontWeight: 700, fontSize: 12, cursor: "pointer",
+                color: view === v ? "#FF1053" : "var(--text3)", fontWeight: 700, fontSize: 12, cursor: "pointer",
               }}>
                 {v === "grid" ? "⊞" : "☰"} {v.charAt(0).toUpperCase() + v.slice(1)}
               </button>
@@ -131,8 +131,8 @@ export default function News() {
           );
         })}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", padding: "5px 12px", borderRadius: 20 }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ef4444", animation: "livePulse 1.8s infinite" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#ef4444" }}>{items.length} Stories</span>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#FF1053", animation: "livePulse 1.8s infinite" }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#FF1053" }}>{items.length} Stories</span>
         </div>
       </div>
 
@@ -148,7 +148,7 @@ export default function News() {
       {error && (
         <div style={{ padding: "40px 24px", textAlign: "center", background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.15)", borderRadius: 14 }}>
           <div style={{ fontSize: 36, marginBottom: 12 }}>📡</div>
-          <h3 style={{ color: "#F87171", marginBottom: 8, fontSize: 16 }}>News unavailable</h3>
+          <h3 style={{ color: "#FF5C8A", marginBottom: 8, fontSize: 16 }}>News unavailable</h3>
           <p style={{ color: "var(--text3)", fontSize: 13 }}>{error.message}</p>
         </div>
       )}
@@ -174,7 +174,7 @@ export default function News() {
                     <img src={featured[0].img} alt={featured[0].title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "60%", background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)" }} />
                     <div style={{ position: "absolute", bottom: 12, left: 14, right: 14 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: CAT_COLORS[featured[0].category] || "#ef4444", background: `${CAT_COLORS[featured[0].category] || "#ef4444"}22`, border: `1px solid ${CAT_COLORS[featured[0].category] || "#ef4444"}40`, padding: "3px 10px", borderRadius: 20 }}>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: CAT_COLORS[featured[0].category] || "#FF1053", background: `${CAT_COLORS[featured[0].category] || "#FF1053"}22`, border: `1px solid ${CAT_COLORS[featured[0].category] || "#FF1053"}40`, padding: "3px 10px", borderRadius: 20 }}>
                         {featured[0].category}
                       </span>
                     </div>
@@ -198,7 +198,7 @@ export default function News() {
                         <img src={n.img} alt={n.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />
                       </div>
                       <div style={{ padding: "10px 12px", flex: 1 }}>
-                        <span style={{ fontSize: 9, fontWeight: 800, color: CAT_COLORS[n.category] || "#ef4444" }}>{n.category}</span>
+                        <span style={{ fontSize: 9, fontWeight: 800, color: CAT_COLORS[n.category] || "#FF1053" }}>{n.category}</span>
                         <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", lineHeight: 1.4, margin: "4px 0 6px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{n.title}</p>
                         <span style={{ fontSize: 10, color: "var(--text3)" }}>{n.source} · {n.hoursAgo < 24 ? `${n.hoursAgo}h` : `${n.daysAgo}d`} ago</span>
                       </div>
@@ -230,7 +230,7 @@ export default function News() {
 }
 
 function NewsCard({ item: n, idx }) {
-  const color = CAT_COLORS[n.category] || "#ef4444";
+  const color = CAT_COLORS[n.category] || "#FF1053";
   return (
     <NewsLink item={n} style={{ textDecoration: "none" }}>
       <div style={{ display: "flex", flexDirection: "column", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", transition: "all 0.22s", height: "100%" }}
@@ -256,7 +256,7 @@ function NewsCard({ item: n, idx }) {
 }
 
 function NewsListItem({ item: n }) {
-  const color = CAT_COLORS[n.category] || "#ef4444";
+  const color = CAT_COLORS[n.category] || "#FF1053";
   return (
     <NewsLink item={n} style={{ textDecoration: "none" }}>
       <div style={{ display: "flex", gap: 14, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", padding: "12px 14px", transition: "all 0.18s" }}

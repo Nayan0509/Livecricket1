@@ -8,7 +8,7 @@ export default function ODICricket() {
       name="ODI Cricket 2026"
       shortName="ODI"
       filterKeywords={["ODI", "One Day International", "One-Day", "Namibia", "Scotland", "CWC League", "ICC CWC"]}
-      accentColor="#38bdf8"
+      accentColor="#00F0FF"
       seoTitle="ODI Cricket Live Score Today — One Day International Matches"
       seoDesc="ODI cricket live score today with ball-by-ball commentary. All One Day International matches, ICC World Cup qualifiers, bilateral ODI series — live updates every 15 seconds."
       seoKeywords="ODI cricket live score today, ODI live score, One Day International live score, ODI cricket today, ODI matches today, ODI ball by ball, ODI cricket score, live ODI score, ODI cricket 2026, ODI World Cup 2027, ICC ODI rankings, 50 over cricket live"

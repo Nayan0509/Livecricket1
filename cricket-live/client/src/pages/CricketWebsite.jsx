@@ -27,7 +27,7 @@ export default function CricketWebsite() {
           Live Cricket Zone is a fast, comprehensive free cricket website. Live scores updated every 15 seconds, official match highlights, ball-by-ball commentary and full scorecards — no signup, no subscription.
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <Link to="/live" style={{ padding: "10px 22px", borderRadius: 10, background: "#ef4444", color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none" }}>🔴 Live Scores</Link>
+          <Link to="/live" style={{ padding: "10px 22px", borderRadius: 10, background: "#FF1053", color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none" }}>🔴 Live Scores</Link>
           <Link to="/watch-live" style={{ padding: "10px 22px", borderRadius: 10, background: "rgba(56,189,248,0.9)", color: "#000", fontWeight: 800, fontSize: 13, textDecoration: "none" }}>📺 Highlights</Link>
           <Link to="/schedule" style={{ padding: "10px 22px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>📅 Schedule</Link>
         </div>
@@ -85,7 +85,7 @@ export default function CricketWebsite() {
             <Link key={l.to} to={l.to} style={{
               display: "block", padding: "10px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700,
               background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)",
-              color: "#a78bfa", textDecoration: "none", transition: "background 0.15s",
+              color: "#FF2E9A", textDecoration: "none", transition: "background 0.15s",
             }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(167,139,250,0.1)"}
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
@@ -105,7 +105,7 @@ export default function CricketWebsite() {
             <thead>
               <tr style={{ background: "rgba(255,255,255,0.05)" }}>
                 {["Feature", "Live Cricket Zone", "Cricbuzz", "ESPNcricinfo"].map(h => (
-                  <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontWeight: 800, color: h === "Live Cricket Zone" ? "#60A5FA" : "rgba(255,255,255,0.5)", fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5 }}>{h}</th>
+                  <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontWeight: 800, color: h === "Live Cricket Zone" ? "#D896FF" : "rgba(255,255,255,0.5)", fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5 }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -124,7 +124,7 @@ export default function CricketWebsite() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: "10px 14px",
-                      color: j === 1 ? "#60A5FA" : j === 0 ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.4)",
+                      color: j === 1 ? "#D896FF" : j === 0 ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.4)",
                       fontWeight: j === 1 ? 700 : 400,
                     }}>{cell}</td>
                   ))}
