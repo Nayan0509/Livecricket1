@@ -7,7 +7,15 @@ const PRIMARY_NAV = [
   { to: "/news",       label: "News"       },
   { to: "/rankings",   label: "Rankings"  },
   { to: "/series",     label: "Series"    },
+  { to: "/stats",      label: "Stats"     },
   { to: "/teams",      label: "Teams"     },
+  { to: "/fantasy",    label: "Fantasy"   },
+];
+
+const SPORTS = [
+  { to: "/football",   label: "Football",   dot: "#22C55E" },
+  { to: "/basketball",  label: "Basketball", dot: "#F97316" },
+  { to: "/tennis",      label: "Tennis",     dot: "#EAB308" },
 ];
 
 const LEAGUES = [
@@ -39,6 +47,8 @@ function LogoMark() {
 export default function Navbar() {
   const [open, setOpen]               = useState(false);
   const [showLeagues, setShowLeagues] = useState(false);
+  const [showSports, setShowSports]   = useState(false);
+  const [showMore, setShowMore]       = useState(false);
   const [search, setSearch]           = useState("");
   const [scrolled, setScrolled]       = useState(false);
   const navigate = useNavigate();
@@ -248,6 +258,157 @@ export default function Navbar() {
                 ))}
               </div>
             </div>
+
+            {/* ── Sports Dropdown ── */}
+            <div
+              style={{ position: "relative" }}
+              onMouseEnter={() => setShowSports(true)}
+              onMouseLeave={() => setShowSports(false)}
+            >
+              <button style={{
+                padding: "6px 13px",
+                fontSize: 13,
+                fontWeight: 400,
+                color: showSports ? "#F1F5F9" : "var(--text2)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                transition: "color 0.15s",
+                fontFamily: "'Inter', sans-serif",
+              }}>
+                Sports
+                <svg
+                  width="9" height="9" viewBox="0 0 10 10" fill="currentColor"
+                  style={{ transition: "transform 0.18s", transform: showSports ? "rotate(180deg)" : "rotate(0)", marginTop: 1 }}
+                >
+                  <path d="M1 3L5 7L9 3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              {showSports && (
+                <div style={{ position: "absolute", top: "100%", left: 0, width: "100%", height: 8 }} />
+              )}
+
+              <div style={{
+                position: "absolute",
+                top: "calc(100% + 6px)",
+                left: 0,
+                width: 180,
+                borderRadius: 12,
+                background: "#0C1221",
+                border: "1px solid rgba(255,255,255,0.10)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04)",
+                padding: "6px",
+                opacity: showSports ? 1 : 0,
+                transform: showSports ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.97)",
+                pointerEvents: showSports ? "all" : "none",
+                transition: "opacity 0.15s cubic-bezier(0.2,0,0,1), transform 0.15s cubic-bezier(0.2,0,0,1)",
+                zIndex: 100,
+              }}>
+                <div style={{
+                  padding: "5px 12px 8px",
+                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  marginBottom: 4,
+                }}>
+                  <span style={{
+                    fontSize: 9, fontWeight: 700, color: "var(--text-muted)",
+                    letterSpacing: "1.2px", textTransform: "uppercase",
+                  }}>
+                    Other Sports
+                  </span>
+                </div>
+                {SPORTS.map(s => (
+                  <Link
+                    key={s.to}
+                    to={s.to}
+                    onClick={() => setShowSports(false)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "8px 12px",
+                      borderRadius: 8,
+                      fontSize: 13,
+                      fontWeight: 400,
+                      color: "var(--text2)",
+                      transition: "background 0.12s, color 0.12s",
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.045)";
+                      e.currentTarget.style.color = "#F1F5F9";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "var(--text2)";
+                    }}
+                  >
+                    <span style={{
+                      width: 6, height: 6, borderRadius: "50%",
+                      background: s.dot, flexShrink: 0, opacity: 0.85,
+                    }} />
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* ── More Dropdown ── */}
+            <div
+              style={{ position: "relative" }}
+              onMouseEnter={() => setShowMore(true)}
+              onMouseLeave={() => setShowMore(false)}
+            >
+              <button style={{
+                padding: "6px 13px", fontSize: 13, fontWeight: 400,
+                color: showMore ? "#F1F5F9" : "var(--text2)",
+                background: "transparent", border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 5,
+                transition: "color 0.15s", fontFamily: "'Inter', sans-serif",
+              }}>
+                More
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"
+                  style={{ transition: "transform 0.18s", transform: showMore ? "rotate(180deg)" : "rotate(0)", marginTop: 1 }}>
+                  <path d="M1 3L5 7L9 3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              {showMore && <div style={{ position: "absolute", top: "100%", left: 0, width: "100%", height: 8 }} />}
+
+              <div style={{
+                position: "absolute", top: "calc(100% + 6px)", left: 0, width: 200,
+                borderRadius: 12, background: "#0C1221",
+                border: "1px solid rgba(255,255,255,0.10)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.65)",
+                padding: "6px",
+                opacity: showMore ? 1 : 0,
+                transform: showMore ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.97)",
+                pointerEvents: showMore ? "all" : "none",
+                transition: "opacity 0.15s cubic-bezier(0.2,0,0,1), transform 0.15s cubic-bezier(0.2,0,0,1)",
+                zIndex: 100,
+              }}>
+                <div style={{ padding: "5px 12px 8px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 4 }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-muted)", letterSpacing: "1.2px", textTransform: "uppercase" }}>More Sections</span>
+                </div>
+                {[
+                  { to: "/schedule",      label: "Schedule",     dot: "#60a5fa" },
+                  { to: "/results",       label: "Results",      dot: "#4ade80" },
+                  { to: "/players",       label: "Players",      dot: "#f59e0b" },
+                  { to: "/videos",        label: "Videos",       dot: "#f87171" },
+                  { to: "/about",         label: "About",        dot: "#a78bfa" },
+                ].map(l => (
+                  <Link key={l.to} to={l.to} onClick={() => setShowMore(false)}
+                    style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 13, fontWeight: 400, color: "var(--text2)", transition: "background 0.12s, color 0.12s" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.045)"; e.currentTarget.style.color = "#F1F5F9"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: l.dot, flexShrink: 0, opacity: 0.85 }} />
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* ── Search Bar ── */}
@@ -394,6 +555,39 @@ export default function Navbar() {
                 >
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: l.dot, flexShrink: 0, opacity: 0.8 }} />
                   {l.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Sports */}
+            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 10, marginBottom: 6 }}>
+              <div style={{
+                fontSize: 9, fontWeight: 700, color: "var(--text-muted)",
+                letterSpacing: "1.2px", textTransform: "uppercase", padding: "0 10px 8px",
+              }}>
+                Other Sports
+              </div>
+              {SPORTS.map(s => (
+                <Link
+                  key={s.to}
+                  to={s.to}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    padding: "9px 12px",
+                    borderRadius: 8,
+                    color: "var(--text2)",
+                    fontWeight: 400,
+                    fontSize: 14,
+                    transition: "background 0.12s, color 0.12s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#F1F5F9"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
+                >
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: s.dot, flexShrink: 0, opacity: 0.8 }} />
+                  {s.label}
                 </Link>
               ))}
             </div>

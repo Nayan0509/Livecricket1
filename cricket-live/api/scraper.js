@@ -326,6 +326,24 @@ async function scrapeCricbuzzAllMatches() {
       });
     }
 
+    // Whole-document scan — modern Cricbuzz splits scripts into RSC chunks,
+    // so unescape the full HTML and bracket-match typeMatches across it.
+    if (!typeMatches) {
+      const plain = html.replace(/\\"/g, '"').replace(/\\/g, "\\");
+      const idx = plain.indexOf('"typeMatches":[');
+      if (idx !== -1) {
+        const start = idx + '"typeMatches":'.length;
+        let brackets = 0, end = -1;
+        for (let i = start; i < plain.length; i++) {
+          if (plain[i] === "[") brackets++;
+          else if (plain[i] === "]") { brackets--; if (!brackets) { end = i + 1; break; } }
+        }
+        if (end !== -1) {
+          try { typeMatches = JSON.parse(plain.slice(start, end)); } catch (_) {}
+        }
+      }
+    }
+
     if (typeMatches) {
       const merged = parseTypeMatches(typeMatches);
       scrapeCache.set(key, merged);
@@ -1124,8 +1142,18 @@ async function scrapeUpcomingMatches() {
       }
       items.push({ id: `up-${i}`, name, date, venue, matchType: type, teams, teamInfo, status: "Scheduled", matchStarted: false, matchEnded: false });
     });
-    scrapeCache.set(key, items);
-    return items;
+    if (items.length) { scrapeCache.set(key, items); return items; }
+  } catch (e) {
+    console.log("Upcoming HTML fallback failed:", e.message);
+  }
+
+  // Final fallback — the all-matches scrape (whole-document scan) still works
+  // on modern Cricbuzz and carries the upcoming bucket.
+  try {
+    const all = await scrapeCricbuzzAllMatches();
+    const upcoming = all.upcoming || [];
+    if (upcoming.length) scrapeCache.set(key, upcoming);
+    return upcoming;
   } catch (e) {
     return [];
   }
@@ -1138,11 +1166,13 @@ async function getNewsFromGoogle() {
   if (cached) return cached;
 
   try {
-    const rssUrl = "https://news.google.com/rss/search?q=cricket+IPL+T20+World+Cup+2026&hl=en-IN&gl=IN&ceid=IN:en";
+    // Broad query — an over-specific query (all words required) returns only
+    // stale stories which the freshness cutoff then filters to zero.
+    const rssUrl = "https://news.google.com/rss/search?q=cricket&hl=en-IN&gl=IN&ceid=IN:en";
     const { data } = await axios.get(rssUrl, { headers: htmlHeaders, timeout: 10000 });
     const $ = cheerio.load(data, { xmlMode: true });
     const now = new Date();
-    const cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const news = [];
 
     $("item").each((i, el) => {
@@ -1348,6 +1378,37 @@ async function scrapeCricbuzzTeams() {
         teams[cat].push({ id, name, url: `https://www.cricbuzz.com${url}`, img: `https://static.cricbuzz.com/a/img/v1/72x72/i1/c${id}/team-flag.jpg` });
       });
     });
+
+    // Modern Cricbuzz (Next.js): extract the embedded "teamList" JSON.
+    // Only international (Test + Associate) teams are server-rendered.
+    if (!teams.international.length && !teams.domestic.length && !teams.league.length && !teams.women.length) {
+      const un = html.replace(/\\"/g, '"');
+      const idx = un.indexOf('"teamList":[');
+      if (idx !== -1) {
+        const start = idx + '"teamList":'.length;
+        let br = 0, end = -1;
+        for (let i = start; i < un.length; i++) {
+          if (un[i] === "[") br++;
+          else if (un[i] === "]") { br--; if (!br) { end = i + 1; break; } }
+        }
+        if (end !== -1) {
+          try {
+            const list = JSON.parse(un.slice(start, end));
+            list.filter(t => t.teamId).forEach(t => {
+              teams.international.push({
+                id: String(t.teamId),
+                name: t.teamName,
+                shortname: t.teamSName || "",
+                url: "https://www.cricbuzz.com/cricket-team/" + (t.teamName || "").toLowerCase().replace(/s+/g, "-") + "/" + t.teamId,
+                img: t.imageId
+                  ? "https://static.cricbuzz.com/a/img/v1/72x72/i1/c" + t.imageId + "/team-flag.jpg"
+                  : "https://static.cricbuzz.com/a/img/v1/72x72/i1/c" + t.teamId + "/team-flag.jpg",
+              });
+            });
+          } catch (_) {}
+        }
+      }
+    }
     staticCache.set(key, teams);
     return teams;
   } catch (e) {
@@ -1408,6 +1469,36 @@ async function scrapeCricbuzzSeries() {
         if (name) res[currentCat].push({ id: url ? url.split("/")[2] : `s-${j}`, name, date, url: url ? `https://www.cricbuzz.com${url}` : null });
       });
     });
+
+    // Modern Cricbuzz (Next.js): rebuild the series list from the embedded
+    // match objects (seriesId/seriesName/format/startDate/endDate), deduped.
+    if (!res.international.length && !res.domestic.length && !res.league.length && !res.women.length) {
+      const un = html.replace(/\\"/g, '"');
+      const re = /"matchId":(\d+),"seriesId":(\d+),"seriesName":"([^"]+)","matchDesc":"[^"]*","matchFormat":"([^"]*)","startDate":(\d+),"endDate":(\d+)/g;
+      const map = new Map();
+      let m;
+      while ((m = re.exec(un))) {
+        const [, , sid, sname, , sd, ed] = m;
+        const cur = map.get(sid) || { name: sname, start: Number(sd), end: Number(ed) };
+        cur.start = Math.min(cur.start, Number(sd));
+        cur.end = Math.max(cur.end, Number(ed));
+        map.set(sid, cur);
+      }
+      const fmtD = (t) => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      map.forEach((v, sid) => {
+        const n = v.name.toLowerCase();
+        const cat = /women|female/.test(n) ? "women"
+          : /(premier league|major league|big bash|super league|the hundred|super smash|t20 blast|sa20|indian premier|caribbean premier|bangladesh premier|pakistan super|lanka premier)/.test(n) ? "league"
+          : /(county|ranji|sheffield|shield|plunket|duleep|irani|syed mushtaq|vijay hazare|one-day cup|four-day|cooch behar)/.test(n) ? "domestic"
+          : "international";
+        res[cat].push({
+          id: String(sid),
+          name: v.name,
+          date: fmtD(v.start) + " – " + fmtD(v.end),
+          url: "https://www.cricbuzz.com/cricket-series/" + sid + "/" + v.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        });
+      });
+    }
     staticCache.set(key, res);
     return res;
   } catch (e) {
@@ -1871,4 +1962,268 @@ module.exports = {
 
   // Legacy compat
   getScaledData,
+};
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MODERN CRICBUZZ OVERRIDES
+// Cricbuzz's JSON APIs are gone; its pages embed data as escaped JSON inside
+// chunked scripts. These overrides fetch the page and bracket-match the value
+// for a key across the WHOLE document, then re-export the affected functions.
+// ═══════════════════════════════════════════════════════════════════════════
+async function _cbPage(url) {
+  const { data } = await axios.get(url, { headers: htmlHeaders, timeout: 12000 });
+  return String(data).replace(/\\"/g, '"').replace(/\\/g, "\\");
+}
+
+function _cbExtract(plain, key) {
+  const marker = '"' + key + '":';
+  let idx = plain.indexOf(marker);
+  while (idx !== -1) {
+    const start = idx + marker.length;
+    const open = plain[start];
+    if (open === "[" || open === "{") {
+      const close = open === "[" ? "]" : "}";
+      let depth = 0;
+      for (let i = start; i < plain.length; i++) {
+        const ch = plain[i];
+        if (ch === open) depth++;
+        else if (ch === close) {
+          depth--;
+          if (!depth) {
+            try { return JSON.parse(plain.slice(start, i + 1)); } catch (_) { break; }
+          }
+        }
+      }
+    }
+    idx = plain.indexOf(marker, idx + 1);
+  }
+  return null;
+}
+
+// ── Scorecard (with fall-of-wickets, partnerships, extras breakdown) ──
+async function cbScorecardModern(matchId) {
+  const key = `cb2:scorecard:${matchId}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+  try {
+    const plain = await _cbPage(`https://www.cricbuzz.com/live-cricket-scorecard/${matchId}`);
+    const raw = _cbExtract(plain, "scoreCard");
+    if (!Array.isArray(raw) || !raw.length) return { innings: [] };
+    const innings = raw.map((inn) => {
+      const batsmen = inn.batTeamDetails?.batsmenData
+        ? Object.values(inn.batTeamDetails.batsmenData).filter(b => b.batName).map(b => ({
+            name: b.batName, dismissal: b.outDesc || "not out",
+            r: String(b.runs || 0), b: String(b.balls || 0),
+            fours: String(b.fours || 0), sixes: String(b.sixes || 0),
+            sr: b.strikeRate != null ? Number(b.strikeRate).toFixed(2) : "0.00",
+          }))
+        : [];
+      const bowlers = inn.bowlTeamDetails?.bowlersData
+        ? Object.values(inn.bowlTeamDetails.bowlersData).filter(b => b.bowlName).map(b => ({
+            name: b.bowlName, o: String(b.overs || 0), m: String(b.maidens || 0),
+            r: String(b.runs || 0), w: String(b.wickets || 0),
+            eco: b.economy != null ? Number(b.economy).toFixed(2) : "0.00",
+          }))
+        : [];
+      const fow = inn.wicketsData
+        ? Object.values(inn.wicketsData).sort((a, b) => (a.wktNbr || 0) - (b.wktNbr || 0))
+            .map(w => `${w.wktRuns}-${w.wktNbr} (${w.batName}, ${w.wktOver} ov)`)
+        : [];
+      const partnerships = inn.partnershipsData
+        ? Object.values(inn.partnershipsData).map(p => ({
+            batsman1: p.bat1Name, batsman2: p.bat2Name,
+            runs: String(p.totalRuns ?? 0), balls: String(p.totalBalls ?? 0),
+          }))
+        : [];
+      const ex = inn.extrasData || {};
+      const sd = inn.scoreDetails || {};
+      return {
+        team: inn.batTeamDetails?.batTeamName || "Team",
+        score: `${sd.runs || 0}/${sd.wickets || 0}${sd.overs ? ` (${sd.overs} Ov)` : ""}`,
+        overs: String(sd.overs || ""),
+        runRate: sd.runRate ? String(sd.runRate) : "",
+        batsmen, bowlers,
+        extras: `${ex.total || 0} (b ${ex.byes || 0}, lb ${ex.legByes || 0}, w ${ex.wides || 0}, nb ${ex.noBalls || 0}, p ${ex.penalty || 0})`,
+        partnerships, fow,
+      };
+    });
+    const out = { innings };
+    scrapeCache.set(key, out, 30);
+    return out;
+  } catch (_) { return { innings: [] }; }
+}
+
+// ── Commentary ──
+async function cbCommentaryModern(matchId, page = 0) {
+  const key = `cb2:comm:${matchId}:${page}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+  const mapItems = (list) => (list || []).filter(c => c.commText).map(c => ({
+    over: c.overNumber ?? c.overNum ?? "",
+    ball: c.ballNbr ?? "",
+    event: c.event || "default",
+    text: String(c.commText).replace(/B0$|\n/g, " ").trim(),
+    batsmanStriker: c.batsmanStriker?.batName || "",
+    bowlerStriker: c.bowlerStriker?.bowlName || "",
+    runs: c.runs || 0,
+  }));
+  // Tolerant array walk: parse each top-level {...} item individually so one
+  // malformed entry can't poison the whole list.
+  const walkItems = (plain) => {
+    const marker = '"commentaryList":[';
+    const at = plain.indexOf(marker);
+    if (at === -1) return [];
+    const out = [];
+    let i = at + marker.length, depth = 0, start = -1, inStr = false, esc = false;
+    for (; i < plain.length; i++) {
+      const ch = plain[i];
+      if (inStr) { esc = ch === "\\" && !esc; if (ch === '"' && !esc) inStr = false; if (ch !== "\\") esc = false; continue; }
+      if (ch === '"') { inStr = true; esc = false; continue; }
+      if (ch === "{") { if (!depth) start = i; depth++; }
+      else if (ch === "}") { depth--; if (!depth && start !== -1) { try { out.push(JSON.parse(plain.slice(start, i + 1))); } catch (_) {} start = -1; } }
+      else if (ch === "]" && !depth) break;
+    }
+    return out;
+  };
+  for (const url of [
+    `https://www.cricbuzz.com/live-cricket-full-commentary/${matchId}`,
+    `https://www.cricbuzz.com/live-cricket-scores/${matchId}`,
+  ]) {
+    try {
+      const plain = await _cbPage(url);
+      const items = mapItems(walkItems(plain));
+      if (items.length) { scrapeCache.set(key, items, 30); return items; }
+    } catch (_) {}
+  }
+  return [];
+}
+
+// ── Live data (miniscore: batsmen, bowler, partnership, RRR) ──
+async function cbLiveDataModern(matchId) {
+  const key = `cb2:livedata:${matchId}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+  try {
+    const plain = await _cbPage(`https://www.cricbuzz.com/live-cricket-scores/${matchId}`);
+    const mini = _cbExtract(plain, "miniscore");
+    if (!mini) return null;
+    const header = _cbExtract(plain, "matchHeader") || {};
+    const norm = { ...mini, partnership: mini.partnership || mini.partnerShip };
+    const parsed = parseMiniscore(norm);
+    const out = { ...parsed, status: mini.status || header.status || "" };
+    scrapeCache.set(key, out, 20);
+    return out;
+  } catch (_) { return null; }
+}
+
+// ── Squad (playing XI / bench when Cricbuzz embeds it) ──
+async function cbSquadModern(matchId) {
+  const key = `cb2:squad:${matchId}`;
+  const cached = staticCache.get(key);
+  if (cached) return cached;
+  try {
+    const plain = await _cbPage(`https://www.cricbuzz.com/cricket-match-squads/${matchId}/m`);
+    // Each team block embeds "players":{"playing XI":[...], "bench":[...]}
+    const teams = [];
+    let idx = plain.indexOf('"players":{');
+    while (idx !== -1 && teams.length < 2) {
+      const grp = _cbExtract(plain.slice(idx), "players");
+      if (grp && typeof grp === "object") {
+        const buckets = Object.entries(grp).filter(([, v]) => Array.isArray(v));
+        const players = [];
+        buckets.forEach(([group, list]) => {
+          list.forEach(p => {
+            if (!p || !p.name) return;
+            players.push({
+              id: p.id, name: p.fullName || p.name, role: p.role || "",
+              captain: !!p.captain, keeper: !!p.keeper,
+              substitute: !!p.substitute || /bench/i.test(group),
+              group,
+            });
+          });
+        });
+        if (players.length) {
+          teams.push({ teamName: players[0].teamName || (teams.length ? "Team 2" : "Team 1"), players });
+        }
+      }
+      idx = plain.indexOf('"players":{', idx + 1);
+    }
+    // Recover proper team names from the page header if present
+    const t1 = _cbExtract(plain, "team1");
+    const t2 = _cbExtract(plain, "team2");
+    if (teams[0] && (t1?.name || t1?.teamName)) teams[0].teamName = t1.name || t1.teamName;
+    if (teams[1] && (t2?.name || t2?.teamName)) teams[1].teamName = t2.name || t2.teamName;
+    const out = { teams };
+    if (teams.length) staticCache.set(key, out);
+    return out;
+  } catch (_) { return { teams: [] }; }
+}
+
+module.exports.scrapeScorecard         = cbScorecardModern;
+module.exports.scrapeCricbuzzScorecard = cbScorecardModern;
+module.exports.scrapeCommentary        = cbCommentaryModern;
+module.exports.scrapeMatchLiveData     = cbLiveDataModern;
+module.exports.scrapeMatchSquad        = cbSquadModern;
+
+
+// ── Series schedule (modern): walk embedded matchInfo objects on the series page ──
+function _cbWalkObjects(plain, marker) {
+  const out = [];
+  let idx = plain.indexOf(marker);
+  while (idx !== -1) {
+    const start = idx + marker.length - 1; // position of "{"
+    let depth = 0, inStr = false, esc = false;
+    for (let i = start; i < plain.length; i++) {
+      const ch = plain[i];
+      if (inStr) { if (esc) esc = false; else if (ch === "\\") esc = true; else if (ch === '"') inStr = false; continue; }
+      if (ch === '"') { inStr = true; continue; }
+      if (ch === "{") depth++;
+      else if (ch === "}") { depth--; if (!depth) { try { out.push(JSON.parse(plain.slice(start, i + 1))); } catch (_) {} break; } }
+    }
+    idx = plain.indexOf(marker, idx + 1);
+  }
+  return out;
+}
+
+async function cbSeriesScheduleModern(seriesId) {
+  const key = `cb2:seriesSched:${seriesId}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+  try {
+    const plain = await _cbPage(`https://www.cricbuzz.com/cricket-series/${seriesId}/matches`);
+    const infos = _cbWalkObjects(plain, '"matchInfo":{');
+    const seen = new Set();
+    const items = infos
+      .filter(m => String(m.seriesId) === String(seriesId) && m.matchId && !seen.has(m.matchId) && seen.add(m.matchId))
+      .map(m => {
+        const st = (m.state || "").toLowerCase();
+        const fs2 = (m.status || "").toLowerCase();
+        const ended = st === "complete" || fs2.includes("won") || fs2.includes("drawn") || fs2.includes("tied") || fs2.includes("abandoned") || fs2.includes("no result");
+        const started = ended || st === "in progress" || st === "live" || st === "innings break";
+        const d = m.startDate ? new Date(Number(m.startDate)) : null;
+        return {
+          id: String(m.matchId),
+          name: m.team1 && m.team2 ? `${m.team1.teamName} vs ${m.team2.teamName}` : (m.matchDesc || "Match"),
+          matchType: m.matchFormat || "",
+          status: m.status || m.state || "Scheduled",
+          series: m.seriesName || "",
+          venue: m.venueInfo ? `${m.venueInfo.ground || ""}${m.venueInfo.city ? ", " + m.venueInfo.city : ""}` : "",
+          date: d && !isNaN(d) ? d.toLocaleDateString() : "",
+          dateTimeGMT: d && !isNaN(d) ? d.toISOString() : "",
+          teams: m.team1 && m.team2 ? [m.team1.teamName, m.team2.teamName] : [],
+          matchStarted: started,
+          matchEnded: ended,
+        };
+      });
+    if (items.length) scrapeCache.set(key, items, 120);
+    return items;
+  } catch (_) { return []; }
+}
+
+const _seriesSchedLegacy = module.exports.scrapeSeriesSchedule;
+module.exports.scrapeSeriesSchedule = async (seriesId) => {
+  const modern = await cbSeriesScheduleModern(seriesId);
+  if (modern.length) return modern;
+  try { return await _seriesSchedLegacy(seriesId); } catch (_) { return []; }
 };

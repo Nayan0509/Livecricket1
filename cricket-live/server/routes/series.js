@@ -42,6 +42,16 @@ router.get("/:id/stats", async (req, res) => {
   }
 });
 
+// GET /api/series/:id/squads — all team squads for a series
+router.get("/:id/squads", async (req, res) => {
+  try {
+    const data = await scraper.scrapeSeriesSquads(req.params.id);
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message, data: {} });
+  }
+});
+
 // GET /api/series/:id — series info (schedule + standings + stats combined)
 router.get("/:id", async (req, res) => {
   try {

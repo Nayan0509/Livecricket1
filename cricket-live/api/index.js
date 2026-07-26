@@ -2,6 +2,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const NodeCache = require("node-cache");
 const scraper = require("./scraper");
+const multiSport = require("./multiSportScraper");
 
 // Suppress noisy deprecation warnings
 process.removeAllListeners("warning");
@@ -478,13 +479,15 @@ async function getNews() {
   if (cached) return cached;
   try {
     const { data } = await axios.get(
-      "https://news.google.com/rss/search?q=cricket+match+IPL+T20&hl=en-IN&gl=IN&ceid=IN:en",
+      // Broad query — over-specific queries surface only stale stories,
+      // which the freshness cutoff then filters to zero.
+      "https://news.google.com/rss/search?q=cricket&hl=en-IN&gl=IN&ceid=IN:en",
       { timeout: 10000 }
     );
     const $ = cheerio.load(data, { xmlMode: true });
     const news = [];
     const now = new Date();
-    const cutoff = new Date(now - 3 * 24 * 60 * 60 * 1000);
+    const cutoff = new Date(now - 7 * 24 * 60 * 60 * 1000);
     $("item").each((i, el) => {
       if (i >= 50) return false;
       const pub = new Date($(el).find("pubDate").text());
@@ -518,10 +521,9 @@ function serveMeta(url, res) {
     const pages = [
       { loc: "/",                        pri: "1.0", freq: "always"  },
       { loc: "/live",                    pri: "1.0", freq: "always"  },
-      { loc: "/live-cricket-score",      pri: "1.0", freq: "always"  },
-      { loc: "/cricket-score-today",     pri: "1.0", freq: "always"  },
-      { loc: "/cricket-matches-today",   pri: "1.0", freq: "always"  },
-      { loc: "/ball-by-ball",            pri: "1.0", freq: "always"  },
+      { loc: "/football",                pri: "0.85", freq: "hourly" },
+      { loc: "/basketball",              pri: "0.85", freq: "hourly" },
+      { loc: "/tennis",                  pri: "0.85", freq: "hourly" },
       { loc: "/ipl",                     pri: "0.95", freq: "hourly" },
       { loc: "/t20-world-cup",           pri: "0.95", freq: "hourly" },
       { loc: "/world-cup",               pri: "0.95", freq: "hourly" },
@@ -543,6 +545,9 @@ function serveMeta(url, res) {
       { loc: "/teams",                   pri: "0.75", freq: "weekly" },
       { loc: "/rankings",                pri: "0.8",  freq: "weekly" },
       { loc: "/news",                    pri: "0.85", freq: "hourly" },
+      { loc: "/news/ipl-2026-auction-tactical-breakdown",     pri: "0.6", freq: "monthly" },
+      { loc: "/news/world-test-championship-2026-standings",  pri: "0.6", freq: "monthly" },
+      { loc: "/news/t20-world-cup-powerplay-batting-trends",  pri: "0.6", freq: "monthly" },
       { loc: "/stats",                   pri: "0.75", freq: "daily"  },
       { loc: "/videos",                  pri: "0.65", freq: "daily"  },
       { loc: "/watch-live",              pri: "0.7",  freq: "hourly" },
@@ -617,25 +622,20 @@ function getPageMeta(pathname) {
       desc: "All live cricket matches right now. Real-time scores, ball-by-ball commentary for every live match. IPL, T20, ODI, Test cricket live.",
       kw: "live cricket matches, cricket live now, live match today, cricket score live, live cricket score now",
     },
-    "/live-cricket-score": {
-      title: `Live Cricket Score - Real-Time Scores Today | ${SITE}`,
-      desc: "Live cricket score today with real-time updates. IPL 2026, T20 World Cup, ODI, Test matches. Ball-by-ball commentary every 15 seconds.",
-      kw: "live cricket score, cricket live score today, live cricket score today, cricket score live, live score cricket",
+    "/football": {
+      title: `Football Live Scores Today - Premier League, La Liga & More | ${SITE}`,
+      desc: "Live football scores today across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA Champions League and MLS, updated in real time.",
+      kw: "football live score, premier league live score, la liga live score, champions league live score, football scores today",
     },
-    "/cricket-score-today": {
-      title: `Cricket Score Today - Live Match Updates | ${SITE}`,
-      desc: "Cricket score today with live updates. Ball-by-ball commentary and live scorecard for all matches including IPL, T20, ODI and Test.",
-      kw: "cricket score today, cricket today score, today cricket score, live cricket score today, cricket match score today",
+    "/basketball": {
+      title: `Basketball Live Scores Today - NBA & NCAA | ${SITE}`,
+      desc: "Live basketball scores today for the NBA, NCAA Men's and NCAA Women's basketball, with live, upcoming and recent results updated in real time.",
+      kw: "basketball live score, NBA live score, NBA scores today, NCAA basketball live score, basketball scores today",
     },
-    "/cricket-matches-today": {
-      title: `Cricket Matches Today - Live Schedule & Timings | ${SITE}`,
-      desc: "All cricket matches today with live scores, timings and ball-by-ball commentary. IPL, T20, ODI, Test cricket matches today.",
-      kw: "cricket matches today, cricket today, today cricket match, cricket match today live, cricket schedule today",
-    },
-    "/ball-by-ball": {
-      title: `Ball by Ball Cricket Commentary Live | ${SITE}`,
-      desc: "Ball by ball cricket commentary live for all matches. Real-time updates for IPL 2026, T20 World Cup, ODI and Test matches.",
-      kw: "ball by ball cricket, ball by ball commentary, cricket ball by ball, live ball by ball, cricket commentary live",
+    "/tennis": {
+      title: `Tennis Live Scores Today - ATP & WTA Tour | ${SITE}`,
+      desc: "Live tennis scores today from the ATP and WTA tours, with set-by-set scores for matches in progress, upcoming fixtures and recent results.",
+      kw: "tennis live score, ATP live score, WTA live score, tennis scores today, tennis results",
     },
     "/ipl": {
       title: `IPL 2026 Live Score - Indian Premier League | ${SITE}`,
@@ -841,12 +841,11 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
 
   const navLinks = [
     ["/", "Home"], ["/live", "Live Scores"], ["/watch-live", "Highlights"],
+    ["/football", "Football"], ["/basketball", "Basketball"], ["/tennis", "Tennis"],
     ["/ipl", "IPL 2026"], ["/t20-world-cup", "T20 World Cup"],
-    ["/cricket-matches-today", "Today's Matches"],
     ["/schedule", "Schedule"], ["/results", "Results"], ["/news", "News"],
     ["/rankings", "ICC Rankings"], ["/players", "Players"], ["/teams", "Teams"],
-    ["/ball-by-ball", "Ball by Ball"], ["/t20", "T20 Cricket"],
-    ["/odi", "ODI Cricket"], ["/test", "Test Cricket"],
+    ["/t20", "T20 Cricket"], ["/odi", "ODI Cricket"], ["/test", "Test Cricket"],
   ];
 
   return `<!DOCTYPE html>
@@ -921,6 +920,15 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
       ${recentHtml}
     </section>` : ""}
 
+    <section aria-label="Other sports">
+      <h2>🌐 Other Sports</h2>
+      <div class="grid">
+        <div class="link-card"><a href="${BASE}/football">Football Live Scores</a><br/><small>Premier League, La Liga, Champions League &amp; more</small></div>
+        <div class="link-card"><a href="${BASE}/basketball">Basketball Live Scores</a><br/><small>NBA &amp; NCAA</small></div>
+        <div class="link-card"><a href="${BASE}/tennis">Tennis Live Scores</a><br/><small>ATP &amp; WTA Tour</small></div>
+      </div>
+    </section>
+
     <section aria-label="Cricket tournaments">
       <h2>🏆 Cricket Tournaments &amp; Leagues</h2>
       <div class="grid">
@@ -944,7 +952,6 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
         <div class="link-card"><a href="${BASE}/t20">T20 Cricket Live Score</a><br/><small>Twenty20 matches</small></div>
         <div class="link-card"><a href="${BASE}/odi">ODI Cricket Live Score</a><br/><small>One Day International</small></div>
         <div class="link-card"><a href="${BASE}/test">Test Cricket Live Score</a><br/><small>5-day Test matches</small></div>
-        <div class="link-card"><a href="${BASE}/ball-by-ball">Ball by Ball Commentary</a><br/><small>Real-time commentary</small></div>
       </div>
     </section>
 
@@ -952,6 +959,7 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
       <h2>About Live Cricket Zone</h2>
       <p>Live Cricket Zone is your ultimate destination for <strong>live cricket scores</strong> with real-time ball-by-ball commentary updated every 15 seconds. We cover all major cricket tournaments including <strong>IPL 2026 live score</strong>, <strong>T20 World Cup 2026</strong>, ODI World Cup, Asia Cup, Champions Trophy, PSL, BBL, CPL, BPL and all international cricket.</p>
       <p>Our <strong>cricket score today</strong> service is faster than Cricbuzz and ESPNcricinfo. Get <strong>live cricket match</strong> updates, full scorecards, toss results, player statistics, ICC rankings 2026, cricket news and match schedules — all in one place.</p>
+      <p>Beyond cricket, Live Cricket Zone also covers <a href="${BASE}/football">football</a> (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Champions League, MLS), <a href="${BASE}/basketball">basketball</a> (NBA, NCAA) and <a href="${BASE}/tennis">tennis</a> (ATP, WTA) live scores.</p>
       <h3>Why Choose Live Cricket Zone?</h3>
       <ul>
         <li>Fastest live cricket score — updated every 15 seconds</li>
@@ -1000,7 +1008,7 @@ module.exports = async (req, res) => {
       const meta = getPageMeta(pathname);
       let liveMatches = [], recentMatches = [];
       // For homepage, live page and today page — inject actual match data
-      if (pathname === "/" || pathname === "/live" || pathname === "/cricket-matches-today" || pathname === "/cricket-score-today") {
+      if (pathname === "/" || pathname === "/live") {
         try {
           const all = await getAllMatches();
           liveMatches = all.live || [];
@@ -1058,6 +1066,18 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data });
     }
 
+    // ── Other sports (football, basketball, tennis) ──────────────────────────
+    if (parts[0] === "sports" && parts[1] && (parts[2] === "matches" || parts[2] === "news")) {
+      const sport = parts[1];
+      if (!multiSport.SPORT_LEAGUES[sport]) {
+        return res.status(404).json({ status: "error", message: `Unsupported sport: ${sport}` });
+      }
+      const data = parts[2] === "matches"
+        ? await multiSport.getSportMatches(sport)
+        : await multiSport.getSportNews(sport);
+      return res.json({ status: "success", data });
+    }
+
     // ── All matches ─────────────────────────────────────────────────────────
     if (path === "matches/all") {
       const data = await getAllMatches();
@@ -1077,14 +1097,49 @@ module.exports = async (req, res) => {
     }
 
     // ── Upcoming matches ────────────────────────────────────────────────────
-    if (path === "matches/upcoming" || path === "matches/schedule") {
+    if (path === "matches/upcoming") {
       const all = await getAllMatches();
       return res.json({ status: "success", data: all.upcoming });
     }
 
+    // ── Schedule (upcoming grouped by date + series; client reads response.schedules) ──
+    if (path === "matches/schedule") {
+      const all = await getAllMatches();
+      const byDate = new Map();
+      (all.upcoming || []).forEach(m => {
+        const d = m.dateTimeGMT ? new Date(m.dateTimeGMT) : null;
+        const dateKey = d && !isNaN(d) ? d.toDateString() : (m.date || "Upcoming");
+        if (!byDate.has(dateKey)) byDate.set(dateKey, new Map());
+        const bySeries = byDate.get(dateKey);
+        const sName = m.series || m.matchType || "Cricket";
+        if (!bySeries.has(sName)) bySeries.set(sName, []);
+        const [ground, city] = (m.venue || "").split(",").map(x => x.trim());
+        bySeries.get(sName).push({
+          matchId: m.id,
+          team1: { teamName: m.teams?.[0] || m.teamInfo?.[0]?.name || "TBA" },
+          team2: { teamName: m.teams?.[1] || m.teamInfo?.[1]?.name || "TBA" },
+          matchDesc: m.status || m.matchType || "",
+          matchFormat: m.matchType || "",
+          startDate: d && !isNaN(d) ? String(d.getTime()) : "",
+          venueInfo: { ground: ground || "", city: city || "" },
+        });
+      });
+      const schedules = [];
+      byDate.forEach((bySeries, dateKey) => {
+        schedules.push({
+          scheduleAdWrapper: {
+            date: dateKey,
+            matchScheduleList: [...bySeries.entries()].map(([seriesName, matchInfo]) => ({ seriesName, matchInfo })),
+          },
+        });
+      });
+      return res.json({ status: "success", response: { schedules } });
+    }
+
     // ── Match commentary ─────────────────────────────────────────────────────
     if (parts[0] === "matches" && parts[2] === "commentary") {
-      const data = await getMatchCommentary(parts[1]);
+      let data = await scraper.scrapeCommentary(parts[1]);
+      if (!data || !data.length) data = await getMatchCommentary(parts[1]);
       return res.json({ status: "success", data });
     }
 
@@ -1216,9 +1271,7 @@ module.exports = async (req, res) => {
       const INDEXNOW_KEY = process.env.INDEXNOW_KEY || "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6";
       const base = "https://www.livecricketzone.com";
       const urls = [
-        `${base}/`, `${base}/live`, `${base}/live-cricket-score`,
-        `${base}/cricket-score-today`, `${base}/cricket-matches-today`,
-        `${base}/ball-by-ball`, `${base}/ipl`, `${base}/t20-world-cup`,
+        `${base}/`, `${base}/live`, `${base}/ipl`, `${base}/t20-world-cup`,
         `${base}/world-cup`, `${base}/asia-cup`, `${base}/champions-trophy`,
         `${base}/psl`, `${base}/bbl`, `${base}/cpl`, `${base}/bpl`,
         `${base}/schedule`, `${base}/news`, `${base}/rankings`,

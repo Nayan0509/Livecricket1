@@ -32,33 +32,10 @@ async function generateDynamicSitemap(matches, players, teams, series) {
     <lastmod>${now}</lastmod>
   </url>
 
-  <url>
-    <loc>${baseUrl}/live-cricket-score</loc>
-    <changefreq>always</changefreq>
-    <priority>1.0</priority>
-    <lastmod>${now}</lastmod>
-  </url>
-
-  <url>
-    <loc>${baseUrl}/cricket-score-today</loc>
-    <changefreq>always</changefreq>
-    <priority>1.0</priority>
-    <lastmod>${now}</lastmod>
-  </url>
-
-  <url>
-    <loc>${baseUrl}/cricket-matches-today</loc>
-    <changefreq>always</changefreq>
-    <priority>1.0</priority>
-    <lastmod>${now}</lastmod>
-  </url>
-
-  <url>
-    <loc>${baseUrl}/ball-by-ball</loc>
-    <changefreq>always</changefreq>
-    <priority>1.0</priority>
-    <lastmod>${now}</lastmod>
-  </url>
+  <!-- Other Sports -->
+  <url><loc>${baseUrl}/football</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/basketball</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/tennis</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
 
   <!-- Tournament Pages -->
   <url><loc>${baseUrl}/ipl</loc><changefreq>hourly</changefreq><priority>0.95</priority><lastmod>${now}</lastmod></url>
@@ -84,6 +61,9 @@ async function generateDynamicSitemap(matches, players, teams, series) {
   <url><loc>${baseUrl}/teams</loc><changefreq>weekly</changefreq><priority>0.75</priority><lastmod>${now}</lastmod></url>
   <url><loc>${baseUrl}/rankings</loc><changefreq>weekly</changefreq><priority>0.8</priority><lastmod>${now}</lastmod></url>
   <url><loc>${baseUrl}/news</loc><changefreq>hourly</changefreq><priority>0.85</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/news/ipl-2026-auction-tactical-breakdown</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/news/world-test-championship-2026-standings</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>${now}</lastmod></url>
+  <url><loc>${baseUrl}/news/t20-world-cup-powerplay-batting-trends</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>${now}</lastmod></url>
   <url><loc>${baseUrl}/stats</loc><changefreq>daily</changefreq><priority>0.75</priority><lastmod>${now}</lastmod></url>
   <url><loc>${baseUrl}/videos</loc><changefreq>daily</changefreq><priority>0.65</priority><lastmod>${now}</lastmod></url>
   <url><loc>${baseUrl}/about</loc><changefreq>monthly</changefreq><priority>0.5</priority><lastmod>${now}</lastmod></url>

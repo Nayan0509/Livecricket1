@@ -11,7 +11,6 @@ import LiveMatches from "./pages/LiveMatches";
 import MatchDetail from "./pages/MatchDetail";
 import Scorecard from "./pages/Scorecard";
 import LiveScore from "./pages/LiveScore";
-import BallByBall from "./pages/BallByBall";
 import UpcomingMatches from "./pages/UpcomingMatches";
 import Results from "./pages/Results";
 import Series from "./pages/Series";
@@ -40,9 +39,6 @@ import WorldCup from "./pages/WorldCup";
 import AsiaCup from "./pages/AsiaCup";
 import ChampionsTrophy from "./pages/ChampionsTrophy";
 import WomensCricket from "./pages/WomensCricket";
-import LiveCricketScore from "./pages/LiveCricketScore";
-import CricketScoreToday from "./pages/CricketScoreToday";
-import CricketMatchesToday from "./pages/CricketMatchesToday";
 import WatchLive from "./pages/WatchLive";
 import Videos from "./pages/Videos";
 import CountyChampionship from "./pages/CountyChampionship";
@@ -51,6 +47,10 @@ import CricketWebsite from "./pages/CricketWebsite";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfUse from "./pages/TermsOfUse";
 import DMCACopyright from "./pages/DMCACopyright";
+import Fantasy from "./pages/Fantasy";
+import Football from "./pages/Football";
+import Basketball from "./pages/Basketball";
+import Tennis from "./pages/Tennis";
 
 
 function AppShell() {
@@ -71,10 +71,11 @@ function AppShell() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/live" element={<LiveMatches />} />
-            <Route path="/live-cricket-score" element={<LiveCricketScore />} />
-            <Route path="/cricket-score-today" element={<CricketScoreToday />} />
-            <Route path="/cricket-matches-today" element={<CricketMatchesToday />} />
-            <Route path="/ball-by-ball" element={<BallByBall />} />
+            {/* Retired keyword-variant doorway pages (duplicate content) → canonical /live */}
+            <Route path="/live-cricket-score" element={<Navigate to="/live" replace />} />
+            <Route path="/cricket-score-today" element={<Navigate to="/live" replace />} />
+            <Route path="/cricket-matches-today" element={<Navigate to="/live" replace />} />
+            <Route path="/ball-by-ball" element={<Navigate to="/live" replace />} />
             <Route path="/watch-live" element={<WatchLive />} />
             <Route path="/highlights" element={<WatchLive />} />
             <Route path="/watch" element={<Navigate to="/watch-live" replace />} />
@@ -125,7 +126,12 @@ function AppShell() {
             <Route path="/county-cricket" element={<CountyChampionship />} />
             <Route path="/icc-cwc-league-2" element={<ICCCWCLeague2 />} />
             <Route path="/namibia-vs-scotland" element={<ICCCWCLeague2 />} />
-            
+            <Route path="/fantasy" element={<Fantasy />} />
+
+            <Route path="/football" element={<Football />} />
+            <Route path="/basketball" element={<Basketball />} />
+            <Route path="/tennis" element={<Tennis />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>

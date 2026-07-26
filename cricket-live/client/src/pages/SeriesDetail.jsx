@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
-import { fetchSeriesInfo } from "../api";
+import { fetchSeriesInfo, fetchSeriesSquads } from "../api";
 
 export default function SeriesDetail() {
   const { id } = useParams();
@@ -19,6 +19,13 @@ export default function SeriesDetail() {
   const schedule  = Array.isArray(series.schedule)  ? series.schedule  : [];
   const standings = Array.isArray(series.standings) ? series.standings : [];
   const stats     = series.stats || { batting: [], bowling: [] };
+
+  const { data: squadsData } = useQuery({
+    queryKey: ["seriesSquads", id],
+    queryFn: () => fetchSeriesSquads(id),
+    staleTime: 600000,
+  });
+  const squads = squadsData?.data || {};
 
   // derive series name from first match if not directly available
   const seriesName = schedule[0]?.series || `Series ${id}`;
@@ -41,6 +48,7 @@ export default function SeriesDetail() {
     { id: "schedule",  label: "Schedule & Results", show: schedule.length > 0 },
     { id: "standings", label: "Points Table",        show: standings.length > 0 },
     { id: "stats",     label: "Top Performers",      show: stats.batting?.length > 0 || stats.bowling?.length > 0 },
+    { id: "squads",    label: "Squads",              show: Object.keys(squads).length > 0 },
   ].filter(t => t.show);
 
   const live     = schedule.filter(m => m.matchStarted && !m.matchEnded);
@@ -97,8 +105,8 @@ export default function SeriesDetail() {
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               flexShrink: 0, background: "none", border: "none", cursor: "pointer",
               padding: "11px 20px", fontSize: 13, fontWeight: 700,
-              color: tab === t.id ? "#3B82F6" : "var(--text3)",
-              borderBottom: tab === t.id ? "2px solid #3B82F6" : "2px solid transparent",
+              color: tab === t.id ? "#ef4444" : "var(--text3)",
+              borderBottom: tab === t.id ? "2px solid #ef4444" : "2px solid transparent",
               marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif", whiteSpace: "nowrap",
             }}>
               {t.label}
@@ -252,6 +260,50 @@ export default function SeriesDetail() {
                 </table>
               </div>
             </section>
+          )}
+        </div>
+      )}
+
+      {/* ── SQUADS ── */}
+      {tab === "squads" && (
+        <div>
+          {Object.keys(squads).length === 0 ? (
+            <div style={{ padding: "40px 20px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12 }}>
+              <p style={{ color: "var(--text3)", fontSize: 13 }}>Squad not yet announced.</p>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
+              {Object.entries(squads).map(([teamName, players]) => (
+                <div key={teamName} style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", background: "var(--card)" }}>
+                  <div style={{ padding: "12px 16px", background: "rgba(239,68,68,0.07)", borderBottom: "1px solid rgba(239,68,68,0.15)", fontWeight: 800, fontSize: 14, color: "#ef4444", display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 3, height: 16, borderRadius: 2, background: "#ef4444", display: "inline-block" }} />
+                    {teamName}
+                  </div>
+                  <div>
+                    {Array.isArray(players) && players.map((p, i) => (
+                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < players.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                        <div style={{ width: 30, height: 30, borderRadius: "50%", background: p.img ? "transparent" : "rgba(255,255,255,0.05)", overflow: "hidden", flexShrink: 0, border: "1px solid rgba(255,255,255,0.08)" }}>
+                          {p.img ? (
+                            <img src={p.img} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />
+                          ) : (
+                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "var(--text3)" }}>{i + 1}</div>
+                          )}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 5 }}>
+                            {p.name}
+                            {p.isCaptain  && <span style={{ fontSize: 9, background: "#ef4444", color: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>}
+                            {p.isVCaptain && <span style={{ fontSize: 9, background: "rgba(239,68,68,0.3)", color: "#ef4444", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>VC</span>}
+                            {p.isWk       && <span style={{ fontSize: 9, background: "rgba(59,130,246,0.2)", color: "#60a5fa", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>WK</span>}
+                          </div>
+                          {p.role && <div style={{ fontSize: 10, color: "var(--text3)" }}>{p.role}</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       )}

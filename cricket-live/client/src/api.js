@@ -17,6 +17,8 @@ export const fetchMatchLiveData     = (id) => api.get(`/matches/${id}/live-data`
 export const fetchMatchSquad        = (id) => api.get(`/matches/${id}/squad`).then(r => r.data);
 export const fetchMatchAnalysis     = (id) => api.get(`/matches/${id}/analysis`).then(r => r.data);
 export const fetchMatchH2H          = (id) => api.get(`/matches/${id}/h2h`).then(r => r.data);
+export const fetchMatchFullInfo     = (id) => api.get(`/matches/${id}/info`).then(r => r.data);
+export const fetchMatchOvers        = (id) => api.get(`/matches/${id}/overs`).then(r => r.data);
 
 // ─── Series ───────────────────────────────────────────────────────────────────
 export const fetchSeries            = () => api.get("/series").then(r => r.data);
@@ -24,6 +26,7 @@ export const fetchSeriesInfo        = (id) => api.get(`/series/${id}`).then(r =>
 export const fetchSeriesSchedule    = (id) => api.get(`/series/${id}/schedule`).then(r => r.data);
 export const fetchSeriesStandings   = (id) => api.get(`/series/${id}/standings`).then(r => r.data);
 export const fetchSeriesStats       = (id) => api.get(`/series/${id}/stats`).then(r => r.data);
+export const fetchSeriesSquads      = (id) => api.get(`/series/${id}/squads`).then(r => r.data);
 
 // ─── Players ─────────────────────────────────────────────────────────────────
 export const fetchPlayers           = (search = "india") => api.get(`/players`, { params: { search } }).then(r => r.data);
@@ -31,6 +34,7 @@ export const fetchPlayerInfo        = (id) => api.get(`/players/${id}`).then(r =
 
 // ─── Static data ─────────────────────────────────────────────────────────────
 export const fetchNews              = () => api.get("/news").then(r => r.data);
+export const fetchNewsEnhanced      = () => api.get("/news?enhanced=1").then(r => r.data);
 export const fetchTeams             = () => api.get("/teams").then(r => r.data);
 export const fetchTeamDetail        = (id) => api.get(`/teams/${id}`).then(r => r.data);
 export const fetchRankings          = (type = "batting", format = "tests", category = "men") =>
@@ -39,6 +43,11 @@ export const fetchIPLStandings      = () => api.get("/matches/standings").then(r
 export const fetchVenueInfo         = (id) => api.get(`/venues/${id}`).then(r => r.data);
 export const fetchSeriesArchive     = (year) => api.get(`/series/archive/${year}`).then(r => r.data);
 export const fetchDetailedSchedule  = (type, month, year) => api.get("/schedule", { params: { type, month, year } }).then(r => r.data);
+export const fetchGlobalStats       = (format, type, category) => api.get("/stats", { params: { format, type, category } }).then(r => r.data);
 
 // ─── YouTube ─────────────────────────────────────────────────────────────────
 export const fetchYouTubeSearch     = (q) => api.get("/youtube/search", { params: { q } }).then(r => r.data);
+
+// ─── Other sports (football, basketball, tennis) ──────────────────────────────
+export const fetchSportMatches      = (sport) => api.get(`/sports/${sport}/matches`).then(r => r.data);
+export const fetchSportNews         = (sport) => api.get(`/sports/${sport}/news`).then(r => r.data);

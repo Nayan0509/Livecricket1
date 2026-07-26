@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad, fetchMatchAnalysis, fetchMatchH2H } from "../api";
+import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad, fetchMatchAnalysis, fetchMatchH2H, fetchMatchFullInfo, fetchMatchOvers } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import WatchSection from "../components/WatchSection";
@@ -550,6 +550,166 @@ function SquadTab({ matchId }) {
   );
 }
 
+/* ── Over Summary Tab ── */
+function OverSummaryTab({ matchId }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["overs", matchId],
+    queryFn: () => fetchMatchOvers(matchId),
+    refetchInterval: 30000,
+  });
+  const overs = data?.data || [];
+
+  if (isLoading) return <div style={{ padding: "40px 0", textAlign: "center" }}><div className="spinner" style={{ margin: "0 auto" }} /></div>;
+  if (!overs.length) return (
+    <div style={{ padding: "50px 24px", textAlign: "center" }}>
+      <div style={{ fontSize: 36, marginBottom: 12 }}>📋</div>
+      <p style={{ color: "var(--text3)", fontSize: 14 }}>Over summary not available yet. Check back once the match begins.</p>
+    </div>
+  );
+
+  const runColors = (runs) => {
+    if (runs >= 18) return "#ef4444";
+    if (runs >= 12) return "#f97316";
+    if (runs >= 8) return "#f59e0b";
+    if (runs <= 3) return "#22d3ee";
+    return "#a3e635";
+  };
+
+  return (
+    <div className="animate-fade-in">
+      <div style={{ fontSize: 12, color: "var(--text3)", marginBottom: 16 }}>Showing {overs.length} completed over{overs.length !== 1 ? "s" : ""}</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
+        {[...overs].reverse().map((ov, i) => (
+          <div key={i} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "12px 14px", borderLeft: `3px solid ${runColors(ov.runs)}` }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5 }}>Over {ov.overNum}</span>
+              <div style={{ display: "flex", gap: 6 }}>
+                <span style={{ fontSize: 14, fontWeight: 900, color: runColors(ov.runs), fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{ov.runs} runs</span>
+                {ov.wickets > 0 && <span style={{ fontSize: 12, fontWeight: 800, color: "#f87171", background: "rgba(239,68,68,0.1)", padding: "1px 7px", borderRadius: 10 }}>{ov.wickets}W</span>}
+              </div>
+            </div>
+            {ov.summary && <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 6 }}>
+              {ov.summary.split(" ").map((ball, bi) => {
+                const isWicket = ball === "W" || ball === "W!";
+                const isFour = ball === "4";
+                const isSix = ball === "6";
+                const isExtra = ball.startsWith("wd") || ball.startsWith("nb") || ball === "Wd" || ball === "Nb";
+                const bg = isWicket ? "#ef4444" : isSix ? "#38bdf8" : isFour ? "#3b82f6" : isExtra ? "#a78bfa" : "rgba(255,255,255,0.08)";
+                const color = isWicket || isSix || isFour || isExtra ? "#fff" : "var(--text2)";
+                return (
+                  <span key={bi} style={{ width: 26, height: 26, borderRadius: "50%", background: bg, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color, flexShrink: 0 }}>
+                    {ball}
+                  </span>
+                );
+              })}
+            </div>}
+            <div style={{ fontSize: 11, color: "var(--text3)" }}>
+              {ov.batStriker && <span>{ov.batStriker}</span>}
+              {ov.batStriker && ov.bowlStriker && <span style={{ margin: "0 6px" }}>→</span>}
+              {ov.bowlStriker && <span>{ov.bowlStriker}</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Enhanced Match Info Tab ── */
+function EnhancedMatchInfoTab({ matchId, match }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["matchFullInfo", matchId],
+    queryFn: () => fetchMatchFullInfo(matchId),
+  });
+  const info = data?.data;
+
+  const toss = info?.toss || (match.tossWinner ? { winner: match.tossWinner, decision: match.tossChoice, text: `${match.tossWinner} won the toss and elected to ${match.tossChoice}` } : null);
+  const umpires = info?.umpires || [
+    match.umpire ? { name: match.umpire, type: "Umpires" } : null,
+    match.tvUmpire ? { name: match.tvUmpire, type: "TV Umpire" } : null,
+    match.referee ? { name: match.referee, type: "Match Referee" } : null,
+  ].filter(Boolean);
+  const venue = info?.venue || { fullName: match.venue || "TBA" };
+  const date = info?.date ? new Date(info.date).toLocaleString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", timeZoneName: "short" }) : match.date;
+
+  const infoRows = [
+    { label: "Series", value: info?.series || match.series || match.matchType, icon: "🏆" },
+    { label: "Match Format", value: info?.matchType || match.matchType, icon: "🏏" },
+    { label: "Match No.", value: info?.matchNumber || match.matchType, icon: "#️⃣" },
+    { label: "Venue", value: venue.fullName || "TBA", icon: "📍" },
+    { label: "Date & Time", value: date || "TBA", icon: "📅" },
+    { label: "Toss", value: toss?.text || "TBA", icon: "🪙" },
+    { label: "Status", value: info?.status || match.status || "Scheduled", icon: "📡" },
+  ].filter(r => r.value && r.value !== "TBA");
+
+  return (
+    <div className="animate-fade-in">
+      {isLoading && (
+        <div style={{ padding: "20px 0", textAlign: "center" }}><div className="spinner" style={{ margin: "0 auto", width: 24, height: 24 }} /></div>
+      )}
+
+      {/* Toss Banner */}
+      {toss?.text && (
+        <div style={{ marginBottom: 16, padding: "14px 18px", borderRadius: 12, background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 22 }}>🪙</span>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#f59e0b", marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.5 }}>Toss</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>{toss.text}</div>
+          </div>
+        </div>
+      )}
+
+      {/* Info Table */}
+      <div style={{ borderRadius: 14, border: "1px solid var(--border)", background: "var(--card)", overflow: "hidden", marginBottom: 16 }}>
+        {infoRows.map((row, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", padding: "14px 18px", borderBottom: i < infoRows.length - 1 ? "1px solid var(--divider)" : "none", transition: "background 0.15s" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
+            <span style={{ fontSize: 16, marginRight: 12, flexShrink: 0 }}>{row.icon}</span>
+            <div style={{ minWidth: 130, fontSize: 12, fontWeight: 700, color: "var(--text3)" }}>{row.label}</div>
+            <div style={{ fontSize: 14, color: "var(--text)", fontWeight: 500, flex: 1 }}>{row.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Umpires */}
+      {umpires.length > 0 && (
+        <div style={{ borderRadius: 14, border: "1px solid var(--border)", background: "var(--card)", overflow: "hidden", marginBottom: 16 }}>
+          <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--divider)", fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#3b82f6", display: "inline-block" }} />
+            Officials
+          </div>
+          {umpires.map((u, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", padding: "12px 18px", borderBottom: i < umpires.length - 1 ? "1px solid var(--divider)" : "none" }}>
+              <div style={{ minWidth: 130, fontSize: 12, fontWeight: 700, color: "var(--text3)" }}>{u.type}</div>
+              <div style={{ fontSize: 14, color: "var(--text)", fontWeight: 600 }}>{u.name}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Venue Details */}
+      {(venue.city || venue.country || venue.capacity) && (
+        <div style={{ borderRadius: 14, border: "1px solid var(--border)", background: "var(--card)", overflow: "hidden", marginBottom: 16 }}>
+          <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--divider)", fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#10b981", display: "inline-block" }} />
+            Venue Details
+          </div>
+          {[venue.city && ["City", venue.city], venue.country && ["Country", venue.country], venue.capacity && ["Capacity", venue.capacity], venue.established && ["Established", venue.established]].filter(Boolean).map(([lbl, val], i, arr) => (
+            <div key={i} style={{ display: "flex", padding: "12px 18px", borderBottom: i < arr.length - 1 ? "1px solid var(--divider)" : "none" }}>
+              <div style={{ minWidth: 130, fontSize: 12, fontWeight: 700, color: "var(--text3)" }}>{lbl}</div>
+              <div style={{ fontSize: 14, color: "var(--text)" }}>{val}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* H2H */}
+      <H2HSection matchId={matchId} />
+    </div>
+  );
+}
+
 export default function MatchDetail() {
   const { id }       = useParams();
   const navigate     = useNavigate();
@@ -784,18 +944,19 @@ export default function MatchDetail() {
         {[
           { id: "scorecard",   label: "Scorecard" },
           { id: "commentary",  label: "Commentary" },
-          { id: "analysis",    label: "Analysis" },
+          { id: "overs",       label: "Over Summary" },
           { id: "squad",       label: "Squad" },
           { id: "info",        label: "Match Info" },
+          { id: "analysis",    label: "Analysis" },
         ].map(t => (
           <button
             key={t.id}
             onClick={() => { setTab(t.id); trackTabSwitch(t.id, id); }}
             style={{
               flexShrink: 0, background: "transparent", border: "none", cursor: "pointer",
-              padding: "14px 20px", fontSize: 13, fontWeight: tab === t.id ? 800 : 600,
-              color: tab === t.id ? "#3B82F6" : "var(--text3)",
-              borderBottom: tab === t.id ? "2.5px solid #3B82F6" : "2.5px solid transparent",
+              padding: "14px 18px", fontSize: 13, fontWeight: tab === t.id ? 800 : 600,
+              color: tab === t.id ? "#ef4444" : "var(--text3)",
+              borderBottom: tab === t.id ? "2.5px solid #ef4444" : "2.5px solid transparent",
               marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif",
               whiteSpace: "nowrap",
             }}
@@ -805,9 +966,10 @@ export default function MatchDetail() {
 
       {tab === "scorecard"  && <ScorecardTab matchId={id} />}
       {tab === "commentary" && <CommentaryTab matchId={id} />}
+      {tab === "overs"      && <OverSummaryTab matchId={id} />}
       {tab === "analysis"   && <AnalysisTab matchId={id} />}
       {tab === "squad"      && <SquadTab matchId={id} />}
-      {tab === "info"       && <MatchInfoTab match={match} />}
+      {tab === "info"       && <EnhancedMatchInfoTab matchId={id} match={match} />}
 
       {/* Bottom ad */}
       <div style={{ marginTop: 32 }}><AdBanner type="auto" /></div>

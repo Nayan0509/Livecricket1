@@ -588,6 +588,30 @@ export default function IPL() {
         </div>
       </div>
 
+      {/* IPL 2026 Editorial Guide & FAQ Accordion for AdSense */}
+      <section style={{ marginTop: 36, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px", color: "var(--text2)", fontSize: 14, lineHeight: 1.8 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", marginBottom: 12 }}>
+          IPL 2026 — Indian Premier League Standings, Rules & Format Overview
+        </h2>
+        <p style={{ marginBottom: 14 }}>
+          The <strong style={{ color: "var(--text)" }}>Indian Premier League (IPL) 2026</strong> features 10 world-class franchises battling across 84 T20 matches in India. Teams earn 2 points for a win, 1 point for a no-result/abandonment, and 0 points for a defeat.
+        </p>
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "#38BDF8", marginTop: 16, marginBottom: 8 }}>
+          Top 4 Qualification & Playoff System
+        </h3>
+        <p style={{ marginBottom: 14 }}>
+          At the end of the 70-match group stage, the top 4 teams in the standings qualify for the IPL Playoffs:
+        </p>
+        <ul style={{ paddingLeft: 20, marginBottom: 14 }}>
+          <li><strong style={{ color: "var(--text)" }}>Qualifier 1:</strong> Rank 1 vs Rank 2 (Winner advances directly to the Grand Final).</li>
+          <li><strong style={{ color: "var(--text)" }}>Eliminator:</strong> Rank 3 vs Rank 4 (Loser is eliminated).</li>
+          <li><strong style={{ color: "var(--text)" }}>Qualifier 2:</strong> Loser of Qualifier 1 vs Winner of Eliminator.</li>
+        </ul>
+        <p style={{ margin: 0 }}>
+          If two or more teams finish tied on points, Net Run Rate (NRR) is used as the primary tiebreaker to determine final playoff placements.
+        </p>
+      </section>
+
       <style>{`
         @media (max-width: 900px) { .ipl-main { grid-template-columns: 1fr !important; } }
       `}</style>

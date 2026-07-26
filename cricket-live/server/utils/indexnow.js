@@ -45,10 +45,9 @@ async function submitAllUrls() {
   const urls = [
     `${baseUrl}/`,
     `${baseUrl}/live`,
-    `${baseUrl}/live-cricket-score`,
-    `${baseUrl}/cricket-score-today`,
-    `${baseUrl}/cricket-matches-today`,
-    `${baseUrl}/ball-by-ball`,
+    `${baseUrl}/football`,
+    `${baseUrl}/basketball`,
+    `${baseUrl}/tennis`,
     `${baseUrl}/ipl`,
     `${baseUrl}/t20-world-cup`,
     `${baseUrl}/world-cup`,

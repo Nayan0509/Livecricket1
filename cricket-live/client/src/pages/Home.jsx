@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchAllMatches, fetchNews, fetchIPLStandings, fetchRankings } from "../api";
+import { fetchAllMatches, fetchNews, fetchIPLStandings, fetchRankings, fetchSportMatches, fetchSportNews } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
-import { trackMatchCardClick, trackWatchClick } from "../utils/analytics";
+import { trackMatchCardClick } from "../utils/analytics";
 
 /* ── Structured data ── */
 const SITE_SD = [
@@ -15,34 +15,237 @@ const SITE_SD = [
     "url": "https://www.livecricketzone.com",
     "description": "Live cricket scores, IPL 2026 points table, T20 World Cup, ODI & Test ball-by-ball commentary",
     "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "https://www.livecricketzone.com/players?search={search_term_string}" }, "query-input": "required name=search_term_string" }
-  },
-  {
-    "@context": "https://schema.org", "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "How can I follow live cricket free on Live Cricket Zone?", "acceptedAnswer": { "@type": "Answer", "text": "Open any live match on Live Cricket Zone for free live scores, ball-by-ball commentary and full scorecards, plus official post-match highlights from the rights holders' YouTube channels. To watch matches live, use your official licensed broadcaster." } },
-      { "@type": "Question", "name": "Where is the IPL 2026 points table?", "acceptedAnswer": { "@type": "Answer", "text": "The IPL 2026 points table is on livecricketzone.com/ipl with live standings updated after every match." } }
-    ]
   }
 ];
 
+const SPORT_SWITCH = [
+  { key: "cricket",    label: "🏏 Cricket"    },
+  { key: "football",   label: "⚽ Football"   },
+  { key: "basketball", label: "🏀 Basketball" },
+  { key: "tennis",     label: "🎾 Tennis"     },
+];
+
 const FORMAT_TABS = [
-  { key: "all",        label: "All" },
-  { key: "ipl",        label: "IPL 2026" },
-  { key: "intl",       label: "International" },
-  { key: "domestic",   label: "Domestic" },
-  { key: "women",      label: "Women's" },
+  { key: "all",      label: "All" },
+  { key: "ipl",      label: "IPL" },
+  { key: "intl",     label: "International" },
+  { key: "domestic", label: "Domestic" },
+  { key: "women",    label: "Women's" },
 ];
 
 function filterByFormat(matches, fmt) {
   if (fmt === "all") return matches;
   const kw = {
-    ipl: ["ipl", "indian premier league"],
-    intl: ["test", "odi", "t20i", "international"],
-    domestic: ["county", "ranji", "domestic", "sheffield", "plunket", "odi", "sma trophy", "super smash"],
-    women: ["women", "woman", "wt20", "wodi"],
+    ipl:      ["ipl", "indian premier league"],
+    intl:     ["test", "odi", "t20i", "international"],
+    domestic: ["county", "ranji", "domestic", "sheffield", "plunket", "super smash"],
+    women:    ["women", "woman", "wt20", "wodi"],
   }[fmt] || [];
   return matches.filter(m =>
     kw.some(k => m.series?.toLowerCase().includes(k) || m.name?.toLowerCase().includes(k) || m.matchType?.toLowerCase().includes(k))
+  );
+}
+
+/* ── Live Dot ── */
+function LiveDot() {
+  return (
+    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#ef4444", display: "inline-block", animation: "livePulse 1.5s infinite", marginRight: 5 }} />
+  );
+}
+
+/* ── Score Bar ── */
+function ScoreBar({ score }) {
+  if (!score?.length) return null;
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8 }}>
+      {score.map((s, i) => (
+        <span key={i} style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", background: "rgba(255,255,255,0.07)", padding: "3px 8px", borderRadius: 6 }}>
+          {s.inning?.split(" ")[0] || ""} {s.r}/{s.w} ({s.o} ov)
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/* ── Match Card ── */
+function MatchCard({ match, onClick }) {
+  const isLive = match.matchStarted && !match.matchEnded;
+  const isCompleted = match.matchEnded;
+  const [t1, t2] = match.teamInfo || [];
+
+  const statusColor = isLive ? "#ef4444" : isCompleted ? "var(--text3)" : "#60a5fa";
+  const statusBg = isLive ? "rgba(239,68,68,0.1)" : isCompleted ? "rgba(255,255,255,0.04)" : "rgba(96,165,250,0.1)";
+
+  return (
+    <div
+      className="match-card-cb"
+      onClick={onClick}
+      style={{ cursor: "pointer", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", transition: "all 0.2s", position: "relative" }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(239,68,68,0.3)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
+    >
+      {/* Top strip */}
+      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#ef4444,#f97316)" : isCompleted ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#3b82f6,#60a5fa)" }} />
+
+      <div style={{ padding: "12px 14px" }}>
+        {/* Series + status */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, maxWidth: "70%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {match.series || match.matchType || "Cricket"}
+          </span>
+          <span style={{ fontSize: 10, fontWeight: 800, color: statusColor, background: statusBg, padding: "2px 7px", borderRadius: 20, display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
+            {isLive && <LiveDot />}
+            {isLive ? "LIVE" : isCompleted ? "Result" : "Upcoming"}
+          </span>
+        </div>
+
+        {/* Teams */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {[t1, t2].map((team, i) => {
+            const sc = match.score?.[i] || match.score?.[i * 2] || null;
+            return (
+              <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                  {team?.img ? (
+                    <img src={team.img} alt={team.name} style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover", background: "rgba(255,255,255,0.05)" }}
+                      onError={e => { e.target.style.display = "none"; }} />
+                  ) : (
+                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "var(--text3)" }}>
+                      {(team?.shortname || team?.name || "?").slice(0, 2)}
+                    </div>
+                  )}
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>
+                    {team?.shortname || team?.name || match.teams?.[i] || "TBA"}
+                  </span>
+                </div>
+                <span style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
+                  {sc ? `${sc.r}/${sc.w}` : match.matchStarted ? "-" : ""}
+                  {sc?.o ? <span style={{ fontSize: 10, color: "var(--text3)", fontWeight: 600, marginLeft: 3 }}>({sc.o})</span> : null}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Status text */}
+        <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--divider)" }}>
+          <p style={{ fontSize: 11, color: isLive ? "#f87171" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
+            {match.status || (match.matchStarted ? "In Progress" : `${match.date || ""}`)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Generic team-vs-team match card (football/basketball/tennis) ── */
+function GenericMatchCard({ match }) {
+  const [a, b] = match.teams || [];
+  const isLive = match.isLive;
+  const statusColor = isLive ? "#ef4444" : match.matchEnded ? "var(--text3)" : "#60a5fa";
+  const statusBg = isLive ? "rgba(239,68,68,0.1)" : match.matchEnded ? "rgba(255,255,255,0.04)" : "rgba(96,165,250,0.1)";
+
+  return (
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#ef4444,#f97316)" : match.matchEnded ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#3b82f6,#60a5fa)" }} />
+      <div style={{ padding: "12px 14px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, maxWidth: "70%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {match.league}
+          </span>
+          <span style={{ fontSize: 10, fontWeight: 800, color: statusColor, background: statusBg, padding: "2px 7px", borderRadius: 20, display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
+            {isLive && <LiveDot />}
+            {isLive ? "LIVE" : match.matchEnded ? "Result" : "Upcoming"}
+          </span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {[a, b].map((t, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{t?.name || "TBD"}</span>
+              <span style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{t?.score || ""}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--divider)" }}>
+          <p style={{ fontSize: 11, color: isLive ? "#f87171" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
+            {match.status}{match.venue ? ` — ${match.venue}` : ""}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Home content for a non-cricket sport tab ── */
+const SPORT_NAMES = { football: "Football", basketball: "Basketball", tennis: "Tennis" };
+const SPORT_PAGE = { football: "/football", basketball: "/basketball", tennis: "/tennis" };
+
+function OtherSportContent({ sport, data, news, loading }) {
+  const name = SPORT_NAMES[sport] || sport;
+  const { live = [], upcoming = [], recent = [] } = data;
+
+  if (loading) {
+    return (
+      <div style={{ padding: "40px 0", textAlign: "center" }}>
+        <div className="spinner" style={{ margin: "0 auto", width: 32, height: 32 }} />
+        <p style={{ color: "var(--text3)", marginTop: 12, fontSize: 13 }}>Loading {name.toLowerCase()} scores…</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {live.length > 0 && (
+        <section style={{ marginBottom: 24 }}>
+          <SectionHeader title={`${name} — Live Now`} link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#ef4444" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+            {live.map(m => <GenericMatchCard key={m.id} match={m} />)}
+          </div>
+        </section>
+      )}
+
+      <AdBanner type="leaderboard" />
+
+      {news.length > 0 && (
+        <section style={{ marginBottom: 24, marginTop: 20 }}>
+          <SectionHeader title={`${name} News`} accent="#3b82f6" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {news.slice(0, 6).map(n => (
+              <a key={n.id} href={n.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                <div style={{ padding: "12px 16px", borderRadius: 10, background: "var(--card)", border: "1px solid var(--border)" }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{n.title}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {recent.length > 0 && (
+        <section style={{ marginBottom: 24 }}>
+          <SectionHeader title="Recent Results" accent="#6366f1" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+            {recent.slice(0, 6).map(m => <GenericMatchCard key={m.id} match={m} />)}
+          </div>
+        </section>
+      )}
+
+      {upcoming.length > 0 && (
+        <section style={{ marginBottom: 24 }}>
+          <SectionHeader title="Upcoming" link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#f59e0b" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+            {upcoming.slice(0, 6).map(m => <GenericMatchCard key={m.id} match={m} />)}
+          </div>
+        </section>
+      )}
+
+      {live.length === 0 && upcoming.length === 0 && recent.length === 0 && (
+        <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card)", borderRadius: 14, border: "1px solid var(--border)" }}>
+          <h3 style={{ color: "var(--text)", marginBottom: 8, fontSize: 18 }}>No {name.toLowerCase()} matches found right now</h3>
+          <p style={{ color: "var(--text3)", fontSize: 13 }}>Check back soon, or visit the full <Link to={SPORT_PAGE[sport]} style={{ color: "#3b82f6" }}>{name} page</Link>.</p>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -51,644 +254,571 @@ function IPLStandingsWidget() {
   const { data, isLoading } = useQuery({
     queryKey: ["iplStandings"],
     queryFn: fetchIPLStandings,
-    refetchInterval: 300000, // 5 minutes
+    refetchInterval: 300000,
   });
-
   const rows = Array.isArray(data?.data) ? data.data : [];
 
   return (
-    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderBottom: "1px solid var(--divider)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
-          IPL 2026 — Points Table
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#ef4444", display: "inline-block" }} />
+          IPL 2026 Points Table
         </span>
-        <Link to="/ipl" style={{ fontSize: 11, color: "#38BDF8", fontWeight: 700 }}>Full Table →</Link>
+        <Link to="/ipl" style={{ fontSize: 11, color: "#ef4444", fontWeight: 700, textDecoration: "none" }}>Full Table →</Link>
       </div>
-
       {isLoading ? (
-        <div style={{ padding: 20, textAlign: "center" }}>
-          <div className="spinner" style={{ width: 24, height: 24, margin: "0 auto" }} />
-        </div>
+        <div style={{ padding: 20, textAlign: "center" }}><div className="spinner" style={{ width: 20, height: 20, margin: "0 auto" }} /></div>
       ) : (
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "rgba(56,189,248,0.06)" }}>
+              <tr style={{ background: "rgba(239,68,68,0.05)" }}>
                 {["#", "Team", "P", "W", "L", "NRR", "Pts"].map(h => (
-                  <th key={h} style={{ padding: "7px 10px", fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.5, color: "var(--text3)", textAlign: h === "Team" ? "left" : "center", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                    {h}
-                  </th>
+                  <th key={h} style={{ padding: "7px 10px", fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.5, color: "var(--text3)", textAlign: h === "Team" ? "left" : "center", borderBottom: "1px solid var(--divider)" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {rows.slice(0, 10).map((r, i) => (
-                <tr
-                  key={r.short || i}
-                  style={{
-                    borderBottom: "1px solid rgba(255,255,255,0.03)",
-                    background: i < 4 ? "rgba(59,130,246,0.03)" : "transparent",
-                    transition: "background 0.15s",
-                  }}
+                <tr key={r.short || i} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)", background: i < 4 ? "rgba(239,68,68,0.03)" : "transparent", transition: "background 0.15s" }}
                   onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(59,130,246,0.03)" : "transparent"; }}
-                >
-                  <td style={{ padding: "8px 10px", fontSize: 10, color: i < 4 ? "#3B82F6" : "var(--text-muted)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
+                  onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(239,68,68,0.03)" : "transparent"; }}>
+                  <td style={{ padding: "8px 10px", fontSize: 11, color: i < 4 ? "#ef4444" : "var(--text3)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
                   <td style={{ padding: "8px 10px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                      <div style={{ width: 22, height: 22, borderRadius: "50%", background: `${r.color}22`, border: `1.5px solid ${r.color}50`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7, fontWeight: 900, color: r.color, flexShrink: 0 }}>
-                        {r.short}
+                      <div style={{ width: 20, height: 20, borderRadius: "50%", background: `${r.color}22`, border: `1.5px solid ${r.color}60`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7, fontWeight: 900, color: r.color, flexShrink: 0 }}>
+                        {r.short?.slice(0, 3)}
                       </div>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text2)", whiteSpace: "nowrap" }}>{r.short}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", whiteSpace: "nowrap" }}>{r.short}</span>
                     </div>
                   </td>
-                  <td style={{ padding: "8px 6px", fontSize: 11, color: "var(--text3)", textAlign: "center" }}>{r.p || "—"}</td>
-                  <td style={{ padding: "8px 6px", fontSize: 11, color: "#3B82F6", fontWeight: 700, textAlign: "center" }}>{r.w || "—"}</td>
-                  <td style={{ padding: "8px 6px", fontSize: 11, color: "#F87171", textAlign: "center" }}>{r.l || "—"}</td>
-                  <td style={{ padding: "8px 6px", fontSize: 10, color: "var(--text3)", textAlign: "center", whiteSpace: "nowrap" }}>{r.nrr || "—"}</td>
-                  <td style={{ padding: "8px 10px", fontSize: 12, fontWeight: 900, color: i < 4 ? "#38BDF8" : "var(--text)", textAlign: "center" }}>{r.pts || "—"}</td>
+                  {["p", "w", "l", "nrr", "pts"].map(k => (
+                    <td key={k} style={{ padding: "8px 10px", textAlign: "center", fontSize: 11, fontWeight: k === "pts" ? 900 : 600, color: k === "pts" ? "#ef4444" : k === "nrr" ? (String(r[k]).startsWith("+") ? "#4ade80" : "#f87171") : "var(--text2)" }}>
+                      {r[k]}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
           </table>
-          <div style={{ padding: "6px 12px", fontSize: 9, color: "var(--text-muted)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-            <span style={{ color: "#3B82F6" }}>●</span> Qualify for Playoffs (Top 4)
-          </div>
         </div>
       )}
     </div>
   );
 }
 
+/* ── Rankings Widget ── */
 function RankingsWidget() {
+  const [format, setFormat] = useState("tests");
   const { data, isLoading } = useQuery({
-    queryKey: ["rankings", "teams", "tests", "men"],
-    queryFn: () => fetchRankings("teams", "tests", "men"),
+    queryKey: ["rankings-widget", "batting", format, "men"],
+    queryFn: () => fetchRankings("batting", format, "men"),
+    staleTime: 3600000,
   });
-  const ranks = (data?.response || []).slice(0, 5);
+  const ranks = data?.response || [];
 
   return (
-    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderBottom: "1px solid var(--divider)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
-          ICC Test Rankings
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#3b82f6", display: "inline-block" }} />
+          ICC Rankings — Batting
         </span>
-        <Link to="/rankings" style={{ fontSize: 11, color: "#3B82F6", fontWeight: 700 }}>Full Rankings →</Link>
+        <Link to="/rankings" style={{ fontSize: 11, color: "#3b82f6", fontWeight: 700, textDecoration: "none" }}>Full →</Link>
       </div>
-      <div>
-        {isLoading ? <div className="spinner" style={{ width: 24, height: 24, margin: "20px auto" }} /> : ranks.map((r, i) => (
-          <div key={r.name || i} style={{
-            display: "flex", alignItems: "center", gap: 10, padding: "9px 16px",
-            borderBottom: "1px solid rgba(255,255,255,0.03)",
-            transition: "background 0.15s",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-          >
-            <span style={{ fontSize: 10, fontWeight: 900, color: "#3B82F6", minWidth: 14 }}>{r.rank || i + 1}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text2)", flex: 1 }}>{r.name}</span>
-            <span style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700 }}>{r.rating}</span>
-          </div>
+      <div style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--divider)" }}>
+        {["tests", "odis", "t20s"].map(f => (
+          <button key={f} onClick={() => setFormat(f)} style={{ flex: 1, background: "none", border: "none", padding: "8px 4px", fontSize: 10, fontWeight: format === f ? 800 : 600, color: format === f ? "#3b82f6" : "var(--text3)", borderBottom: format === f ? "2px solid #3b82f6" : "2px solid transparent", cursor: "pointer", textTransform: "uppercase", letterSpacing: 0.5 }}>
+            {f === "tests" ? "Test" : f === "odis" ? "ODI" : "T20"}
+          </button>
         ))}
       </div>
-    </div>
-  );
-}
-
-/* ── Featured Match (largest live match) ── */
-function FeaturedMatch({ match }) {
-  const navigate = useNavigate();
-  const t1 = match.teamInfo?.[0];
-  const t2 = match.teamInfo?.[1];
-  const s1 = match.score?.[0];
-  const s2 = match.score?.[1];
-
-  const TeamBlock = ({ team, score, align }) => (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: align === "right" ? "flex-end" : "flex-start", gap: 8 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, flexDirection: align === "right" ? "row-reverse" : "row" }}>
-        {team?.img
-          ? <img src={team.img} alt={team.name} style={{ width: 52, height: 52, borderRadius: "50%", border: "2px solid rgba(59,130,246,0.3)", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "2px solid rgba(59,130,246,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#3B82F6" }}>
-              {team?.shortname?.slice(0, 2) || "?"}
-            </div>
-        }
-        <div style={{ textAlign: align === "right" ? "right" : "left" }}>
-          <div style={{ fontWeight: 900, fontSize: 16, color: "#fff" }}>{team?.name || team?.shortname || "TBD"}</div>
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>{team?.shortname}</div>
-        </div>
-      </div>
-      {score ? (
-        <div style={{ textAlign: align === "right" ? "right" : "left" }}>
-          <span style={{ fontSize: 34, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#3B82F6", lineHeight: 1 }}>
-            {score.r}/{score.w}
-          </span>
-          <span style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", fontWeight: 500, marginLeft: 6 }}>
-            ({score.o} ov)
-          </span>
-        </div>
+      {isLoading ? (
+        <div style={{ padding: 16, textAlign: "center" }}><div className="spinner" style={{ width: 18, height: 18, margin: "0 auto" }} /></div>
       ) : (
-        <span style={{ fontSize: 14, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>Yet to bat</span>
+        <div>
+          {ranks.slice(0, 5).map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 14px", borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+              <span style={{ width: 18, textAlign: "center", fontSize: 11, fontWeight: 800, color: i < 3 ? "#ef4444" : "var(--text3)" }}>{i + 1}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{r.name}</div>
+                <div style={{ fontSize: 10, color: "var(--text3)" }}>{r.country}</div>
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 900, color: "#3b82f6", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{r.rating}</span>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
-
-  return (
-    <div
-      onClick={() => { trackMatchCardClick(match.id, match.name, true); navigate(`/match/${match.id}`); }}
-      style={{
-        borderRadius: 18,
-        background: "linear-gradient(135deg, rgba(5,150,105,0.12) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(59,130,246,0.3)",
-        padding: "24px 28px",
-        marginBottom: 14,
-        cursor: "pointer",
-        position: "relative",
-        overflow: "hidden",
-        boxShadow: "0 0 40px rgba(59,130,246,0.08)",
-        transition: "all 0.3s",
-      }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(59,130,246,0.5)"; e.currentTarget.style.boxShadow = "0 0 60px rgba(59,130,246,0.15)"; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"; e.currentTarget.style.boxShadow = "0 0 40px rgba(59,130,246,0.08)"; }}
-    >
-      {/* Decorative pitch lines */}
-      <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "repeating-linear-gradient(90deg, #3B82F6 0 1px, transparent 1px 40px)", pointerEvents: "none" }} />
-
-      {/* Top meta */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span className="live-chip"><span className="dot" />&nbsp;LIVE</span>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>{match.matchType}</span>
-          {match.venue && <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>• {match.venue}</span>}
-        </div>
-        <button
-          onClick={e => { e.stopPropagation(); trackWatchClick(match.id, match.name); navigate(`/match/${match.id}?watch=1`); }}
-          style={{
-            display: "flex", alignItems: "center", gap: 6,
-            background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.4)",
-            color: "#F87171", borderRadius: 100, padding: "7px 16px",
-            fontSize: 12, fontWeight: 700, cursor: "pointer",
-            transition: "all 0.2s",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.28)"; e.currentTarget.style.color = "#fff"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.15)"; e.currentTarget.style.color = "#F87171"; }}
-        >
-          ▶ Highlights
-        </button>
-      </div>
-
-      {/* Teams + Scores */}
-      <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-        <TeamBlock team={t1} score={s1} align="left" />
-        <div style={{
-          flexShrink: 0, padding: "8px 14px", borderRadius: 10,
-          background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
-          fontSize: 12, fontWeight: 900, color: "rgba(255,255,255,0.4)",
-        }}>VS</div>
-        <TeamBlock team={t2} score={s2} align="right" />
-      </div>
-
-      {/* Status */}
-      <div style={{
-        marginTop: 18, padding: "9px 14px", borderRadius: 10,
-        background: "rgba(59,130,246,0.07)", border: "1px solid rgba(59,130,246,0.15)",
-        fontSize: 13, fontWeight: 700, color: "#60A5FA",
-        display: "flex", alignItems: "center", gap: 8,
-      }}>
-        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#3B82F6", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />
-        {match.status}
-      </div>
-    </div>
-  );
 }
 
-/* ── Compact Match Row ── */
-function MatchRow({ match }) {
-  const navigate    = useNavigate();
-  const isLive      = match.matchStarted && !match.matchEnded;
-  const isCompleted = match.matchEnded;
-  const t1 = match.teamInfo?.[0];
-  const t2 = match.teamInfo?.[1];
-  const s1 = match.score?.[0];
-  const s2 = match.score?.[1];
-  const scoreColor = isLive ? "#3B82F6" : isCompleted ? "#60A5FA" : "var(--text)";
-
+/* ── News Card ── */
+function NewsCardSidebar({ item, idx }) {
   return (
-    <div
-      onClick={() => { trackMatchCardClick(match.id, match.name, isLive); navigate(`/match/${match.id}`); }}
-      style={{
-        display: "grid", gridTemplateColumns: "1fr 48px 1fr auto",
-        alignItems: "center", gap: 6, padding: "13px 16px", cursor: "pointer",
-        borderBottom: "1px solid rgba(255,255,255,0.04)",
-        background: isLive ? "rgba(59,130,246,0.03)" : "transparent",
-        transition: "background 0.15s",
-      }}
-      onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(59,130,246,0.07)" : "rgba(255,255,255,0.025)"; }}
-      onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(59,130,246,0.03)" : "transparent"; }}
-    >
-      {/* Team 1 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-        {t1?.img
-          ? <img src={t1.img} alt={t1.name} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", border: `1.5px solid rgba(59,130,246,0.2)`, flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(59,130,246,0.1)", border: "1.5px solid rgba(59,130,246,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#3B82F6", flexShrink: 0 }}>{t1?.shortname?.slice(0, 2) || "?"}</div>
-        }
-        <div style={{ minWidth: 0 }}>
-          <div style={{ fontWeight: 800, fontSize: 12, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            {t1?.shortname || match.teams?.[0] || "TBD"}
-          </div>
-          {s1 && <div style={{ fontSize: 14, fontWeight: 900, color: scoreColor, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", lineHeight: 1.1 }}>
-            {s1.r}/{s1.w} <span style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 500 }}>({s1.o})</span>
-          </div>}
-        </div>
-      </div>
-
-      {/* VS centre */}
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: 9, fontWeight: 900, color: "var(--text-muted)", background: "rgba(255,255,255,0.04)", borderRadius: 5, padding: "2px 4px", display: "inline-block" }}>VS</div>
-        {isLive && <div style={{ marginTop: 2, fontSize: 8, color: "#3B82F6", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
-          <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#3B82F6", animation: "livePulse 1.8s infinite" }} />LIVE
-        </div>}
-        {isCompleted && <div style={{ marginTop: 2, fontSize: 8, color: "#60A5FA", fontWeight: 800 }}>FIN</div>}
-      </div>
-
-      {/* Team 2 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexDirection: "row-reverse", minWidth: 0 }}>
-        {t2?.img
-          ? <img src={t2.img} alt={t2.name} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(56,189,248,0.2)", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-          : <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(56,189,248,0.1)", border: "1.5px solid rgba(56,189,248,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#38BDF8", flexShrink: 0 }}>{t2?.shortname?.slice(0, 2) || "?"}</div>
-        }
-        <div style={{ minWidth: 0, textAlign: "right" }}>
-          <div style={{ fontWeight: 800, fontSize: 12, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            {t2?.shortname || match.teams?.[1] || "TBD"}
-          </div>
-          {s2 && <div style={{ fontSize: 14, fontWeight: 900, color: scoreColor, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", lineHeight: 1.1 }}>
-            {s2.r}/{s2.w} <span style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 500 }}>({s2.o})</span>
-          </div>}
-        </div>
-      </div>
-
-      {/* Watch */}
-      <button
-        onClick={e => { e.stopPropagation(); trackWatchClick(match.id, match.name); navigate(`/match/${match.id}?watch=1`); }}
-        style={{
-          display: "flex", alignItems: "center",
-          background: isLive ? "rgba(239,68,68,0.12)" : "rgba(59,130,246,0.07)",
-          border: `1px solid ${isLive ? "rgba(239,68,68,0.3)" : "rgba(59,130,246,0.18)"}`,
-          color: isLive ? "#F87171" : "#3B82F6",
-          borderRadius: 7, padding: "5px 9px", fontSize: 11, fontWeight: 700,
-          cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.2s", flexShrink: 0,
-        }}
-        onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.22)" : "rgba(59,130,246,0.16)"; e.currentTarget.style.color = "#fff"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.12)" : "rgba(59,130,246,0.07)"; e.currentTarget.style.color = isLive ? "#F87171" : "#3B82F6"; }}
-      >▶</button>
-    </div>
-  );
-}
-
-/* ── News card (compact sidebar-style) ── */
-function NewsCard({ item, compact = false }) {
-  if (compact) {
-    return (
-      <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
-        <div style={{
-          padding: "10px 14px", borderBottom: "1px solid rgba(255,255,255,0.03)",
-          transition: "background 0.15s",
-        }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-        >
-          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text2)", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: 4 }}>
-            {item.title}
-          </div>
-          <div style={{ fontSize: 10, color: "var(--text-muted)", display: "flex", gap: 8 }}>
-            <span className="news-source-badge">{item.source}</span>
-            <span>{item.hoursAgo != null ? `${item.hoursAgo}h ago` : item.date}</span>
-          </div>
-        </div>
-      </a>
-    );
-  }
-
-  return (
-    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
-      <div style={{
-        padding: "14px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)",
-        transition: "background 0.15s",
-      }}
-        onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.025)"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, gap: 8 }}>
-          <span className="news-source-badge">{item.source}</span>
-          <span style={{ fontSize: 10, color: "var(--text-muted)", flexShrink: 0 }}>
-            {item.hoursAgo != null ? `${item.hoursAgo}h ago` : item.date}
-          </span>
-        </div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", lineHeight: 1.5, marginBottom: 6, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-          {item.title}
-        </div>
-        {item.description && (
-          <div style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.6, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-            {item.description}
-          </div>
+    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "flex", gap: 10, padding: "10px 0", borderBottom: "1px solid var(--divider)" }}>
+      <div style={{ width: 68, height: 52, borderRadius: 8, overflow: "hidden", flexShrink: 0, background: "rgba(255,255,255,0.05)" }}>
+        {item.img ? (
+          <img src={item.img} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />
+        ) : (
+          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🏏</div>
         )}
-        <Link
-          to="/news"
-          onClick={e => e.stopPropagation()}
-          style={{ display: "inline-block", marginTop: 8, fontSize: 11, color: "#3B82F6", fontWeight: 700, textDecoration: "none" }}
-        >
-          More cricket news →
-        </Link>
+      </div>
+      <div style={{ flex: 1 }}>
+        <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", lineHeight: 1.4, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+          {item.title}
+        </p>
+        <span style={{ fontSize: 10, color: "var(--text3)", marginTop: 4, display: "block" }}>{item.source} · {item.hoursAgo < 24 ? `${item.hoursAgo}h` : `${item.daysAgo}d`} ago</span>
       </div>
     </a>
   );
 }
 
-const QUICK_LINKS = [
-  { to: "/ipl",              label: "IPL 2026",          color: "#38BDF8" },
-  { to: "/t20-world-cup",    label: "T20 World Cup",     color: "#EF4444" },
-  { to: "/county-championship", label: "County 2026",   color: "#38BDF8" },
-  { to: "/world-cup",        label: "ODI World Cup",     color: "#3B82F6" },
-  { to: "/champions-trophy", label: "Champions Trophy",  color: "#A78BFA" },
-  { to: "/psl",              label: "PSL 2026",          color: "#3B82F6" },
-  { to: "/bbl",              label: "BBL",               color: "#0EA5E9" },
-  { to: "/womens-cricket",   label: "Women's",           color: "#EC4899" },
+/* ── News Featured Card (large) ── */
+function NewsCardFeatured({ item, idx }) {
+  const colors = ["#ef4444", "#3b82f6", "#f59e0b", "#8b5cf6"];
+  const color = colors[idx % colors.length];
+  return (
+    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "flex", flexDirection: "column", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", transition: "all 0.2s" }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = `${color}40`; e.currentTarget.style.transform = "translateY(-2px)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; }}>
+      <div style={{ height: 140, background: "rgba(255,255,255,0.03)", overflow: "hidden", position: "relative" }}>
+        {item.img ? (
+          <img src={item.img} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
+        ) : (
+          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, background: `${color}10` }}>🏏</div>
+        )}
+        <div style={{ position: "absolute", bottom: 8, left: 8 }}>
+          <span style={{ fontSize: 9, fontWeight: 800, color: color, background: `${color}22`, border: `1px solid ${color}40`, padding: "2px 7px", borderRadius: 20, textTransform: "uppercase", letterSpacing: 0.5 }}>
+            {item.category || "Cricket"}
+          </span>
+        </div>
+      </div>
+      <div style={{ padding: "12px 14px" }}>
+        <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", lineHeight: 1.5, margin: "0 0 6px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</h3>
+        <span style={{ fontSize: 10, color: "var(--text3)" }}>{item.source} · {item.hoursAgo < 24 ? `${item.hoursAgo}h ago` : `${item.daysAgo}d ago`}</span>
+      </div>
+    </a>
+  );
+}
+
+/* ── Trending Topics ── */
+const TRENDING = [
+  "IPL 2026", "T20 World Cup", "India vs Australia", "Virat Kohli", "Rohit Sharma",
+  "Jasprit Bumrah", "Ben Stokes", "Champions Trophy", "PSL 2026", "County Cricket"
 ];
 
-export default function Home() {
-  const [matchTab,   setMatchTab]   = useState("live");
-  const [formatTab,  setFormatTab]  = useState("all");
+function TrendingChips() {
+  const navigate = useNavigate();
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+      {TRENDING.map(t => (
+        <button key={t} onClick={() => navigate(`/players?search=${encodeURIComponent(t)}`)} style={{ padding: "6px 13px", borderRadius: 20, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "var(--text2)", fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif" }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.25)"; e.currentTarget.style.color = "#ef4444"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "var(--text2)"; }}>
+          {t}
+        </button>
+      ))}
+    </div>
+  );
+}
 
-  const { data: allMatchesData, isLoading: matchesLoading } = useQuery({
+/* ── Section Header ── */
+function SectionHeader({ title, link, linkLabel, accent = "#ef4444" }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+      <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ width: 3, height: 16, borderRadius: 2, background: accent, display: "inline-block" }} />
+        {title}
+      </h2>
+      {link && (
+        <Link to={link} style={{ fontSize: 12, color: accent, fontWeight: 700, textDecoration: "none" }}>{linkLabel || "View all →"}</Link>
+      )}
+    </div>
+  );
+}
+
+/* ── Fantasy Promo Card ── */
+function FantasyPromoCard() {
+  return (
+    <div style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.08) 100%)", border: "1px solid rgba(139,92,246,0.2)", borderRadius: 12, padding: "16px 18px", marginTop: 16 }}>
+      <div style={{ fontSize: 10, fontWeight: 800, color: "#a78bfa", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>🏆 Fantasy Cricket</div>
+      <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", margin: "0 0 8px", lineHeight: 1.4 }}>Build Your Dream Team</h3>
+      <p style={{ fontSize: 12, color: "var(--text3)", margin: "0 0 12px", lineHeight: 1.6 }}>Get expert picks, captain suggestions & player form analysis.</p>
+      <Link to="/fantasy" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.35)", color: "#a78bfa", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>
+        Fantasy Guide →
+      </Link>
+    </div>
+  );
+}
+
+/* ── Quick Links ── */
+function QuickLinks() {
+  const LINKS = [
+    { label: "Live Scores", to: "/live", emoji: "🔴" },
+    { label: "Schedule", to: "/schedule", emoji: "📅" },
+    { label: "Series", to: "/series", emoji: "🏆" },
+    { label: "Rankings", to: "/rankings", emoji: "📊" },
+    { label: "Stats", to: "/stats", emoji: "📈" },
+    { label: "Teams", to: "/teams", emoji: "🌍" },
+    { label: "Videos", to: "/videos", emoji: "🎬" },
+    { label: "Fantasy", to: "/fantasy", emoji: "✨" },
+  ];
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 20 }}>
+      {LINKS.map(l => (
+        <Link key={l.to} to={l.to} style={{ textDecoration: "none", display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "12px 6px", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, transition: "all 0.2s" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(239,68,68,0.3)"; e.currentTarget.style.background = "rgba(239,68,68,0.04)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.background = "var(--card)"; }}>
+          <span style={{ fontSize: 18 }}>{l.emoji}</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text2)", textAlign: "center" }}>{l.label}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+/* ── Editorial Section & FAQ Accordion for AdSense ── */
+function HomeEditorialSection() {
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const faqs = [
+    {
+      q: "How frequently are live scores updated on Live Cricket Zone?",
+      a: "Live scores on Live Cricket Zone refresh automatically every 15 seconds. For active IPL 2026, T20 World Cup, and international matches, our real-time ball-by-ball engine delivers delivery-by-delivery scorecard updates, over summaries, and instant wicket notifications."
+    },
+    {
+      q: "Can I track full scorecards and ball-by-ball commentary?",
+      a: "Yes. Clicking on any live or completed match card opens a comprehensive match dashboard featuring full batting scorecards, bowling figures, partnership graphs, fall of wickets, over-by-over progress bars, and ball-by-ball commentary text."
+    },
+    {
+      q: "What tournaments and cricket formats are covered?",
+      a: "We provide comprehensive 360° coverage across all international and premier domestic formats: Test Cricket (including ICC World Test Championship), One Day Internationals (ODI World Cup, Asia Cup, Champions Trophy), T20 Internationals, Indian Premier League (IPL 2026), Pakistan Super League (PSL), Big Bash League (BBL), Caribbean Premier League (CPL), Bangladesh Premier League (BPL), County Championship, and Women's International Cricket."
+    },
+    {
+      q: "Where are official match video highlights sourced from?",
+      a: "All match video highlights on Live Cricket Zone are embedded strictly from official rights holders' verified YouTube channels (e.g. BCCI, ICC, England Cricket, Cricket Australia). We do not host or stream unverified video content."
+    },
+    {
+      q: "How are ICC Team and Player Rankings calculated?",
+      a: "Our ICC Rankings section updates regularly according to the official International Cricket Council rating formula, ranking top 10 batters, bowlers, and all-rounders across Test, ODI, and T20I formats."
+    }
+  ];
+
+  return (
+    <div style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* Editorial Overview Box */}
+      <section style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px", color: "var(--text2)", fontSize: 14, lineHeight: 1.8 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", marginBottom: 12 }}>
+          Live Cricket Scores, Scorecards & Match Analysis Hub
+        </h2>
+        <p style={{ marginBottom: 14 }}>
+          Welcome to <strong style={{ color: "var(--text)" }}>Live Cricket Zone</strong> — your ultimate destination for real-time cricket updates, live scorecards, ball-by-ball commentary, and match statistics worldwide. Whether you are tracking the high-octane action of <strong style={{ color: "var(--text)" }}>IPL 2026</strong>, international Test series battles, ODI World Cup clashes, or domestic county fixtures, our high-speed platform delivers accurate data updated every 15 seconds.
+        </p>
+        <p style={{ marginBottom: 14 }}>
+          Our coverage spans every major cricket-playing nation, including India, Australia, England, Pakistan, South Africa, New Zealand, West Indies, Sri Lanka, Bangladesh, and Afghanistan. Fans can explore detailed player stats, team head-to-head records, ICC player rankings, upcoming series schedules, and post-match editorial summaries.
+        </p>
+        <p style={{ margin: 0 }}>
+          Designed with a mobile-first performance architecture, Live Cricket Zone ensures seamless reading and fast scorecard loading on 3G, 4G, and 5G mobile networks without intrusive popups or disruptive layouts.
+        </p>
+      </section>
+
+      {/* FAQ Accordion */}
+      <section style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px" }}>
+        <h2 style={{ fontSize: 18, fontWeight: 900, color: "var(--text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ color: "#ef4444" }}>❓</span> Frequently Asked Questions (FAQ)
+        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {faqs.map((faq, i) => {
+            const isOpen = openFaq === i;
+            return (
+              <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden", background: isOpen ? "rgba(255,255,255,0.02)" : "transparent" }}>
+                <button
+                  onClick={() => setOpenFaq(isOpen ? null : i)}
+                  style={{
+                    width: "100%", padding: "14px 16px", background: "none", border: "none",
+                    textAlign: "left", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center",
+                    color: "var(--text)", fontWeight: 700, fontSize: 14, gap: 12
+                  }}
+                >
+                  <span>{faq.q}</span>
+                  <span style={{ color: "var(--text3)", fontSize: 16, transition: "transform 0.2s", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+                </button>
+                {isOpen && (
+                  <div style={{ padding: "0 16px 14px", color: "var(--text2)", fontSize: 13, lineHeight: 1.7, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 10 }}>
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ── Main Export ── */
+export default function Home() {
+  const navigate = useNavigate();
+  const [fmt, setFmt] = useState("all");
+  const [activeSport, setActiveSport] = useState("cricket");
+
+  const { data: matchData, isLoading } = useQuery({
     queryKey: ["allMatches"],
     queryFn: fetchAllMatches,
     refetchInterval: 30000,
+    enabled: activeSport === "cricket",
   });
+
   const { data: newsData } = useQuery({
     queryKey: ["news"],
     queryFn: fetchNews,
+    staleTime: 300000,
+    enabled: activeSport === "cricket",
   });
 
-  const liveMatches     = allMatchesData?.data?.live     || [];
-  const recentMatches   = allMatchesData?.data?.recent   || [];
-  const upcomingMatches = allMatchesData?.data?.upcoming || [];
-  const newsItems       = Array.isArray(newsData?.data) ? newsData.data : [];
+  const { data: otherSportMatches, isLoading: otherSportLoading } = useQuery({
+    queryKey: ["sportMatches", activeSport],
+    queryFn: () => fetchSportMatches(activeSport),
+    refetchInterval: 30000,
+    enabled: activeSport !== "cricket",
+  });
 
-  const tabPool = matchTab === "live" ? liveMatches : matchTab === "recent" ? recentMatches : upcomingMatches;
-  const visibleMatches = filterByFormat(tabPool, formatTab);
+  const { data: otherSportNews } = useQuery({
+    queryKey: ["sportNews", activeSport],
+    queryFn: () => fetchSportNews(activeSport),
+    staleTime: 300000,
+    enabled: activeSport !== "cricket",
+  });
 
-  // The "featured" match is the first live IPL or international match
-  const featuredMatch = liveMatches.find(m =>
-    m.series?.toLowerCase().includes("ipl") ||
-    m.name?.toLowerCase().includes("india") ||
-    m.name?.toLowerCase().includes("australia") ||
-    m.name?.toLowerCase().includes("england") ||
-    m.name?.toLowerCase().includes("pakistan")
-  ) || liveMatches[0];
+  const allMatches = matchData?.data || {};
+  const liveRaw = allMatches.live || [];
+  const recentRaw = allMatches.recent || [];
+  const upcomingRaw = allMatches.upcoming || [];
+  const allList = [...liveRaw, ...recentRaw, ...upcomingRaw];
+
+  const filtered = filterByFormat(allList, fmt);
+  const filteredLive = filtered.filter(m => m.matchStarted && !m.matchEnded);
+  const filteredRecent = filtered.filter(m => m.matchEnded);
+  const filteredUpcoming = filtered.filter(m => !m.matchStarted);
+
+  const newsItems = newsData?.data || [];
+
+  const goToMatch = (m) => {
+    trackMatchCardClick(m.id, m.name);
+    navigate(`/match/${m.id}`);
+  };
 
   return (
-    <div style={{ maxWidth: 1320, margin: "0 auto", padding: "0 16px 60px" }}>
+    <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 12px 60px" }}>
       <SEO
-        title="Live Cricket Score Today — IPL 2026 Points Table, T20, ODI, Test Ball-by-Ball"
-        description="Live Cricket Zone: IPL 2026 live score, points table, ball-by-ball commentary. T20 World Cup, ODI & Test matches. Free live scores and official highlights — updated every 15 seconds."
+        title="Live Cricket Score 2026 — IPL, T20 World Cup, Ball-by-Ball"
+        description="Live cricket scores 2026: IPL 2026 points table, T20 World Cup, ODI & Test ball-by-ball commentary, scorecards, rankings and news aggregated from trusted sources."
+        keywords="live cricket score, IPL 2026, cricket score today, ball by ball commentary, T20 World Cup, cricket live"
         url="/"
-        keywords="live cricket score today, IPL 2026 live score, IPL 2026 points table, T20 World Cup live, cricket score today, cricket highlights, ball by ball cricket, IPL standings 2026"
         structuredData={SITE_SD}
       />
 
-      {/* ── Format Quick Links ── */}
-      <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4, marginTop: 14, marginBottom: 14, scrollbarWidth: "none" }}>
-        {QUICK_LINKS.map(l => (
-          <Link key={l.to} to={l.to} style={{
-            flexShrink: 0, padding: "6px 14px", borderRadius: 20,
-            fontSize: 12, fontWeight: 700, color: l.color,
-            background: `${l.color}12`, border: `1px solid ${l.color}30`,
-            transition: "all 0.2s", whiteSpace: "nowrap",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = `${l.color}24`; e.currentTarget.style.borderColor = `${l.color}55`; }}
-            onMouseLeave={e => { e.currentTarget.style.background = `${l.color}12`; e.currentTarget.style.borderColor = `${l.color}30`; }}
-          >
-            {l.label}
-          </Link>
+      {/* Sport Switcher */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 14, marginTop: 8, flexWrap: "wrap" }}>
+        {SPORT_SWITCH.map(s => (
+          <button key={s.key} onClick={() => setActiveSport(s.key)} style={{
+            padding: "7px 16px", borderRadius: 20, fontSize: 13, fontWeight: activeSport === s.key ? 800 : 600,
+            background: activeSport === s.key ? "rgba(239,68,68,0.12)" : "rgba(255,255,255,0.04)",
+            border: `1px solid ${activeSport === s.key ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.09)"}`,
+            color: activeSport === s.key ? "#ef4444" : "var(--text2)", cursor: "pointer", transition: "all 0.18s",
+            fontFamily: "'Inter',sans-serif",
+          }}>
+            {s.label}
+          </button>
         ))}
       </div>
 
-      {/* ── MAIN LAYOUT: Left (Matches+News) + Right (Sidebar) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 290px", gap: 16, alignItems: "start" }} className="home-main">
-
-        {/* ══ LEFT COLUMN ══ */}
-        <div>
-          {/* Featured live match */}
-          {featuredMatch && <FeaturedMatch match={featuredMatch} />}
-
-          {/* Match panel */}
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden", marginBottom: 16 }}>
-            {/* Status tabs */}
-            <div style={{ display: "flex", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-              {[
-                { key: "live",     label: "Live",     count: liveMatches.length,     color: "#EF4444" },
-                { key: "recent",   label: "Recent",   count: recentMatches.length,   color: "#3B82F6" },
-                { key: "upcoming", label: "Upcoming", count: upcomingMatches.length, color: "#38BDF8" },
-              ].map(tab => (
-                <button key={tab.key} onClick={() => setMatchTab(tab.key)} style={{
-                  flex: 1, background: "none", border: "none", cursor: "pointer",
-                  padding: "10px 6px", fontSize: 12, fontWeight: 700,
-                  color: matchTab === tab.key ? tab.color : "var(--text-muted)",
-                  borderBottom: matchTab === tab.key ? `2px solid ${tab.color}` : "2px solid transparent",
-                  marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif",
-                }}>
-                  {tab.label}
-                  <span style={{ marginLeft: 5, fontSize: 10, background: matchTab === tab.key ? `${tab.color}18` : "rgba(255,255,255,0.04)", color: matchTab === tab.key ? tab.color : "var(--text-muted)", padding: "1px 6px", borderRadius: 8, fontWeight: 800 }}>
-                    {tab.count}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* Format filter */}
-            <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(255,255,255,0.04)", padding: "0 12px", overflowX: "auto", scrollbarWidth: "none" }}>
-              {FORMAT_TABS.map(f => (
-                <button key={f.key} onClick={() => setFormatTab(f.key)} style={{
-                  background: "none", border: "none", cursor: "pointer", padding: "8px 12px",
-                  fontSize: 11, fontWeight: formatTab === f.key ? 800 : 600,
-                  color: formatTab === f.key ? "#3B82F6" : "var(--text3)",
-                  borderBottom: formatTab === f.key ? "2px solid #3B82F6" : "2px solid transparent",
-                  marginBottom: -1, transition: "color 0.2s", whiteSpace: "nowrap",
-                  fontFamily: "'Inter',sans-serif",
-                }}>
-                  {f.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Match list */}
-            {matchesLoading
-              ? <div style={{ padding: 28, textAlign: "center" }}><div className="spinner" style={{ margin: "0 auto", width: 28, height: 28 }} /></div>
-              : visibleMatches.length === 0
-              ? <div style={{ padding: "28px 16px", textAlign: "center" }}>
-                  <div style={{ fontSize: 28, marginBottom: 8 }}>🏏</div>
-                  <p style={{ color: "var(--text-muted)", fontSize: 13 }}>
-                    No {matchTab === "live" ? "live" : matchTab === "recent" ? "recent" : "upcoming"} {formatTab !== "all" ? FORMAT_TABS.find(f => f.key === formatTab)?.label : ""} matches right now.
-                  </p>
-                </div>
-              : visibleMatches.map(m => <MatchRow key={m.id} match={m} />)
-            }
-          </div>
-
-          {/* ── AD: Below match panel ── */}
-          <AdBanner type="auto" />
-
-          {/* ── NEWS FEED (below matches on left) ── */}
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden", marginTop: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-              <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
-                Cricket News Today
-              </span>
-              <Link to="/news" style={{ fontSize: 11, color: "#3B82F6", fontWeight: 700 }}>View All →</Link>
-            </div>
-
-            {newsItems.length === 0
-              ? <div style={{ padding: "24px 16px", textAlign: "center", color: "var(--text-muted)", fontSize: 12 }}>Loading news…</div>
-              : <>
-                  {newsItems.slice(0, 5).map((item, i) => <NewsCard key={item.id || i} item={item} />)}
-                  <div style={{ padding: "10px 12px" }}><AdBanner type="auto" /></div>
-                  {newsItems.slice(5, 10).map((item, i) => <NewsCard key={item.id || (i + 5)} item={item} />)}
-                </>
-            }
-          </div>
-        </div>
-
-        {/* ══ RIGHT SIDEBAR ══ */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-
-          {/* Today stats */}
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
-            <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
-              Today's Cricket
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
-              {[
-                { label: "Live",   v: liveMatches.length,     c: "#EF4444", bg: "rgba(239,68,68,0.07)" },
-                { label: "Recent", v: recentMatches.length,   c: "#3B82F6", bg: "rgba(59,130,246,0.07)" },
-                { label: "Soon",   v: upcomingMatches.length, c: "#38BDF8", bg: "rgba(56,189,248,0.07)" },
-              ].map((s, i) => (
-                <div key={i} style={{ padding: "12px 6px", textAlign: "center", background: s.bg, borderRight: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                  <div style={{ fontSize: 24, fontWeight: 900, color: s.c, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{s.v}</div>
-                  <div style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.4, marginTop: 2 }}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* IPL Points Table */}
-          <IPLStandingsWidget />
-
-          {/* Ad rectangle */}
-          <AdBanner type="rectangle" />
-
-          {/* ICC Rankings */}
-          <RankingsWidget />
-
-          {/* Series & Leagues */}
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
-            <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#38BDF8,#0EA5E9)", display: "inline-block" }} />
-              Series &amp; Leagues
-            </div>
-            <div style={{ padding: "4px 0" }}>
-              {QUICK_LINKS.map(l => (
-                <Link key={l.to} to={l.to} style={{
-                  display: "flex", alignItems: "center", gap: 9,
-                  padding: "8px 14px", fontSize: 12, fontWeight: 600, color: "var(--text2)",
-                  transition: "background 0.15s, color 0.15s",
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.05)"; e.currentTarget.style.color = "#3B82F6"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
-                >
-                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: l.color, boxShadow: `0 0 5px ${l.color}70`, flexShrink: 0 }} />
-                  {l.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick nav */}
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
-            <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 3, height: 12, borderRadius: 2, background: "linear-gradient(180deg,#3B82F6,#2563EB)", display: "inline-block" }} />
-              Quick Access
-            </div>
-            <div style={{ padding: "4px 0" }}>
-              {[
-                ["📅 Schedule",   "/schedule"],
-                ["📋 Results",    "/results"],
-                ["👤 Players",    "/players"],
-                ["🏏 Teams",      "/teams"],
-                ["🏆 All Series", "/series"],
-                ["📈 Stats",      "/stats"],
-                ["📰 News",       "/news"],
-                ["📊 Rankings",   "/rankings"],
-              ].map(([label, to]) => (
-                <Link key={to} to={to} style={{
-                  display: "block", padding: "8px 14px", fontSize: 12, fontWeight: 600, color: "var(--text2)",
-                  transition: "background 0.15s, color 0.15s",
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.05)"; e.currentTarget.style.color = "#3B82F6"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Recent news (compact sidebar) */}
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-              <span style={{ fontSize: 11, fontWeight: 800, color: "var(--text)" }}>Latest News</span>
-              <Link to="/news" style={{ fontSize: 10, color: "#3B82F6", fontWeight: 700 }}>More →</Link>
-            </div>
-            {newsItems.slice(0, 6).map((item, i) => (
-              <NewsCard key={item.id || i} item={item} compact />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Ad above SEO section ── */}
-      <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
-
-      {/* ── SEO Content Block ── */}
-      <section aria-label="About Live Cricket Zone" style={{
-        marginTop: 16, padding: "22px 24px", borderRadius: 14,
-        background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.06)",
-      }}>
-        <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 3, background: "linear-gradient(180deg,#2563EB,#3B82F6)", display: "inline-block" }} />
-          Live Cricket Score Today — IPL 2026, T20 &amp; All Formats
-        </h2>
-        <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8, marginBottom: 8 }}>
-          Live Cricket Zone delivers fast live cricket scores updated every 15 seconds with full ball-by-ball commentary. Follow <strong style={{ color: "var(--text2)" }}>IPL 2026 live score and points table</strong>, T20 World Cup, ODI & Test matches worldwide, plus official post-match highlights embedded from YouTube.
-        </p>
-        <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.8 }}>
-          Coverage includes: <strong style={{ color: "var(--text2)" }}>IPL 2026, T20 World Cup, ODI World Cup, Asia Cup, Champions Trophy, PSL, BBL, CPL, County Championship</strong>, Ranji Trophy, and all international series between all ICC member nations.
-        </p>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
-          {["IPL 2026 Points Table", "IPL Live Score", "T20 Live Score", "Cricket Score Today", "Ball by Ball", "Match Highlights", "ODI Live", "Test Match Live", "ICC Rankings 2026", "Cricket News Today"].map(tag => (
-            <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20, background: "rgba(59,130,246,0.07)", border: "1px solid rgba(59,130,246,0.14)", color: "rgba(52,211,153,0.8)" }}>{tag}</span>
+      {/* Format Tabs (cricket only) */}
+      {activeSport === "cricket" && (
+        <div style={{ display: "flex", gap: 0, marginBottom: 16, borderBottom: "1px solid var(--divider)", overflowX: "auto", scrollbarWidth: "none" }}>
+          {FORMAT_TABS.map(t => (
+            <button key={t.key} onClick={() => setFmt(t.key)} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", padding: "10px 18px", fontSize: 13, fontWeight: fmt === t.key ? 800 : 600, color: fmt === t.key ? "#ef4444" : "var(--text3)", borderBottom: `2px solid ${fmt === t.key ? "#ef4444" : "transparent"}`, transition: "all 0.18s", fontFamily: "'Inter',sans-serif" }}>
+              {t.label}
+            </button>
           ))}
         </div>
-      </section>
+      )}
 
-      <style>{`
-        @media (max-width: 1024px) {
-          .home-main { grid-template-columns: 1fr !important; }
-        }
-        @keyframes skeletonPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.6; } }
-      `}</style>
+      {/* 2-column layout: main (65%) + sidebar (35%) */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20, alignItems: "start" }}>
+
+        {/* ── LEFT COLUMN ── */}
+        <div>
+          {/* Quick Links */}
+          <QuickLinks />
+
+          {/* Loading */}
+          {isLoading && (
+            <div style={{ padding: "40px 0", textAlign: "center" }}>
+              <div className="spinner" style={{ margin: "0 auto", width: 32, height: 32 }} />
+              <p style={{ color: "var(--text3)", marginTop: 12, fontSize: 13 }}>Loading matches…</p>
+            </div>
+          )}
+
+          {activeSport === "cricket" ? (
+            <>
+              {/* LIVE MATCHES */}
+              {!isLoading && filteredLive.length > 0 && (
+                <section style={{ marginBottom: 24 }}>
+                  <SectionHeader title="Live Matches" link="/live" linkLabel="All Live →" accent="#ef4444" />
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+                    {filteredLive.map(m => <MatchCard key={m.id} match={m} onClick={() => goToMatch(m)} />)}
+                  </div>
+                </section>
+              )}
+
+              {/* Ad */}
+              <AdBanner type="leaderboard" />
+
+              {/* NEWS GRID (featured articles) */}
+              {newsItems.length > 0 && (
+                <section style={{ marginBottom: 24, marginTop: 20 }}>
+                  <SectionHeader title="Top Stories" link="/news" linkLabel="All News →" accent="#3b82f6" />
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 }}>
+                    {newsItems.slice(0, 6).map((n, i) => <NewsCardFeatured key={n.id || i} item={n} idx={i} />)}
+                  </div>
+                </section>
+              )}
+
+              {/* RECENT RESULTS */}
+              {!isLoading && filteredRecent.length > 0 && (
+                <section style={{ marginBottom: 24 }}>
+                  <SectionHeader title="Recent Results" link="/results" linkLabel="All Results →" accent="#6366f1" />
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+                    {filteredRecent.slice(0, 6).map(m => <MatchCard key={m.id} match={m} onClick={() => goToMatch(m)} />)}
+                  </div>
+                </section>
+              )}
+
+              {/* UPCOMING MATCHES */}
+              {!isLoading && filteredUpcoming.length > 0 && (
+                <section style={{ marginBottom: 24 }}>
+                  <SectionHeader title="Upcoming Matches" link="/upcoming" linkLabel="Full Schedule →" accent="#f59e0b" />
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
+                    {filteredUpcoming.slice(0, 6).map(m => <MatchCard key={m.id} match={m} onClick={() => goToMatch(m)} />)}
+                  </div>
+                </section>
+              )}
+
+              {/* Trending */}
+              <section style={{ marginBottom: 24 }}>
+                <SectionHeader title="Trending" accent="#f59e0b" />
+                <TrendingChips />
+              </section>
+
+              {/* All-format empty state */}
+              {!isLoading && filtered.length === 0 && (
+                <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card)", borderRadius: 14, border: "1px solid var(--border)" }}>
+                  <div style={{ fontSize: 40, marginBottom: 12 }}>🏏</div>
+                  <h3 style={{ color: "var(--text)", marginBottom: 8, fontSize: 18 }}>No matches for this filter</h3>
+                  <p style={{ color: "var(--text3)", fontSize: 13 }}>Try a different category or check back soon.</p>
+                </div>
+              )}
+
+              {/* Editorial Content & FAQ Section for AdSense High Value Content */}
+              <HomeEditorialSection />
+            </>
+          ) : (
+            <OtherSportContent
+              sport={activeSport}
+              data={otherSportMatches?.data || { live: [], upcoming: [], recent: [] }}
+              news={otherSportNews?.data || []}
+              loading={otherSportLoading}
+            />
+          )}
+
+          <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
+        </div>
+
+        {/* ── RIGHT SIDEBAR ── */}
+        <aside style={{ position: "sticky", top: 80, display: "flex", flexDirection: "column", gap: 16 }}>
+          {activeSport === "cricket" ? (
+            <>
+              <IPLStandingsWidget />
+              <RankingsWidget />
+
+              {/* News sidebar */}
+              {newsItems.length > 0 && (
+                <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+                  <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
+                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#f59e0b", display: "inline-block" }} />
+                      Latest News
+                    </span>
+                    <Link to="/news" style={{ fontSize: 11, color: "#f59e0b", fontWeight: 700, textDecoration: "none" }}>All →</Link>
+                  </div>
+                  <div style={{ padding: "4px 14px" }}>
+                    {newsItems.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} idx={i} />)}
+                  </div>
+                </div>
+              )}
+
+              <FantasyPromoCard />
+
+              {/* Featured Tournaments */}
+              <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px" }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#22d3ee", display: "inline-block" }} />
+                  Featured Tournaments
+                </div>
+                {[
+                  { to: "/ipl", label: "IPL 2026", dot: "#ef4444" },
+                  { to: "/t20-world-cup", label: "T20 World Cup", dot: "#f59e0b" },
+                  { to: "/champions-trophy", label: "Champions Trophy", dot: "#a78bfa" },
+                  { to: "/psl", label: "PSL 2026", dot: "#60a5fa" },
+                  { to: "/world-cup", label: "ODI World Cup", dot: "#4ade80" },
+                  { to: "/asia-cup", label: "Asia Cup", dot: "#f472b6" },
+                  { to: "/bbl", label: "Big Bash League", dot: "#fb923c" },
+                  { to: "/womens-cricket", label: "Women's Cricket", dot: "#e879f9" },
+                ].map(s => (
+                  <Link key={s.to} to={s.to} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: s.dot, display: "inline-block", flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text2)", transition: "color 0.15s" }}>{s.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Other-sport news sidebar */}
+              {(otherSportNews?.data || []).length > 0 && (
+                <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
+                  <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
+                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#f59e0b", display: "inline-block" }} />
+                      Latest News
+                    </span>
+                  </div>
+                  <div style={{ padding: "4px 14px" }}>
+                    {otherSportNews.data.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} idx={i} />)}
+                  </div>
+                </div>
+              )}
+
+              {/* Other Sports quick links */}
+              <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px" }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#22d3ee", display: "inline-block" }} />
+                  More Sports
+                </div>
+                {SPORT_SWITCH.filter(s => s.key !== activeSport).map(s => (
+                  <button key={s.key} onClick={() => setActiveSport(s.key)} style={{ width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "var(--text2)", fontSize: 12, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }
