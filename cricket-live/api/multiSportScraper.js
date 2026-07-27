@@ -29,10 +29,22 @@ const SPORT_LEAGUES = {
     { slug: "ger.1", name: "Bundesliga" },
     { slug: "fra.1", name: "Ligue 1" },
     { slug: "uefa.champions", name: "UEFA Champions League" },
+    { slug: "uefa.europa", name: "UEFA Europa League" },
     { slug: "usa.1", name: "MLS" },
+    { slug: "ned.1", name: "Eredivisie" },
+    { slug: "por.1", name: "Primeira Liga" },
+    { slug: "bra.1", name: "Brasileirão" },
+    { slug: "mex.1", name: "Liga MX" },
+    { slug: "eng.2", name: "EFL Championship" },
+    { slug: "sco.1", name: "Scottish Premiership" },
+    { slug: "tur.1", name: "Süper Lig" },
+    { slug: "arg.1", name: "Argentine Primera División" },
+    { slug: "conmebol.libertadores", name: "Copa Libertadores" },
+    { slug: "fifa.world", name: "FIFA World Cup" },
   ],
   basketball: [
     { slug: "nba", name: "NBA" },
+    { slug: "wnba", name: "WNBA" },
     { slug: "mens-college-basketball", name: "NCAA Men's Basketball" },
     { slug: "womens-college-basketball", name: "NCAA Women's Basketball" },
   ],
@@ -162,23 +174,34 @@ async function getSportNews(sport) {
   const cached = newsCache.get(cacheKey);
   if (cached) return cached;
 
-  // Pull from the sport's primary league only — avoids one duplicate-content
-  // feed per league for what is ultimately the same global news wire.
-  const primary = leagues[0];
-  const url = `${ESPN_BASE}/${ESPN_SPORT_SLUG[sport]}/${primary.slug}/news`;
-  let articles = [];
-  try {
-    const { data } = await axios.get(url, { headers, timeout: 10000, params: { limit: 20 } });
-    articles = (data.articles || []).map(a => ({
-      id: String(a.id),
-      title: a.headline,
-      description: a.description,
-      url: (a.links && a.links.web && a.links.web.href) || "",
-      img: (a.images && a.images[0] && a.images[0].url) || "",
-      source: "ESPN",
-      date: a.published,
-    }));
-  } catch (_) {}
+  // Pull from each league's own news feed and merge — genuinely distinct
+  // real articles per league, not one feed duplicated under many labels.
+  const results = await Promise.allSettled(
+    leagues.map(l => axios.get(`${ESPN_BASE}/${ESPN_SPORT_SLUG[sport]}/${l.slug}/news`, {
+      headers, timeout: 10000, params: { limit: 15 },
+    }))
+  );
+
+  const seen = new Set();
+  const articles = [];
+  results.forEach(r => {
+    if (r.status !== "fulfilled") return;
+    (r.value.data.articles || []).forEach(a => {
+      const id = String(a.id);
+      if (seen.has(id)) return;
+      seen.add(id);
+      articles.push({
+        id,
+        title: a.headline,
+        description: a.description,
+        url: (a.links && a.links.web && a.links.web.href) || "",
+        img: (a.images && a.images[0] && a.images[0].url) || "",
+        source: "ESPN",
+        date: a.published,
+      });
+    });
+  });
+  articles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   newsCache.set(cacheKey, articles);
   return articles;

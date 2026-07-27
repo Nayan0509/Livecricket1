@@ -490,8 +490,16 @@ async function getNews() {
 
 // ─── STATIC META ─────────────────────────────────────────────────────────────
 
-function serveMeta(url, res) {
-  if (url.includes("sitemap.xml")) {
+function serveMeta(url, res, req) {
+  const reqPath = [
+    url,
+    req?.headers?.["x-matched-path"],
+    req?.headers?.["x-forwarded-uri"],
+    req?.headers?.["x-original-url"],
+    req?.headers?.["x-invoke-path"],
+  ].filter(Boolean).join(" ");
+
+  if (reqPath.includes("sitemap.xml")) {
     const now = new Date().toISOString().split("T")[0];
     const base = "https://www.livecricketzone.com";
     const pages = [
@@ -533,15 +541,11 @@ function serveMeta(url, res) {
       { loc: "/best-cricket-website",    pri: "0.85", freq: "daily"  },
     ];
 
-    // Try to add live match URLs dynamically
-    let matchUrls = "";
-    // (async match injection happens in the main handler for /sitemap.xml)
-
     const urlEntries = pages.map(p =>
       `  <url><loc>${base}${p.loc}</loc><changefreq>${p.freq}</changefreq><priority>${p.pri}</priority><lastmod>${now}</lastmod></url>`
     ).join("\n");
 
-    res.setHeader("Content-Type", "application/xml");
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
     res.setHeader("X-Robots-Tag", "noindex");
     res.status(200).send(
@@ -549,12 +553,13 @@ function serveMeta(url, res) {
     );
     return true;
   }
-  if (url.includes("robots.txt")) {
-    res.setHeader("Content-Type", "text/plain");
+  if (reqPath.includes("robots.txt")) {
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "s-maxage=86400");
     res.status(200).send(
       "User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /*.json$\nCrawl-delay: 1\n\n" +
       "User-agent: Googlebot\nAllow: /\nCrawl-delay: 0\n\n" +
+      "User-agent: Mediapartners-Google\nAllow: /\n\n" +
       "User-agent: Bingbot\nAllow: /\nCrawl-delay: 1\n\n" +
       "User-agent: adidxbot\nAllow: /\nCrawl-delay: 1\n\n" +
       "User-agent: msnbot\nAllow: /\nCrawl-delay: 1\n\n" +
@@ -562,9 +567,16 @@ function serveMeta(url, res) {
     );
     return true;
   }
-  if (url.includes("ads.txt")) {
-    res.setHeader("Content-Type", "text/plain");
-    res.status(200).send("google.com, pub-8179151029580359, DIRECT, f08c47fec0942fa0");
+  if (reqPath.includes("ads.txt")) {
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    res.status(200).send("google.com, pub-8179151029580359, DIRECT, f08c47fec0942fa0\n");
+    return true;
+  }
+  if (reqPath.includes("BingSiteAuth.xml")) {
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    res.status(200).send('<?xml version="1.0"?><users><user>A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6</user></users>');
     return true;
   }
   return false;
@@ -968,7 +980,7 @@ module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(200).end();
-  if (serveMeta(req.url || "", res)) return;
+  if (serveMeta(req.url || "", res, req)) return;
 
   // ── Bot detection: serve pre-rendered HTML to crawlers ───────────────────
   if (isBot(req)) {

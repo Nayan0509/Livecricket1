@@ -35,6 +35,11 @@ app.use("/api/indexnow", require("./routes/indexnow"));
 app.use("/api/seo",      require("./routes/seo"));
 app.use("/api/youtube",  require("./routes/youtube"));
 
+app.get("/ads.txt", (req, res) => {
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.send("google.com, pub-8179151029580359, DIRECT, f08c47fec0942fa0\n");
+});
+
 app.get("/api/health", (req, res) => res.json({
   status: "ok",
   mode: "Scale Up (Scraper Enabled)",
