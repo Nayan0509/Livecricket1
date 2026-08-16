@@ -20,6 +20,7 @@ app.use("/api/teams",    require("./routes/teams"));
 app.use("/api/venues",   require("./routes/venues"));
 app.use("/api/stats",    require("./routes/stats"));
 app.use("/api/sports",   require("./routes/sports"));
+app.use("/api/games",    require("./routes/games"));
 app.use("/api/browse-matches", (req, res, next) => {
   const scraper = require("./utils/scraper");
   const date = req.query.date;

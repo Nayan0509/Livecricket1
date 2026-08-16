@@ -94,13 +94,16 @@ export default function Footer() {
               Resources
             </div>
             {[
-              ["News",        "/news"],
-              ["ICC Rankings","/rankings"],
-              ["Stats",       "/stats"],
-              ["Players",     "/players"],
-              ["Teams",       "/teams"],
-              ["All Series",  "/series"],
-              ["About Us",    "/about"],
+              ["News",             "/news"],
+              ["🎮 Play Games",    "/games"],
+              ["ICC Rankings",     "/rankings"],
+              ["Stats",            "/stats"],
+              ["Players",          "/players"],
+              ["Teams",            "/teams"],
+              ["All Series",       "/series"],
+              ["Editorial Policy", "/editorial-policy"],
+              ["Contact Us",       "/contact"],
+              ["About Us",         "/about"],
             ].map(([label, href]) => (
               <Link key={href} to={href} style={{ display: "block", color: "var(--text3)", fontSize: 13, marginBottom: 8, textDecoration: "none", transition: "color 0.15s" }}
                 onMouseEnter={e => { e.currentTarget.style.color = "var(--text2)"; }}
@@ -140,14 +143,17 @@ export default function Footer() {
           </div>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             {[
-              ["Privacy Policy",   "/privacy-policy"],
-              ["Terms of Use",     "/terms-of-use"],
-              ["DMCA / Copyright", "/dmca-copyright"],
+              ["About Us",          "/about"],
+              ["Editorial Policy",  "/editorial-policy"],
+              ["Contact Us",        "/contact"],
+              ["Privacy Policy",    "/privacy-policy"],
+              ["Terms of Use",      "/terms-of-use"],
+              ["DMCA / Copyright",  "/dmca-copyright"],
             ].map(([label, href]) => (
-              <a key={label} href={href} style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", textDecoration: "none", transition: "color 0.15s" }}
-                onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.28)"; }}
-              >{label}</a>
+              <Link key={label} to={href} style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none", transition: "color 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#00F0FF"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.45)"; }}
+              >{label}</Link>
             ))}
           </div>
         </div>

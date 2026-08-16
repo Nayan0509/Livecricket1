@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 const NodeCache = require("node-cache");
 const scraper = require("./scraper");
 const multiSport = require("./multiSportScraper");
+const kachufulEngine = require("./kachufulRooms");
 
 // Suppress noisy deprecation warnings
 process.removeAllListeners("warning");
@@ -488,7 +489,10 @@ async function getNews() {
   }
 }
 
-// ─── STATIC META ─────────────────────────────────────────────────────────────
+// ─── ORIGINAL ARTICLES DATA FOR SEO & BOT RENDERING ───────────────────────
+const { ORIGINAL_ARTICLES } = require("./articlesData");
+
+// ─── STATIC META & MULTI-SITEMAP ENGINE ───────────────────────────────────────
 
 function serveMeta(url, res, req) {
   const reqPath = [
@@ -499,74 +503,190 @@ function serveMeta(url, res, req) {
     req?.headers?.["x-invoke-path"],
   ].filter(Boolean).join(" ");
 
-  if (reqPath.includes("sitemap.xml")) {
-    const now = new Date().toISOString().split("T")[0];
-    const base = "https://www.livecricketzone.com";
-    const pages = [
-      { loc: "/",                        pri: "1.0", freq: "always"  },
-      { loc: "/live",                    pri: "1.0", freq: "always"  },
-      { loc: "/football",                pri: "0.85", freq: "hourly" },
-      { loc: "/basketball",              pri: "0.85", freq: "hourly" },
-      { loc: "/tennis",                  pri: "0.85", freq: "hourly" },
-      { loc: "/ipl",                     pri: "0.95", freq: "hourly" },
-      { loc: "/t20-world-cup",           pri: "0.95", freq: "hourly" },
-      { loc: "/world-cup",               pri: "0.95", freq: "hourly" },
-      { loc: "/asia-cup",                pri: "0.95", freq: "hourly" },
-      { loc: "/champions-trophy",        pri: "0.95", freq: "hourly" },
-      { loc: "/womens-cricket",          pri: "0.9",  freq: "hourly" },
-      { loc: "/t20",                     pri: "0.9",  freq: "hourly" },
-      { loc: "/odi",                     pri: "0.9",  freq: "hourly" },
-      { loc: "/test",                    pri: "0.9",  freq: "hourly" },
-      { loc: "/psl",                     pri: "0.9",  freq: "hourly" },
-      { loc: "/bbl",                     pri: "0.85", freq: "hourly" },
-      { loc: "/cpl",                     pri: "0.85", freq: "hourly" },
-      { loc: "/bpl",                     pri: "0.85", freq: "hourly" },
-      { loc: "/schedule",                pri: "0.9",  freq: "hourly" },
-      { loc: "/upcoming",                pri: "0.9",  freq: "hourly" },
-      { loc: "/results",                 pri: "0.85", freq: "hourly" },
-      { loc: "/series",                  pri: "0.8",  freq: "daily"  },
-      { loc: "/players",                 pri: "0.8",  freq: "daily"  },
-      { loc: "/teams",                   pri: "0.75", freq: "weekly" },
-      { loc: "/rankings",                pri: "0.8",  freq: "weekly" },
-      { loc: "/news",                    pri: "0.85", freq: "hourly" },
-      { loc: "/news/ipl-2026-auction-tactical-breakdown",     pri: "0.6", freq: "monthly" },
-      { loc: "/news/world-test-championship-2026-standings",  pri: "0.6", freq: "monthly" },
-      { loc: "/news/t20-world-cup-powerplay-batting-trends",  pri: "0.6", freq: "monthly" },
-      { loc: "/stats",                   pri: "0.75", freq: "daily"  },
-      { loc: "/videos",                  pri: "0.65", freq: "daily"  },
-      { loc: "/watch-live",              pri: "0.7",  freq: "hourly" },
-      { loc: "/county-championship",     pri: "0.95", freq: "hourly" },
-      { loc: "/county-cricket",          pri: "0.92", freq: "hourly" },
-      { loc: "/about",                   pri: "0.5",  freq: "monthly"},
-      { loc: "/best-cricket-website",    pri: "0.85", freq: "daily"  },
-    ];
+  const base = "https://www.livecricketzone.com";
+  const now = new Date().toISOString().split("T")[0];
 
-    const urlEntries = pages.map(p =>
+  const articlePages = ORIGINAL_ARTICLES.map(a => ({
+    loc: `/news/${a.id}`,
+    pri: "0.75",
+    freq: "monthly"
+  }));
+
+  const CORE_PAGES = [
+    { loc: "/",                        pri: "1.0",  freq: "always"  },
+    { loc: "/live",                    pri: "1.0",  freq: "always"  },
+    { loc: "/ipl",                     pri: "0.98", freq: "hourly"  },
+    { loc: "/t20-world-cup",           pri: "0.95", freq: "hourly"  },
+    { loc: "/champions-trophy",        pri: "0.95", freq: "hourly"  },
+    { loc: "/asia-cup",                pri: "0.95", freq: "hourly"  },
+    { loc: "/world-cup",               pri: "0.95", freq: "hourly"  },
+    { loc: "/womens-cricket",          pri: "0.90", freq: "hourly"  },
+    { loc: "/county-championship",     pri: "0.95", freq: "hourly"  },
+    { loc: "/county-cricket",          pri: "0.92", freq: "hourly"  },
+    { loc: "/t20",                     pri: "0.90", freq: "hourly"  },
+    { loc: "/odi",                     pri: "0.90", freq: "hourly"  },
+    { loc: "/test",                    pri: "0.90", freq: "hourly"  },
+    { loc: "/psl",                     pri: "0.90", freq: "hourly"  },
+    { loc: "/bbl",                     pri: "0.85", freq: "hourly"  },
+    { loc: "/cpl",                     pri: "0.85", freq: "hourly"  },
+    { loc: "/bpl",                     pri: "0.85", freq: "hourly"  },
+    { loc: "/schedule",                pri: "0.90", freq: "hourly"  },
+    { loc: "/upcoming",                pri: "0.90", freq: "hourly"  },
+    { loc: "/results",                 pri: "0.85", freq: "hourly"  },
+    { loc: "/news",                    pri: "0.90", freq: "hourly"  },
+    { loc: "/rankings",                pri: "0.85", freq: "daily"   },
+    { loc: "/stats",                   pri: "0.80", freq: "daily"   },
+    { loc: "/series",                  pri: "0.80", freq: "daily"   },
+    { loc: "/teams",                   pri: "0.75", freq: "weekly"  },
+    { loc: "/players",                 pri: "0.80", freq: "daily"   },
+    { loc: "/fantasy",                 pri: "0.80", freq: "daily"   },
+    { loc: "/watch-live",              pri: "0.75", freq: "hourly"  },
+    { loc: "/videos",                  pri: "0.70", freq: "daily"   },
+    { loc: "/football",                pri: "0.85", freq: "hourly"  },
+    { loc: "/basketball",              pri: "0.85", freq: "hourly"  },
+    { loc: "/tennis",                  pri: "0.85", freq: "hourly"  },
+    { loc: "/cricket-website",         pri: "0.75", freq: "weekly"  },
+    { loc: "/games",                   pri: "0.85", freq: "weekly"  },
+    { loc: "/about",                   pri: "0.60", freq: "monthly" },
+    { loc: "/contact",                 pri: "0.60", freq: "monthly" },
+    { loc: "/editorial-policy",        pri: "0.60", freq: "monthly" },
+    { loc: "/privacy-policy",          pri: "0.50", freq: "monthly" },
+    { loc: "/terms-of-use",            pri: "0.50", freq: "monthly" },
+    { loc: "/dmca-copyright",          pri: "0.50", freq: "monthly" },
+    ...articlePages
+  ];
+
+  // 1. Google News Sitemap
+  if (reqPath.includes("sitemap-news.xml")) {
+    const articles = ORIGINAL_ARTICLES.map(a => `
+  <url>
+    <loc>${base}/news/${a.id}</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Live Cricket Zone</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>${a.date}T09:00:00+05:30</news:publication_date>
+      <news:title>${a.title.replace(/&/g, "&amp;")}</news:title>
+    </news:news>
+  </url>`).join("");
+
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "s-maxage=1800, stale-while-revalidate=300");
+    res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+${articles}
+</urlset>`);
+    return true;
+  }
+
+  // 2. Google Video Sitemap
+  if (reqPath.includes("sitemap-videos.xml")) {
+    const videoEntries = [
+      {
+        loc: `${base}/watch-live`,
+        thumb: `${base}/og-image.png`,
+        title: "Live Cricket Highlights & Official Match Recaps - Live Cricket Zone",
+        desc: "Watch official cricket match highlights for IPL 2026, T20 World Cup, ODI, and Test matches from authorized broadcasters.",
+        url: `${base}/watch-live`
+      },
+      {
+        loc: `${base}/videos`,
+        thumb: `${base}/og-image.png`,
+        title: "Cricket Videos & Post-Match Highlights 2026",
+        desc: "Official post-match highlights, player interviews, and match summaries embedded from verified YouTube channels.",
+        url: `${base}/videos`
+      }
+    ].map(v => `
+  <url>
+    <loc>${v.loc}</loc>
+    <video:video>
+      <video:thumbnail_loc>${v.thumb}</video:thumbnail_loc>
+      <video:title>${v.title.replace(/&/g, "&amp;")}</video:title>
+      <video:description>${v.desc.replace(/&/g, "&amp;")}</video:description>
+      <video:player_loc>${v.url}</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>`).join("");
+
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
+    res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+${videoEntries}
+</urlset>`);
+    return true;
+  }
+
+  // 3. Main Sitemap
+  if (reqPath.includes("sitemap.xml") || reqPath.includes("sitemap-main.xml")) {
+    const urlEntries = CORE_PAGES.map(p =>
       `  <url><loc>${base}${p.loc}</loc><changefreq>${p.freq}</changefreq><priority>${p.pri}</priority><lastmod>${now}</lastmod></url>`
     ).join("\n");
 
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
-    res.setHeader("X-Robots-Tag", "noindex");
     res.status(200).send(
       `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>`
     );
     return true;
   }
+
+  // 4. RSS Feed (RSS 2.0)
+  if (reqPath.includes("rss.xml") || reqPath.includes("feed.xml")) {
+    const items = ORIGINAL_ARTICLES.map(a => `
+    <item>
+      <title>${a.title.replace(/&/g, "&amp;")}</title>
+      <link>${base}/news/${a.id}</link>
+      <guid>${base}/news/${a.id}</guid>
+      <pubDate>${new Date(a.date).toUTCString()}</pubDate>
+      <description>${a.description.replace(/&/g, "&amp;")}</description>
+      <category>${a.category}</category>
+    </item>`).join("");
+
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "s-maxage=1800, stale-while-revalidate=300");
+    res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Live Cricket Zone - Live Scores, News &amp; IPL 2026</title>
+    <link>${base}</link>
+    <description>Fastest real-time live cricket scores, ball-by-ball commentary, IPL 2026 points table, ICC rankings, and news.</description>
+    <language>en-us</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${base}/rss.xml" rel="self" type="application/rss+xml"/>
+${items}
+  </channel>
+</rss>`);
+    return true;
+  }
+
+  // 5. Robots.txt
   if (reqPath.includes("robots.txt")) {
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "s-maxage=86400");
     res.status(200).send(
-      "User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /*.json$\nCrawl-delay: 1\n\n" +
+      "User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /*?*utm_source=\nDisallow: /*?*sessionid=\nDisallow: /*?*fbclid=\nCrawl-delay: 1\n\n" +
+      "Host: https://www.livecricketzone.com\n\n" +
+      "Sitemap: https://www.livecricketzone.com/sitemap.xml\n" +
+      "Sitemap: https://www.livecricketzone.com/sitemap-news.xml\n" +
+      "Sitemap: https://www.livecricketzone.com/sitemap-videos.xml\n" +
+      "Sitemap: https://www.livecricketzone.com/rss.xml\n\n" +
       "User-agent: Googlebot\nAllow: /\nCrawl-delay: 0\n\n" +
+      "User-agent: Googlebot-News\nAllow: /\n\n" +
+      "User-agent: Googlebot-Image\nAllow: /\n\n" +
+      "User-agent: Googlebot-Video\nAllow: /\n\n" +
       "User-agent: Mediapartners-Google\nAllow: /\n\n" +
       "User-agent: Bingbot\nAllow: /\nCrawl-delay: 1\n\n" +
-      "User-agent: adidxbot\nAllow: /\nCrawl-delay: 1\n\n" +
-      "User-agent: msnbot\nAllow: /\nCrawl-delay: 1\n\n" +
-      "Sitemap: https://www.livecricketzone.com/sitemap.xml"
+      "User-agent: Applebot\nAllow: /\n\n" +
+      "User-agent: DuckDuckBot\nAllow: /\nCrawl-delay: 1\n"
     );
     return true;
   }
+
+  // 6. ads.txt & BingSiteAuth
   if (reqPath.includes("ads.txt")) {
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=86400");
@@ -579,19 +699,19 @@ function serveMeta(url, res, req) {
     res.status(200).send('<?xml version="1.0"?><users><user>A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6</user></users>');
     return true;
   }
+
   return false;
 }
 
 // ─── BOT DETECTION ───────────────────────────────────────────────────────────
 
-const BOT_UA = /googlebot|bingbot|adidxbot|bingpreview|msnbot|yandex|yandexbot|baiduspider|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix|petalbot|bytespider|gptbot|claudebot|ccbot/i;
+const BOT_UA = /googlebot|google-inspectiontool|googlebot-news|googlebot-image|googlebot-video|mediapartners-google|adsbot-google|google-adwords|feedfetcher-google|adsense|bingbot|adidxbot|bingpreview|msnbot|yandex|yandexbot|baiduspider|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix|petalbot|bytespider|gptbot|claudebot|ccbot/i;
 
 function isBot(req) {
   return BOT_UA.test(req.headers["user-agent"] || "");
 }
 
 // ─── PAGE META MAP ────────────────────────────────────────────────────────────
-// For each route, define what bots should see in <head>
 
 const BASE = "https://www.livecricketzone.com";
 const SITE = "Live Cricket Zone";
@@ -601,181 +721,282 @@ function getPageMeta(pathname) {
 
   const map = {
     "/": {
-      title: `Live Cricket Score Today - IPL 2026 & T20 Live | ${SITE}`,
-      desc: "Fastest live cricket score today. Ball-by-ball commentary, IPL 2026 live score, T20 World Cup, ODI & Test scorecards updated every 15 seconds.",
-      kw: "live cricket score, cricket score today, IPL 2026 live score, live match today, ball by ball commentary, cricket live score today",
+      title: `Live Cricket Score Today — IPL 2026, T20, ODI & Test Ball-by-Ball | ${SITE}`,
+      desc: "Live Cricket Zone: fastest real-time live cricket scores updated every 15 seconds. IPL 2026 points table, T20 World Cup, ball-by-ball commentary, ICC rankings, and news.",
+      kw: "live cricket score, live cricket score today, IPL 2026 live score, IPL points table 2026, ball by ball commentary, live cricket match today, cricket score live",
     },
     "/live": {
-      title: `Live Cricket Score Now - All Matches Live | ${SITE}`,
-      desc: "All live cricket matches right now. Real-time scores, ball-by-ball commentary for every live match. IPL, T20, ODI, Test cricket live.",
-      kw: "live cricket matches, cricket live now, live match today, cricket score live, live cricket score now",
-    },
-    "/football": {
-      title: `Football Live Scores Today - Premier League, La Liga & More | ${SITE}`,
-      desc: "Live football scores today across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA Champions League and MLS, updated in real time.",
-      kw: "football live score, premier league live score, la liga live score, champions league live score, football scores today",
-    },
-    "/basketball": {
-      title: `Basketball Live Scores Today - NBA & NCAA | ${SITE}`,
-      desc: "Live basketball scores today for the NBA, NCAA Men's and NCAA Women's basketball, with live, upcoming and recent results updated in real time.",
-      kw: "basketball live score, NBA live score, NBA scores today, NCAA basketball live score, basketball scores today",
-    },
-    "/tennis": {
-      title: `Tennis Live Scores Today - ATP & WTA Tour | ${SITE}`,
-      desc: "Live tennis scores today from the ATP and WTA tours, with set-by-set scores for matches in progress, upcoming fixtures and recent results.",
-      kw: "tennis live score, ATP live score, WTA live score, tennis scores today, tennis results",
+      title: `Live Cricket Scores Right Now — All Ongoing Matches | ${SITE}`,
+      desc: "All live cricket matches right now. Real-time ball-by-ball scores, full scorecards, toss results, partnerships, and commentary updated every 15 seconds.",
+      kw: "live cricket matches, cricket live now, live cricket score now, current cricket match, live ball by ball",
     },
     "/ipl": {
-      title: `IPL 2026 Live Score - Indian Premier League | ${SITE}`,
-      desc: "IPL 2026 live score, ball-by-ball commentary, points table, schedule and results. Real-time Indian Premier League 2026 updates.",
-      kw: "IPL 2026 live score, IPL live score today, Indian Premier League 2026, IPL ball by ball, IPL scorecard, IPL points table 2026",
+      title: `IPL 2026 Points Table, Live Score & Schedule — Indian Premier League | ${SITE}`,
+      desc: "IPL 2026 live points table, team standings, net run rate (NRR), today match live score, full scorecard, and complete 2026 schedule with venues.",
+      kw: "IPL 2026 points table, IPL points table 2026, IPL 2026 standings, IPL live score today, IPL 2026 schedule, IPL top 4 2026, IPL scorecard",
     },
     "/t20-world-cup": {
-      title: `T20 World Cup 2026 Live Score - ICC T20 WC | ${SITE}`,
-      desc: "T20 World Cup 2026 live score, ball-by-ball commentary, schedule and standings. Real-time ICC T20 World Cup 2026 updates.",
-      kw: "T20 World Cup 2026 live score, ICC T20 World Cup live, T20 World Cup schedule 2026, T20 World Cup ball by ball",
-    },
-    "/world-cup": {
-      title: `Cricket World Cup 2027 Live Score - ODI WC | ${SITE}`,
-      desc: "ICC Cricket World Cup 2027 live score, ball-by-ball commentary, schedule and standings. Real-time ODI World Cup updates.",
-      kw: "Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule 2027",
-    },
-    "/asia-cup": {
-      title: `Asia Cup 2026 Live Score - India vs Pakistan | ${SITE}`,
-      desc: "Asia Cup 2026 live score, ball-by-ball commentary and results. India vs Pakistan live score and all Asia Cup 2026 matches.",
-      kw: "Asia Cup 2026 live score, Asia Cup live score today, India vs Pakistan Asia Cup live, Asia Cup ball by ball",
+      title: `T20 World Cup 2026 Live Score, Schedule & Points Table | ${SITE}`,
+      desc: "ICC Men's T20 World Cup 2026 live scores, ball-by-ball commentary, fixtures, group standings, Super 8 points table, and official match highlights.",
+      kw: "T20 World Cup 2026 live score, ICC T20 World Cup live, T20 World Cup schedule 2026, T20 World Cup points table",
     },
     "/champions-trophy": {
-      title: `Champions Trophy 2025 Live Score - ICC CT | ${SITE}`,
-      desc: "ICC Champions Trophy 2025 live score, ball-by-ball commentary, schedule and results. Real-time Champions Trophy updates.",
-      kw: "Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy ball by ball",
+      title: `ICC Champions Trophy 2025 Live Score, Fixtures & Results | ${SITE}`,
+      desc: "ICC Champions Trophy live score, ball-by-ball commentary, tournament schedule, points table, and match summaries for all international fixtures.",
+      kw: "Champions Trophy 2025 live score, ICC Champions Trophy live, Champions Trophy live score today, Champions Trophy schedule",
+    },
+    "/asia-cup": {
+      title: `Asia Cup 2026 Live Score — India vs Pakistan & All Fixtures | ${SITE}`,
+      desc: "ACC Asia Cup 2026 live score with ball-by-ball commentary. Follow India vs Pakistan, Sri Lanka, Bangladesh, Afghanistan and Nepal in the Asia Cup.",
+      kw: "Asia Cup 2026 live score, Asia Cup live score today, India vs Pakistan Asia Cup live, Asia Cup schedule 2026",
+    },
+    "/world-cup": {
+      title: `Cricket World Cup 2027 Live Score & Schedule — ICC ODI WC | ${SITE}`,
+      desc: "ICC Cricket World Cup 2027 live scores, qualifying standings, tournament schedule, points table, and ball-by-ball commentary.",
+      kw: "Cricket World Cup 2027 live score, ICC World Cup live, ODI World Cup live score, Cricket World Cup schedule",
     },
     "/womens-cricket": {
-      title: `Women's Cricket Live Score 2026 - ICC WT20 | ${SITE}`,
-      desc: "Women's cricket live score 2026 with ball-by-ball commentary. ICC Women's T20 World Cup, Women's ODI and Test match updates.",
-      kw: "women's cricket live score, ICC women's T20 World Cup live, women's cricket today, women's ODI live score",
+      title: `Women's Cricket Live Score 2026 — ICC WT20 & WODI Matches | ${SITE}`,
+      desc: "Women's cricket live scores with ball-by-ball commentary. ICC Women's T20 World Cup, WPL, Women's ODI and Test match updates.",
+      kw: "women's cricket live score, ICC women's T20 World Cup live, women's cricket today, WPL live score",
+    },
+    "/county-championship": {
+      title: `County Championship 2026 Live Score — English County Cricket | ${SITE}`,
+      desc: "County Championship 2026 live scores, Division One and Division Two results, tables, and ball-by-ball coverage for Surrey, Yorkshire, Lancashire, and all 18 counties.",
+      kw: "county championship 2026, county championship live score, county cricket live score, division one cricket, surrey cricket",
+    },
+    "/county-cricket": {
+      title: `County Cricket Live Score 2026 — All County Matches | ${SITE}`,
+      desc: "County cricket live scores 2026 for all County Championship Division One and Division Two matches with ball-by-ball commentary.",
+      kw: "county cricket live score, county cricket 2026, county cricket today, county cricket results",
     },
     "/t20": {
-      title: `T20 Cricket Live Score Today - All T20 Matches | ${SITE}`,
-      desc: "T20 cricket live score today. IPL 2026, T20 World Cup, PSL, BBL, CPL, BPL — real-time updates with ball-by-ball commentary.",
-      kw: "T20 cricket live score, T20 live score today, T20 cricket today, T20 matches today, T20 ball by ball",
+      title: `T20 Cricket Live Score Today — All Domestic & International T20s | ${SITE}`,
+      desc: "T20 cricket live score today. IPL 2026, T20 World Cup, PSL, BBL, CPL, BPL, Super Smash, and all international T20 matches with ball-by-ball commentary.",
+      kw: "T20 cricket live score, T20 live score today, T20 cricket today, T20 matches today",
     },
     "/odi": {
-      title: `ODI Cricket Live Score Today - One Day Intl | ${SITE}`,
-      desc: "ODI cricket live score today. Real-time One Day International match updates with ball-by-ball commentary. All ODI series covered.",
-      kw: "ODI cricket live score, ODI live score today, One Day International live, ODI cricket today, ODI ball by ball",
+      title: `ODI Cricket Live Score Today — One Day Internationals | ${SITE}`,
+      desc: "ODI cricket live score today. Real-time One Day International match updates with ball-by-ball commentary and full scorecards for all bilateral series.",
+      kw: "ODI cricket live score, ODI live score today, One Day International live, ODI cricket today",
     },
     "/test": {
-      title: `Test Cricket Live Score Today - Test Matches | ${SITE}`,
-      desc: "Test cricket live score today. Real-time Test match updates with ball-by-ball commentary, day-by-day scorecard and session reports.",
-      kw: "Test cricket live score, Test match live score today, Test cricket today, Test match today, Test cricket ball by ball",
+      title: `Test Cricket Live Score Today — WTC & Bilateral Test Matches | ${SITE}`,
+      desc: "Test cricket live score today. World Test Championship (WTC) matches, session reports, day-by-day scorecards, and ball-by-ball commentary.",
+      kw: "Test cricket live score, Test match live score today, Test cricket today, WTC standings live",
     },
     "/psl": {
-      title: `PSL 2026 Live Score - Pakistan Super League | ${SITE}`,
-      desc: "PSL 2026 live score, ball-by-ball commentary, points table, schedule and results. Real-time Pakistan Super League 2026 updates.",
-      kw: "PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard",
+      title: `PSL 2026 Live Score — Pakistan Super League Standings & Schedule | ${SITE}`,
+      desc: "PSL 2026 live score, ball-by-ball commentary, points table, schedule and results. Lahore Qalandars, Karachi Kings, Islamabad United and all teams.",
+      kw: "PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL scorecard, PSL points table",
     },
     "/bbl": {
-      title: `BBL 2026 Live Score - Big Bash League | ${SITE}`,
-      desc: "BBL 2026 live score, ball-by-ball commentary, schedule and results. Real-time Big Bash League 2026 cricket updates.",
-      kw: "BBL 2026 live score, Big Bash League live score, BBL live today, BBL ball by ball, BBL scorecard",
+      title: `BBL 2026 Live Score — Big Bash League Australia | ${SITE}`,
+      desc: "BBL 2026 live score, ball-by-ball commentary, schedule, points table and results. Real-time Big Bash League cricket updates.",
+      kw: "BBL 2026 live score, Big Bash League live score, BBL live today, BBL scorecard",
     },
     "/cpl": {
-      title: `CPL 2026 Live Score - Caribbean Premier League | ${SITE}`,
-      desc: "CPL 2026 live score, ball-by-ball commentary, schedule and results. Real-time Caribbean Premier League 2026 updates.",
-      kw: "CPL 2026 live score, Caribbean Premier League live score, CPL live today, CPL ball by ball",
+      title: `CPL 2026 Live Score — Caribbean Premier League | ${SITE}`,
+      desc: "CPL 2026 live score, ball-by-ball commentary, schedule and results. Real-time Caribbean Premier League updates.",
+      kw: "CPL 2026 live score, Caribbean Premier League live score, CPL live today",
     },
     "/bpl": {
-      title: `BPL 2026 Live Score - Bangladesh Premier League | ${SITE}`,
-      desc: "BPL 2026 live score, ball-by-ball commentary, schedule and results. Real-time Bangladesh Premier League 2026 updates.",
-      kw: "BPL 2026 live score, Bangladesh Premier League live score, BPL live today, BPL ball by ball",
+      title: `BPL 2026 Live Score — Bangladesh Premier League | ${SITE}`,
+      desc: "BPL 2026 live score, ball-by-ball commentary, schedule and results. Real-time Bangladesh Premier League updates.",
+      kw: "BPL 2026 live score, Bangladesh Premier League live score, BPL live today",
     },
     "/schedule": {
-      title: `Cricket Schedule 2026 - Fixtures & Timings | ${SITE}`,
-      desc: "Cricket schedule 2026 — all fixtures, match timings and venues. IPL, T20 World Cup, ODI and Test series timetable.",
+      title: `Cricket Schedule 2026 — Fixtures, Match Timings & Venues | ${SITE}`,
+      desc: "Cricket schedule 2026 — complete fixtures, match timings and venues. IPL 2026, T20 World Cup, ODI and Test series timetable.",
       kw: "cricket schedule 2026, cricket fixtures, upcoming cricket matches, cricket match schedule, cricket calendar 2026",
     },
     "/upcoming": {
-      title: `Upcoming Cricket Matches 2026 - Schedule | ${SITE}`,
-      desc: "Upcoming cricket matches 2026 — IPL, T20 World Cup, ODI and Test fixtures with dates, venues and match timings.",
-      kw: "upcoming cricket matches, cricket upcoming matches, cricket fixtures 2026, next cricket match, cricket schedule upcoming",
+      title: `Upcoming Cricket Matches 2026 — Match Fixtures & Dates | ${SITE}`,
+      desc: "Upcoming cricket matches 2026: IPL, T20 World Cup, ODI and Test fixtures with dates, venues and start times.",
+      kw: "upcoming cricket matches, cricket upcoming matches, cricket fixtures 2026, next cricket match",
     },
     "/results": {
-      title: `Cricket Results - Latest Scores & Scorecards | ${SITE}`,
-      desc: "Latest cricket match results, scores and full scorecards. IPL 2026, T20 World Cup, ODI and Test match results.",
-      kw: "cricket results, cricket match results, cricket scores today, cricket scorecard results, latest cricket results",
+      title: `Cricket Results & Recent Match Scorecards | ${SITE}`,
+      desc: "Latest cricket match results, full scorecards, player of the match awards, and match outcome summaries for all formats.",
+      kw: "cricket results, cricket match results, cricket scores today, cricket scorecard results",
     },
     "/series": {
-      title: `Cricket Series 2026 - All Series & Tours | ${SITE}`,
-      desc: "All cricket series 2026 — international tours, bilateral series and ICC tournaments. Live scores and schedules.",
+      title: `Cricket Series 2026 — International Tours & Tournaments | ${SITE}`,
+      desc: "All cricket series 2026: international bilateral tours, ICC tournaments, and domestic leagues. Full schedule and standings.",
       kw: "cricket series 2026, cricket series schedule, international cricket series, cricket tour 2026",
     },
     "/players": {
-      title: `Cricket Players - Stats & Profiles 2026 | ${SITE}`,
-      desc: "Cricket player profiles with batting averages, bowling records and career stats for all international and IPL players.",
+      title: `Cricket Players Directory 2026 — Stats, Career Records & Profiles | ${SITE}`,
+      desc: "Cricket player profiles with batting averages, bowling records, career stats, centuries, and ICC rankings for all international and IPL stars.",
       kw: "cricket players, cricket player stats, cricket player records, cricket player profile, IPL players 2026",
     },
     "/teams": {
-      title: `Cricket Teams - International & IPL Profiles | ${SITE}`,
-      desc: "All cricket teams — international and IPL. Team profiles, squad, recent form and head-to-head records.",
+      title: `Cricket Teams Directory — International & IPL Franchise Profiles | ${SITE}`,
+      desc: "All cricket teams: international teams (India, Australia, England, Pakistan) and IPL franchises. Squads, recent form and head-to-head records.",
       kw: "cricket teams, international cricket teams, IPL teams 2026, cricket team profiles, cricket squad",
     },
     "/rankings": {
-      title: `ICC Cricket Rankings 2026 - Batsmen & Bowlers | ${SITE}`,
-      desc: "Latest ICC cricket rankings 2026 for batsmen, bowlers, all-rounders and teams in Test, ODI and T20 formats.",
+      title: `ICC Cricket Rankings 2026 — Batsmen, Bowlers, All-Rounders & Teams | ${SITE}`,
+      desc: "Latest ICC cricket rankings 2026 for Test, ODI and T20I formats. Official player rankings for batting, bowling, all-rounders, and team ratings.",
       kw: "ICC cricket rankings 2026, cricket rankings, ICC rankings batsmen, ICC rankings bowlers, ICC team rankings 2026",
     },
     "/news": {
-      title: `Cricket News Today - Latest Updates | ${SITE}`,
-      desc: "Latest cricket news today. Breaking news, match previews, player updates, IPL 2026 and T20 World Cup news.",
-      kw: "cricket news today, latest cricket news, cricket news, IPL news 2026, cricket breaking news, cricket updates today",
+      title: `Cricket News Today — Latest Headlines, Previews & Editorial | ${SITE}`,
+      desc: "Latest cricket news today: breaking updates, match previews, team selections, IPL 2026 analysis, and T20 World Cup coverage.",
+      kw: "cricket news today, latest cricket news, cricket news, IPL news 2026, cricket breaking news",
     },
     "/stats": {
-      title: `Cricket Statistics - Records & Career Stats | ${SITE}`,
-      desc: "Cricket statistics — batting averages, bowling figures, career records, highest scores and best bowling figures for all formats.",
-      kw: "cricket statistics, cricket stats, cricket records, batting average cricket, bowling figures cricket, cricket career stats",
-    },
-    "/county-championship": {
-      title: `County Championship 2026 Live Score - English County Cricket | ${SITE}`,
-      desc: "County Championship 2026 live scores, Division One and Division Two results. All 18 English counties — Surrey, Yorkshire, Lancashire and more.",
-      kw: "county championship 2026, county championship live score, county cricket live score, county championship today, county cricket today, division one cricket, surrey cricket, yorkshire cricket, lancashire cricket, county championship results",
-    },
-    "/county-cricket": {
-      title: `County Cricket Live Score 2026 - All County Matches | ${SITE}`,
-      desc: "County cricket live scores 2026 for all County Championship Division One and Division Two matches with ball-by-ball commentary.",
-      kw: "county cricket live score, county cricket 2026, county cricket today, county cricket results, county cricket schedule, english county cricket live",
+      title: `Cricket Statistics & Records 2026 — Batting & Bowling Career Records | ${SITE}`,
+      desc: "Cricket statistics: batting averages, highest individual scores, best bowling figures, most centuries, and career records across Test, ODI, and T20 formats.",
+      kw: "cricket statistics, cricket stats, cricket records, batting average cricket, bowling figures cricket",
     },
     "/watch-live": {
-      title: `Cricket Highlights - Official Match Highlights & Live Scores | ${SITE}`,
-      desc: "Official cricket match highlights and live scores. Post-match highlights for IPL 2026, T20 World Cup, ODI and Test cricket, embedded from official YouTube channels.",
-      kw: "cricket highlights, match highlights, IPL highlights, T20 highlights, cricket live scores",
+      title: `Cricket Highlights & Official Match Recaps | ${SITE}`,
+      desc: "Official cricket match highlights, boundary recaps, and video summaries for IPL 2026, T20 World Cup, ODI and Test cricket.",
+      kw: "cricket highlights, match highlights, IPL highlights, T20 highlights, cricket video highlights",
     },
     "/videos": {
-      title: `Cricket Videos - Official Match Highlights | ${SITE}`,
-      desc: "Cricket videos — official match highlights and best moments for IPL 2026, T20 World Cup, ODI and Test cricket, embedded from official YouTube channels.",
-      kw: "cricket videos, cricket highlights, IPL highlights, T20 World Cup highlights, cricket match video",
+      title: `Cricket Videos & Highlights 2026 | ${SITE}`,
+      desc: "Cricket videos: official match highlights and top moments for IPL 2026, T20 World Cup, ODI and Test matches.",
+      kw: "cricket videos, cricket highlights, IPL highlights, T20 World Cup highlights",
     },
+    "/football": {
+      title: `Football Live Scores Today — Premier League, La Liga & Champions League | ${SITE}`,
+      desc: "Live football scores today across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA Champions League and MLS in real time.",
+      kw: "football live score, premier league live score, la liga live score, champions league live score, football scores today",
+    },
+    "/basketball": {
+      title: `Basketball Live Scores Today — NBA & NCAA Basketball | ${SITE}`,
+      desc: "Live basketball scores today for the NBA, NCAA Men's and NCAA Women's basketball, with real-time box scores and standings.",
+      kw: "basketball live score, NBA live score, NBA scores today, NCAA basketball live score",
+    },
+    "/tennis": {
+      title: `Tennis Live Scores Today — ATP & WTA Tour Matches | ${SITE}`,
+      desc: "Live tennis scores today from the ATP Tour, WTA Tour, and Grand Slams with set-by-set scores and game updates.",
+      kw: "tennis live score, ATP live score, WTA live score, tennis scores today, tennis results",
+    },
+    "/fantasy": {
+      title: `Cricket Fantasy Guide 2026 — Team Strategy & Player Picks | ${SITE}`,
+      desc: "Cricket fantasy team strategy, pitch reports, player matchup statistics, and captaincy recommendations for IPL 2026 and international matches.",
+      kw: "cricket fantasy guide, fantasy cricket tips, IPL fantasy team, captaincy picks cricket",
+    },
+    "/cricket-website": {
+      title: `Best Live Cricket Score Website 2026 — Live Cricket Zone | ${SITE}`,
+      desc: "Why Live Cricket Zone is the fastest and most comprehensive live cricket score website. Ball-by-ball updates, scorecards, rankings and news.",
+      kw: "best cricket website, live cricket score site, fast cricket score website, cricket score online",
+    },
+    "/games": {
+      title: `Play Free Cricket & Kachuful Games Online — Live Cricket Zone Arcade | ${SITE}`,
+      desc: "Play free cricket games online: Cricket Super Striker batting challenge, traditional Kachuful (Judgement) card game, Cricket Trivia quiz, and memory match puzzle for kids.",
+      kw: "cricket game online, play kachuful online, kachuful card game, cricket trivia quiz, cricket games for kids, batting game",
+    },
+    "/about": {
+      title: `About Live Cricket Zone — Real-Time Cricket Scores & Analysis | ${SITE}`,
+      desc: "About Live Cricket Zone: providing real-time ball-by-ball cricket scores, IPL 2026 coverage, ICC rankings, and cricket editorial news worldwide.",
+      kw: "about Live Cricket Zone, cricket live score provider, cricket news editorial",
+    },
+    "/contact": {
+      title: `Contact Us — Live Cricket Zone Editorial & Support | ${SITE}`,
+      desc: "Contact Live Cricket Zone editorial desk for feedback, score corrections, partnership inquiries, and support.",
+      kw: "contact live cricket zone, cricket editorial contact, score correction",
+    },
+    "/editorial-policy": {
+      title: `Editorial Policy & Fact-Checking Standards — Live Cricket Zone | ${SITE}`,
+      desc: "Live Cricket Zone editorial policy, fact-checking methodology, corrections policy, and author qualifications.",
+      kw: "editorial policy, fact checking standards, cricket journalism, live cricket zone editorial",
+    },
+    "/privacy-policy": {
+      title: `Privacy Policy | ${SITE}`,
+      desc: "Privacy policy for Live Cricket Zone detailing user privacy standards, Google AdSense DoubleClick DART cookie disclosures, and data protection.",
+      kw: "privacy policy, Live Cricket Zone privacy, adsense privacy policy",
+    },
+    "/terms-of-use": {
+      title: `Terms of Use | ${SITE}`,
+      desc: "Terms of use and conditions for accessing Live Cricket Zone services.",
+      kw: "terms of use, Live Cricket Zone terms",
+    },
+    "/dmca-copyright": {
+      title: `DMCA Copyright Policy | ${SITE}`,
+      desc: "DMCA copyright notice, content attribution, and copyright compliance information for Live Cricket Zone.",
+      kw: "DMCA copyright, copyright policy",
+    }
   };
 
   // Match detail pages: /match/:id
   if (p.startsWith("/match/")) {
-    const slug = p.replace("/match/", "");
+    const slug = p.replace("/match/", "").replace(/\/scorecard$|\/live-score$/, "");
     const vsMatch = slug.match(/^(.+?)-vs-(.+?)(?:-\d+)?$/i);
+    const subpage = p.endsWith("/scorecard") ? "Scorecard" : p.endsWith("/live-score") ? "Live Score" : "Live Score & Commentary";
     if (vsMatch) {
       const t1 = vsMatch[1].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       const t2 = vsMatch[2].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       return {
-        title: `${t1} vs ${t2} Live Score - Scorecard & Commentary | ${SITE}`,
-        desc: `${t1} vs ${t2} live score, ball-by-ball commentary and real-time scorecard. Plus official post-match highlights when available.`,
-        kw: `${t1} vs ${t2} live score, ${t1} vs ${t2} scorecard, ${t1} vs ${t2} commentary, cricket live score, ball by ball commentary`,
+        title: `${t1} vs ${t2} ${subpage} Today | ${SITE}`,
+        desc: `${t1} vs ${t2} live score today with ball-by-ball commentary, full scorecard, match statistics, toss result and highlights on Live Cricket Zone.`,
+        kw: `${t1} vs ${t2} live score, ${t1} vs ${t2} scorecard, ${t1} vs ${t2} commentary, cricket live score today, ball by ball`,
         canonical: `${BASE}${p}`,
       };
     }
     return {
-      title: `Live Cricket Score - Scorecard & Commentary | ${SITE}`,
-      desc: "Live cricket score, full scorecard and ball-by-ball commentary, plus official post-match highlights when available.",
+      title: `Live Cricket Match ${subpage} Today | ${SITE}`,
+      desc: "Live cricket score today, full scorecard and real-time ball-by-ball commentary, plus official post-match highlights when available.",
       kw: "live cricket score, cricket scorecard, ball by ball commentary, cricket highlights",
       canonical: `${BASE}${p}`,
+    };
+  }
+
+  // News article pages: /news/:id
+  if (p.startsWith("/news/")) {
+    const articleId = p.replace("/news/", "");
+    const foundArticle = ORIGINAL_ARTICLES.find(a => a.id === articleId);
+    if (foundArticle) {
+      return {
+        title: `${foundArticle.title} | ${SITE}`,
+        desc: foundArticle.description,
+        kw: `${foundArticle.category} news, cricket analysis, ${foundArticle.title}`,
+        canonical: `${BASE}${p}`,
+        article: foundArticle
+      };
+    }
+    const cleanTitle = articleId.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    return {
+      title: `${cleanTitle} — Cricket News | ${SITE}`,
+      desc: `Read the latest cricket news and analysis regarding ${cleanTitle} on Live Cricket Zone.`,
+      kw: `cricket news, ${cleanTitle}`,
+      canonical: `${BASE}${p}`
+    };
+  }
+
+  // Series detail pages: /series/:id
+  if (p.startsWith("/series/")) {
+    const seriesId = p.replace("/series/", "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    return {
+      title: `${seriesId} 2026 Schedule, Live Scores & Standings | ${SITE}`,
+      desc: `Complete schedule, match fixtures, live scorecards and points table for ${seriesId} on Live Cricket Zone.`,
+      kw: `${seriesId} schedule, ${seriesId} points table, ${seriesId} live scores`,
+      canonical: `${BASE}${p}`
+    };
+  }
+
+  // Team detail pages: /teams/:id
+  if (p.startsWith("/teams/")) {
+    const teamId = p.replace("/teams/", "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    return {
+      title: `${teamId} Cricket Team Squad, Schedule & Live Scores | ${SITE}`,
+      desc: `${teamId} cricket team profile: squad roster, upcoming fixtures, recent results, player statistics and match updates.`,
+      kw: `${teamId} cricket team, ${teamId} squad, ${teamId} schedule, ${teamId} live score`,
+      canonical: `${BASE}${p}`
+    };
+  }
+
+  // Player detail pages: /players/:id
+  if (p.startsWith("/players/")) {
+    const playerId = p.replace("/players/", "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    return {
+      title: `${playerId} Cricket Stats, Career Records & Profile | ${SITE}`,
+      desc: `${playerId} cricket statistics: career batting average, bowling figures, centuries, wickets, and ICC rankings across Test, ODI, and T20 formats.`,
+      kw: `${playerId} stats, ${playerId} career records, ${playerId} batting average, ${playerId} bowling figures`,
+      canonical: `${BASE}${p}`
     };
   }
 
@@ -783,57 +1004,312 @@ function getPageMeta(pathname) {
   return { ...meta, canonical: `${BASE}${p}` };
 }
 
-// ─── BOT HTML RENDERER ────────────────────────────────────────────────────────
-// Serves a fully-formed HTML page to crawlers with all meta tags + visible content
+// ─── DEEP BOT HTML RENDERER ───────────────────────────────────────────────────
 
-function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
-  const liveHtml = liveMatches.length > 0
-    ? liveMatches.slice(0, 10).map(m => `
-      <article itemscope itemtype="https://schema.org/SportsEvent">
-        <h3 itemprop="name"><a href="${BASE}/match/${m.id}">${m.name}</a></h3>
-        <p itemprop="description">${m.status}${m.venue ? ` — ${m.venue}` : ""}</p>
-        <meta itemprop="sport" content="Cricket"/>
-      </article>`).join("")
-    : "";
+function renderBotHtml(pathname, meta, context = {}) {
+  const p = pathname.replace(/\/$/, "") || "/";
+  const {
+    liveMatches = [],
+    recentMatches = [],
+    upcomingMatches = [],
+    iplStandings = [],
+    rankings = {},
+    news = [],
+    matchDetail = null,
+    sportMatches = { live: [], upcoming: [], recent: [] },
+  } = context;
 
-  const recentHtml = recentMatches.length > 0
-    ? recentMatches.slice(0, 5).map(m => `
-      <article>
-        <h3><a href="${BASE}/match/${m.id}">${m.name}</a></h3>
-        <p>${m.status}</p>
-      </article>`).join("")
-    : "";
+  // 1. Build JSON-LD Structured Data
+  const structuredDataList = [];
 
-  const sd = JSON.stringify({
+  // WebSite Schema
+  structuredDataList.push({
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": meta.title,
-    "description": meta.desc,
-    "url": meta.canonical,
-    "inLanguage": "en-US",
-    "isPartOf": { "@type": "WebSite", "name": "Live Cricket Zone", "url": BASE },
+    "@type": "WebSite",
+    "name": SITE,
+    "alternateName": ["livecricketzone.com", "Cricket Live Zone", "Live Cricket Scores"],
+    "url": BASE,
+    "description": "Real-time ball-by-ball cricket scores, IPL 2026, T20 World Cup, ICC rankings, and news.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${BASE}/players?search={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    },
     "publisher": {
       "@type": "Organization",
-      "name": "Live Cricket Zone",
+      "name": SITE,
       "url": BASE,
       "logo": { "@type": "ImageObject", "url": `${BASE}/logo192.png` }
-    },
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": BASE },
-        ...(pathname !== "/" ? [{ "@type": "ListItem", "position": 2, "name": meta.title.split("|")[0].trim(), "item": meta.canonical }] : [])
-      ]
     }
   });
 
+  // BreadcrumbList Schema
+  const breadcrumbItems = [{ "@type": "ListItem", "position": 1, "name": "Home", "item": BASE }];
+  if (p !== "/") {
+    const parts = p.replace(/^\/+|\/+$/g, "").split("/");
+    if (parts.length === 1) {
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 2,
+        "name": meta.title.split("|")[0].split("—")[0].trim(),
+        "item": meta.canonical
+      });
+    } else {
+      const parentName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).replace(/-/g, " ");
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 2,
+        "name": parentName,
+        "item": `${BASE}/${parts[0]}`
+      });
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 3,
+        "name": meta.title.split("|")[0].split("—")[0].trim(),
+        "item": meta.canonical
+      });
+    }
+  }
+  structuredDataList.push({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems
+  });
+
+  // Route-Specific Structured Data
+  if (p === "/" || p === "/live") {
+    liveMatches.forEach(m => {
+      structuredDataList.push({
+        "@context": "https://schema.org",
+        "@type": "SportsEvent",
+        "name": m.name || "Live Cricket Match",
+        "sport": "Cricket",
+        "description": `${m.name} live score. ${m.status || ""}`,
+        "url": `${BASE}/match/${m.id}`,
+        "eventStatus": "https://schema.org/LiveEventUpdate",
+        ...(m.dateTimeGMT && { "startDate": new Date(m.dateTimeGMT).toISOString() }),
+        "location": { "@type": "Place", "name": m.venue || "International Stadium" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": `${BASE}/match/${m.id}` }
+      });
+    });
+  } else if (p === "/ipl") {
+    structuredDataList.push({
+      "@context": "https://schema.org",
+      "@type": "SportsEvent",
+      "name": "IPL 2026 — Indian Premier League",
+      "sport": "Cricket",
+      "startDate": "2026-03-28",
+      "endDate": "2026-05-31",
+      "location": { "@type": "Place", "name": "India" },
+      "url": `${BASE}/ipl`,
+      "description": "IPL 2026 points table, live scores, ball-by-ball commentary and standings."
+    });
+  } else if (p === "/news" && news.length > 0) {
+    structuredDataList.push({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Latest Cricket News & IPL 2026 Headlines",
+      "itemListElement": news.slice(0, 15).map((n, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "name": n.title,
+        "url": n.url?.startsWith("http") ? n.url : `${BASE}/news/${n.id || i}`
+      }))
+    });
+  } else if (p.startsWith("/news/") && meta.article) {
+    structuredDataList.push({
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": meta.article.title,
+      "image": [meta.article.img],
+      "datePublished": `${meta.article.date}T09:00:00+05:30`,
+      "dateModified": `${meta.article.date}T09:00:00+05:30`,
+      "author": [{ "@type": "Organization", "name": "Live Cricket Zone Editorial Team", "url": `${BASE}/about` }],
+      "publisher": { "@type": "Organization", "name": SITE, "logo": { "@type": "ImageObject", "url": `${BASE}/logo192.png` } },
+      "description": meta.article.description
+    });
+  } else if (p.startsWith("/match/") && matchDetail) {
+    structuredDataList.push({
+      "@context": "https://schema.org",
+      "@type": "SportsEvent",
+      "name": matchDetail.name || "Live Cricket Match",
+      "sport": "Cricket",
+      "description": `${matchDetail.name} live score: ${matchDetail.status || ""}`,
+      "url": `${BASE}${p}`,
+      "eventStatus": matchDetail.matchEnded ? "https://schema.org/EventCompleted" : matchDetail.matchStarted ? "https://schema.org/LiveEventUpdate" : "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": matchDetail.venue || "Cricket Stadium" },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": `${BASE}${p}` }
+    });
+  } else if (p === "/rankings") {
+    structuredDataList.push({
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "ICC Cricket Rankings 2026 — Batsmen, Bowlers & Teams",
+      "description": "Official ICC player and team rankings across Test, ODI, and T20 formats.",
+      "url": `${BASE}/rankings`
+    });
+  }
+
+  // 2. Generate Content Sections based on Route
+  let dynamicBodyHtml = "";
+
+  if (p === "/" || p === "/live") {
+    const liveCards = liveMatches.length > 0
+      ? liveMatches.map(m => `
+        <article itemscope itemtype="https://schema.org/SportsEvent" class="card">
+          <span class="live-badge">🔴 LIVE</span>
+          <h3 itemprop="name"><a href="${BASE}/match/${m.id}">${m.name}</a></h3>
+          <p class="score-summary">${(m.score || []).map(s => `<strong>${s.inning || "Score"}:</strong> ${s.r}/${s.w} (${s.o} ov)`).join(" · ") || "Match in progress"}</p>
+          <p class="status" itemprop="description">${m.status || ""}${m.venue ? ` | ${m.venue}` : ""}</p>
+        </article>`).join("")
+      : "<p>No live cricket matches at this exact moment. Check upcoming matches below!</p>";
+
+    const recentCards = recentMatches.slice(0, 8).map(m => `
+      <article class="card">
+        <h3><a href="${BASE}/match/${m.id}">${m.name}</a></h3>
+        <p class="score-summary">${(m.score || []).map(s => `${s.inning || "Score"}: ${s.r}/${s.w} (${s.o} ov)`).join(" · ")}</p>
+        <p class="status">${m.status || "Match Ended"}</p>
+      </article>`).join("");
+
+    dynamicBodyHtml = `
+      <section aria-label="Live Cricket Matches">
+        <h2>🔴 Live Cricket Matches Right Now</h2>
+        <div class="grid">${liveCards}</div>
+      </section>
+      ${recentCards ? `<section aria-label="Recent Cricket Results"><h2>✅ Recent Match Results</h2><div class="grid">${recentCards}</div></section>` : ""}`;
+  } else if (p === "/ipl") {
+    const standingsRows = iplStandings.length > 0
+      ? iplStandings.map((r, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${r.team || r.name}</strong> (${r.short || ""})</td>
+          <td>${r.p || r.played || 0}</td>
+          <td>${r.w || r.won || 0}</td>
+          <td>${r.l || r.lost || 0}</td>
+          <td>${r.nrr || "+0.000"}</td>
+          <td><strong>${r.pts || r.points || 0}</strong></td>
+        </tr>`).join("")
+      : `<tr><td colspan="7">IPL 2026 Points Table updates in real time during every match.</td></tr>`;
+
+    dynamicBodyHtml = `
+      <section aria-label="IPL 2026 Points Table">
+        <h2>🏆 IPL 2026 Points Table &amp; Standings</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>L</th><th>NRR</th><th>Pts</th></tr>
+          </thead>
+          <tbody>${standingsRows}</tbody>
+        </table>
+      </section>
+      <section aria-label="IPL 2026 FAQs">
+        <h2>❓ Frequently Asked Questions: IPL 2026</h2>
+        <div class="faq-card">
+          <h3>How many teams qualify for IPL 2026 playoffs?</h3>
+          <p>The top 4 teams in the IPL 2026 points table qualify for the playoffs. Teams ranked 1 and 2 play Qualifier 1, while teams ranked 3 and 4 play the Eliminator.</p>
+        </div>
+        <div class="faq-card">
+          <h3>How often is the IPL live points table updated?</h3>
+          <p>Live Cricket Zone updates the IPL 2026 points table immediately following the conclusion of every match, with real-time Net Run Rate (NRR) recalculations.</p>
+        </div>
+      </section>`;
+  } else if (p === "/rankings") {
+    const menBatting = rankings.menBatting || [];
+    const menBowling = rankings.menBowling || [];
+    const battingRows = menBatting.slice(0, 10).map((r, i) => `
+      <tr><td>${r.rank || i + 1}</td><td><strong>${r.name || r.player}</strong></td><td>${r.country || ""}</td><td>${r.rating || ""}</td></tr>`).join("") || "<tr><td colspan='4'>Rankings data updating...</td></tr>";
+    const bowlingRows = menBowling.slice(0, 10).map((r, i) => `
+      <tr><td>${r.rank || i + 1}</td><td><strong>${r.name || r.player}</strong></td><td>${r.country || ""}</td><td>${r.rating || ""}</td></tr>`).join("") || "<tr><td colspan='4'>Rankings data updating...</td></tr>";
+
+    dynamicBodyHtml = `
+      <section aria-label="ICC Men's Test Batting Rankings">
+        <h2>🏏 ICC Men's Test Batting Rankings 2026</h2>
+        <table class="data-table">
+          <thead><tr><th>Rank</th><th>Batsman</th><th>Team</th><th>Rating</th></tr></thead>
+          <tbody>${battingRows}</tbody>
+        </table>
+      </section>
+      <section aria-label="ICC Men's Test Bowling Rankings" style="margin-top:24px">
+        <h2>🎯 ICC Men's Test Bowling Rankings 2026</h2>
+        <table class="data-table">
+          <thead><tr><th>Rank</th><th>Bowler</th><th>Team</th><th>Rating</th></tr></thead>
+          <tbody>${bowlingRows}</tbody>
+        </table>
+      </section>`;
+  } else if (p === "/news") {
+    const newsCards = news.slice(0, 20).map(n => `
+      <article class="card">
+        <h3><a href="${n.url || '#'}" target="_blank" rel="noopener noreferrer">${n.title}</a></h3>
+        <p>${n.description || ""}</p>
+        <small style="color:#777">Source: ${n.source || "Cricket News Wire"} · ${n.date || "Today"}</small>
+      </article>`).join("");
+
+    dynamicBodyHtml = `
+      <section aria-label="Latest Cricket News">
+        <h2>📰 Latest Cricket News Headlines</h2>
+        <div class="grid">${newsCards}</div>
+      </section>`;
+  } else if (p.startsWith("/news/") && meta.article) {
+    const a = meta.article;
+    dynamicBodyHtml = `
+      <article class="article-content">
+        <h2>${a.title}</h2>
+        <p class="meta-line">Category: <strong>${a.category}</strong> · By <strong>${a.source}</strong> · Published: ${a.date}</p>
+        <p class="summary-box"><em>${a.description}</em></p>
+        ${a.takeaways ? `<div class="takeaways"><h3>Key Takeaways</h3><ul>${a.takeaways.map(t => `<li>${t}</li>`).join("")}</ul></div>` : ""}
+        ${(a.content || []).map(c => `<h3>${c.heading}</h3><p>${c.text}</p>`).join("")}
+      </article>`;
+  } else if (p.startsWith("/match/") && matchDetail) {
+    const m = matchDetail;
+    dynamicBodyHtml = `
+      <article class="match-detail-box">
+        <h2>${m.name} Live Score</h2>
+        <p class="match-status">${m.status || ""}</p>
+        <p><strong>Venue:</strong> ${m.venue || "International Ground"} | <strong>Format:</strong> ${m.matchType || "Cricket Match"}</p>
+        <div class="score-breakdown">
+          ${(m.score || []).map(s => `<p style="font-size:16px"><strong>${s.inning || "Innings"}:</strong> ${s.r}/${s.w} in ${s.o} overs</p>`).join("")}
+        </div>
+      </article>`;
+  } else if (p === "/schedule" || p === "/upcoming") {
+    const upcomingList = upcomingMatches.slice(0, 15).map(m => `
+      <div class="card">
+        <strong>${m.date || "Upcoming"}</strong>: <a href="${BASE}/match/${m.id}">${m.name}</a>
+        <br/><small style="color:#666">${m.matchType || ""} — ${m.venue || ""}</small>
+      </div>`).join("") || "<p>Upcoming fixtures are updated continuously.</p>";
+
+    dynamicBodyHtml = `
+      <section aria-label="Upcoming Cricket Matches">
+        <h2>📅 Upcoming Cricket Schedule 2026</h2>
+        <div>${upcomingList}</div>
+      </section>`;
+  } else if (p === "/football" || p === "/basketball" || p === "/tennis") {
+    const sportName = p.replace("/", "");
+    const capName = sportName.charAt(0).toUpperCase() + sportName.slice(1);
+    dynamicBodyHtml = `
+      <section aria-label="${capName} Live Scores">
+        <h2>${capName} Live Scores &amp; Upcoming Matches</h2>
+        <p>Follow real-time ${sportName} scores, match summaries and standings on Live Cricket Zone.</p>
+        <div class="grid">
+          ${(sportMatches.live || []).slice(0, 6).map(m => `<div class="card"><strong>${m.teams?.[0]?.name || "TBD"} vs ${m.teams?.[1]?.name || "TBD"}</strong><br/><small>${m.league || ""} · 🔴 LIVE</small></div>`).join("") || "<p>No matches live at this moment.</p>"}
+        </div>
+      </section>`;
+  } else {
+    dynamicBodyHtml = `
+      <section aria-label="Cricket Information">
+        <h2>${meta.title.split("|")[0].trim()}</h2>
+        <p>${meta.desc}</p>
+      </section>`;
+  }
+
   const navLinks = [
-    ["/", "Home"], ["/live", "Live Scores"], ["/watch-live", "Highlights"],
-    ["/football", "Football"], ["/basketball", "Basketball"], ["/tennis", "Tennis"],
-    ["/ipl", "IPL 2026"], ["/t20-world-cup", "T20 World Cup"],
+    ["/", "Home"], ["/live", "Live Scores"], ["/ipl", "IPL 2026"],
+    ["/t20-world-cup", "T20 World Cup"], ["/champions-trophy", "Champions Trophy"],
     ["/schedule", "Schedule"], ["/results", "Results"], ["/news", "News"],
-    ["/rankings", "ICC Rankings"], ["/players", "Players"], ["/teams", "Teams"],
-    ["/t20", "T20 Cricket"], ["/odi", "ODI Cricket"], ["/test", "Test Cricket"],
+    ["/rankings", "ICC Rankings"], ["/stats", "Stats"], ["/teams", "Teams"],
+    ["/players", "Players"], ["/fantasy", "Fantasy"], ["/football", "Football"],
+    ["/basketball", "Basketball"], ["/tennis", "Tennis"],
   ];
 
   return `<!DOCTYPE html>
@@ -843,9 +1319,10 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>${meta.title}</title>
   <meta name="description" content="${meta.desc}"/>
+  <meta name="keywords" content="${meta.kw || 'live cricket score, IPL 2026, cricket score today, ball by ball commentary'}"/>
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
-  <meta name="googlebot" content="index,follow"/>
-  <meta name="bingbot" content="index,follow"/>
+  <meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
+  <meta name="bingbot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
   <meta name="author" content="Live Cricket Zone"/>
   <meta name="language" content="English"/>
   <meta name="geo.region" content="IN"/>
@@ -858,35 +1335,42 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
   <meta property="og:image" content="${BASE}/og-image.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
-  <meta property="og:site_name" content="Live Cricket Zone"/>
+  <meta property="og:site_name" content="${SITE}"/>
   <meta property="og:locale" content="en_US"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="${meta.title}"/>
   <meta name="twitter:description" content="${meta.desc}"/>
   <meta name="twitter:image" content="${BASE}/og-image.png"/>
   <meta name="twitter:site" content="@LiveCricketZone"/>
-  <script type="application/ld+json">${sd}</script>
+  ${structuredDataList.map(sd => `<script type="application/ld+json">${JSON.stringify(sd)}</script>`).join("\n  ")}
   <style>
-    body{font-family:Arial,sans-serif;max-width:1200px;margin:0 auto;padding:16px;color:#1a1a1a;line-height:1.6}
-    header{border-bottom:2px solid #3B82F6;padding-bottom:12px;margin-bottom:20px}
-    h1{color:#3B82F6;margin:0 0 8px}
-    nav a{margin-right:12px;color:#1565c0;text-decoration:none;font-size:14px}
+    body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:1200px;margin:0 auto;padding:16px;color:#1e293b;background:#fff;line-height:1.6}
+    header{border-bottom:2px solid #3B82F6;padding-bottom:12px;margin-bottom:24px}
+    h1{color:#1e40af;margin:0 0 10px;font-size:26px}
+    h2{color:#0f172a;border-left:4px solid #3B82F6;padding-left:10px;margin:24px 0 12px;font-size:20px}
+    h3{color:#1e293b;font-size:16px;margin:8px 0 4px}
+    nav a{margin-right:12px;color:#2563eb;text-decoration:none;font-size:13px;font-weight:600}
     nav a:hover{text-decoration:underline}
-    h2{color:#1a1a1a;border-left:4px solid #3B82F6;padding-left:10px}
-    article{border:1px solid #e0e0e0;border-radius:6px;padding:12px;margin-bottom:10px}
-    article h3{margin:0 0 4px;font-size:15px}
-    article h3 a{color:#1565c0;text-decoration:none}
-    article p{margin:0;color:#555;font-size:13px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-    .link-card{border:1px solid #e0e0e0;border-radius:6px;padding:12px;text-align:center}
-    .link-card a{color:#1565c0;text-decoration:none;font-weight:bold}
-    footer{margin-top:40px;padding-top:16px;border-top:1px solid #e0e0e0;font-size:12px;color:#777}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:20px}
+    .card{border:1px solid #e2e8f0;border-radius:8px;padding:14px;background:#f8fafc}
+    .card a{color:#2563eb;text-decoration:none;font-weight:700}
+    .card a:hover{text-decoration:underline}
+    .live-badge{background:#ef4444;color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:12px;display:inline-block;margin-bottom:6px}
+    .score-summary{color:#0f172a;font-size:14px;margin:4px 0}
+    .status{color:#64748b;font-size:12px;margin:0}
+    .data-table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px}
+    .data-table th,.data-table td{border:1px solid #cbd5e1;padding:8px 12px;text-align:left}
+    .data-table th{background:#f1f5f9;font-weight:700;color:#0f172a}
+    .faq-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-bottom:10px}
+    .summary-box{background:#eff6ff;border-left:3px solid #3b82f6;padding:12px 16px;border-radius:4px}
+    .takeaways{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin:14px 0}
+    footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;font-size:12px;color:#64748b}
   </style>
 </head>
 <body>
   <header>
-    <div style="font-size:22px;font-weight:bold"><a href="${BASE}" style="color:#3B82F6;text-decoration:none">🏏 Live Cricket Zone</a></div>
-    <p itemprop="description" style="margin:4px 0 10px;color:#555;font-size:14px">Fastest live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup &amp; all cricket updates</p>
+    <div style="font-size:24px;font-weight:bold"><a href="${BASE}" style="color:#2563eb;text-decoration:none">🏏 Live Cricket Zone</a></div>
+    <p style="margin:4px 0 10px;color:#64748b;font-size:13px">Fastest live cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup &amp; international cricket updates</p>
     <nav aria-label="Main navigation">
       ${navLinks.map(([href, label]) => `<a href="${BASE}${href}">${label}</a>`).join("")}
     </nav>
@@ -894,72 +1378,32 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
 
   <main>
     <h1>${meta.title.split("|")[0].trim()}</h1>
-    <p style="font-size:15px;color:#333;margin-bottom:20px">${meta.desc}</p>
+    <p style="font-size:15px;color:#475569;margin-bottom:20px">${meta.desc}</p>
 
-    ${liveMatches.length > 0 ? `
-    <section aria-label="Live cricket matches">
-      <h2>🔴 Live Cricket Matches Right Now</h2>
-      ${liveHtml}
-    </section>` : ""}
+    ${dynamicBodyHtml}
 
-    ${recentMatches.length > 0 ? `
-    <section aria-label="Recent cricket results">
-      <h2>✅ Recent Match Results</h2>
-      ${recentHtml}
-    </section>` : ""}
-
-    <section aria-label="Other sports">
-      <h2>🌐 Other Sports</h2>
+    <section aria-label="Tournament and Format Navigation" style="margin-top:36px">
+      <h2>🏆 Cricket Tournaments &amp; Formats</h2>
       <div class="grid">
-        <div class="link-card"><a href="${BASE}/football">Football Live Scores</a><br/><small>Premier League, La Liga, Champions League &amp; more</small></div>
-        <div class="link-card"><a href="${BASE}/basketball">Basketball Live Scores</a><br/><small>NBA &amp; NCAA</small></div>
-        <div class="link-card"><a href="${BASE}/tennis">Tennis Live Scores</a><br/><small>ATP &amp; WTA Tour</small></div>
+        <div class="card"><a href="${BASE}/ipl">IPL 2026 Points Table &amp; Live Score</a><br/><small>Indian Premier League</small></div>
+        <div class="card"><a href="${BASE}/t20-world-cup">T20 World Cup 2026</a><br/><small>ICC Men's T20 World Cup</small></div>
+        <div class="card"><a href="${BASE}/champions-trophy">Champions Trophy 2025</a><br/><small>ICC Champions Trophy</small></div>
+        <div class="card"><a href="${BASE}/asia-cup">Asia Cup 2026 Live Score</a><br/><small>India vs Pakistan &amp; Asian Teams</small></div>
+        <div class="card"><a href="${BASE}/county-championship">County Championship 2026</a><br/><small>English County Cricket</small></div>
+        <div class="card"><a href="${BASE}/psl">PSL 2026 Live Score</a><br/><small>Pakistan Super League</small></div>
+        <div class="card"><a href="${BASE}/bbl">BBL 2026 Live Score</a><br/><small>Big Bash League</small></div>
+        <div class="card"><a href="${BASE}/womens-cricket">Women's Cricket Live Score</a><br/><small>ICC Women's T20 &amp; ODI</small></div>
+        <div class="card"><a href="${BASE}/t20">T20 Cricket Live Score</a><br/><small>All Twenty20 Matches</small></div>
+        <div class="card"><a href="${BASE}/odi">ODI Cricket Live Score</a><br/><small>One Day Internationals</small></div>
+        <div class="card"><a href="${BASE}/test">Test Cricket Live Score</a><br/><small>5-day Test Matches</small></div>
+        <div class="card"><a href="${BASE}/rankings">ICC Cricket Rankings 2026</a><br/><small>Men's &amp; Women's Rankings</small></div>
       </div>
     </section>
 
-    <section aria-label="Cricket tournaments">
-      <h2>🏆 Cricket Tournaments &amp; Leagues</h2>
-      <div class="grid">
-        <div class="link-card"><a href="${BASE}/ipl">IPL 2026 Live Score</a><br/><small>Indian Premier League</small></div>
-        <div class="link-card"><a href="${BASE}/t20-world-cup">T20 World Cup 2026</a><br/><small>ICC T20 World Cup</small></div>
-        <div class="link-card"><a href="${BASE}/world-cup">Cricket World Cup 2027</a><br/><small>ICC ODI World Cup</small></div>
-        <div class="link-card"><a href="${BASE}/asia-cup">Asia Cup 2026</a><br/><small>India vs Pakistan</small></div>
-        <div class="link-card"><a href="${BASE}/champions-trophy">Champions Trophy 2025</a><br/><small>ICC Champions Trophy</small></div>
-        <div class="link-card"><a href="${BASE}/psl">PSL 2026 Live Score</a><br/><small>Pakistan Super League</small></div>
-        <div class="link-card"><a href="${BASE}/bbl">BBL 2026 Live Score</a><br/><small>Big Bash League</small></div>
-        <div class="link-card"><a href="${BASE}/cpl">CPL 2026 Live Score</a><br/><small>Caribbean Premier League</small></div>
-        <div class="link-card"><a href="${BASE}/bpl">BPL 2026 Live Score</a><br/><small>Bangladesh Premier League</small></div>
-        <div class="link-card"><a href="${BASE}/womens-cricket">Women's Cricket</a><br/><small>ICC Women's T20 &amp; ODI</small></div>
-        <div class="link-card"><a href="${BASE}/county-championship">County Championship 2026</a><br/><small>English County Cricket</small></div>
-      </div>
-    </section>
-
-    <section aria-label="Cricket formats">
-      <h2>🏏 Cricket Formats</h2>
-      <div class="grid">
-        <div class="link-card"><a href="${BASE}/t20">T20 Cricket Live Score</a><br/><small>Twenty20 matches</small></div>
-        <div class="link-card"><a href="${BASE}/odi">ODI Cricket Live Score</a><br/><small>One Day International</small></div>
-        <div class="link-card"><a href="${BASE}/test">Test Cricket Live Score</a><br/><small>5-day Test matches</small></div>
-      </div>
-    </section>
-
-    <section aria-label="About Live Cricket Zone">
+    <section aria-label="About Live Cricket Zone" style="margin-top:36px">
       <h2>About Live Cricket Zone</h2>
-      <p>Live Cricket Zone is your ultimate destination for <strong>live cricket scores</strong> with real-time ball-by-ball commentary updated every 15 seconds. We cover all major cricket tournaments including <strong>IPL 2026 live score</strong>, <strong>T20 World Cup 2026</strong>, ODI World Cup, Asia Cup, Champions Trophy, PSL, BBL, CPL, BPL and all international cricket.</p>
-      <p>Our <strong>cricket score today</strong> service is faster than Cricbuzz and ESPNcricinfo. Get <strong>live cricket match</strong> updates, full scorecards, toss results, player statistics, ICC rankings 2026, cricket news and match schedules — all in one place.</p>
-      <p>Beyond cricket, Live Cricket Zone also covers <a href="${BASE}/football">football</a> (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Champions League, MLS), <a href="${BASE}/basketball">basketball</a> (NBA, NCAA) and <a href="${BASE}/tennis">tennis</a> (ATP, WTA) live scores.</p>
-      <h3>Why Choose Live Cricket Zone?</h3>
-      <ul>
-        <li>Fastest live cricket score — updated every 15 seconds</li>
-        <li>Ball-by-ball commentary for every match</li>
-        <li>Complete scorecards with batting and bowling figures</li>
-        <li>IPL 2026 live score, points table and schedule</li>
-        <li>T20 World Cup 2026 live updates</li>
-        <li>ICC rankings 2026 for batsmen, bowlers and teams</li>
-        <li>Cricket news today from all major sources</li>
-        <li>Player profiles and career statistics</li>
-        <li>Free — no subscription required</li>
-      </ul>
+      <p>Live Cricket Zone is the premier online destination for <strong>live cricket scores</strong> with real-time ball-by-ball commentary updated every 15 seconds. We cover all major international tournaments and domestic leagues, including <strong>IPL 2026</strong>, <strong>T20 World Cup 2026</strong>, ICC Champions Trophy, Asia Cup, PSL, BBL, CPL, BPL, and County Championship.</p>
+      <p>Our service provides instant ball-by-ball commentary, full scorecards with batting and bowling figures, toss information, player career statistics, ICC rankings, and official match highlights.</p>
     </section>
   </main>
 
@@ -967,7 +1411,11 @@ function renderBotHtml(pathname, meta, liveMatches = [], recentMatches = []) {
     <p>&copy; ${new Date().getFullYear()} Live Cricket Zone — <a href="${BASE}">livecricketzone.com</a> | 
     <a href="${BASE}/about">About</a> | 
     <a href="${BASE}/sitemap.xml">Sitemap</a> | 
-    <a href="${BASE}/news">Cricket News</a></p>
+    <a href="${BASE}/sitemap-news.xml">News Sitemap</a> | 
+    <a href="${BASE}/rss.xml">RSS Feed</a> | 
+    <a href="${BASE}/privacy-policy">Privacy Policy</a> | 
+    <a href="${BASE}/terms-of-use">Terms of Use</a> | 
+    <a href="${BASE}/dmca-copyright">DMCA</a></p>
   </footer>
 </body>
 </html>`;
@@ -994,16 +1442,52 @@ module.exports = async (req, res) => {
     // Skip API paths — bots shouldn't get HTML for /api/* routes
     if (!pathname.startsWith("/api/")) {
       const meta = getPageMeta(pathname);
-      let liveMatches = [], recentMatches = [];
-      // For homepage, live page and today page — inject actual match data
-      if (pathname === "/" || pathname === "/live") {
-        try {
+      const cleanPath = pathname.replace(/\/$/, "") || "/";
+      const context = {};
+
+      try {
+        if (cleanPath === "/" || cleanPath === "/live" || cleanPath === "/schedule" || cleanPath === "/upcoming" || cleanPath === "/results" || cleanPath === "/t20" || cleanPath === "/odi" || cleanPath === "/test" || cleanPath.startsWith("/t20-") || cleanPath.startsWith("/asia-") || cleanPath.startsWith("/champions-") || cleanPath.startsWith("/world-") || cleanPath.startsWith("/psl") || cleanPath.startsWith("/bbl") || cleanPath.startsWith("/county-")) {
           const all = await getAllMatches();
-          liveMatches = all.live || [];
-          recentMatches = all.recent || [];
-        } catch (_) {}
+          context.liveMatches = all.live || [];
+          context.recentMatches = all.recent || [];
+          context.upcomingMatches = all.upcoming || [];
+        }
+        if (cleanPath === "/ipl" || cleanPath === "/") {
+          try { context.iplStandings = await scraper.scrapeIPLStandings(); } catch (_) {}
+          if (cleanPath === "/ipl" && !context.liveMatches) {
+            const all = await getAllMatches();
+            context.liveMatches = (all.live || []).filter(m => m.series?.toLowerCase().includes("ipl") || m.name?.toLowerCase().includes("ipl"));
+            context.upcomingMatches = (all.upcoming || []).filter(m => m.series?.toLowerCase().includes("ipl") || m.name?.toLowerCase().includes("ipl"));
+          }
+        }
+        if (cleanPath === "/rankings") {
+          const [menBatting, menBowling] = await Promise.allSettled([
+            scraper.scrapeCricbuzzRankings("men", "batting", "tests"),
+            scraper.scrapeCricbuzzRankings("men", "bowling", "tests"),
+          ]);
+          context.rankings = {
+            menBatting: menBatting.status === "fulfilled" ? menBatting.value : [],
+            menBowling: menBowling.status === "fulfilled" ? menBowling.value : []
+          };
+        }
+        if (cleanPath === "/news") {
+          context.news = await getNews();
+        }
+        if (cleanPath.startsWith("/match/")) {
+          const matchId = cleanPath.replace("/match/", "").split("/")[0].split("-").pop();
+          if (matchId) {
+            context.matchDetail = await getMatchInfo(matchId);
+          }
+        }
+        if (cleanPath === "/football" || cleanPath === "/basketball" || cleanPath === "/tennis") {
+          const sport = cleanPath.replace("/", "");
+          context.sportMatches = await multiSport.getSportMatches(sport);
+        }
+      } catch (err) {
+        console.warn("[Bot Context Error]:", err.message);
       }
-      const html = renderBotHtml(pathname, meta, liveMatches, recentMatches);
+
+      const html = renderBotHtml(pathname, meta, context);
       res.setHeader("Content-Type", "text/html; charset=utf-8");
       res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
       res.setHeader("Vary", "User-Agent");
@@ -1233,8 +1717,16 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data });
     }
     if (parts[0] === "players") {
-      const query = qp(req, "search") || "india";
-      const data = await searchPlayers(query);
+      const query = qp(req, "search") || "virat";
+      const data = await scraper.searchPlayers(query);
+      return res.json({ status: "success", data });
+    }
+
+    // ── Career Stats & Records ───────────────────────────────────────────────
+    if (parts[0] === "stats") {
+      const data = typeof scraper.scrapeCareerRecords === "function"
+        ? scraper.scrapeCareerRecords()
+        : {};
       return res.json({ status: "success", data });
     }
 
@@ -1254,23 +1746,46 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data });
     }
 
-    // ── IndexNow submit-all ──────────────────────────────────────────────────
+    // ── IndexNow submit-all & Search Engine Ping ────────────────────────────
     if (path === "indexnow/submit-all") {
       const INDEXNOW_KEY = process.env.INDEXNOW_KEY || "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6";
       const base = "https://www.livecricketzone.com";
       const urls = [
         `${base}/`, `${base}/live`, `${base}/ipl`, `${base}/t20-world-cup`,
-        `${base}/world-cup`, `${base}/asia-cup`, `${base}/champions-trophy`,
+        `${base}/champions-trophy`, `${base}/asia-cup`, `${base}/world-cup`,
+        `${base}/county-championship`, `${base}/county-cricket`, `${base}/womens-cricket`,
+        `${base}/t20`, `${base}/odi`, `${base}/test`,
         `${base}/psl`, `${base}/bbl`, `${base}/cpl`, `${base}/bpl`,
-        `${base}/schedule`, `${base}/news`, `${base}/rankings`,
+        `${base}/schedule`, `${base}/upcoming`, `${base}/results`,
+        `${base}/news`, `${base}/rankings`, `${base}/stats`,
+        `${base}/series`, `${base}/teams`, `${base}/players`,
+        `${base}/fantasy`, `${base}/watch-live`, `${base}/videos`,
+        `${base}/football`, `${base}/basketball`, `${base}/tennis`,
+        `${base}/cricket-website`, `${base}/about`,
+        `${base}/news/ipl-2026-auction-tactical-breakdown`,
+        `${base}/news/world-test-championship-2026-standings`,
+        `${base}/news/t20-world-cup-powerplay-batting-trends`,
       ];
       try {
-        const r = await fetch("https://api.indexnow.org/indexnow", {
-          method: "POST",
-          headers: { "Content-Type": "application/json; charset=utf-8" },
-          body: JSON.stringify({ host: "www.livecricketzone.com", key: INDEXNOW_KEY, keyLocation: `${base}/${INDEXNOW_KEY}.txt`, urlList: urls }),
+        const [indexNowRes, bingRes] = await Promise.allSettled([
+          fetch("https://api.indexnow.org/indexnow", {
+            method: "POST",
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify({ host: "www.livecricketzone.com", key: INDEXNOW_KEY, keyLocation: `${base}/${INDEXNOW_KEY}.txt`, urlList: urls }),
+          }),
+          fetch("https://www.bing.com/indexnow", {
+            method: "POST",
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify({ host: "www.livecricketzone.com", key: INDEXNOW_KEY, keyLocation: `${base}/${INDEXNOW_KEY}.txt`, urlList: urls }),
+          })
+        ]);
+        return res.json({
+          status: "success",
+          indexnow: indexNowRes.status === "fulfilled" ? indexNowRes.value.status : "failed",
+          bing: bingRes.status === "fulfilled" ? bingRes.value.status : "failed",
+          count: urls.length,
+          urls
         });
-        return res.json({ status: "success", indexnow: r.status, count: urls.length });
       } catch (e) {
         return res.json({ status: "error", message: e.message });
       }
@@ -1323,6 +1838,58 @@ module.exports = async (req, res) => {
         return res.json(ytResult);
       } catch (e) {
         return res.json({ videos: [], error: e.message });
+      }
+    }
+
+    // ── Kachuful Multiplayer Room Routes ──────────────────────────────────────
+    if (parts[0] === "games" && parts[1] === "kachuful" && parts[2] === "rooms") {
+      let body = {};
+      if (req.body && typeof req.body === "object") body = req.body;
+      else if (req.body && typeof req.body === "string") {
+        try { body = JSON.parse(req.body); } catch (_) {}
+      }
+
+      const roomId = parts[3];
+      const subAction = parts[4];
+      const playerName = qp(req, "player") || body.player || body.playerName || "Player";
+
+      // POST /api/games/kachuful/rooms (Create or Join)
+      if (!roomId && req.method === "POST") {
+        if (body.action === "create") {
+          const room = kachufulEngine.createRoom(body.hostName || "Host");
+          return res.json({ status: "success", room });
+        }
+        if (body.action === "join") {
+          const result = kachufulEngine.joinRoom(body.roomId, body.playerName);
+          if (result.error) return res.status(400).json({ status: "error", message: result.error });
+          return res.json({ status: "success", room: result.room, assignedName: result.assignedName });
+        }
+      }
+
+      // Room actions
+      if (roomId) {
+        if (subAction === "action" && req.method === "POST") {
+          let result;
+          if (body.action === "start") {
+            result = kachufulEngine.startMatch(roomId, playerName);
+          } else if (body.action === "bid") {
+            result = kachufulEngine.submitBid(roomId, playerName, body.bid);
+          } else if (body.action === "play_card") {
+            result = kachufulEngine.playCard(roomId, playerName, body.cardId);
+          } else if (body.action === "next_round") {
+            result = kachufulEngine.nextRound(roomId);
+          } else if (body.action === "reaction") {
+            result = kachufulEngine.addReaction(roomId, playerName, body.emoji);
+          }
+          if (result?.error) return res.status(400).json({ status: "error", message: result.error });
+          const sanitized = kachufulEngine.getSanitizedRoom(roomId, playerName);
+          return res.json({ status: "success", room: sanitized });
+        }
+
+        // GET room state
+        const sanitized = kachufulEngine.getSanitizedRoom(roomId, playerName);
+        if (!sanitized) return res.status(404).json({ status: "error", message: "Room not found" });
+        return res.json({ status: "success", room: sanitized });
       }
     }
 

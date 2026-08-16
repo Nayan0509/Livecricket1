@@ -9,6 +9,7 @@ const DEFAULT_IMG = `${SITE_URL}/og-image.png`;
 export default function SEO({
   title,
   description = DEFAULT_DESC,
+  keywords = "live cricket score, IPL 2026, cricket score today, ball by ball commentary, T20 World Cup, ICC rankings, cricket news",
   image = DEFAULT_IMG,
   url,
   type = "website",
@@ -17,7 +18,35 @@ export default function SEO({
   article = null,
 }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Live Cricket Scores & IPL 2026`;
-  const canonical = url ? `${SITE_URL}${url}` : SITE_URL;
+  const canonical = url ? `${SITE_URL}${url.startsWith("/") ? url : `/${url}`}` : SITE_URL;
+
+  // Build hierarchical breadcrumbs
+  const breadcrumbItems = [{ "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL }];
+  if (url && url !== "/") {
+    const parts = url.replace(/^\/+|\/+$/g, "").split("/");
+    if (parts.length === 1) {
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 2,
+        "name": (title || parts[0]).split("|")[0].split("—")[0].trim(),
+        "item": canonical
+      });
+    } else if (parts.length >= 2) {
+      const parentName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).replace(/-/g, " ");
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 2,
+        "name": parentName,
+        "item": `${SITE_URL}/${parts[0]}`
+      });
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 3,
+        "name": (title || parts[1]).split("|")[0].split("—")[0].trim(),
+        "item": canonical
+      });
+    }
+  }
 
   return (
     <Helmet>
@@ -25,13 +54,14 @@ export default function SEO({
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
       <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonical} />
       
       {/* Search Engine Robots */}
       {!noindex && <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />}
       {noindex && <meta name="robots" content="noindex, nofollow" />}
-      <meta name="googlebot" content="index, follow" />
-      <meta name="bingbot" content="index, follow" />
+      <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       
       {/* Additional SEO */}
       <meta name="author" content="Live Cricket Zone" />
@@ -89,35 +119,24 @@ export default function SEO({
         </script>
       ))}
       
-      {/* BreadcrumbList for better SERP visibility */}
+      {/* BreadcrumbList for rich SERP breadcrumbs */}
       {url && url !== "/" && (
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
-            "itemListElement": [
-              {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": SITE_URL
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "name": title,
-                "item": canonical
-              }
-            ]
+            "itemListElement": breadcrumbItems
           })}
         </script>
       )}
 
-      {/* Directives for Web Spiders */}
+      {/* Performance preconnects */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link rel="preconnect" href="https://g.cricapi.com" />
+      <link rel="preconnect" href="https://static.cricbuzz.com" />
       <link rel="dns-prefetch" href="https://api.cricapi.com" />
+      <link rel="dns-prefetch" href="https://news.google.com" />
     </Helmet>
   );
 }

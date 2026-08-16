@@ -82,8 +82,8 @@ async function getPlayerInfo(id) {
 // GET /api/players?search=virat
 router.get("/", async (req, res) => {
   try {
-    const query = req.query.search || "india";
-    const data = await searchPlayers(query);
+    const query = req.query.search || "virat";
+    const data = await scraper.searchPlayers(query);
     res.json({ status: "success", data });
   } catch (err) {
     res.status(500).json({ error: err.message, data: [] });

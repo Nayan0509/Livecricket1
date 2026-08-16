@@ -1740,6 +1740,8 @@ module.exports.scrapeIPLStandings     = _firstNonEmpty(cbScraper.scrapeIPLStandi
 
 // Functions routes call that the ESPN rewrite renamed/dropped
 module.exports.scrapePlayerDetails    = _firstNonEmpty(cbScraper.scrapePlayerDetails, _espnImpl.scrapePlayerInfo);
+module.exports.searchPlayers          = _firstNonEmpty(cbScraper.searchPlayers, _espnImpl.searchPlayers);
+module.exports.scrapeCareerRecords    = cbScraper.scrapeCareerRecords;
 module.exports.scrapeTeamDetail       = _firstNonEmpty(cbScraper.scrapeTeamDetail, _espnImpl.scrapeTeamInfo);
 module.exports.scrapeVenueInfo        = _firstNonEmpty(cbScraper.scrapeVenueInfo, _espnImpl.scrapeVenueStats);
 module.exports.scrapeBrowseMatches    = _firstNonEmpty(cbScraper.scrapeBrowseMatches, _espnImpl.scrapeBrowseMatches);

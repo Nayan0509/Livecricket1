@@ -27,12 +27,16 @@ export default function PlayerDetail() {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": player.name,
-    "nationality": player.country,
+    "jobTitle": player.role || "Cricketer",
+    "nationality": {
+      "@type": "Country",
+      "name": player.country
+    },
     "birthDate": player.dateOfBirth?.split("T")[0],
     "birthPlace": player.placeOfBirth,
-    "description": `${player.name} cricket stats — ${player.role}, ${player.battingStyle}, ${player.country}`,
+    "description": `${player.name} career cricket stats — ${player.role || "Player"}, ${player.battingStyle || ""}, representing ${player.country}.`,
     "image": player.playerImg,
-    "url": `https://criclive.vercel.app/players/${id}`,
+    "url": `https://www.livecricketzone.com/players/${id}`,
   };
 
   // Convert flat stats array into grouped object: { batting: { test: {m,inn,runs,...}, odi:{...} }, bowling:{...} }

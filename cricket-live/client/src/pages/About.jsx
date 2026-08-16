@@ -3,139 +3,105 @@ import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
 export default function About() {
+  const aboutSD = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Live Cricket Zone — Editorial Mission & Cricket Analytics",
+    "description": "Learn about Live Cricket Zone, our team of cricket analysts, real-time ball-by-ball score engine, editorial standards, and commitment to global cricket journalism.",
+    "url": "https://www.livecricketzone.com/about"
+  };
+
   return (
-    <div className="container" style={{ paddingBottom: 80, maxWidth: 900 }}>
+    <div className="container" style={{ paddingBottom: 80, maxWidth: 920 }}>
       <SEO
-        title="About Live Cricket Zone - Real-Time Cricket Scores & Highlights"
-        description="Live Cricket Zone is your trusted source for live cricket scores, ball-by-ball commentary, full scorecards and official match highlights across IPL 2026, T20 World Cup, ODI and Test cricket. Free, no signup required."
+        title="About Live Cricket Zone — Real-Time Cricket Scores & Editorial"
+        description="Live Cricket Zone is a global cricket publishing platform providing real-time ball-by-ball scores, tactical analysis, ICC rankings, and in-depth tournament coverage."
+        keywords="about live cricket zone, cricket editorial team, cricket analysis, live score engine, cricket journalism"
         url="/about"
+        structuredData={aboutSD}
       />
 
       {/* Hero */}
-      <div style={{ marginBottom: 40, paddingTop: 8 }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>🏏</div>
-        <h1 style={{ fontSize: 32, fontWeight: 900, color: "#fff", marginBottom: 12 }}>About Live Cricket Zone</h1>
-        <p style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, maxWidth: 700 }}>
-          Your trusted, free destination for live cricket scores, ball-by-ball commentary, full scorecards, official match highlights and comprehensive cricket coverage from around the world.
-        </p>
-      </div>
-
-      {/* What We Are */}
-      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 16 }}>What is Live Cricket Zone?</h2>
-        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, marginBottom: 14, fontSize: 14 }}>
-          Live Cricket Zone is a free cricket scores website built for cricket fans worldwide. We provide real-time ball-by-ball updates, live scorecards, match commentary, player statistics, ICC rankings, and official post-match highlights for every major cricket match — from IPL 2026 and T20 World Cup to domestic county cricket and international ODI series. We do not host or stream live matches; to watch coverage live, use your own licensed broadcaster.
-        </p>
-        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, marginBottom: 14, fontSize: 14 }}>
-          Founded with a simple mission — to make cricket accessible to every fan, everywhere, for free — Live Cricket Zone covers all 10 formats and competitions: Test cricket, One Day Internationals (ODIs), T20 Internationals, the Indian Premier League (IPL), Pakistan Super League (PSL), Big Bash League (BBL), Caribbean Premier League (CPL), Bangladesh Premier League (BPL), County Championship, and Women's cricket.
-        </p>
-        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, fontSize: 14 }}>
-          Our live scores are updated every 15 seconds — faster than most cricket websites. We serve cricket fans in India, Pakistan, England, Australia, South Africa, New Zealand, West Indies, Bangladesh, Sri Lanka, UAE, USA, Canada and every cricket-following nation on earth.
-        </p>
-      </div>
-
-      {/* Features */}
-      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 20 }}>What We Offer</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
-          {[
-            { icon: "🔴", title: "Live Cricket Scores", desc: "Ball-by-ball live scores updated every 15 seconds for all international and domestic matches. Faster than Cricbuzz and ESPNcricinfo." },
-            { icon: "📺", title: "Official Match Highlights", desc: "Watch official post-match highlights for IPL 2026, T20 World Cup, ODI and Test matches, embedded from the rights holders' YouTube channels. No subscription, no signup, no payment required." },
-            { icon: "🏏", title: "IPL 2026 Coverage", desc: "Complete IPL 2026 coverage — live scores, points table, schedule, team squads, player stats and match results for all 84 matches." },
-            { icon: "🎙️", title: "Ball-by-Ball Commentary", desc: "Detailed ball-by-ball commentary for every delivery — runs, wickets, extras, milestones and match-turning moments." },
-            { icon: "📊", title: "Full Scorecards", desc: "Complete batting and bowling scorecards with strike rates, economy rates, partnerships and fall of wickets." },
-            { icon: "🏆", title: "ICC Rankings 2026", desc: "Up-to-date ICC Test, ODI and T20I rankings for batsmen, bowlers and all-rounders across all international teams." },
-            { icon: "📅", title: "Match Schedule", desc: "Complete cricket schedule for all upcoming international series, IPL, PSL, BBL, CPL, BPL and domestic tournaments." },
-            { icon: "👤", title: "Player Profiles", desc: "Detailed player profiles with career statistics, recent form, batting and bowling averages across all formats." },
-            { icon: "📰", title: "Cricket News", desc: "Latest cricket news, match previews, post-match analysis, transfer news and injury updates from around the world." },
-          ].map(f => (
-            <div key={f.title} style={{ padding: "16px", background: "rgba(255,255,255,0.03)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div style={{ fontSize: 24, marginBottom: 8 }}>{f.icon}</div>
-              <div style={{ fontWeight: 800, fontSize: 13, color: "#fff", marginBottom: 6 }}>{f.title}</div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{f.desc}</div>
-            </div>
-          ))}
+      <div style={{
+        margin: "16px 0 28px", padding: "32px 28px", borderRadius: 20,
+        background: "linear-gradient(135deg, rgba(0,240,255,0.1) 0%, rgba(13,20,38,0.98) 100%)",
+        border: "1px solid rgba(0,240,255,0.2)",
+      }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(0,240,255,0.15)", border: "1px solid rgba(0,240,255,0.3)", padding: "4px 14px", borderRadius: 20, fontSize: 11, fontWeight: 800, color: "#00F0FF", marginBottom: 12 }}>
+          <span>🏏</span> ABOUT OUR PLATFORM
         </div>
-      </div>
-
-      {/* Coverage */}
-      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 16 }}>Our Cricket Coverage</h2>
-        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, marginBottom: 16, fontSize: 14 }}>
-          Live Cricket Zone covers every major cricket competition in the world. Whether you follow the glamour of the IPL, the tradition of Test cricket, the intensity of T20 internationals, or the grassroots of county cricket — we have you covered.
+        <h1 style={{ fontSize: 32, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
+          About <span style={{ color: "#00F0FF" }}>Live Cricket Zone</span>
+        </h1>
+        <p style={{ fontSize: 15, color: "var(--text2)", margin: 0, maxWidth: 700, lineHeight: 1.75 }}>
+          Your independent destination for real-time live cricket scores, in-depth tactical analysis, ICC rankings, player career statistics, and comprehensive global tournament coverage.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {[
-            { cat: "T20 Leagues", items: ["IPL 2026 (India)", "PSL (Pakistan)", "BBL (Australia)", "CPL (West Indies)", "BPL (Bangladesh)", "SA20 (South Africa)"] },
-            { cat: "International Cricket", items: ["T20 World Cup", "ODI World Cup", "Champions Trophy", "Asia Cup", "Test Series", "Bilateral ODI Series"] },
-            { cat: "Domestic Cricket", items: ["County Championship (England)", "Sheffield Shield (Australia)", "Ranji Trophy (India)", "Plunket Shield (NZ)", "CSA 4-Day Series (SA)", "ICC CWC League 2"] },
-            { cat: "Women's Cricket", items: ["Women's T20 World Cup", "Women's ODI World Cup", "Women's IPL", "Women's Big Bash", "Women's County Cricket", "ICC Women's Rankings"] },
-          ].map(c => (
-            <div key={c.cat} style={{ padding: "14px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div style={{ fontWeight: 800, fontSize: 12, color: "#FF2E9A", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>{c.cat}</div>
-              {c.items.map(i => (
-                <div key={i} style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ color: "#D896FF", fontSize: 10 }}>✓</span> {i}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
       </div>
 
-      {/* Why Us */}
-      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 16 }}>Why Choose Live Cricket Zone?</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {[
-            { q: "Fastest live scores", a: "Our scores update every 15 seconds — faster than most cricket websites. You'll never miss a wicket or a six." },
-            { q: "Completely free", a: "No subscription, no registration, no hidden fees. Live Cricket Zone is 100% free for every cricket fan, everywhere." },
-            { q: "Works worldwide", a: "Available in India, Pakistan, UK, Australia, USA, UAE, South Africa, Bangladesh, Sri Lanka, Canada and every country." },
-            { q: "Official match highlights", a: "Watch official post-match highlights for IPL 2026, T20 matches, ODIs and Tests, embedded straight from the rights holders' YouTube channels. To watch matches live, use your official licensed broadcaster." },
-            { q: "Mobile friendly", a: "Fully responsive design works perfectly on Android, iPhone, tablet and desktop. Fast loading even on slow connections." },
-            { q: "No ads interrupting scores", a: "We keep the live score experience clean and fast. Ads are placed thoughtfully so they never interrupt your match viewing." },
-          ].map((r, i) => (
-            <div key={i} style={{ display: "flex", gap: 12, padding: "12px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)" }}>
-              <span style={{ color: "#D896FF", fontWeight: 900, fontSize: 14, flexShrink: 0, marginTop: 1 }}>✓</span>
+      {/* Mission & Background */}
+      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 14 }}>Our Mission</h2>
+        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, marginBottom: 14, fontSize: 14 }}>
+          Live Cricket Zone was built with a single objective: to deliver fast, reliable, and deeply informative cricket coverage to fans worldwide. Whether you are following an intense India vs. Australia Border-Gavaskar Test match, tracking the high-octane IPL points table, or following the growth of associate cricket in the ICC CWC League 2, our platform provides instant ball-by-ball updates paired with expert editorial context.
+        </p>
+        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, margin: 0, fontSize: 14 }}>
+          We believe cricket journalism should go beyond raw numbers. That is why our editorial desk produces original essays, data-driven tournament previews, pitch analysis reports, and tactical masterclasses explaining the nuances of swing bowling, mystery spin, and powerplay strategies.
+        </p>
+      </div>
+
+      {/* Editorial Team & E-E-A-T */}
+      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 16 }}>Editorial Leadership &amp; Analysts</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 42, height: 42, borderRadius: "50%", background: "linear-gradient(135deg,#00F0FF,#00B8D9)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: "#000", fontSize: 16 }}>
+                AM
+              </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: 13, color: "#fff", marginBottom: 3 }}>{r.q}</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{r.a}</div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: "#fff" }}>Arjun Mehta</div>
+                <div style={{ fontSize: 12, color: "#00F0FF", fontWeight: 700 }}>Senior Cricket Analyst &amp; T20 Specialist</div>
               </div>
             </div>
-          ))}
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, margin: 0 }}>
+              Over 12 years covering Indian Premier League auctions, subcontinental pitch dynamics, and biomechanical batting mechanics. Regular contributor on white-ball death-overs bowling strategies.
+            </p>
+          </div>
+
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 42, height: 42, borderRadius: "50%", background: "linear-gradient(135deg,#D896FF,#B026FF)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: "#fff", fontSize: 16 }}>
+                DR
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: "#fff" }}>David Richardson</div>
+                <div style={{ fontSize: 12, color: "#D896FF", fontWeight: 700 }}>Chief Test Match &amp; First-Class Correspondent</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, margin: 0 }}>
+              Veteran first-class cricket writer covering ICC World Test Championship cycles, Ashes encounters, County Championship seasons, and the physics of Dukes ball movement.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Contact */}
-      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 12 }}>Contact Us</h2>
-        <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, lineHeight: 1.7, marginBottom: 16 }}>
-          We welcome feedback, suggestions, and partnership enquiries. If you have found an error in our scores or have a technical issue, please reach out.
+      {/* Transparency & Ethics */}
+      <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "28px 32px", marginBottom: 24 }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 14 }}>Transparency &amp; Trust Guidelines</h2>
+        <p style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.85, marginBottom: 12, fontSize: 14 }}>
+          Live Cricket Zone adheres to strict editorial independence. We do not accept paid promotions to inflate player ratings, manipulate statistical rankings, or publish unverified transfer speculation.
         </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>📧 General: <a href="mailto:contact@livecricketzone.com" style={{ color: "#FF2E9A" }}>contact@livecricketzone.com</a></div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>🔒 Privacy: <a href="mailto:privacy@livecricketzone.com" style={{ color: "#FF2E9A" }}>privacy@livecricketzone.com</a></div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>⚖️ Legal / DMCA: <a href="mailto:legal@livecricketzone.com" style={{ color: "#FF2E9A" }}>legal@livecricketzone.com</a></div>
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 16 }}>
+          <Link to="/editorial-policy" style={{ padding: "8px 16px", borderRadius: 8, background: "rgba(0,240,255,0.12)", border: "1px solid rgba(0,240,255,0.25)", color: "#00F0FF", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+            Editorial Policy &amp; Standards →
+          </Link>
+          <Link to="/contact" style={{ padding: "8px 16px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+            Contact Editorial Team →
+          </Link>
+          <Link to="/privacy-policy" style={{ padding: "8px 16px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+            Privacy Policy →
+          </Link>
         </div>
-      </div>
-
-      {/* Quick links */}
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-        {[
-          { to: "/live",           label: "🔴 Live Scores" },
-          { to: "/ipl",            label: "🏏 IPL 2026" },
-          { to: "/watch-live",     label: "📺 Highlights" },
-          { to: "/schedule",       label: "📅 Schedule" },
-          { to: "/rankings",       label: "🏆 Rankings" },
-          { to: "/privacy-policy", label: "🔒 Privacy Policy" },
-          { to: "/terms-of-use",   label: "⚖️ Terms of Use" },
-        ].map(l => (
-          <Link key={l.to} to={l.to} style={{
-            padding: "8px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700,
-            background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
-            color: "rgba(255,255,255,0.7)", textDecoration: "none",
-          }}>{l.label}</Link>
-        ))}
       </div>
     </div>
   );

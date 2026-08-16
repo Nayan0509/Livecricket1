@@ -33,6 +33,23 @@ export default function Rankings() {
     if (c === "women" && format === "tests") setFormat("odis");
   };
 
+  const rankingsSD = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": `ICC ${category === "men" ? "Men's" : "Women's"} ${TYPE_LABELS[type]} Rankings ${format.toUpperCase()} 2026`,
+    "description": `Official ICC cricket rankings for ${category} ${type} in ${format} format.`,
+    "url": "https://www.livecricketzone.com/rankings",
+    "creator": {
+      "@type": "Organization",
+      "name": "International Cricket Council (ICC)"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Live Cricket Zone",
+      "url": "https://www.livecricketzone.com"
+    }
+  };
+
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
@@ -40,6 +57,7 @@ export default function Rankings() {
         description={`Latest ICC cricket rankings for ${category === "men" ? "men" : "women"}'s ${type} in ${format} format. Updated rankings for all international teams and players.`}
         keywords="ICC cricket rankings, ICC rankings 2026, batting rankings, bowling rankings, Test rankings, ODI rankings, T20 rankings, cricket team rankings"
         url="/rankings"
+        structuredData={rankingsSD}
       />
 
       {/* Hero */}

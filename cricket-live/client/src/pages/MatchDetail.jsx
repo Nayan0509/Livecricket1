@@ -776,12 +776,45 @@ export default function MatchDetail() {
       ? "linear-gradient(160deg, rgba(34,197,94,0.08) 0%, rgba(9,9,11,1) 55%)"
       : "linear-gradient(160deg, rgba(56,189,248,0.08) 0%, rgba(9,9,11,1) 55%)";
 
+  const matchSD = {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    "name": match.name ? `${match.name} Live Score` : "Live Cricket Match",
+    "sport": "Cricket",
+    "description": `${match.name || "Cricket Match"} live score, full scorecard and ball-by-ball commentary. ${match.status || ""}`,
+    "url": `https://www.livecricketzone.com/match/${id}`,
+    "eventStatus": matchEnded ? "https://schema.org/EventCompleted" : isLive ? "https://schema.org/LiveEventUpdate" : "https://schema.org/EventScheduled",
+    ...(match.dateTimeGMT ? { "startDate": new Date(match.dateTimeGMT).toISOString() } : {}),
+    "location": {
+      "@type": "Place",
+      "name": match.venue || "International Cricket Ground",
+      "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+    },
+    ...(t1?.name && t2?.name ? {
+      "competitor": [
+        { "@type": "SportsTeam", "name": t1.name },
+        { "@type": "SportsTeam", "name": t2.name }
+      ],
+      "homeTeam": { "@type": "SportsTeam", "name": t1.name },
+      "awayTeam": { "@type": "SportsTeam", "name": t2.name }
+    } : {}),
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": `https://www.livecricketzone.com/match/${id}`
+    }
+  };
+
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 80px" }}>
       <SEO
-        title={`${match.name} — Live Score, Scorecard & Commentary`}
-        description={`${match.name} live score, full scorecard and ball-by-ball commentary. ${match.status || ""}`}
+        title={`${match.name || "Cricket Match"} Live Score Today — Scorecard & Ball-by-Ball`}
+        description={`${match.name || "Cricket Match"} live score today, full scorecard, ball-by-ball commentary, match statistics and toss update. ${match.status || ""}`}
+        keywords={`${match.name || "cricket"} live score, ${t1?.name || ""} vs ${t2?.name || ""} live score, scorecard, commentary, live match today`}
         url={`/match/${id}`}
+        structuredData={matchSD}
       />
 
       {/* Back */}

@@ -44,9 +44,16 @@ export const fetchVenueInfo         = (id) => api.get(`/venues/${id}`).then(r =>
 export const fetchSeriesArchive     = (year) => api.get(`/series/archive/${year}`).then(r => r.data);
 export const fetchDetailedSchedule  = (type, month, year) => api.get("/schedule", { params: { type, month, year } }).then(r => r.data);
 export const fetchGlobalStats       = (format, type, category) => api.get("/stats", { params: { format, type, category } }).then(r => r.data);
+export const fetchCareerRecords     = () => api.get("/stats/records").then(r => r.data);
 
 // ─── YouTube ─────────────────────────────────────────────────────────────────
 export const fetchYouTubeSearch     = (q) => api.get("/youtube/search", { params: { q } }).then(r => r.data);
+
+// ─── Kachuful Multiplayer Rooms ───────────────────────────────────────────
+export const createKachufulRoom    = (hostName) => api.post("/games/kachuful/rooms", { action: "create", hostName }).then(r => r.data);
+export const joinKachufulRoom      = (roomId, playerName) => api.post("/games/kachuful/rooms", { action: "join", roomId, playerName }).then(r => r.data);
+export const fetchKachufulRoom     = (roomId, playerName) => api.get(`/games/kachuful/rooms/${roomId}`, { params: { player: playerName } }).then(r => r.data);
+export const sendKachufulAction    = (roomId, playerName, data) => api.post(`/games/kachuful/rooms/${roomId}/action`, { playerName, ...data }).then(r => r.data);
 
 // ─── Other sports (football, basketball, tennis) ──────────────────────────────
 export const fetchSportMatches      = (sport) => api.get(`/sports/${sport}/matches`).then(r => r.data);

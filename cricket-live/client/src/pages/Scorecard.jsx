@@ -117,12 +117,29 @@ export default function Scorecard() {
   const match = infoData?.data;
   const isLive = match?.matchStarted && !match?.matchEnded;
 
+  const scorecardSD = {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    "name": match ? `${match.name} Scorecard` : "Cricket Match Scorecard",
+    "sport": "Cricket",
+    "description": match ? `Full scorecard for ${match.name}. ${match.status || ""}` : "Full cricket scorecard with complete batting innings, bowling figures and fall of wickets.",
+    "url": `https://www.livecricketzone.com/match/${id}/scorecard`,
+    "eventStatus": match?.matchEnded ? "https://schema.org/EventCompleted" : isLive ? "https://schema.org/LiveEventUpdate" : "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "Place",
+      "name": match?.venue || "Cricket Stadium",
+      "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+    }
+  };
+
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 80px" }}>
       <SEO
-        title={match ? `${match.name} Scorecard — Full Innings Stats` : "Cricket Scorecard — Full Batting & Bowling Stats"}
-        description={match ? `Full scorecard for ${match.name}. ${match.status}. Batting and bowling figures with ball-by-ball analysis on Live Cricket Zone.` : "Full cricket scorecard with complete batting innings, bowling figures, dismissals and fall of wickets. Live Cricket Zone."}
+        title={match ? `${match.name} Scorecard — Full Innings Stats & Commentary` : "Cricket Scorecard — Full Batting & Bowling Stats"}
+        description={match ? `Full scorecard for ${match.name}. ${match.status || ""}. Batting and bowling figures with ball-by-ball analysis on Live Cricket Zone.` : "Full cricket scorecard with complete batting innings, bowling figures, dismissals and fall of wickets. Live Cricket Zone."}
+        keywords={match ? `${match.name} scorecard, cricket scorecard, ${match.teams?.[0] || ""} vs ${match.teams?.[1] || ""} scorecard, batting figures, bowling figures` : "cricket scorecard, full batting stats, bowling figures"}
         url={`/match/${id}/scorecard`}
+        structuredData={scorecardSD}
       />
 
       {/* Back */}

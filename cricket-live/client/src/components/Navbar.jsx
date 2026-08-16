@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 const PRIMARY_NAV = [
   { to: "/live",       label: "Live"       },
   { to: "/watch-live", label: "Highlights" },
+  { to: "/games",      label: "🎮 Games"    },
   { to: "/news",       label: "News"       },
   { to: "/rankings",   label: "Rankings"  },
   { to: "/series",     label: "Series"    },

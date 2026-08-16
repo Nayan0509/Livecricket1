@@ -69,6 +69,18 @@ export default function News() {
   const featured = items.slice(0, 3);
   const rest = items.slice(3);
 
+  const newsItemListSD = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Latest Cricket News & IPL 2026 Updates",
+    "itemListElement": rawItems.slice(0, 10).map((item, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": item.title,
+      "url": item.url?.startsWith("http") ? item.url : `https://www.livecricketzone.com/news/${item.id || idx}`
+    }))
+  };
+
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
@@ -76,6 +88,7 @@ export default function News() {
         description="Latest cricket news today: IPL 2026 updates, match previews, player news and T20 World Cup headlines aggregated from trusted cricket sources."
         keywords="cricket news today, IPL 2026 news, cricket latest news, match preview, player updates, T20 World Cup news"
         url="/news"
+        structuredData={newsItemListSD}
       />
 
       {/* Hero */}

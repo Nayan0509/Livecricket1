@@ -11,8 +11,15 @@ Disallow: /*?*fbclid=
 # Crawl Delay
 Crawl-delay: 1
 
-# Sitemap
+# Host
+Host: https://www.livecricketzone.com
+
+# Sitemaps & RSS Feeds
 Sitemap: https://www.livecricketzone.com/sitemap.xml
+Sitemap: https://www.livecricketzone.com/sitemap-news.xml
+Sitemap: https://www.livecricketzone.com/sitemap-videos.xml
+Sitemap: https://www.livecricketzone.com/sitemap-matches.xml
+Sitemap: https://www.livecricketzone.com/rss.xml
 
 # Google — no delay, full access
 User-agent: Googlebot
@@ -22,7 +29,13 @@ Crawl-delay: 0
 User-agent: Googlebot-Image
 Allow: /
 
+User-agent: Googlebot-News
+Allow: /
+
 User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Mediapartners-Google
 Allow: /
 
 # Bing
@@ -31,6 +44,10 @@ Allow: /
 Crawl-delay: 1
 
 User-agent: adidxbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: msnbot
 Allow: /
 Crawl-delay: 1
 
@@ -48,6 +65,10 @@ Crawl-delay: 2
 User-agent: DuckDuckBot
 Allow: /
 Crawl-delay: 1
+
+# Apple
+User-agent: Applebot
+Allow: /
 
 # Social media crawlers — allow for rich previews
 User-agent: facebookexternalhit

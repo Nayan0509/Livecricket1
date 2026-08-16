@@ -4,7 +4,7 @@ import SEO from "../components/SEO";
 const SITE = "Live Cricket Zone";
 const SITE_URL = "https://www.livecricketzone.com";
 const CONTACT = "privacy@livecricketzone.com";
-const UPDATED = "11 April 2026";
+const UPDATED = "16 August 2026";
 
 function Section({ title, children }) {
   return (
@@ -12,7 +12,7 @@ function Section({ title, children }) {
       <h2 style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 12, paddingBottom: 8, borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         {title}
       </h2>
-      <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, lineHeight: 1.8 }}>
+      <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 14, lineHeight: 1.85 }}>
         {children}
       </div>
     </div>
@@ -21,113 +21,85 @@ function Section({ title, children }) {
 
 export default function PrivacyPolicy() {
   return (
-    <div className="container" style={{ maxWidth: 860, paddingBottom: 80 }}>
+    <div className="container" style={{ maxWidth: 880, paddingBottom: 80 }}>
       <SEO
-        title="Privacy Policy - Live Cricket Zone"
-        description="Privacy Policy for Live Cricket Zone. Learn how we collect, use and protect your data. GDPR compliant. Last updated April 2026."
+        title="Privacy Policy — Live Cricket Zone & Google AdSense Disclosures"
+        description="Privacy Policy for Live Cricket Zone. Detailed disclosures on Google AdSense, DoubleClick DART cookies, third-party advertising, GDPR and CCPA user rights."
+        keywords="privacy policy, live cricket zone privacy, adsense privacy policy, doubleclick dart cookie, GDPR privacy"
         url="/privacy-policy"
-        noindex={false}
       />
 
       <div style={{ marginBottom: 36, paddingTop: 8 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 900, color: "#fff", marginBottom: 8 }}>Privacy Policy</h1>
+        <h1 style={{ fontSize: 30, fontWeight: 900, color: "#fff", marginBottom: 8 }}>Privacy Policy</h1>
         <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>
-          Last updated: {UPDATED} · <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A", textDecoration: "none" }}>{CONTACT}</a>
+          Last updated: {UPDATED} · Contact: <a href={`mailto:${CONTACT}`} style={{ color: "#00F0FF", textDecoration: "none" }}>{CONTACT}</a>
         </p>
       </div>
 
       <div style={{
-        background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
-        borderRadius: 12, padding: "14px 18px", marginBottom: 32, fontSize: 13,
-        color: "rgba(255,255,255,0.6)", lineHeight: 1.7,
+        background: "rgba(0,240,255,0.08)", border: "1px solid rgba(0,240,255,0.2)",
+        borderRadius: 12, padding: "16px 20px", marginBottom: 32, fontSize: 13,
+        color: "rgba(255,255,255,0.7)", lineHeight: 1.7,
       }}>
-        This Privacy Policy applies to <strong style={{ color: "#fff" }}>{SITE_URL}</strong> and all its pages. By using this website you agree to the practices described below. This policy is compliant with the UK GDPR, EU GDPR, and applicable data protection laws.
+        This Privacy Policy governs the manner in which <strong style={{ color: "#fff" }}>{SITE}</strong> ({SITE_URL}) collects, uses, maintains, and discloses information collected from users. We respect your privacy and are committed to protecting personal data in full compliance with the General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), and Google AdSense Program Policies.
       </div>
 
-      <Section title="1. Who We Are">
-        <p>Live Cricket Zone ("<strong style={{ color: "#fff" }}>we</strong>", "<strong style={{ color: "#fff" }}>us</strong>", "<strong style={{ color: "#fff" }}>our</strong>") operates the website at <a href={SITE_URL} style={{ color: "#FF5C8A" }}>{SITE_URL}</a>. We provide live cricket scores, match commentary, news, and video content aggregation. We are the data controller for personal data collected through this website.</p>
-      </Section>
-
-      <Section title="2. What Data We Collect">
-        <p style={{ marginBottom: 10 }}>We collect minimal data. Specifically:</p>
+      <Section title="1. Information We Collect">
+        <p style={{ marginBottom: 10 }}>When you visit Live Cricket Zone, we may collect non-personally identifiable information automatically:</p>
         <ul style={{ paddingLeft: 20, marginBottom: 10 }}>
-          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Usage data</strong> — pages visited, time on site, browser type, device type, IP address (anonymised). Collected automatically via Google Analytics.</li>
-          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Cookies</strong> — small files stored on your device for analytics and advertising purposes (see Section 5).</li>
-          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Search queries</strong> — if you use the player search feature, your search term is processed to return results. We do not store search history linked to individuals.</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Log and Device Data:</strong> Browser type, operating system, device model, referring URLs, timestamps, and anonymized IP addresses.</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Cookies and Web Beacons:</strong> Identifiers placed on your device to enhance navigation, analyze trends, and deliver relevant advertisements.</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>User Communications:</strong> If you contact us via email or our contact form, we retain your email address and message history solely to respond to your inquiry.</li>
         </ul>
-        <p>We do <strong style={{ color: "#fff" }}>not</strong> collect names, email addresses, passwords, or payment information. We do not require account registration.</p>
       </Section>
 
-      <Section title="3. How We Use Your Data">
+      <Section title="2. Google AdSense and DoubleClick DART Cookies">
+        <p style={{ marginBottom: 12 }}>
+          Google is a third-party vendor on our website. Google uses cookies, specifically the <strong style={{ color: "#fff" }}>DoubleClick DART cookie</strong>, to serve ads to our site visitors based upon their visit to {SITE_URL} and other sites on the Internet:
+        </p>
+        <ul style={{ paddingLeft: 20, marginBottom: 12 }}>
+          <li style={{ marginBottom: 6 }}>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to your website or other websites.</li>
+          <li style={{ marginBottom: 6 }}>Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.</li>
+          <li style={{ marginBottom: 6 }}>Users may opt out of personalized advertising by visiting <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" style={{ color: "#00F0FF" }}>Google Ads Settings</a>.</li>
+          <li style={{ marginBottom: 6 }}>Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: "#00F0FF" }}>aboutads.info</a> or <a href="https://www.youronlinechoices.com" target="_blank" rel="noopener noreferrer" style={{ color: "#00F0FF" }}>Your Online Choices</a>.</li>
+        </ul>
+      </Section>
+
+      <Section title="3. Third-Party Ad Networks and Analytics">
+        <p style={{ marginBottom: 10 }}>
+          Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Live Cricket Zone. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
+        </p>
+        <p>
+          Note that Live Cricket Zone has no access to or control over these cookies that are used by third-party advertisers.
+        </p>
+      </Section>
+
+      <Section title="4. GDPR Data Subject Rights (For European Users)">
+        <p style={{ marginBottom: 10 }}>If you reside in the European Economic Area (EEA) or UK, you possess specific data protection rights under the GDPR:</p>
         <ul style={{ paddingLeft: 20 }}>
-          <li style={{ marginBottom: 6 }}>To provide and improve the website and its features</li>
-          <li style={{ marginBottom: 6 }}>To analyse traffic and usage patterns (Google Analytics)</li>
-          <li style={{ marginBottom: 6 }}>To serve relevant advertisements (Google AdSense)</li>
-          <li style={{ marginBottom: 6 }}>To ensure website security and prevent abuse</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>The right to access:</strong> You have the right to request copies of your personal data.</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>The right to rectification:</strong> You can request corrections to inaccurate information.</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>The right to erasure:</strong> You have the right to request that we erase your personal data under certain conditions.</li>
+          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>The right to withdraw consent:</strong> You may withdraw your consent for non-essential cookies at any time via your browser settings.</li>
         </ul>
-        <p style={{ marginTop: 10 }}>Our legal basis for processing under UK/EU GDPR is <strong style={{ color: "#fff" }}>legitimate interests</strong> (analytics, security) and <strong style={{ color: "#fff" }}>consent</strong> (advertising cookies).</p>
       </Section>
 
-      <Section title="4. Third-Party Services">
-        <p style={{ marginBottom: 10 }}>We use the following third-party services that may process your data:</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {[
-            { name: "Google Analytics", purpose: "Website traffic analysis", policy: "https://policies.google.com/privacy" },
-            { name: "Google AdSense", purpose: "Advertising", policy: "https://policies.google.com/privacy" },
-            { name: "YouTube (Google)", purpose: "Video embedding via YouTube IFrame API", policy: "https://policies.google.com/privacy" },
-            { name: "Cricbuzz", purpose: "Cricket data sourced from publicly available pages", policy: "https://www.cricbuzz.com/privacy-policy" },
-          ].map(s => (
-            <div key={s.name} style={{ padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 8, border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div style={{ fontWeight: 700, color: "#fff", marginBottom: 2 }}>{s.name}</div>
-              <div style={{ fontSize: 13 }}>{s.purpose} · <a href={s.policy} target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>Privacy Policy ↗</a></div>
-            </div>
-          ))}
-        </div>
-        <p style={{ marginTop: 12 }}>These services have their own privacy policies. We encourage you to review them.</p>
+      <Section title="5. CCPA Rights (For California Residents)">
+        <p style={{ marginBottom: 10 }}>
+          Under the California Consumer Privacy Act (CCPA), California consumers have the right to request disclosure of categories of personal information collected, request deletion of collected information, and request not to sell the consumer's personal data. <strong style={{ color: "#fff" }}>We do not sell personal information.</strong>
+        </p>
       </Section>
 
-      <Section title="5. Cookies">
-        <p style={{ marginBottom: 10 }}>We use the following types of cookies:</p>
-        <ul style={{ paddingLeft: 20 }}>
-          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Essential cookies</strong> — required for the website to function. Cannot be disabled.</li>
-          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Analytics cookies</strong> — Google Analytics (_ga, _gid) to understand how visitors use the site.</li>
-          <li style={{ marginBottom: 6 }}><strong style={{ color: "#fff" }}>Advertising cookies</strong> — Google AdSense to serve personalised ads based on your interests.</li>
-        </ul>
-        <p style={{ marginTop: 10 }}>You can control cookies through your browser settings or opt out of Google advertising cookies at <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>adssettings.google.com</a>.</p>
+      <Section title="6. Children's Information (COPPA)">
+        <p>
+          Protecting children's privacy online is paramount. Live Cricket Zone does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you believe your child provided this information on our website, please contact us immediately and we will promptly remove such information from our records.
+        </p>
       </Section>
 
-      <Section title="6. YouTube Embedded Videos">
-        <p>This website embeds videos from YouTube using the official YouTube IFrame API. When you watch an embedded video, YouTube (Google) may set cookies and collect data about your viewing. This is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>Google's Privacy Policy</a>. We use <code style={{ background: "rgba(255,255,255,0.08)", padding: "1px 5px", borderRadius: 4 }}>youtube-nocookie.com</code> embeds to minimise cookie usage until you interact with the player.</p>
-      </Section>
-
-      <Section title="7. Your Rights (UK/EU GDPR)">
-        <p style={{ marginBottom: 10 }}>Under UK GDPR and EU GDPR you have the right to:</p>
-        <ul style={{ paddingLeft: 20 }}>
-          <li style={{ marginBottom: 6 }}>Access the personal data we hold about you</li>
-          <li style={{ marginBottom: 6 }}>Request correction of inaccurate data</li>
-          <li style={{ marginBottom: 6 }}>Request deletion of your data ("right to be forgotten")</li>
-          <li style={{ marginBottom: 6 }}>Object to processing of your data</li>
-          <li style={{ marginBottom: 6 }}>Withdraw consent at any time</li>
-          <li style={{ marginBottom: 6 }}>Lodge a complaint with the ICO (UK) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" style={{ color: "#FF5C8A" }}>ico.org.uk</a></li>
-        </ul>
-        <p style={{ marginTop: 10 }}>To exercise any of these rights, contact us at <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a>.</p>
-      </Section>
-
-      <Section title="8. Data Retention">
-        <p>Analytics data is retained for 26 months as per Google Analytics default settings. We do not retain any other personal data beyond your active session.</p>
-      </Section>
-
-      <Section title="9. Children's Privacy">
-        <p>This website is not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us immediately at <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a>.</p>
-      </Section>
-
-      <Section title="10. Changes to This Policy">
-        <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date. Continued use of the website after changes constitutes acceptance of the updated policy.</p>
-      </Section>
-
-      <Section title="11. Contact">
-        <p>For any privacy-related questions or requests: <a href={`mailto:${CONTACT}`} style={{ color: "#FF5C8A" }}>{CONTACT}</a></p>
-        <p style={{ marginTop: 6 }}>Website: <a href={SITE_URL} style={{ color: "#FF5C8A" }}>{SITE_URL}</a></p>
+      <Section title="7. Contact Information">
+        <p>
+          If you have any questions or suggestions about our Privacy Policy or data practices, please contact our Data Protection Officer at <a href={`mailto:${CONTACT}`} style={{ color: "#00F0FF" }}>{CONTACT}</a> or via our <a href="/contact" style={{ color: "#00F0FF" }}>Contact Us</a> page.
+        </p>
       </Section>
     </div>
   );

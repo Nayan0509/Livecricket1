@@ -11,6 +11,14 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message, data: [] });
   }
+// GET /api/stats/records
+router.get("/records", (req, res) => {
+  try {
+    const data = typeof scraper.scrapeCareerRecords === "function" ? scraper.scrapeCareerRecords() : {};
+    res.json({ status: "success", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message, data: {} });
+  }
 });
 
 module.exports = router;

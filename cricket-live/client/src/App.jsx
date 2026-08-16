@@ -22,6 +22,7 @@ import PlayerDetail from "./pages/PlayerDetail";
 import Rankings from "./pages/Rankings";
 import News from "./pages/News";
 import NewsDetail from "./pages/NewsDetail";
+import Games from "./pages/Games";
 import Schedule from "./pages/Schedule";
 import Stats from "./pages/Stats";
 import About from "./pages/About";
@@ -47,10 +48,13 @@ import CricketWebsite from "./pages/CricketWebsite";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfUse from "./pages/TermsOfUse";
 import DMCACopyright from "./pages/DMCACopyright";
+import Contact from "./pages/Contact";
+import EditorialPolicy from "./pages/EditorialPolicy";
 import Fantasy from "./pages/Fantasy";
 import Football from "./pages/Football";
 import Basketball from "./pages/Basketball";
 import Tennis from "./pages/Tennis";
+import CookieConsent from "./components/CookieConsent";
 
 
 function AppShell() {
@@ -101,9 +105,12 @@ function AppShell() {
             <Route path="/rankings" element={<Rankings />} />
             <Route path="/news" element={<News />} />
             <Route path="/news/:id" element={<NewsDetail />} />
+            <Route path="/games" element={<Games />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/editorial-policy" element={<EditorialPolicy />} />
             <Route path="/cricket-website" element={<CricketWebsite />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-use" element={<TermsOfUse />} />
@@ -136,6 +143,7 @@ function AppShell() {
           </Routes>
         </ErrorBoundary>
       </main>
+      <CookieConsent />
       <Footer />
       <script type="application/ld+json">
         {`

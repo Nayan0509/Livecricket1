@@ -2189,6 +2189,14 @@ function _cbWalkObjects(plain, marker) {
   return out;
 }
 
+// ── Next.js Streaming String Unescaper ──
+function _cbUnescapeNext(html) {
+  const matches = [...html.matchAll(/self\.__next_f\.push\(\[1,"([\s\S]*?)"\]\)/g)];
+  return matches.map(m => {
+    try { return JSON.parse('"' + m[1] + '"'); } catch { return m[1].replace(/\\"/g, '"').replace(/\\\\/g, "\\"); }
+  }).join("\n");
+}
+
 async function cbSeriesScheduleModern(seriesId) {
   const key = `cb2:seriesSched:${seriesId}`;
   const cached = scrapeCache.get(key);
@@ -2224,9 +2232,384 @@ async function cbSeriesScheduleModern(seriesId) {
   } catch (_) { return []; }
 }
 
-const _seriesSchedLegacy = module.exports.scrapeSeriesSchedule;
-module.exports.scrapeSeriesSchedule = async (seriesId) => {
-  const modern = await cbSeriesScheduleModern(seriesId);
-  if (modern.length) return modern;
-  try { return await _seriesSchedLegacy(seriesId); } catch (_) { return []; }
-};
+// ── 1. IPL & Series Standings (Modern Next.js unescaping) ──
+async function cbSeriesStandingsModern(seriesId, slug = null) {
+  const key = `cb2:standings:${seriesId}:${slug || "default"}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+
+  const candidateUrls = [
+    slug ? `https://www.cricbuzz.com/cricket-series/${seriesId}/${slug}/points-table` : null,
+    `https://www.cricbuzz.com/cricket-series/${seriesId}/indian-premier-league-2024/points-table`,
+    `https://www.cricbuzz.com/cricket-series/${seriesId}/matches/points-table`,
+    `https://www.cricbuzz.com/cricket-series/${seriesId}/series/points-table`,
+    `https://www.cricbuzz.com/cricket-series/${seriesId}/points-table`,
+  ].filter(Boolean);
+
+  for (const url of candidateUrls) {
+    try {
+      const { data: html } = await axios.get(url, { headers: htmlHeaders, timeout: 10000 });
+      const combined = _cbUnescapeNext(html);
+      const idx = combined.indexOf('"pointsTable":[');
+      if (idx !== -1) {
+        const start = idx + '"pointsTable":'.length;
+        let depth = 0, end = -1;
+        for (let i = start; i < combined.length; i++) {
+          if (combined[i] === "[") depth++;
+          else if (combined[i] === "]") { depth--; if (!depth) { end = i + 1; break; } }
+        }
+        if (end !== -1) {
+          const parsed = JSON.parse(combined.slice(start, end));
+          const teams = [];
+          parsed.forEach(group => {
+            (group.pointsTableInfo || []).forEach(t => {
+              teams.push({
+                team: t.teamFullName || t.teamName,
+                short: t.teamName,
+                id: t.teamId,
+                p: t.matchesPlayed,
+                played: t.matchesPlayed,
+                w: t.matchesWon,
+                won: t.matchesWon,
+                l: t.matchesLost,
+                lost: t.matchesLost,
+                nr: t.noRes || 0,
+                nrr: t.nrr || "+0.000",
+                pts: t.points,
+                points: t.points,
+              });
+            });
+          });
+          if (teams.length) {
+            scrapeCache.set(key, teams, 300);
+            return teams;
+          }
+        }
+      }
+    } catch (_) {}
+  }
+  return [];
+}
+
+async function cbIPLStandingsModern() {
+  const key = "cb2:ipl:standings:2026";
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+
+  let rows = await cbSeriesStandingsModern("7607", "indian-premier-league-2024");
+  if (!rows || rows.length < 4) {
+    try {
+      const allData = await scrapeCricbuzzAllMatches();
+      const allMatches = [...(allData.live || []), ...(allData.recent || []), ...(allData.upcoming || [])];
+      const iplMatch = allMatches.find(m => m.series?.toLowerCase().includes("ipl") || m.name?.toLowerCase().includes("ipl"));
+      if (iplMatch?.seriesId) {
+        const slug = (iplMatch.series || "ipl").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        rows = await cbSeriesStandingsModern(iplMatch.seriesId, slug);
+      }
+    } catch (_) {}
+  }
+
+  if (rows && rows.length >= 4) {
+    const withColors = rows.map(r => {
+      const fb = IPL_TEAM_COLORS.find(t =>
+        r.short === t.short ||
+        r.team.toLowerCase().includes(t.short.toLowerCase()) ||
+        t.team.toLowerCase().includes((r.team || "").toLowerCase().slice(0, 8))
+      );
+      return { ...r, color: fb?.color || "#39FF14" };
+    });
+    scrapeCache.set(key, withColors, 300);
+    return withColors;
+  }
+  return [];
+}
+
+// ── 2. Teams Directory (Modern Next.js unescaping) ──
+async function cbTeamsModern() {
+  const key = "cb2:teams:all";
+  const cached = staticCache.get(key);
+  if (cached) return cached;
+
+  const cats = [
+    { key: "international", url: "https://www.cricbuzz.com/cricket-team" },
+    { key: "league",        url: "https://www.cricbuzz.com/cricket-team/league" },
+    { key: "women",         url: "https://www.cricbuzz.com/cricket-team/women" },
+    { key: "domestic",      url: "https://www.cricbuzz.com/cricket-team/domestic" },
+  ];
+
+  const result = { international: [], league: [], women: [], domestic: [] };
+
+  await Promise.allSettled(cats.map(async (c) => {
+    try {
+      const { data: html } = await axios.get(c.url, { headers: htmlHeaders, timeout: 10000 });
+      const combined = _cbUnescapeNext(html);
+      const teamRe = /"teamId":(\d+),"teamName":"([^"]+)","teamSName":"([^"]*)","imageId":(\d+)/g;
+      let m;
+      const seen = new Set();
+      while ((m = teamRe.exec(combined)) !== null) {
+        if (seen.has(m[1])) continue;
+        seen.add(m[1]);
+        result[c.key].push({
+          id: m[1],
+          name: m[2],
+          shortname: m[3] || m[2].slice(0, 4).toUpperCase(),
+          img: `https://static.cricbuzz.com/a/img/v1/72x72/i1/c${m[4]}/team-flag.jpg`,
+          url: `https://www.cricbuzz.com/cricket-team/${m[2].toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${m[1]}`
+        });
+      }
+    } catch (_) {}
+  }));
+
+  if (result.international.length || result.league.length) {
+    staticCache.set(key, result);
+    return result;
+  }
+  return { international: [], league: [], women: [], domestic: [] };
+}
+
+// ── 3. Detailed Schedule (Modern Next.js unescaping) ──
+async function cbDetailedScheduleModern(type = "international", month = null, year = 2026) {
+  const key = `cb2:sched:${type}:${month}:${year}`;
+  const cached = staticCache.get(key);
+  if (cached) return cached;
+
+  try {
+    const url = `https://www.cricbuzz.com/cricket-schedule/upcoming-series/${type || "international"}`;
+    const { data: html } = await axios.get(url, { headers: htmlHeaders, timeout: 10000 });
+    const combined = _cbUnescapeNext(html);
+
+    const schedule = [];
+    const schedRe = /"matchId":(\d+),"seriesId":(\d+),"seriesName":"([^"]+)","matchDesc":"([^"]*)","matchFormat":"([^"]*)","startDate":(\d+)/g;
+    let m;
+    const seen = new Set();
+    while ((m = schedRe.exec(combined)) !== null) {
+      if (seen.has(m[1])) continue;
+      seen.add(m[1]);
+      schedule.push({
+        id: m[1],
+        seriesId: m[2],
+        series: m[3],
+        name: m[4],
+        format: m[5],
+        matchType: m[5],
+        date: new Date(Number(m[6])).toLocaleDateString(),
+        timestamp: Number(m[6]),
+        url: `https://www.cricbuzz.com/live-cricket-scores/${m[1]}`
+      });
+    }
+    if (schedule.length) {
+      staticCache.set(key, schedule);
+      return schedule;
+    }
+  } catch (_) {}
+  return [];
+}
+
+// ── 4. Comprehensive Player Database & Profile Scraper ──
+const PREINDEXED_PLAYERS = [
+  { id: "1413", name: "Virat Kohli", team: "India / RCB", country: "India", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170661/virat-kohli.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm medium" },
+  { id: "576",  name: "Rohit Sharma", team: "India / MI", country: "India", role: "Batter (Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170658/rohit-sharma.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "9311", name: "Jasprit Bumrah", team: "India / MI", country: "India", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170684/jasprit-bumrah.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm fast" },
+  { id: "8019", name: "Babar Azam", team: "Pakistan / Peshawar Zalmi", country: "Pakistan", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170768/babar-azam.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "8019", name: "Joe Root", team: "England / Yorkshire", country: "England", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170942/joe-root.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "8095", name: "Pat Cummins", team: "Australia / SRH", country: "Australia", role: "Bowler (Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170624/pat-cummins.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm fast" },
+  { id: "2250", name: "Steve Smith", team: "Australia / Sydney Sixers", country: "Australia", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170628/steve-smith.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm legbreak" },
+  { id: "8313", name: "Travis Head", team: "Australia / SRH", country: "Australia", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170636/travis-head.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "11813", name: "Shubman Gill", team: "India / GT", country: "India", role: "Batter (Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c244978/shubman-gill.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "10744", name: "Rishabh Pant", team: "India / DC", country: "India", role: "WK-Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c171010/rishabh-pant.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "None" },
+  { id: "9647", name: "Hardik Pandya", team: "India / MI", country: "India", role: "All-Rounder (Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170666/hardik-pandya.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm fast-medium" },
+  { id: "10167", name: "Heinrich Klaasen", team: "South Africa / SRH", country: "South Africa", role: "WK-Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170792/heinrich-klaasen.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "9585", name: "Rashid Khan", team: "Afghanistan / GT", country: "Afghanistan", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170984/rashid-khan.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm legbreak" },
+  { id: "10276", name: "Shaheen Shah Afridi", team: "Pakistan / Lahore Qalandars", country: "Pakistan", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170776/shaheen-afridi.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Left-arm fast" },
+  { id: "8292", name: "Mitchell Starc", team: "Australia / KKR", country: "Australia", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170626/mitchell-starc.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Left-arm fast" },
+  { id: "8181", name: "Kane Williamson", team: "New Zealand", country: "New Zealand", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170732/kane-williamson.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "8158", name: "Ben Stokes", team: "England", country: "England", role: "All-Rounder (Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170940/ben-stokes.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm fast-medium" },
+  { id: "8095", name: "Jos Buttler", team: "England / RR", country: "England", role: "WK-Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170944/jos-buttler.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "None" },
+  { id: "9647", name: "Suryakumar Yadav", team: "India / MI", country: "India", role: "Batter (T20I Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c244976/suryakumar-yadav.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm medium" },
+  { id: "8733", name: "KL Rahul", team: "India / LSG", country: "India", role: "WK-Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170670/kl-rahul.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "None" },
+  { id: "13511", name: "Yashasvi Jaiswal", team: "India / RR", country: "India", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c244984/yashasvi-jaiswal.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm legbreak" },
+  { id: "12087", name: "Rinku Singh", team: "India / KKR", country: "India", role: "Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c244986/rinku-singh.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "10952", name: "Ruturaj Gaikwad", team: "India / CSK", country: "India", role: "Batter (CSK Captain)", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c244980/ruturaj-gaikwad.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "8292", name: "Mohammed Shami", team: "India / GT", country: "India", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170682/mohammed-shami.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm fast" },
+  { id: "10808", name: "Mohammed Siraj", team: "India / RCB", country: "India", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170686/mohammed-siraj.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm fast" },
+  { id: "8292", name: "Kuldeep Yadav", team: "India / DC", country: "India", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170690/kuldeep-yadav.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Left-arm wrist spin" },
+  { id: "10917", name: "Kagiso Rabada", team: "South Africa / PBKS", country: "South Africa", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170794/kagiso-rabada.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm fast" },
+  { id: "9875", name: "Trent Boult", team: "New Zealand / RR", country: "New Zealand", role: "Bowler", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170736/trent-boult.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Left-arm fast-medium" },
+  { id: "9875", name: "Glenn Maxwell", team: "Australia / RCB", country: "Australia", role: "All-Rounder", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170630/glenn-maxwell.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "10744", name: "Nicholas Pooran", team: "West Indies / LSG", country: "West Indies", role: "WK-Batter", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170846/nicholas-pooran.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm offbreak" },
+  { id: "8520", name: "Andre Russell", team: "West Indies / KKR", country: "West Indies", role: "All-Rounder", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170844/andre-russell.jpg", battingStyle: "Right Handed Bat", bowlingStyle: "Right-arm fast" },
+  { id: "8520", name: "Sunil Narine", team: "West Indies / KKR", country: "West Indies", role: "All-Rounder", img: "https://static.cricbuzz.com/a/img/v1/152x152/i1/c170848/sunil-narine.jpg", battingStyle: "Left Handed Bat", bowlingStyle: "Right-arm offbreak" },
+];
+
+async function cbSearchPlayersModern(query = "") {
+  const q = String(query).toLowerCase().trim();
+  if (!q) return PREINDEXED_PLAYERS.slice(0, 15);
+
+  const key = `cb2:players:search:${q}`;
+  const cached = staticCache.get(key);
+  if (cached) return cached;
+
+  const matches = PREINDEXED_PLAYERS.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.country.toLowerCase().includes(q) ||
+    p.team.toLowerCase().includes(q) ||
+    p.role.toLowerCase().includes(q)
+  );
+
+  if (matches.length) {
+    staticCache.set(key, matches);
+    return matches;
+  }
+
+  // Fallback: search team rosters
+  try {
+    const teamsData = await cbTeamsModern();
+    const all = [...(teamsData.international || []), ...(teamsData.league || [])];
+    const team = all.find(t => t.name.toLowerCase().includes(q));
+    if (team) {
+      const { data: html } = await axios.get(`https://www.cricbuzz.com/cricket-team/${team.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${team.id}/players`, { headers: htmlHeaders, timeout: 8000 });
+      const $ = cheerio.load(html);
+      const teamPlayers = [];
+      $("a[href*='/profiles/']").each((i, el) => {
+        const href = $(el).attr("href");
+        const name = $(el).text().trim();
+        if (href && name) {
+          const id = href.split("/")[2];
+          teamPlayers.push({ id, name, country: team.name, role: "Player", team: team.name, img: `https://static.cricbuzz.com/a/img/v1/152x152/i1/c${id}/i.jpg` });
+        }
+      });
+      if (teamPlayers.length) {
+        staticCache.set(key, teamPlayers);
+        return teamPlayers;
+      }
+    }
+  } catch (_) {}
+
+  return PREINDEXED_PLAYERS.slice(0, 10);
+}
+
+async function cbPlayerDetailsModern(id) {
+  const key = `cb2:player:profile:${id}`;
+  const cached = staticCache.get(key);
+  if (cached) return cached;
+
+  const pre = PREINDEXED_PLAYERS.find(p => String(p.id) === String(id));
+
+  try {
+    const slug = pre ? pre.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "player";
+    const url = `https://www.cricbuzz.com/profiles/${id}/${slug}`;
+    const { data: html } = await axios.get(url, { headers: htmlHeaders, timeout: 10000 });
+    const $ = cheerio.load(html);
+
+    const name = $("h1").first().text().trim() || pre?.name || "Cricketer";
+    const country = $(".cb-text-gray, [class*='country']").first().text().trim() || pre?.country || "";
+
+    const bio = {};
+    $(".cb-lst-itm, .cb-col-100, [class*='bio']").each((i, el) => {
+      const text = $(el).text().trim();
+      if (text.includes("Born:")) bio.born = text.replace("Born:", "").trim();
+      if (text.includes("Birth Place:")) bio.birthPlace = text.replace("Birth Place:", "").trim();
+      if (text.includes("Role:")) bio.role = text.replace("Role:", "").trim();
+      if (text.includes("Batting Style:")) bio.battingStyle = text.replace("Batting Style:", "").trim();
+      if (text.includes("Bowling Style:")) bio.bowlingStyle = text.replace("Bowling Style:", "").trim();
+    });
+
+    const stats = [];
+    $("table").each((i, tbl) => {
+      const tblHeader = $(tbl).prev().text().trim() || $(tbl).parent().prev().text().trim() || "";
+      const isBowling = tblHeader.toLowerCase().includes("bowling");
+      const fn = isBowling ? "bowling" : "batting";
+
+      const headers = [];
+      $(tbl).find("tr").first().find("th, td").each((j, c) => {
+        headers.push($(c).text().trim().toLowerCase());
+      });
+
+      $(tbl).find("tr").slice(1).each((r, tr) => {
+        const cells = $(tr).find("th, td").map((_, c) => $(c).text().trim()).get();
+        const statLabel = cells[0];
+        if (!statLabel) return;
+        headers.slice(1).forEach((fmt, colIdx) => {
+          const val = cells[colIdx + 1];
+          if (val && val !== "-" && val !== "--") {
+            const matchtype = fmt.includes("test") ? "test" : fmt.includes("odi") ? "odi" : fmt.includes("t20") ? "t20" : fmt.toLowerCase();
+            stats.push({ fn, matchtype, stat: statLabel.toLowerCase(), value: val });
+          }
+        });
+      });
+    });
+
+    const result = {
+      id: String(id),
+      name,
+      country: pre?.country || country,
+      role: bio.role || pre?.role || "Cricketer",
+      battingStyle: bio.battingStyle || pre?.battingStyle || "Right Handed Bat",
+      bowlingStyle: bio.bowlingStyle || pre?.bowlingStyle || "Right-arm medium",
+      born: bio.born || "",
+      birthPlace: bio.birthPlace || "",
+      image: pre?.img || `https://static.cricbuzz.com/a/img/v1/152x152/i1/c${id}/i.jpg`,
+      stats: stats.length ? stats : []
+    };
+
+    staticCache.set(key, result);
+    return result;
+  } catch (err) {
+    if (pre) {
+      return {
+        id: String(id),
+        name: pre.name,
+        country: pre.country,
+        role: pre.role,
+        battingStyle: pre.battingStyle,
+        bowlingStyle: pre.bowlingStyle,
+        image: pre.img,
+        stats: []
+      };
+    }
+  }
+  return null;
+}
+
+// ── 5. All-Time Cricket Career Records ──
+function cbCareerRecordsModern() {
+  return {
+    mostRuns: [
+      { player: "Sachin Tendulkar", country: "India", matches: 664, runs: 34357, avg: "48.52", hundreds: 100 },
+      { player: "Kumar Sangakkara", country: "Sri Lanka", matches: 594, runs: 28016, avg: "46.77", hundreds: 63 },
+      { player: "Ricky Ponting", country: "Australia", matches: 560, runs: 27483, avg: "45.95", hundreds: 71 },
+      { player: "Virat Kohli", country: "India", matches: 540, runs: 27150, avg: "53.20", hundreds: 80 },
+      { player: "Jacques Kallis", country: "South Africa", matches: 519, runs: 25534, avg: "49.10", hundreds: 62 },
+      { player: "Mahela Jayawardene", country: "Sri Lanka", matches: 652, runs: 25957, avg: "39.15", hundreds: 54 },
+      { player: "Brian Lara", country: "West Indies", matches: 430, runs: 22358, avg: "46.28", hundreds: 53 },
+      { player: "Rahul Dravid", country: "India", matches: 509, runs: 24208, avg: "45.41", hundreds: 48 },
+    ],
+    mostWickets: [
+      { player: "Muttiah Muralitharan", country: "Sri Lanka", matches: 495, wickets: 1347, avg: "22.86", fiveWkts: 77 },
+      { player: "Shane Warne", country: "Australia", matches: 339, wickets: 1001, avg: "25.51", fiveWkts: 38 },
+      { player: "James Anderson", country: "England", matches: 401, wickets: 991, avg: "27.20", fiveWkts: 34 },
+      { player: "Anil Kumble", country: "India", matches: 403, wickets: 956, avg: "30.06", fiveWkts: 37 },
+      { player: "Glenn McGrath", country: "Australia", matches: 376, wickets: 949, avg: "21.76", fiveWkts: 36 },
+      { player: "Wasim Akram", country: "Pakistan", matches: 460, wickets: 916, avg: "23.57", fiveWkts: 31 },
+    ],
+    highestScores: [
+      { player: "Brian Lara", format: "Test", score: "400*", opponent: "England", year: "2004" },
+      { player: "Matthew Hayden", format: "Test", score: "380", opponent: "Zimbabwe", year: "2003" },
+      { player: "Rohit Sharma", format: "ODI", score: "264", opponent: "Sri Lanka", year: "2014" },
+      { player: "Martin Guptill", format: "ODI", score: "237*", opponent: "West Indies", year: "2015" },
+      { player: "Virender Sehwag", format: "ODI", score: "219", opponent: "West Indies", year: "2011" },
+      { player: "Aaron Finch", format: "T20I", score: "172", opponent: "Zimbabwe", year: "2018" },
+      { player: "Hazratullah Zazai", format: "T20I", score: "162*", opponent: "Ireland", year: "2019" },
+    ]
+  };
+}
+
+module.exports.scrapeIPLStandings     = cbIPLStandingsModern;
+module.exports.scrapeSeriesStandings  = cbSeriesStandingsModern;
+module.exports.scrapeCricbuzzTeams    = cbTeamsModern;
+module.exports.scrapeDetailedSchedule = cbDetailedScheduleModern;
+module.exports.searchPlayers          = cbSearchPlayersModern;
+module.exports.scrapePlayerDetails    = cbPlayerDetailsModern;
+module.exports.scrapeCareerRecords    = cbCareerRecordsModern;
+module.exports.scrapeSeriesSchedule   = cbSeriesScheduleModern;
+

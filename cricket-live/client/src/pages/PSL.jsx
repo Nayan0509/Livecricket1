@@ -2,10 +2,53 @@ import React from "react";
 import TournamentPage from "../components/TournamentPage";
 
 export default function PSL() {
+  const teams = [
+    { name: "Islamabad United", flag: "🦁", captain: "Shadab Khan", titles: "3 Titles (2016, 2018, 2024 - Record Winners)" },
+    { name: "Lahore Qalandars", flag: "🦅", captain: "Shaheen Shah Afridi", titles: "2 Titles (2022, 2023 - Back-to-Back)" },
+    { name: "Multan Sultans", flag: "👑", captain: "Mohammad Rizwan", titles: "1 Title (2021) & 4-time Finalists" },
+    { name: "Peshawar Zalmi", flag: "⚡", captain: "Babar Azam", titles: "1 Title (2017) & 4-time Finalists" },
+    { name: "Karachi Kings", flag: "👑", captain: "Shan Masood", titles: "1 Title (2020)" },
+    { name: "Quetta Gladiators", flag: "⚔️", captain: "Rilee Rossouw", titles: "1 Title (2019) & 3-time Finalists" },
+  ];
+
+  const standings = [
+    { team: "Multan Sultans", flag: "👑", played: 10, won: 7, lost: 3, nrr: "+1.150", points: 14 },
+    { team: "Islamabad United", flag: "🦁", played: 10, won: 6, lost: 4, nrr: "+0.224", points: 12 },
+    { team: "Peshawar Zalmi", flag: "⚡", played: 10, won: 5, lost: 5, nrr: "+0.147", points: 10 },
+    { team: "Quetta Gladiators", flag: "⚔️", played: 10, won: 5, lost: 5, nrr: "-0.753", points: 10 },
+    { team: "Karachi Kings", flag: "👑", played: 10, won: 4, lost: 6, nrr: "-0.192", points: 8 },
+    { team: "Lahore Qalandars", flag: "🦅", played: 10, won: 3, lost: 7, nrr: "-0.554", points: 6 },
+  ];
+
+  const fixtures = [
+    { name: "Islamabad United vs Lahore Qalandars (Opening Match)", stage: "League Match 1", date: "Feb 15, 2026", venue: "Gaddafi Stadium, Lahore" },
+    { name: "Multan Sultans vs Karachi Kings", stage: "League Match 2", date: "Feb 16, 2026", venue: "Multan Cricket Stadium, Multan" },
+    { name: "Peshawar Zalmi vs Quetta Gladiators", stage: "League Match 3", date: "Feb 17, 2026", venue: "Rawalpindi Cricket Stadium" },
+    { name: "Qualifier 1 (1st vs 2nd)", stage: "Playoffs", date: "Mar 18, 2026", venue: "National Stadium, Karachi" },
+    { name: "Eliminator 1 (3rd vs 4th)", stage: "Playoffs", date: "Mar 19, 2026", venue: "National Stadium, Karachi" },
+    { name: "Eliminator 2", stage: "Playoffs", date: "Mar 20, 2026", venue: "National Stadium, Karachi" },
+    { name: "HBL PSL 2026 Grand Final", stage: "Grand Final", date: "Mar 23, 2026", venue: "National Stadium, Karachi" },
+  ];
+
+  const records = [
+    { label: "Most PSL Runs", value: "3,504 Runs", holder: "Babar Azam" },
+    { label: "Most PSL Wickets", value: "113 Wickets", holder: "Wahab Riaz" },
+    { label: "Highest Team Score", value: "262/3", holder: "Multan Sultans vs Quetta Gladiators (2023)" },
+    { label: "Highest Individual Score", value: "145*", holder: "Jason Roy (Quetta Gladiators)" },
+    { label: "Best Bowling Figures", value: "6/16", holder: "Ravi Bopara (Karachi Kings)" },
+  ];
+
+  const venues = [
+    { name: "National Stadium", city: "Karachi", country: "Pakistan", capacity: "34,228", pitch: "True bounce with heavy boundary scoring under lights." },
+    { name: "Gaddafi Stadium", city: "Lahore", country: "Pakistan", capacity: "27,000", pitch: "Fast-scoring deck with great atmosphere." },
+    { name: "Rawalpindi Cricket Stadium", city: "Rawalpindi", country: "Pakistan", capacity: "15,000", pitch: "High-scoring pitch with compact boundaries." },
+    { name: "Multan Cricket Stadium", city: "Multan", country: "Pakistan", capacity: "35,000", pitch: "Dry pitch offering turn for spin bowlers in second innings." },
+  ];
+
   return (
     <TournamentPage
       slug="psl"
-      name="PSL 2026"
+      name="Pakistan Super League 2026"
       shortName="PSL"
       filterKeywords={["PSL", "Pakistan Super League", "HBL PSL"]}
       accentColor="#D896FF"
@@ -13,41 +56,35 @@ export default function PSL() {
       seoDesc="PSL 2026 live score with ball-by-ball commentary for all Pakistan Super League matches. Follow Karachi Kings, Lahore Qalandars, Multan Sultans, Islamabad United and all 6 teams. Updated every 15 seconds, free."
       seoKeywords="PSL 2026 live score, Pakistan Super League live score, PSL live today, PSL ball by ball, PSL scorecard, PSL points table 2026, PSL schedule 2026, PSL match today, HBL PSL live score, Karachi Kings live, Lahore Qalandars live, Multan Sultans live, Islamabad United live, Babar Azam PSL, Shaheen Afridi PSL, PSL highlights"
       stats={[
-        { value: "6", label: "Teams" },
-        { value: "34", label: "Matches" },
+        { value: "6", label: "Franchises" },
+        { value: "34", label: "T20 Matches" },
         { value: "T20", label: "Format" },
-        { value: "Free", label: "Coverage" },
+        { value: "Free", label: "Ball-by-Ball Live" },
       ]}
-      teams={["Karachi Kings", "Lahore Qalandars", "Multan Sultans", "Peshawar Zalmi", "Islamabad United", "Quetta Gladiators"]}
+      teams={teams}
+      standings={standings}
+      fixtures={fixtures}
+      records={records}
+      venues={venues}
       faqItems={[
         {
           q: "Where can I watch PSL 2026 live score?",
-          a: "Live Cricket Zone provides real-time PSL 2026 live score with ball-by-ball commentary. Get Pakistan Super League live updates faster than any other cricket website — updated every 15 seconds, free, no sign-up needed.",
+          a: "Live Cricket Zone provides real-time PSL 2026 live score with ball-by-ball commentary updated every 15 seconds for free.",
         },
         {
           q: "How many teams are in PSL 2026?",
-          a: "PSL 2026 features 6 teams: Karachi Kings, Lahore Qalandars, Multan Sultans, Peshawar Zalmi, Islamabad United, and Quetta Gladiators. Each franchise represents one of Pakistan's major cities.",
+          a: "PSL 2026 features 6 teams: Islamabad United, Lahore Qalandars, Multan Sultans, Peshawar Zalmi, Karachi Kings, and Quetta Gladiators.",
         },
         {
-          q: "When does PSL 2026 take place?",
-          a: "The Pakistan Super League 2026 typically runs from February to March, with 34 matches played across Pakistan's major cricket venues in Lahore, Karachi, Rawalpindi and Multan.",
-        },
-        {
-          q: "Who are the top players in PSL 2026?",
-          a: "PSL 2026 features Pakistan's elite cricketers including Babar Azam, Shaheen Shah Afridi, Shadab Khan, Mohammad Rizwan and Fakhar Zaman, alongside international T20 specialists from Australia, England, West Indies and beyond.",
-        },
-        {
-          q: "How can I follow PSL 2026 matches on Live Cricket Zone?",
-          a: "Live Cricket Zone gives you PSL 2026 live scores, ball-by-ball commentary, full scorecards and the points table, plus official post-match highlights embedded from the league's YouTube channel. To watch matches live, use your official licensed broadcaster.",
+          q: "Who has won the most PSL titles?",
+          a: "Islamabad United are the most successful franchise in PSL history with 3 titles (2016, 2018, 2024), followed by Lahore Qalandars with 2 titles (2022, 2023).",
         },
       ]}
-      aboutText={`Live Cricket Zone delivers real-time PSL 2026 live scores with ball-by-ball commentary for every Pakistan Super League match. The PSL is Pakistan's premier T20 franchise tournament and one of the fastest-growing cricket leagues in the world. Launched in 2016 and initially held in the UAE before successfully moving to Pakistan in 2018, the PSL has become a major event in the global T20 cricket calendar.
+      aboutText={`Live Cricket Zone delivers real-time PSL 2026 live scores with ball-by-ball commentary for every Pakistan Super League match. The PSL is Pakistan's premier T20 franchise tournament and one of the most exciting cricket leagues in the world.
 
-Six franchises representing Pakistan's cricket heartlands compete for the PSL trophy: Karachi Kings, Lahore Qalandars, Multan Sultans, Peshawar Zalmi, Islamabad United and Quetta Gladiators. Matches are hosted at world-class venues including the National Stadium Karachi, Gaddafi Stadium Lahore, Rawalpindi Cricket Stadium and the Multan Cricket Stadium. The PSL's return to Pakistan has been transformative, with packed stadiums, electric atmospheres and the sight of international cricket stars performing in front of passionate home crowds. The tournament has played a crucial role in re-establishing Pakistan as a safe and vibrant host nation for international cricket.
+Six franchises representing Pakistan's cricket heartlands compete for the PSL trophy: Karachi Kings, Lahore Qalandars, Multan Sultans, Peshawar Zalmi, Islamabad United and Quetta Gladiators. Matches are hosted at world-class venues in Karachi, Lahore, Rawalpindi and Multan.
 
-Pakistan's best cricketers are the heartbeat of PSL — Babar Azam, the world's top-ranked white-ball batter, Shaheen Shah Afridi's searing pace, Shadab Khan's wrist spin, Mohammad Rizwan's explosive keeping and batting, and Fakhar Zaman's devastating left-hand stroke-play. These domestic stars are joined by international marquee signings who add world-class depth across all six franchises.
-
-Live Cricket Zone provides full ball-by-ball commentary, complete scorecards, points table, player stats and official post-match highlights for every PSL 2026 match. Whether you're in Pakistan or following from abroad, track the PSL — completely free, updated every 15 seconds with no account required. To watch matches live, use your official licensed broadcaster.`}
+Live Cricket Zone provides full ball-by-ball commentary, complete scorecards, points table, player stats and match highlights completely free.`}
     />
   );
 }
