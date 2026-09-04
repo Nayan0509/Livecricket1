@@ -25,10 +25,10 @@ export default function ODICricket() {
   ];
 
   const fixtures = [
-    { name: "India vs England 1st ODI", stage: "Bilateral Series", date: "Jul 16, 2026", venue: "Lord's, London" },
-    { name: "Australia vs South Africa 1st ODI", stage: "Bilateral Series", date: "Jul 20, 2026", venue: "Wanderers, Johannesburg" },
-    { name: "New Zealand vs Pakistan 1st ODI", stage: "Bilateral Series", date: "Jul 24, 2026", venue: "Seddon Park, Hamilton" },
-    { name: "India vs England 2nd ODI", stage: "Bilateral Series", date: "Jul 28, 2026", venue: "Edgbaston, Birmingham" },
+    { name: "India vs England 1st ODI", stage: "Bilateral Tour", date: "Upcoming Series", venue: "Lord's, London" },
+    { name: "Australia vs South Africa 1st ODI", stage: "Bilateral Tour", date: "Upcoming Series", venue: "Wanderers, Johannesburg" },
+    { name: "New Zealand vs Pakistan 1st ODI", stage: "Bilateral Tour", date: "Upcoming Series", venue: "Seddon Park, Hamilton" },
+    { name: "India vs England 2nd ODI", stage: "Bilateral Tour", date: "Upcoming Series", venue: "Edgbaston, Birmingham" },
   ];
 
   const records = [
@@ -51,7 +51,7 @@ export default function ODICricket() {
       slug="odi"
       name="ODI Cricket Hub 2026"
       shortName="ODI"
-      filterKeywords={["ODI", "One Day International", "One-Day", "CWC League", "ICC CWC"]}
+      filterKeywords={["ODI", "One Day International", "One-Day", "CWC League", "ICC CWC", "Tri-Series", "One Day", "ODI Series"]}
       accentColor="#00F0FF"
       seoTitle="ODI Cricket Live Score Today — One Day International Matches"
       seoDesc="ODI cricket live score today with ball-by-ball commentary. All One Day International matches, ICC World Cup qualifiers, bilateral ODI series — live updates every 15 seconds."

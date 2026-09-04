@@ -1,16 +1,17 @@
 {
   "short_name": "CricketZone",
   "name": "Live Cricket Zone — Live Scores & News",
-  "description": "Live cricket scores, IPL 2026, T20 World Cup, ODI & Test match updates",
+  "description": "Live scores for cricket, football, basketball and tennis — IPL 2026, Premier League, NBA, ATP/WTA and more",
   "icons": [
-    { "src": "favicon.ico", "sizes": "64x64 32x32 24x24 16x16", "type": "image/x-icon" },
-    { "src": "logo192.png", "type": "image/png", "sizes": "192x192" },
-    { "src": "logo512.png", "type": "image/png", "sizes": "512x512" }
+    { "src": "favicon.ico", "sizes": "64x64", "type": "image/x-icon" },
+    { "src": "logo192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "logo512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "logo512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#3B82F6",
-  "background_color": "#0a0f0d",
+  "theme_color": "#07050D",
+  "background_color": "#07050D",
   "categories": ["sports", "news"],
   "lang": "en",
   "orientation": "portrait-primary"

@@ -38,6 +38,24 @@ export default function AdBanner({
   }, []);
 
   const cfg = AD_SLOTS[type] || AD_SLOTS.auto;
+  const isPlaceholder = cfg.slot && typeof cfg.slot === "string" && cfg.slot.startsWith("REPLACE_");
+
+  useEffect(() => {
+    if (isPlaceholder || pushed.current) return;
+    const t = setTimeout(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        pushed.current = true;
+      } catch (_) {}
+    }, 150);
+    return () => clearTimeout(t);
+  }, [isPlaceholder]);
+
+  // Before manual ad slots are configured, avoid rendering broken empty boxes
+  // during Google AdSense review. Auto Ads will handle ad placements automatically.
+  if (isPlaceholder) {
+    return null;
+  }
 
   const wrapStyle = {
     width: "100%",
@@ -52,7 +70,7 @@ export default function AdBanner({
     display: "block",
     width: "100%",
     minHeight: type === "rectangle" ? 250 : type === "leaderboard" ? 90 : 60,
-    background: "rgba(255,255,255,0.015)",
+    background: "transparent",
     borderRadius: 8,
     overflow: "hidden",
   };
@@ -68,7 +86,7 @@ export default function AdBanner({
           className="adsbygoogle"
           style={{ display: "block", width: "100%", minHeight: slotStyle.minHeight }}
           data-ad-client={PUB}
-          data-ad-slot={cfg.slot}
+          data-ad-slot={cfg.slot !== "auto" ? cfg.slot : undefined}
           data-ad-format={cfg.format}
           data-full-width-responsive={cfg.fullWidth ? "true" : undefined}
         />
@@ -76,3 +94,4 @@ export default function AdBanner({
     </div>
   );
 }
+

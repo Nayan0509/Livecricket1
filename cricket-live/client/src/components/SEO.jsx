@@ -54,7 +54,6 @@ export default function SEO({
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
       <meta name="description" content={description} />
-      {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonical} />
       
       {/* Search Engine Robots */}
@@ -63,24 +62,18 @@ export default function SEO({
       <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       
-      {/* Additional SEO */}
+      {/* Additional SEO
+          Note: meta keywords, revisit-after, distribution and rating are
+          deliberately omitted — no major search engine reads them, and a
+          stuffed keywords tag is a legacy spam signal. */}
       <meta name="author" content="Live Cricket Zone" />
-      <meta name="language" content="English" />
-      <meta name="revisit-after" content="1 days" />
-      <meta name="distribution" content="global" />
-      <meta name="rating" content="general" />
       <meta httpEquiv="content-language" content="en-US" />
-      
+
       {/* Mobile & Design */}
-      <meta name="theme-color" content="#B026FF" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       <meta name="apple-mobile-web-app-title" content="Live Cricket Zone" />
-      
-      {/* Geo Targeting */}
-      <meta name="geo.region" content="IN" />
-      <meta name="geo.placename" content="India" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />

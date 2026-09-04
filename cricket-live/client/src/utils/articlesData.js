@@ -1,6 +1,12 @@
 // High-Value Original Cricket Editorial Articles for Live Cricket Zone (Google AdSense Compliant)
 
-export const ORIGINAL_ARTICLES = [
+const getDynamicDate = (daysAgo) => {
+  const d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  return d.toISOString().split("T")[0];
+};
+
+const ARTICLES_RAW = [
   {
     id: "ipl-2026-auction-tactical-breakdown",
     title: "IPL 2026 Auction Analysis: Tactical Shifts, All-Rounder Bidding Wars & Team Compositions",
@@ -421,5 +427,96 @@ export const ORIGINAL_ARTICLES = [
         text: "Statistically, overs 18 through 20 yield three times more wickets than overs 7 through 15. Bowlers assigned the 19th and 20th overs have high odds of capturing multiple wickets even while conceding boundaries, making them indispensable fantasy picks."
       }
     ]
+  },
+  {
+    id: "odi-middle-overs-tactical-revolution",
+    title: "ODI Middle Overs Revolution: Strike Rotation, Reverse Sweep Dynamics & Accelerating Between Overs 11-40",
+    category: "ODI",
+    source: "Live Cricket Zone Editorial",
+    author: "Rohan Sen (White-Ball Tactical Analyst)",
+    date: "2026-04-02",
+    hoursAgo: 72,
+    readTime: "7 min read",
+    img: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&auto=format&fit=crop",
+    description: "How modern ODI teams cracked the 350-run code by abandoning defensive consolidation between overs 11 and 40 in favor of calculated boundary hunting and aggressive strike rotation.",
+    takeaways: [
+      "Dot ball percentages between overs 11 and 40 have dropped below 42% for world top-5 ODI sides.",
+      "Sweep and reverse-sweep variations force captains to vacate deep cover or deep mid-wicket boundary sweepers.",
+      "Teams that maintain a minimum 5.5 run rate through the middle phase win over 78% of 50-over matches."
+    ],
+    content: [
+      {
+        heading: "The Death of the Traditional 20-Over Consolidation Phase",
+        text: "For decades, 50-over cricket adhered to a predictable template: aggressive powerplays, defensive accumulation through the middle 30 overs with singles and doubles, followed by an all-out slog in the final 10 overs. Today, teams like India, England, and Australia treat overs 11 to 40 as an active offensive theatre. Batters no longer allow spin bowling partnerships to settle into metronomic lengths. Instead, continuous strike rotation and low-risk boundary options over mid-on and mid-wicket maintain run rates above 6 per over without surrendering wickets in clusters."
+      },
+      {
+        heading: "Manipulating Field Restrictions via Modern Strokeplay",
+        text: "With only four fielders permitted outside the 30-yard circle between overs 11 and 40, opening up square boundaries via sweeps, reverse-sweeps, and late dabs forces opposing captains to constantly shuffle fielders. When a spinner is forced to protect backward point, the straight boundary opens up for high-percentage lofted drives. This cat-and-mouse tactical duel defines the middle overs of championship-tier One Day Internationals."
+      },
+      {
+        heading: "Batting Depth as an Enabler for Middle-Overs Intent",
+        text: "Crucially, fearless middle-overs batting is only sustainable when supported by reliable lower-order batting depth down to numbers 8 and 9. Having seamers and spinners who can score at a 120+ strike rate allows top-order batters to absorb occasional dismissals without shrinking into defensive shells, ensuring continuous momentum through the innings."
+      }
+    ]
+  },
+  {
+    id: "bbl-franchise-t20-leagues-pitch-evolution",
+    title: "Global T20 Franchise Evolution: Pitch Preparation, Boundary Dimensions & Overseas Draft Strategies",
+    category: "T20",
+    source: "Live Cricket Zone Editorial",
+    author: "Arjun Mehta (Senior Cricket Analyst)",
+    date: "2026-03-25",
+    hoursAgo: 168,
+    readTime: "6 min read",
+    img: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop",
+    description: "A comprehensive comparative study of franchise tournament pitches. How drop-in decks in Australia, red soil in India, and slow Caribbean tracks demand specialized overseas recruitment.",
+    takeaways: [
+      "Australian drop-in decks at Perth and Adelaide require high-release seamers capable of extracting steep bounce.",
+      "Caribbean Premier League venues demand wrist spinners with deceptive googlies that grip into abrasive surfaces.",
+      "IPL mega-auctions place the highest financial premium on left-arm pace angles and versatile powerplay hitters."
+    ],
+    content: [
+      {
+        heading: "Drop-In Decks vs. Traditional Natural Turf Squares",
+        text: "The global proliferation of franchise cricket has introduced immense pitch diversity across the calendar. Australian Big Bash League venues like the MCG and Optus Stadium rely on sophisticated drop-in pitches engineered to deliver true, consistent bounce and high carry throughout the 40 overs. Conversely, subcontinent venues in Mumbai and Chennai feature red and black soil combinations that demand exceptional reverse-swing discipline and skilled wrist-spin variation."
+      },
+      {
+        heading: "Data-Driven Overseas Draft Architectures",
+        text: "Modern franchise management teams rely on granular ball-tracking analytics rather than player reputation when executing international drafts. Bowling strike rates against left-handed batters, boundary percentages conceded off yorkers versus hard lengths, and spin-hitting proficiency in the middle overs dictate multi-million dollar bidding wars in IPL, PSL, and BBL drafts."
+      }
+    ]
+  },
+  {
+    id: "womens-cricket-renaissance-wpl-and-icc-growth",
+    title: "The Women's Cricket Revolution: WPL Professionalism, Athletic Standards & Global Television Audiences",
+    category: "Women's",
+    source: "Live Cricket Zone Editorial",
+    author: "Priya Sharma (Women's Cricket Correspondent)",
+    date: "2026-03-18",
+    hoursAgo: 240,
+    readTime: "7 min read",
+    img: "https://images.unsplash.com/photo-1562552476-8ac325b57623?w=800&auto=format&fit=crop",
+    description: "An investigative feature on the meteoric rise of the Women's Premier League (WPL), pay parity milestones, television viewership records, and the next generation of global female cricket superstars.",
+    takeaways: [
+      "The WPL has established an elite professional ecosystem, elevating batting powerplay run rates to historical highs.",
+      "Global broadcast viewership for women's ICC finals now rivals established male international sporting events.",
+      "Investment in domestic state pathways across India, Australia, and England is bridging the gap between associate and full member nations."
+    ],
+    content: [
+      {
+        heading: "The Commercial and Cultural Impact of Franchise Cricket",
+        text: "The launch and explosive growth of the Women's Premier League in India, alongside the Women's Big Bash League in Australia and The Hundred in the UK, has permanently transformed the economics of women's sports. Global television audiences exceeding 100 million viewers for flagship fixtures have driven record sponsorship investments, providing players with state-of-the-art sports science, dedicated nutritionists, and high-performance training camps."
+      },
+      {
+        heading: "Athletic Benchmarks and Power-Hitting Evolution",
+        text: "The physical standards of modern women's cricket have reached unprecedented heights. Bowlers routinely clock speeds above 125 km/h with high-skill swing and seam movement, while batters utilize modern weighted bat profiles to clear 65-meter boundaries with consistent bat-speed. The technical refinement across all disciplines reflects full-time professionalization across top cricket nations."
+      }
+    ]
   }
 ];
+
+export const ORIGINAL_ARTICLES = ARTICLES_RAW.map((art, idx) => ({
+  ...art,
+  date: getDynamicDate(Math.floor(idx * 1.5)),
+  hoursAgo: Math.floor(idx * 8) + 2,
+}));

@@ -8,6 +8,29 @@ export const fetchLiveMatches     = () => api.get("/matches/live").then(r => r.d
 export const fetchUpcomingMatches = () => api.get("/matches/upcoming").then(r => r.data);
 export const fetchSchedule        = () => api.get("/matches/schedule").then(r => r.data);
 
+// Real-Time Server-Sent Events (SSE) stream subscriber
+export const subscribeLiveMatchStream = (onData, onError) => {
+  if (typeof window === "undefined" || !("EventSource" in window)) return () => {};
+  try {
+    const es = new EventSource("/api/matches/live-stream");
+    es.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (onData) onData(data);
+      } catch (e) {
+        if (onError) onError(e);
+      }
+    };
+    es.onerror = (err) => {
+      if (onError) onError(err);
+    };
+    return () => es.close();
+  } catch (err) {
+    if (onError) onError(err);
+    return () => {};
+  }
+};
+
 // Match detail
 export const fetchMatchInfo         = (id) => api.get(`/matches/${id}`).then(r => r.data);
 export const fetchMatchScore        = (id) => api.get(`/matches/${id}/score`).then(r => r.data);

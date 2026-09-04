@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import SEO from "./SEO";
 import AdBanner from "./AdBanner";
 import { MotionGrid, MotionItem } from "./MotionGrid";
-import { fetchLiveMatches, fetchUpcomingMatches } from "../api";
+import { fetchAllMatches, subscribeLiveMatchStream } from "../api";
 
 export default function TournamentPage({
   slug,
@@ -27,27 +27,29 @@ export default function TournamentPage({
   endDate,
 }) {
   const [liveMatches, setLiveMatches] = useState([]);
+  const [recentMatches, setRecentMatches] = useState([]);
   const [upcomingMatches, setUpcomingMatches] = useState([]);
   const [activeTab, setActiveTab] = useState("fixtures");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
+    const filter = (m) =>
+      filterKeywords.some(
+        (kw) =>
+          m.series?.toLowerCase().includes(kw.toLowerCase()) ||
+          m.name?.toLowerCase().includes(kw.toLowerCase()) ||
+          m.matchType?.toLowerCase().includes(kw.toLowerCase())
+      );
+
     const load = async () => {
       try {
-        const [liveRes, upcomingRes] = await Promise.all([
-          fetchLiveMatches(),
-          fetchUpcomingMatches(),
-        ]);
-        const filter = (m) =>
-          filterKeywords.some(
-            (kw) =>
-              m.series?.toLowerCase().includes(kw.toLowerCase()) ||
-              m.name?.toLowerCase().includes(kw.toLowerCase())
-          );
+        const allRes = await fetchAllMatches();
+        const data = allRes?.data || allRes || {};
         if (mounted) {
-          setLiveMatches((liveRes?.data || []).filter(filter));
-          setUpcomingMatches((upcomingRes?.data || []).filter(filter));
+          setLiveMatches((data.live || []).filter(filter));
+          setRecentMatches((data.recent || []).filter(filter));
+          setUpcomingMatches((data.upcoming || []).filter(filter));
         }
       } catch (e) {
         console.error("Tournament load error:", e);
@@ -56,7 +58,18 @@ export default function TournamentPage({
       }
     };
     load();
-    return () => { mounted = false; };
+
+    const unsubscribe = subscribeLiveMatchStream((streamData) => {
+      if (!mounted || !streamData) return;
+      if (streamData.live) setLiveMatches((streamData.live || []).filter(filter));
+      if (streamData.recent) setRecentMatches((streamData.recent || []).filter(filter));
+      if (streamData.upcoming) setUpcomingMatches((streamData.upcoming || []).filter(filter));
+    });
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
   }, [filterKeywords]);
 
   // Combined fixtures: live API upcoming matches + tournament schedule fixtures
@@ -192,6 +205,25 @@ export default function TournamentPage({
           {/* TAB 1: FIXTURES & LIVE MATCHES */}
           {activeTab === "fixtures" && (
             <motion.div key="fixtures" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+              {/* Off-Season / Active Status Notice */}
+              {liveMatches.length === 0 && upcomingMatches.length === 0 && (
+                <div style={{
+                  padding: "14px 18px", borderRadius: 12, marginBottom: 24,
+                  background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex", alignItems: "center", gap: 12
+                }}>
+                  <span style={{ fontSize: 20 }}>🏏</span>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: 13, color: "var(--text)" }}>
+                      {name} — Official Tournament Hub
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--text3)" }}>
+                      Live scorecards and delivery commentary update dynamically whenever matches are in progress. Browse official records, venues, and match roadmaps below.
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Live Section */}
               {liveMatches.length > 0 && (
                 <section style={{ marginBottom: 28 }}>
@@ -212,6 +244,15 @@ export default function TournamentPage({
                               <span style={{ fontSize: 11, color: "var(--text3)" }}>{m.matchType}</span>
                             </div>
                             <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 6 }}>{m.name}</div>
+                            {m.score?.length > 0 && (
+                              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 6 }}>
+                                {m.score.map((sc, sci) => (
+                                  <span key={sci} style={{ fontSize: 11, fontWeight: 800, color: "var(--text)", background: "rgba(255,255,255,0.08)", padding: "2px 6px", borderRadius: 4 }}>
+                                    {sc.inning?.split(" ")[0]} {sc.r}/{sc.w}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                             <div style={{ color: "#FF5C8A", fontWeight: 700, fontSize: 13 }}>{m.status}</div>
                           </div>
                         </Link>
@@ -221,11 +262,48 @@ export default function TournamentPage({
                 </section>
               )}
 
+              {/* Recent Match Results Section (if available from real API) */}
+              {recentMatches.length > 0 && (
+                <section style={{ marginBottom: 28 }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 3, height: 16, borderRadius: 2, background: "#34D399", display: "inline-block" }} />
+                    {shortName} Recent Results &amp; Final Scores
+                  </h2>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
+                    {recentMatches.map(m => (
+                      <Link key={m.id} to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
+                        <div style={{
+                          padding: "16px 18px", borderRadius: 12,
+                          background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)",
+                          transition: "border-color 0.2s"
+                        }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8 }}>
+                            <span>📅 {m.date || "Completed"}</span>
+                            <span style={{ color: "#34D399" }}>Result</span>
+                          </div>
+                          <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 6 }}>{m.name}</div>
+                          {m.score?.length > 0 && (
+                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+                              {m.score.map((sc, sci) => (
+                                <span key={sci} style={{ fontSize: 11, fontWeight: 800, color: "var(--text2)", background: "rgba(255,255,255,0.06)", padding: "2px 6px", borderRadius: 4 }}>
+                                  {sc.inning?.split(" ")[0]} {sc.r}/{sc.w}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.4 }}>{m.status}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {/* Tournament Fixtures / Roadmap */}
               <section>
                 <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ width: 3, height: 16, borderRadius: 2, background: accentColor, display: "inline-block" }} />
-                  {name} Fixtures &amp; Match Schedule
+                  {upcomingMatches.length > 0 ? `${name} Upcoming Match Schedule` : `${name} Official Roadmap & Fixtures`}
                 </h2>
                 {displayFixtures.length > 0 ? (
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>

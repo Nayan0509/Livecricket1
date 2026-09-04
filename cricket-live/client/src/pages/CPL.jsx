@@ -21,13 +21,13 @@ export default function CPL() {
   ];
 
   const fixtures = [
-    { name: "Antigua & Barbuda Falcons vs St Kitts & Nevis Patriots", stage: "Match 1", date: "Aug 28, 2026", venue: "Sir Vivian Richards Stadium, Antigua" },
-    { name: "Trinbago Knight Riders vs Guyana Amazon Warriors", stage: "Match 2", date: "Aug 30, 2026", venue: "Queen's Park Oval, Port of Spain" },
-    { name: "Barbados Royals vs Saint Lucia Kings", stage: "Match 3", date: "Sep 02, 2026", venue: "Kensington Oval, Bridgetown" },
-    { name: "Qualifier 1 (1st vs 2nd)", stage: "Playoffs", date: "Oct 01, 2026", venue: "Providence Stadium, Guyana" },
-    { name: "Eliminator (3rd vs 4th)", stage: "Playoffs", date: "Oct 02, 2026", venue: "Providence Stadium, Guyana" },
-    { name: "Qualifier 2", stage: "Playoffs", date: "Oct 04, 2026", venue: "Providence Stadium, Guyana" },
-    { name: "Republic Bank CPL 2026 Grand Final", stage: "Grand Final", date: "Oct 06, 2026", venue: "Providence Stadium, Guyana" },
+    { name: "Antigua & Barbuda Falcons vs St Kitts & Nevis Patriots", stage: "Match 1", date: "Tournament Opening Match", venue: "Sir Vivian Richards Stadium, Antigua" },
+    { name: "Trinbago Knight Riders vs Guyana Amazon Warriors", stage: "Match 2", date: "Group Stage", venue: "Queen's Park Oval, Port of Spain" },
+    { name: "Barbados Royals vs Saint Lucia Kings", stage: "Match 3", date: "Group Stage", venue: "Kensington Oval, Bridgetown" },
+    { name: "Qualifier 1 (1st vs 2nd)", stage: "Playoffs", date: "Playoffs", venue: "Providence Stadium, Guyana" },
+    { name: "Eliminator (3rd vs 4th)", stage: "Playoffs", date: "Playoffs", venue: "Providence Stadium, Guyana" },
+    { name: "Qualifier 2", stage: "Playoffs", date: "Playoffs", venue: "Providence Stadium, Guyana" },
+    { name: "Republic Bank CPL 2026 Grand Final", stage: "Grand Final", date: "Championship Final", venue: "Providence Stadium, Guyana" },
   ];
 
   const records = [
@@ -51,7 +51,11 @@ export default function CPL() {
       slug="cpl"
       name="Caribbean Premier League 2026"
       shortName="CPL"
-      filterKeywords={["CPL", "Caribbean Premier League", "Caribbean Premier"]}
+      filterKeywords={[
+        "CPL", "Caribbean Premier League", "Caribbean Premier",
+        "Trinbago", "Guyana Amazon Warriors", "Saint Lucia Kings",
+        "Barbados Royals", "Antigua & Barbuda Falcons", "St Kitts & Nevis Patriots"
+      ]}
       accentColor="#00F0FF"
       seoTitle="CPL 2026 Live Score — Caribbean Premier League T20"
       seoDesc="CPL 2026 live score with ball-by-ball commentary for all Caribbean Premier League matches. Follow Trinbago Knight Riders, Barbados Royals, Guyana Amazon Warriors, Saint Lucia Kings and all 6 teams. Updated every 15 seconds, free."

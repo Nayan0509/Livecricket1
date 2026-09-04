@@ -33,15 +33,15 @@ export default function T20WorldCup() {
   ];
 
   const fixtures = [
-    { name: "India vs Pakistan", stage: "Group A", date: "Jun 06, 2026", venue: "Wankhede Stadium, Mumbai" },
-    { name: "Australia vs England", stage: "Group B", date: "Jun 07, 2026", venue: "Eden Gardens, Kolkata" },
-    { name: "South Africa vs West Indies", stage: "Group C", date: "Jun 09, 2026", venue: "M. Chinnaswamy Stadium, Bengaluru" },
-    { name: "New Zealand vs Afghanistan", stage: "Group D", date: "Jun 11, 2026", venue: "MA Chidambaram Stadium, Chennai" },
-    { name: "Super 8 - Match 1 (A1 vs B2)", stage: "Super 8", date: "Jun 18, 2026", venue: "Narendra Modi Stadium, Ahmedabad" },
-    { name: "Super 8 - Match 2 (C1 vs D2)", stage: "Super 8", date: "Jun 19, 2026", venue: "Arun Jaitley Stadium, Delhi" },
-    { name: "Semi-Final 1", stage: "Semi-Final", date: "Jun 24, 2026", venue: "Wankhede Stadium, Mumbai" },
-    { name: "Semi-Final 2", stage: "Semi-Final", date: "Jun 25, 2026", venue: "Eden Gardens, Kolkata" },
-    { name: "ICC T20 World Cup Grand Final", stage: "Grand Final", date: "Jun 28, 2026", venue: "Narendra Modi Stadium, Ahmedabad" },
+    { name: "India vs Pakistan", stage: "Group Stage", date: "Tournament Stage A", venue: "Wankhede Stadium, Mumbai" },
+    { name: "Australia vs England", stage: "Group Stage", date: "Tournament Stage B", venue: "Eden Gardens, Kolkata" },
+    { name: "South Africa vs West Indies", stage: "Group Stage", date: "Tournament Stage C", venue: "M. Chinnaswamy Stadium, Bengaluru" },
+    { name: "New Zealand vs Afghanistan", stage: "Group Stage", date: "Tournament Stage D", venue: "MA Chidambaram Stadium, Chennai" },
+    { name: "Super 8 - Match 1 (A1 vs B2)", stage: "Super 8", date: "Super 8 Stage", venue: "Narendra Modi Stadium, Ahmedabad" },
+    { name: "Super 8 - Match 2 (C1 vs D2)", stage: "Super 8", date: "Super 8 Stage", venue: "Arun Jaitley Stadium, Delhi" },
+    { name: "Semi-Final 1", stage: "Semi-Final", date: "Knockout Stage", venue: "Wankhede Stadium, Mumbai" },
+    { name: "Semi-Final 2", stage: "Semi-Final", date: "Knockout Stage", venue: "Eden Gardens, Kolkata" },
+    { name: "ICC T20 World Cup Grand Final", stage: "Grand Final", date: "Championship Final", venue: "Narendra Modi Stadium, Ahmedabad" },
   ];
 
   const records = [
@@ -66,7 +66,7 @@ export default function T20WorldCup() {
       slug="t20-world-cup"
       name="ICC Men's T20 World Cup 2026"
       shortName="T20 WC"
-      filterKeywords={["T20 World Cup", "ICC T20", "WT20", "T20WC"]}
+      filterKeywords={["T20 World Cup", "ICC T20", "WT20", "T20WC", "World T20", "T20I", "ICC Men's T20", "T20"]}
       accentColor="#f472b6"
       seoTitle="T20 World Cup 2026 Live Score — ICC T20 WC All Matches"
       seoDesc="T20 World Cup 2026 live score with ball-by-ball commentary. All 45 ICC T20 World Cup 2026 matches covered — India, Pakistan, Australia, England and 16 teams. Updated every 15 seconds, free."

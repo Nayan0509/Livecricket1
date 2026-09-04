@@ -555,6 +555,50 @@ async function scrapeMatchLiveData(matchId) {
   }
 }
 
+// ─── RSC STREAM PARSER HELPERS ──────────────────────────────────────────────
+function decodeRSCStream(html) {
+  if (!html) return "";
+  const chunks = [];
+  const regex = /self\.__next_f\.push\(\[1,\s*"([\s\S]*?)"\]\)/g;
+  let m;
+  while ((m = regex.exec(html)) !== null) {
+    try { chunks.push(JSON.parse(`"${m[1]}"`)); } catch (_) { chunks.push(m[1]); }
+  }
+  return chunks.join("");
+}
+
+function extractJsonObjectFromRSC(str, key) {
+  if (!str || !key) return null;
+  const target = `"${key}":`;
+  const idx = str.indexOf(target);
+  if (idx === -1) return null;
+  const startChar = str[idx + target.length];
+  if (startChar !== "{" && startChar !== "[") return null;
+  const openChar = startChar;
+  const closeChar = openChar === "{" ? "}" : "]";
+  let depth = 0;
+  let inString = false;
+  let escapeNext = false;
+  const startIdx = idx + target.length;
+  for (let i = startIdx; i < str.length; i++) {
+    const ch = str[i];
+    if (escapeNext) { escapeNext = false; continue; }
+    if (ch === "\\") { escapeNext = true; continue; }
+    if (ch === '"') { inString = !inString; continue; }
+    if (!inString) {
+      if (ch === openChar) depth++;
+      else if (ch === closeChar) {
+        depth--;
+        if (depth === 0) {
+          const jsonSub = str.slice(startIdx, i + 1);
+          try { return JSON.parse(jsonSub); } catch (_) { return null; }
+        }
+      }
+    }
+  }
+  return null;
+}
+
 // ─── 5. COMMENTARY ───────────────────────────────────────────────────────────
 async function scrapeCommentary(matchId, page = 0) {
   const key = `cricbuzz:commentary:${matchId}:${page}`;
@@ -564,11 +608,11 @@ async function scrapeCommentary(matchId, page = 0) {
   const normaliseEvent = (c) => {
     if (c.event) {
       const ev = String(c.event).toUpperCase();
-      if (ev === "SIX"  || ev === "SIXER")   return "SIX";
-      if (ev === "FOUR" || ev === "BOUNDARY") return "FOUR";
-      if (ev === "WICKET" || ev === "OUT")    return "WICKET";
-      if (ev === "WIDE")    return "WIDE";
-      if (ev === "NO_BALL" || ev === "NOBALL") return "NO_BALL";
+      if (ev.includes("SIX")) return "SIX";
+      if (ev.includes("FOUR") || ev.includes("BOUNDARY")) return "FOUR";
+      if (ev.includes("WICKET") || ev.includes("OUT")) return "WICKET";
+      if (ev.includes("WIDE")) return "WIDE";
+      if (ev.includes("NO_BALL") || ev.includes("NOBALL")) return "NO_BALL";
       return ev;
     }
     if (c.runs === 6) return "SIX";
@@ -576,10 +620,11 @@ async function scrapeCommentary(matchId, page = 0) {
     return "default";
   };
 
+  // 1. Try mobile/internal JSON API
   try {
     const { data } = await axios.get(
       `https://www.cricbuzz.com/api/cricket-match/${matchId}/commentary/${page}`,
-      { headers: apiHeaders, timeout: 10000 }
+      { headers: apiHeaders, timeout: 8000 }
     );
     const list = data?.commentaryList;
     if (Array.isArray(list) && list.length) {
@@ -593,7 +638,6 @@ async function scrapeCommentary(matchId, page = 0) {
           batsmanStriker: c.batsmanStriker?.batName || c.batName || "",
           bowlerStriker:  c.bowlerStriker?.bowlName || c.bowlName || "",
           runs:           c.runs !== undefined ? c.runs : 0,
-          // over summary blocks
           overSeparator:  c.overSeparator ? {
             runs:   c.overSeparator.runs,
             wickets: c.overSeparator.wickets,
@@ -607,48 +651,97 @@ async function scrapeCommentary(matchId, page = 0) {
         return commentary;
       }
     }
-  } catch (e) {
-    console.log(`Commentary JSON API failed for ${matchId} page ${page}:`, e.message);
-  }
+  } catch (_) {}
 
-  // HTML fallback (only for page 0)
-  if (page > 0) return [];
+  // 2. Modern Next.js RSC Stream Ingestion (Only for page 0 or initial fetch)
+  if (page === 0) {
+    try {
+      const { data: html } = await axios.get(
+        `https://www.cricbuzz.com/live-cricket-scores/${matchId}`,
+        { headers: htmlHeaders, timeout: 12000 }
+      );
+      const rsc = decodeRSCStream(html);
+      if (rsc) {
+        const matchCommObj = extractJsonObjectFromRSC(rsc, "matchCommentary") || extractJsonObjectFromRSC(rsc, "commentaryList");
+        if (matchCommObj) {
+          const rawItems = Array.isArray(matchCommObj) ? matchCommObj : Object.values(matchCommObj);
+          if (rawItems.length > 0) {
+            const commentary = rawItems
+              .filter(c => c && (c.commText || c.overSeparator || c.text))
+              .map(c => {
+                const overVal = c.overNumber !== undefined ? c.overNumber : (c.over || "");
+                const ballVal = c.ballNbr !== undefined ? c.ballNbr : (c.ball || "");
+                const cleanText = (c.commText || c.text || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+                return {
+                  over: overVal ? String(overVal) : "",
+                  ball: ballVal ? String(ballVal) : "",
+                  event: normaliseEvent(c),
+                  text: cleanText,
+                  batsmanStriker: c.batsmanDetails?.playerName || c.batsmanStriker?.batName || c.batName || "",
+                  bowlerStriker: c.bowlerDetails?.playerName || c.bowlerStriker?.bowlName || c.bowlName || "",
+                  runs: c.runs !== undefined ? Number(c.runs) : 0,
+                  overSeparator: c.overSeparator ? {
+                    runs: c.overSeparator.runs,
+                    wickets: c.overSeparator.wickets,
+                    o_summary: c.overSeparator.o_summary,
+                    batStriker: c.overSeparator.batStriker?.batName,
+                    bowlStriker: c.overSeparator.bowlStriker?.bowlName,
+                  } : null,
+                };
+              });
 
-  const commentary = [];
-  try {
-    const { data: html } = await axios.get(
-      `https://www.cricbuzz.com/live-cricket-scorecard/${matchId}`,
-      { headers: htmlHeaders, timeout: 12000 }
-    );
-    const $ = cheerio.load(html);
-
-    const nextDataScript = $("script#__NEXT_DATA__").html();
-    if (nextDataScript) {
-      try {
-        const nd = JSON.parse(nextDataScript);
-        const list = nd?.props?.pageProps?.commentaryList
-          || nd?.props?.pageProps?.appData?.commentaryList;
-        if (Array.isArray(list)) {
-          list.filter(c => c.commText).forEach(c => {
-            commentary.push({ over: c.overNumber ?? "", ball: c.ballNbr ?? "", event: normaliseEvent(c), text: c.commText, batsmanStriker: c.batsmanStriker?.batName || "", bowlerStriker: c.bowlerStriker?.bowlName || "", runs: c.runs ?? 0 });
-          });
+            if (commentary.length) {
+              scrapeCache.set(key, commentary);
+              return commentary;
+            }
+          }
         }
-      } catch (_) {}
-    }
+      }
 
-    if (!commentary.length) {
+      // 3. Fallback to __NEXT_DATA__ if present
+      const $ = cheerio.load(html);
+      const nextDataScript = $("script#__NEXT_DATA__").html();
+      if (nextDataScript) {
+        try {
+          const nd = JSON.parse(nextDataScript);
+          const list = nd?.props?.pageProps?.commentaryList || nd?.props?.pageProps?.appData?.commentaryList;
+          if (Array.isArray(list) && list.length) {
+            const commentary = list
+              .filter(c => c.commText)
+              .map(c => ({
+                over: c.overNumber != null ? String(c.overNumber) : "",
+                ball: c.ballNbr != null ? String(c.ballNbr) : "",
+                event: normaliseEvent(c),
+                text: (c.commText || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+                batsmanStriker: c.batsmanStriker?.batName || "",
+                bowlerStriker: c.bowlerStriker?.bowlName || "",
+                runs: c.runs ?? 0,
+              }));
+            if (commentary.length) {
+              scrapeCache.set(key, commentary);
+              return commentary;
+            }
+          }
+        } catch (_) {}
+      }
+
+      // 4. Legacy DOM commentary fallback
+      const domComm = [];
       $(".cb-col.cb-col-100.cb-ltst-wgt-hdr").each((_, el) => {
         const over = $(el).find(".cb-col-8").text().trim();
         const text = $(el).find(".cb-col-84").text().trim();
-        if (text) commentary.push({ over, ball: "", event: "default", text, runs: 0, batsmanStriker: "", bowlerStriker: "" });
+        if (text) domComm.push({ over, ball: "", event: "default", text, runs: 0, batsmanStriker: "", bowlerStriker: "" });
       });
+      if (domComm.length) {
+        scrapeCache.set(key, domComm);
+        return domComm;
+      }
+    } catch (e) {
+      console.log(`Commentary stream fallback failed for ${matchId}:`, e.message);
     }
-  } catch (e) {
-    console.log("Commentary HTML fallback failed:", e.message);
   }
 
-  if (commentary.length) scrapeCache.set(key, commentary);
-  return commentary;
+  return [];
 }
 
 // ─── 6. SCORECARD ────────────────────────────────────────────────────────────
@@ -657,146 +750,119 @@ async function scrapeScorecard(matchId) {
   const cached = scrapeCache.get(key);
   if (cached) return cached;
 
+  const mapInningsData = (scoreCard) => {
+    return scoreCard.map(inn => {
+      const batsmen = Object.values(inn.batTeamDetails?.batsmenData || {})
+        .filter(b => b.batName)
+        .map(b => ({
+          name:       b.batName,
+          dismissal:  b.outDesc || "not out",
+          r:          String(b.runs    ?? 0),
+          b:          String(b.balls   ?? 0),
+          fours:      String(b.fours   ?? 0),
+          sixes:      String(b.sixes   ?? 0),
+          sr:         b.strikeRate != null ? String(Number(b.strikeRate).toFixed(2)) : "0.00",
+          isBatting:  !!b.isBatting,
+          dots:       String(b.dots   ?? 0),
+        }));
+
+      const bowlers = Object.values(inn.bowlTeamDetails?.bowlersData || {})
+        .filter(b => b.bowlName)
+        .map(b => ({
+          name:       b.bowlName,
+          o:          String(b.overs   ?? 0),
+          m:          String(b.maidens ?? 0),
+          r:          String(b.runs    ?? 0),
+          w:          String(b.wickets ?? 0),
+          eco:        b.economy != null ? String(Number(b.economy).toFixed(2)) : "0.00",
+          isBowling:  !!b.isBowling,
+          wides:      String(b.wides    ?? 0),
+          noBalls:    String(b.noBalls  ?? 0),
+        }));
+
+      const sd  = inn.scoreDetails || {};
+      const ext = inn.extrasData   || {};
+
+      const partnerships = Object.values(inn.partnershipsData || {}).map(p => ({
+        batsman1: p.bat1Name || p.bat1Id,
+        batsman2: p.bat2Name || p.bat2Id,
+        runs:     p.runs ?? 0,
+        balls:    p.balls ?? 0,
+      }));
+
+      const fow = Object.values(inn.wicketsData || {}).map(w =>
+        `${w.batName || "Wicket"} ${w.wktRuns ?? 0}(${w.wktOvr ?? 0})`
+      );
+
+      return {
+        team:   inn.batTeamDetails?.batTeamName || inn.batTeamDetails?.batTeamShortName || "Team",
+        score:  `${sd.runs ?? 0}/${sd.wickets ?? 0}`,
+        overs:  String(sd.overs ?? 0),
+        runRate: sd.runRate != null ? String(Number(sd.runRate).toFixed(2)) : null,
+        target:  sd.target  != null ? sd.target : null,
+        rrr:     sd.reqRunRate != null ? String(Number(sd.reqRunRate).toFixed(2)) : null,
+        extras: {
+          total:   ext.total  ?? 0,
+          wides:   ext.wides  ?? 0,
+          noBalls: ext.noBalls ?? 0,
+          legByes: ext.legByes ?? 0,
+          byes:    ext.byes   ?? 0,
+          penalty: ext.penalty ?? 0,
+        },
+        batsmen,
+        bowlers,
+        partnerships,
+        fow,
+      };
+    });
+  };
+
+  // 1. Try mobile/internal JSON API
   try {
     const { data } = await axios.get(
       `https://www.cricbuzz.com/api/cricket-match/${matchId}/scorecard`,
-      { headers: apiHeaders, timeout: 10000 }
+      { headers: apiHeaders, timeout: 8000 }
     );
     const scoreCard = data?.scoreCard;
     if (Array.isArray(scoreCard) && scoreCard.length) {
-      const innings = scoreCard.map(inn => {
-        const batsmen = Object.values(inn.batTeamDetails?.batsmenData || {})
-          .filter(b => b.batName)
-          .map(b => ({
-            name:       b.batName,
-            dismissal:  b.outDesc || "not out",
-            r:          String(b.runs    ?? 0),
-            b:          String(b.balls   ?? 0),
-            fours:      String(b.fours   ?? 0),
-            sixes:      String(b.sixes   ?? 0),
-            sr:         b.strikeRate != null ? String(Number(b.strikeRate).toFixed(2)) : "0.00",
-            isBatting:  !!b.isBatting,
-            dots:       String(b.dots   ?? 0),
-          }));
-
-        const bowlers = Object.values(inn.bowlTeamDetails?.bowlersData || {})
-          .filter(b => b.bowlName)
-          .map(b => ({
-            name:       b.bowlName,
-            o:          String(b.overs   ?? 0),
-            m:          String(b.maidens ?? 0),
-            r:          String(b.runs    ?? 0),
-            w:          String(b.wickets ?? 0),
-            eco:        b.economy != null ? String(Number(b.economy).toFixed(2)) : "0.00",
-            isBowling:  !!b.isBowling,
-            wides:      String(b.wides    ?? 0),
-            noBalls:    String(b.noBalls  ?? 0),
-          }));
-
-        const sd  = inn.scoreDetails || {};
-        const ext = inn.extrasData   || {};
-
-        // Extract Partnerships
-        const partnerships = Object.values(inn.partnershipsData || {}).map(p => ({
-          batsman1: p.bat1Name,
-          batsman2: p.bat2Name,
-          runs:     p.runs,
-          balls:    p.balls,
-        }));
-
-        return {
-          team:   inn.batTeamDetails?.batTeamName || "Team",
-          score:  `${sd.runs ?? 0}/${sd.wickets ?? 0}`,
-          overs:  String(sd.overs ?? 0),
-          runRate: sd.runRate  != null ? String(Number(sd.runRate).toFixed(2))  : null,
-          target:  sd.target   != null ? sd.target  : null,
-          rrr:     sd.reqRunRate != null ? String(Number(sd.reqRunRate).toFixed(2)) : null,
-          extras: {
-            total:   ext.total  ?? 0,
-            wides:   ext.wides  ?? 0,
-            noBalls: ext.noBalls ?? 0,
-            legByes: ext.legByes ?? 0,
-            byes:    ext.byes   ?? 0,
-            penalty: ext.penalty ?? 0,
-          },
-          batsmen,
-          bowlers,
-          partnerships,
-          fow: Object.values(inn.wicketsData || {}).map(w =>
-            `${w.batName} ${w.wktRuns}(${w.wktOvr})`
-          ),
-        };
-      });
-
-      const result = { innings };
+      const result = { innings: mapInningsData(scoreCard) };
       scrapeCache.set(key, result);
       return result;
     }
-  } catch (e) {
-    console.log(`Scorecard JSON API failed for ${matchId}:`, e.message);
-  }
+  } catch (_) {}
 
-  // HTML fallback
+  // 2. Next.js RSC Stream Ingestion from live-cricket-scorecard
   try {
     const { data: html } = await axios.get(
       `https://www.cricbuzz.com/live-cricket-scorecard/${matchId}`,
       { headers: htmlHeaders, timeout: 12000 }
     );
-    const $ = cheerio.load(html);
-    const innings = [];
+    const rsc = decodeRSCStream(html);
+    if (rsc) {
+      const scoreCard = extractJsonObjectFromRSC(rsc, "scoreCard") || extractJsonObjectFromRSC(rsc, "scoreCardDetails");
+      if (Array.isArray(scoreCard) && scoreCard.length) {
+        const result = { innings: mapInningsData(scoreCard) };
+        scrapeCache.set(key, result);
+        return result;
+      }
+    }
 
+    // 3. Fallback to __NEXT_DATA__
+    const $ = cheerio.load(html);
     const nd = $("script#__NEXT_DATA__").html();
     if (nd) {
       try {
         const parsed = JSON.parse(nd);
         const sc = parsed?.props?.pageProps?.appData?.scoreCard || parsed?.props?.pageProps?.scoreCard;
         if (Array.isArray(sc) && sc.length) {
-          sc.forEach(inn => {
-            if (!inn.batTeamDetails?.batsmenData) return;
-            const batsmen = Object.values(inn.batTeamDetails.batsmenData)
-              .filter(b => b.batName)
-              .map(b => ({ name: b.batName, dismissal: b.outDesc || "not out", r: String(b.runs ?? 0), b: String(b.balls ?? 0), fours: String(b.fours ?? 0), sixes: String(b.sixes ?? 0), sr: b.strikeRate != null ? String(Number(b.strikeRate).toFixed(2)) : "0.00", isBatting: !!b.isBatting }));
-            const bowlers = Object.values(inn.bowlTeamDetails?.bowlersData || {})
-              .filter(b => b.bowlName)
-              .map(b => ({ name: b.bowlName, o: String(b.overs ?? 0), m: String(b.maidens ?? 0), r: String(b.runs ?? 0), w: String(b.wickets ?? 0), eco: b.economy != null ? String(Number(b.economy).toFixed(2)) : "0.00", isBowling: !!b.isBowling }));
-            const sd  = inn.scoreDetails || {};
-            const ext = inn.extrasData   || {};
-            innings.push({ team: inn.batTeamDetails.batTeamName || "Team", score: `${sd.runs ?? 0}/${sd.wickets ?? 0}`, overs: String(sd.overs ?? 0), extras: { total: ext.total ?? 0, wides: ext.wides ?? 0, noBalls: ext.noBalls ?? 0, legByes: ext.legByes ?? 0, byes: ext.byes ?? 0 }, batsmen, bowlers, fow: [] });
-          });
+          const result = { innings: mapInningsData(sc) };
+          scrapeCache.set(key, result);
+          return result;
         }
       } catch (_) {}
     }
-
-    // Pure HTML fallback
-    if (!innings.length) {
-      ["1","2","3","4"].forEach(num => {
-        const div = $(`#innings_${num}`);
-        if (!div.length) return;
-        const teamName = div.find(".cb-scrd-hdr").text().split("Innings")[0].trim();
-        const score    = div.find(".cb-scrd-hdr .text-bold").text().trim();
-        const batsmen  = [];
-        div.find(".cb-scrd-itms").each((_, el) => {
-          const name = $(el).find("a.text-cbTextLink").text().trim();
-          if (!name) return;
-          const cols = $(el).find(".cb-col-8");
-          batsmen.push({ name, dismissal: $(el).find(".cb-font-12.text-gray").text().trim(), r: $(cols[0]).text().trim(), b: $(cols[1]).text().trim(), fours: $(cols[2]).text().trim(), sixes: $(cols[3]).text().trim(), sr: $(cols[4]).text().trim() });
-        });
-        const bowlers = [];
-        div.find(".cb-ltst-wgt-hdr:contains('Bowling')").nextAll(".cb-scrd-itms").each((_, el) => {
-          const name = $(el).find("a.text-cbTextLink").text().trim();
-          if (!name) return;
-          const cols = $(el).find(".cb-col-8, .cb-col-10");
-          bowlers.push({ name, o: $(cols[0]).text().trim(), m: $(cols[1]).text().trim(), r: $(cols[2]).text().trim(), w: $(cols[3]).text().trim(), eco: $(cols[4]).text().trim() });
-        });
-        if (teamName) innings.push({ team: teamName, score, overs: "", extras: { total: 0 }, batsmen, bowlers, fow: [] });
-      });
-    }
-
-    const result = { innings };
-    scrapeCache.set(key, result);
-    return result;
   } catch (e) {
-    console.log(`Scorecard HTML fallback failed for ${matchId}:`, e.message);
+    console.log(`Scorecard HTML/RSC fallback failed for ${matchId}:`, e.message);
   }
 
   return { innings: [] };
@@ -2062,17 +2128,51 @@ async function cbCommentaryModern(matchId, page = 0) {
   const key = `cb2:comm:${matchId}:${page}`;
   const cached = scrapeCache.get(key);
   if (cached) return cached;
-  const mapItems = (list) => (list || []).filter(c => c.commText).map(c => ({
-    over: c.overNumber ?? c.overNum ?? "",
-    ball: c.ballNbr ?? "",
-    event: c.event || "default",
-    text: String(c.commText).replace(/B0$|\n/g, " ").trim(),
-    batsmanStriker: c.batsmanStriker?.batName || "",
-    bowlerStriker: c.bowlerStriker?.bowlName || "",
-    runs: c.runs || 0,
-  }));
-  // Tolerant array walk: parse each top-level {...} item individually so one
-  // malformed entry can't poison the whole list.
+
+  const normaliseEvent = (c) => {
+    if (c.event) {
+      const ev = Array.isArray(c.event) ? c.event.join(" ").toUpperCase() : String(c.event).toUpperCase();
+      if (ev.includes("SIX")) return "SIX";
+      if (ev.includes("FOUR") || ev.includes("BOUNDARY")) return "FOUR";
+      if (ev.includes("WICKET") || ev.includes("OUT")) return "WICKET";
+      if (ev.includes("WIDE")) return "WIDE";
+      if (ev.includes("NO_BALL") || ev.includes("NOBALL")) return "NO_BALL";
+      return ev;
+    }
+    if (c.runs === 6) return "SIX";
+    if (c.runs === 4) return "FOUR";
+    return "default";
+  };
+
+  const mapItems = (list) => (list || []).filter(c => c && (c.commText || c.text || c.overSeparator)).map(c => {
+    const rawText = c.commText || c.text || "";
+    const cleanText = String(rawText)
+      .replace(/<[^>]+>/g, " ")
+      .replace(/B0\$/g, c.batsmanStriker?.batName || c.batsmanDetails?.playerName || "")
+      .replace(/B1\$/g, c.bowlerStriker?.bowlName || c.bowlerDetails?.playerName || "")
+      .replace(/B\d+\$/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    return {
+      over: c.overNumber != null ? String(c.overNumber) : (c.over != null ? String(c.over) : ""),
+      ball: c.ballNbr != null ? String(c.ballNbr) : (c.ball != null ? String(c.ball) : ""),
+      event: normaliseEvent(c),
+      text: cleanText,
+      batsmanStriker: c.batsmanDetails?.playerName || c.batsmanStriker?.batName || c.batName || "",
+      bowlerStriker: c.bowlerDetails?.playerName || c.bowlerStriker?.bowlName || c.bowlName || "",
+      runs: c.runs || 0,
+      overSeparator: c.overSeparator ? {
+        runs: c.overSeparator.runs,
+        wickets: c.overSeparator.wickets,
+        o_summary: c.overSeparator.o_summary,
+        batStriker: c.overSeparator.batStriker?.batName,
+        bowlStriker: c.overSeparator.bowlStriker?.bowlName,
+      } : null,
+    };
+  });
+
+  // Tolerant array walk
   const walkItems = (plain) => {
     const marker = '"commentaryList":[';
     const at = plain.indexOf(marker);
@@ -2089,14 +2189,34 @@ async function cbCommentaryModern(matchId, page = 0) {
     }
     return out;
   };
+
   for (const url of [
-    `https://www.cricbuzz.com/live-cricket-full-commentary/${matchId}`,
     `https://www.cricbuzz.com/live-cricket-scores/${matchId}`,
+    `https://www.cricbuzz.com/live-cricket-full-commentary/${matchId}`,
   ]) {
     try {
       const plain = await _cbPage(url);
-      const items = mapItems(walkItems(plain));
-      if (items.length) { scrapeCache.set(key, items, 30); return items; }
+      
+      // 1. Try modern Next.js RSC matchCommentary object
+      const commObj = _cbExtract(plain, "matchCommentary") || _cbExtract(plain, "commentaryList");
+      if (commObj) {
+        const rawList = Array.isArray(commObj) ? commObj : Object.values(commObj);
+        const items = mapItems(rawList);
+        if (items.length) {
+          scrapeCache.set(key, items, 30);
+          return items;
+        }
+      }
+      
+      // 2. Try walking commentaryList array
+      const walked = walkItems(plain);
+      if (walked.length) {
+        const items = mapItems(walked);
+        if (items.length) {
+          scrapeCache.set(key, items, 30);
+          return items;
+        }
+      }
     } catch (_) {}
   }
   return [];

@@ -2,8 +2,17 @@ const axios = require("axios");
 const NodeCache = require("node-cache");
 
 // ─── Cache ────────────────────────────────────────────────────────────────────
-const scrapeCache = new NodeCache({ stdTTL: 30 });   // 30s – live/upcoming/recent
-const newsCache = new NodeCache({ stdTTL: 300 });    // 5min – news
+// ESPN's public site API rate-limits (returns 403) if hammered. With ~18 football
+// leagues, one uncached call fans out to 18 upstream requests, so TTLs are kept
+// generous and every successful result is also kept in `lastGood` forever —
+// if upstream starts failing we serve the last real data instead of a blank page.
+const scrapeCache = new NodeCache({ stdTTL: 120 });   // 2 min – live/upcoming/recent
+const newsCache = new NodeCache({ stdTTL: 1800 });    // 30 min – news
+const lastGood = new NodeCache({ stdTTL: 0 });        // never expires – outage fallback
+
+// Max simultaneous upstream requests. Firing all 18 leagues at once is what
+// triggers ESPN's rate limiter.
+const FETCH_CONCURRENCY = 4;
 
 const ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports";
 
@@ -11,6 +20,22 @@ const headers = {
   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
   "Accept": "application/json, text/plain, */*",
 };
+
+// Run `fn` over `items` with bounded concurrency. Never rejects: each slot
+// resolves to {ok:true,value} or {ok:false,error} like Promise.allSettled.
+async function mapLimit(items, limit, fn) {
+  const out = new Array(items.length);
+  let cursor = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (cursor < items.length) {
+      const i = cursor++;
+      try { out[i] = { ok: true, value: await fn(items[i]) }; }
+      catch (error) { out[i] = { ok: false, error }; }
+    }
+  });
+  await Promise.all(workers);
+  return out;
+}
 
 // Our public sport keys vs. ESPN's own sport slugs (ESPN calls football "soccer").
 const ESPN_SPORT_SLUG = {
@@ -137,11 +162,13 @@ async function getSportMatches(sport) {
   const cached = scrapeCache.get(cacheKey);
   if (cached) return cached;
 
-  const results = await Promise.allSettled(leagues.map(l => fetchScoreboard(sport, l.slug)));
+  const results = await mapLimit(leagues, FETCH_CONCURRENCY, l => fetchScoreboard(sport, l.slug));
 
   let all = [];
+  let okCount = 0;
   results.forEach((r, i) => {
-    if (r.status !== "fulfilled") return;
+    if (!r || !r.ok) return;
+    okCount++;
     const league = leagues[i].name;
     const events = r.value.events || [];
     if (sport === "tennis") {
@@ -150,6 +177,13 @@ async function getSportMatches(sport) {
       events.forEach(ev => all.push(normalizeTeamEvent(ev, sport, league)));
     }
   });
+
+  // Every upstream league failed (rate limit / outage) — serve the last known
+  // real data rather than caching an empty result and blanking the page.
+  if (okCount === 0) {
+    const stale = lastGood.get(cacheKey);
+    if (stale) return stale;
+  }
 
   const live = all.filter(m => m.isLive);
   const recent = all
@@ -163,6 +197,7 @@ async function getSportMatches(sport) {
 
   const payload = { live, recent, upcoming };
   scrapeCache.set(cacheKey, payload);
+  if (okCount > 0) lastGood.set(cacheKey, payload);
   return payload;
 }
 
@@ -176,16 +211,18 @@ async function getSportNews(sport) {
 
   // Pull from each league's own news feed and merge — genuinely distinct
   // real articles per league, not one feed duplicated under many labels.
-  const results = await Promise.allSettled(
-    leagues.map(l => axios.get(`${ESPN_BASE}/${ESPN_SPORT_SLUG[sport]}/${l.slug}/news`, {
+  const results = await mapLimit(leagues, FETCH_CONCURRENCY, l =>
+    axios.get(`${ESPN_BASE}/${ESPN_SPORT_SLUG[sport]}/${l.slug}/news`, {
       headers, timeout: 10000, params: { limit: 15 },
-    }))
+    })
   );
 
   const seen = new Set();
   const articles = [];
+  let okCount = 0;
   results.forEach(r => {
-    if (r.status !== "fulfilled") return;
+    if (!r || !r.ok) return;
+    okCount++;
     (r.value.data.articles || []).forEach(a => {
       const id = String(a.id);
       if (seen.has(id)) return;
@@ -201,9 +238,16 @@ async function getSportNews(sport) {
       });
     });
   });
+
+  if (okCount === 0) {
+    const stale = lastGood.get(cacheKey);
+    if (stale) return stale;
+  }
+
   articles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   newsCache.set(cacheKey, articles);
+  if (okCount > 0) lastGood.set(cacheKey, articles);
   return articles;
 }
 

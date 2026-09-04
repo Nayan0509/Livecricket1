@@ -11,10 +11,14 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message, data: [] });
   }
+});
+
 // GET /api/stats/records
-router.get("/records", (req, res) => {
+router.get("/records", async (req, res) => {
   try {
-    const data = typeof scraper.scrapeCareerRecords === "function" ? scraper.scrapeCareerRecords() : {};
+    const data = typeof scraper.scrapeCareerRecords === "function"
+      ? await scraper.scrapeCareerRecords()
+      : {};
     res.json({ status: "success", data });
   } catch (err) {
     res.status(500).json({ error: err.message, data: {} });

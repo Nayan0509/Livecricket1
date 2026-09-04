@@ -32,6 +32,32 @@ router.get("/live", async (req, res) => {
   }
 });
 
+// GET /api/matches/live-stream  — Server-Sent Events (SSE) real-time streaming feed
+router.get("/live-stream", async (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.flushHeaders?.();
+
+  const sendUpdate = async () => {
+    try {
+      const data = await scraper.getAllMatches();
+      res.write(`data: ${JSON.stringify(data)}\n\n`);
+    } catch (err) {
+      res.write(`event: error\ndata: ${JSON.stringify({ message: err.message })}\n\n`);
+    }
+  };
+
+  await sendUpdate();
+  const intervalId = setInterval(sendUpdate, 8000);
+
+  req.on("close", () => {
+    clearInterval(intervalId);
+    res.end();
+  });
+});
+
 // GET /api/matches/upcoming
 router.get("/upcoming", async (req, res) => {
   try {

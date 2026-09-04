@@ -25,14 +25,16 @@ export default function BBL() {
   ];
 
   const fixtures = [
-    { name: "Brisbane Heat vs Melbourne Stars", stage: "Match 1", date: "Dec 15, 2026", venue: "The Gabba, Brisbane" },
-    { name: "Sydney Sixers vs Melbourne Renegades", stage: "Match 2", date: "Dec 16, 2026", venue: "SCG, Sydney" },
-    { name: "Perth Scorchers vs Hobart Hurricanes", stage: "Match 3", date: "Dec 17, 2026", venue: "Optus Stadium, Perth" },
-    { name: "Adelaide Strikers vs Sydney Thunder", stage: "Match 4", date: "Dec 18, 2026", venue: "Adelaide Oval, Adelaide" },
-    { name: "The Qualifier (1st vs 2nd)", stage: "Finals", date: "Jan 22, 2027", venue: "The Gabba, Brisbane" },
-    { name: "The Knockout (3rd vs 4th)", stage: "Finals", date: "Jan 23, 2027", venue: "Optus Stadium, Perth" },
-    { name: "The Challenger", stage: "Finals", date: "Jan 25, 2027", venue: "SCG, Sydney" },
-    { name: "KFC BBL Grand Final", stage: "Grand Final", date: "Jan 28, 2027", venue: "The Gabba, Brisbane" },
+    { name: "Opening Night: Brisbane Heat vs Melbourne Stars", stage: "Match 1", date: "Dec 2026", venue: "The Gabba, Brisbane" },
+    { name: "Sydney Sixers vs Melbourne Renegades", stage: "Match 2", date: "Dec 2026", venue: "SCG, Sydney" },
+    { name: "Perth Scorchers vs Hobart Hurricanes", stage: "Match 3", date: "Dec 2026", venue: "Optus Stadium, Perth" },
+    { name: "Adelaide Strikers vs Sydney Thunder", stage: "Match 4", date: "Dec 2026", venue: "Adelaide Oval, Adelaide" },
+    { name: "Sydney Smash: Sixers vs Thunder", stage: "Derby", date: "Jan 2027", venue: "SCG, Sydney" },
+    { name: "Melbourne Derby: Stars vs Renegades", stage: "Derby", date: "Jan 2027", venue: "MCG, Melbourne" },
+    { name: "The Qualifier (1st vs 2nd)", stage: "Finals", date: "Jan 2027", venue: "TBD" },
+    { name: "The Knockout (3rd vs 4th)", stage: "Finals", date: "Jan 2027", venue: "TBD" },
+    { name: "The Challenger", stage: "Finals", date: "Jan 2027", venue: "TBD" },
+    { name: "KFC BBL Grand Final", stage: "Grand Final", date: "Jan 2027", venue: "TBD" },
   ];
 
   const records = [
@@ -56,7 +58,11 @@ export default function BBL() {
       slug="bbl"
       name="Big Bash League 2026"
       shortName="BBL"
-      filterKeywords={["BBL", "Big Bash", "Big Bash League"]}
+      filterKeywords={[
+        "BBL", "Big Bash", "Big Bash League", "Perth Scorchers", "Sydney Sixers",
+        "Brisbane Heat", "Adelaide Strikers", "Melbourne Renegades", "Sydney Thunder",
+        "Hobart Hurricanes", "Melbourne Stars"
+      ]}
       accentColor="#00F0FF"
       seoTitle="BBL 2026 Live Score — Big Bash League Cricket Australia"
       seoDesc="BBL 2026 live score with ball-by-ball commentary for all Big Bash League matches. Follow Sydney Sixers, Perth Scorchers, Melbourne Stars, Brisbane Heat and all 8 teams. Updated every 15 seconds, free."

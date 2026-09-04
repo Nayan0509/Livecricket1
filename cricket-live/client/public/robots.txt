@@ -14,12 +14,8 @@ Crawl-delay: 1
 # Host
 Host: https://www.livecricketzone.com
 
-# Sitemaps & RSS Feeds
+# Sitemap
 Sitemap: https://www.livecricketzone.com/sitemap.xml
-Sitemap: https://www.livecricketzone.com/sitemap-news.xml
-Sitemap: https://www.livecricketzone.com/sitemap-videos.xml
-Sitemap: https://www.livecricketzone.com/sitemap-matches.xml
-Sitemap: https://www.livecricketzone.com/rss.xml
 
 # Google — no delay, full access
 User-agent: Googlebot
