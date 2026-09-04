@@ -89,6 +89,16 @@ export default function EditorialPolicy() {
               <div style={{ fontSize: 11, color: "#D896FF", fontWeight: 700, marginBottom: 6 }}>Chief Test Match Correspondent</div>
               <p style={{ fontSize: 12, color: "var(--text3)", margin: 0, lineHeight: 1.6 }}>Former first-class cricket writer covering ICC World Test Championship series, Ashes encounters, and County cricket.</p>
             </div>
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "16px" }}>
+              <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 4 }}>Priya Sharma</div>
+              <div style={{ fontSize: 11, color: "#FF2E9A", fontWeight: 700, marginBottom: 6 }}>Women's Cricket Correspondent</div>
+              <p style={{ fontSize: 12, color: "var(--text3)", margin: 0, lineHeight: 1.6 }}>Specialist in women's cricket analytics, WPL strategy, and international talent pipeline development.</p>
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "16px" }}>
+              <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 4 }}>Rohan Sen</div>
+              <div style={{ fontSize: 11, color: "#39FF14", fontWeight: 700, marginBottom: 6 }}>White-Ball Tactical Analyst</div>
+              <p style={{ fontSize: 12, color: "var(--text3)", margin: 0, lineHeight: 1.6 }}>White-ball data modeler tracking strike-rotation efficiency, field-restriction manipulation, and death-overs physics.</p>
+            </div>
           </div>
         </section>
       </div>

@@ -12,7 +12,7 @@ const pagesToTest = [
   { url: '/t20-world-cup', expect: ['T20 World Cup 2026', 'Competing Nations', 'All-Time T20 World Cup Records'] },
   { url: '/county-championship', expect: ['County Championship 2026', 'First-Class Counties', 'County Championship Historic Milestones'] },
   { url: '/bbl', expect: ['Big Bash League', 'BBL'] },
-  { url: '/news', expect: ['Latest Cricket News', 'Editorial Analysis'] },
+  { url: '/news', expect: ['In-House Cricket Editorial', 'Tactical Masterclasses'] },
   { url: '/ads.txt', expect: ['google.com, pub-8179151029580359, DIRECT, f08c47fec0942fa0'] }
 ];
 
@@ -54,6 +54,7 @@ async function runTests() {
       } else {
         allPassed = false;
         console.error(`❌ [${item.url}] Failed! Status: ${statusCode}, Missing: ${missingExpectations.join(', ')}`);
+        console.error(`   Sample of body (first 300 chars): ${responseBody.slice(0, 300)}`);
       }
     } catch (err) {
       allPassed = false;

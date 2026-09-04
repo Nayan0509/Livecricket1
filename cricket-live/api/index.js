@@ -705,7 +705,7 @@ ${items}
 
 // ─── BOT DETECTION ───────────────────────────────────────────────────────────
 
-const BOT_UA = /googlebot|google-inspectiontool|googlebot-news|googlebot-image|googlebot-video|mediapartners-google|adsbot-google|google-adwords|feedfetcher-google|adsense|bingbot|adidxbot|bingpreview|msnbot|yandex|yandexbot|baiduspider|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix|petalbot|bytespider|gptbot|claudebot|ccbot/i;
+const BOT_UA = /googlebot|google-inspectiontool|googlebot-news|googlebot-image|googlebot-video|mediapartners-google|adsbot-google|google-adwords|feedfetcher-google|adsense|google-adsense|headlesschrome|chrome-headless|phantomjs|puppeteer|selenium|bingbot|adidxbot|bingpreview|msnbot|yandex|yandexbot|baiduspider|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|screaming.frog|sitebulb|lighthouse|chrome-lighthouse|pagespeed|gtmetrix|petalbot|bytespider|gptbot|claudebot|ccbot/i;
 
 function isBot(req) {
   return BOT_UA.test(req.headers["user-agent"] || "");
@@ -1913,6 +1913,12 @@ module.exports = async (req, res) => {
       res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
       return res.status(200).send(html);
     }
+    // Resilient fallback: If index.html is missing in serverless container, render rich HTML
+    const meta = getPageMeta(pathname);
+    const html = renderBotHtml(pathname, meta, {});
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+    return res.status(200).send(html);
   }
 
   // ── Parse path for API routes ─────────────────────────────────────────────

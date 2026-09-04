@@ -612,6 +612,40 @@ export default function Navbar() {
               ))}
             </div>
 
+            {/* Trust & Transparency for mobile reviewers */}
+            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 10, marginBottom: 10 }}>
+              <div style={{
+                fontSize: 9, fontWeight: 700, color: "var(--text-muted)",
+                letterSpacing: "1.2px", textTransform: "uppercase", padding: "0 10px 8px",
+              }}>
+                Trust &amp; Information
+              </div>
+              {[
+                { to: "/about", label: "About Live Cricket Zone" },
+                { to: "/editorial-policy", label: "Editorial Policy & Standards" },
+                { to: "/contact", label: "Contact Us" },
+                { to: "/privacy-policy", label: "Privacy Policy & AdSense" },
+                { to: "/terms-of-use", label: "Terms of Use" },
+              ].map(item => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 8,
+                    color: "var(--text3)",
+                    fontWeight: 400,
+                    fontSize: 13,
+                    display: "block",
+                    textDecoration: "none",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
             {/* Mobile search */}
             <form onSubmit={handleSearch} style={{ position: "relative", marginTop: 4 }}>
               <div style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text3)" }}>

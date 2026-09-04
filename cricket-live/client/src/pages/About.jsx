@@ -82,6 +82,36 @@ export default function About() {
               Veteran first-class cricket writer covering ICC World Test Championship cycles, Ashes encounters, County Championship seasons, and the physics of Dukes ball movement.
             </p>
           </div>
+
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 42, height: 42, borderRadius: "50%", background: "linear-gradient(135deg,#FF2E9A,#FF1053)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: "#fff", fontSize: 16 }}>
+                PS
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: "#fff" }}>Priya Sharma</div>
+                <div style={{ fontSize: 12, color: "#FF2E9A", fontWeight: 700 }}>Women's Cricket Correspondent</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, margin: 0 }}>
+              Specializes in the tactical evolution of women's franchise cricket, Women's Premier League (WPL) analytics, athletic performance benchmarks, and international state pathways.
+            </p>
+          </div>
+
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 42, height: 42, borderRadius: "50%", background: "linear-gradient(135deg,#39FF14,#00B8D9)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: "#000", fontSize: 16 }}>
+                RS
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: "#fff" }}>Rohan Sen</div>
+                <div style={{ fontSize: 12, color: "#39FF14", fontWeight: 700 }}>White-Ball Tactical Analyst</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, margin: 0 }}>
+              Data-driven performance analyst studying middle-overs strike rotation rates, powerplay entry points, boundary percentage suppression, and bowler release angles.
+            </p>
+          </div>
         </div>
       </div>
 
