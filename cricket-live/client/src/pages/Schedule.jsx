@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { fetchSchedule, fetchDetailedSchedule } from "../api";
 import AdBanner from "../components/AdBanner";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 
 const SCHEDULE_TABS = [
   { id: "all",           label: "📅 All Upcoming" },
@@ -23,7 +25,7 @@ export default function Schedule() {
 
   const { data: detailedData, isLoading: detailedLoading } = useQuery({
     queryKey: ["detailedSchedule", activeTab],
-    queryFn: () => fetchDetailedSchedule(activeTab, null, 2026),
+    queryFn: () => fetchDetailedSchedule(activeTab, null, new Date().getFullYear()),
     enabled: activeTab !== "all",
   });
 
@@ -33,8 +35,8 @@ export default function Schedule() {
   const scheduleSD = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Cricket Schedule 2026 Fixtures",
-    "description": "Upcoming cricket matches, series, tours and tournaments schedule for 2026.",
+    "name": "Cricket Schedule",
+    "description": "Upcoming cricket matches, series, tours and tournaments.",
     "url": "https://www.livecricketzone.com/schedule"
   };
 
@@ -60,12 +62,14 @@ export default function Schedule() {
           <span>📅</span> GLOBAL CRICKET CALENDAR
         </div>
         <h1 style={{ fontSize: 30, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
-          Cricket <span style={{ color: "#00F0FF" }}>Schedule 2026</span>
+          Cricket <span style={{ color: "#00F0FF" }}>Schedule</span>
         </h1>
         <p style={{ fontSize: 14, color: "var(--text2)", margin: 0, maxWidth: 650 }}>
           All upcoming cricket fixtures, tournament dates, and match timings across International tours, T20 Leagues, Women's cricket, and First-Class Domestic competitions.
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/schedule"]} />
 
       {/* Category Tabs */}
       <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, marginBottom: 24, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
@@ -197,19 +201,6 @@ export default function Schedule() {
 
       <div style={{ marginTop: 28 }}><AdBanner type="auto" /></div>
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 28px", borderRadius: 16, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.08)" }}>
-        <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#00F0FF,#00B8D9)", display: "inline-block" }} />
-          Cricket Schedule 2026 — Complete Fixtures &amp; Timetable Guide
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Live Cricket Zone's cricket schedule page brings together every upcoming international tour, ICC event, and domestic cricket fixture. From the <strong style={{ color: "var(--text2)" }}>IPL 2026 timetable</strong> to the ICC T20 World Cup, Champions Trophy, World Test Championship series, and bilateral ODI/T20I tours — all match timings, venues, and dates are updated continuously.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          Switch across tabs to filter by International matches, T20 Leagues (IPL, PSL, BBL, CPL, BPL), Women's cricket, and Domestic first-class schedules.
-        </p>
-      </section>
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { fetchAllMatches, subscribeLiveMatchStream } from "../api";
 import MatchCard from "../components/MatchCard";
 import AdBanner from "../components/AdBanner";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 
 export default function LiveMatches() {
   const [activeTab, setActiveTab] = useState("live");
@@ -104,6 +106,8 @@ export default function LiveMatches() {
           🔄 Refresh Feeds
         </button>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/live"]} />
 
       {/* Tabs with live count badges */}
       <div style={{ display: "flex", borderBottom: "1px solid var(--border)", marginBottom: 36, gap: 12, overflowX: "auto" }}>

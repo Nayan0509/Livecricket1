@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNews } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
-import { ORIGINAL_ARTICLES } from "../utils/articlesData";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
+
+const INTRO = PAGE_INTROS["/news"];
 
 const CATEGORIES = ["All", "IPL", "Test", "ODI", "T20", "Women's", "Cricket"];
 
@@ -36,14 +38,9 @@ const CAT_COLORS = {
   All: "#6b7280",
 };
 
-// Original in-house articles (identified by their `content` field) open on our
-// own /news/:id page; aggregated API items link out to the source.
+// Every headline links out to the publisher's original report.
 function NewsLink({ item, style, children }) {
-  return item.content ? (
-    <Link to={`/news/${item.id}`} state={{ originalNews: item }} style={style}>{children}</Link>
-  ) : (
-    <a href={item.url} target="_blank" rel="noopener noreferrer" style={style}>{children}</a>
-  );
+  return <a href={item.url} target="_blank" rel="noopener noreferrer" style={style}>{children}</a>;
 }
 
 export default function News() {
@@ -61,9 +58,10 @@ export default function News() {
     id: n.id || `news-${i}`,
     img: n.img || DEFAULT_IMAGES[i % DEFAULT_IMAGES.length],
     category: n.category || getCat(n.title || ""),
+    daysAgo: Math.floor((n.hoursAgo || 0) / 24),
   }));
 
-  const rawItems = [...ORIGINAL_ARTICLES, ...apiItems];
+  const rawItems = apiItems;
 
   const items = category === "All" ? rawItems : rawItems.filter(n => n.category === category);
   const featured = items.slice(0, 3);
@@ -72,24 +70,18 @@ export default function News() {
   const newsItemListSD = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Latest Cricket News & IPL 2026 Updates",
+    "name": "Cricket News Headlines",
     "itemListElement": rawItems.slice(0, 10).map((item, idx) => ({
       "@type": "ListItem",
       "position": idx + 1,
       "name": item.title,
-      "url": item.url?.startsWith("http") ? item.url : `https://www.livecricketzone.com/news/${item.id || idx}`
+      "url": item.url
     }))
   };
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 16px 60px" }}>
-      <SEO
-        title="Cricket News Today — Latest Headlines, IPL & Match Previews"
-        description="Latest cricket news today: IPL 2026 updates, match previews, player news and T20 World Cup headlines aggregated from trusted cricket sources."
-        keywords="cricket news today, IPL 2026 news, cricket latest news, match preview, player updates, T20 World Cup news"
-        url="/news"
-        structuredData={newsItemListSD}
-      />
+      <SEO url="/news" structuredData={newsItemListSD} />
 
       {/* Hero */}
       <div style={{
@@ -103,7 +95,7 @@ export default function News() {
               Cricket <span style={{ color: "#FF1053" }}>News</span>
             </h1>
             <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
-              Latest headlines · IPL 2026 · Aggregated from trusted sources
+              Headlines from established publishers · each links to the original report
             </p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
@@ -120,6 +112,8 @@ export default function News() {
           </div>
         </div>
       </div>
+
+      <PageIntro intro={INTRO} />
 
       {/* Category Filters */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
@@ -169,7 +163,7 @@ export default function News() {
       {!isLoading && !error && items.length === 0 && (
         <div style={{ padding: "60px 24px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 14, border: "1px dashed rgba(255,255,255,0.07)" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>📭</div>
-          <p style={{ color: "var(--text3)", fontSize: 14 }}>No news stories for this category. Try another filter.</p>
+          <p style={{ color: "var(--text3)", fontSize: 14 }}>{category === "All" ? INTRO.empty : "No news stories for this category. Try another filter."}</p>
         </div>
       )}
 

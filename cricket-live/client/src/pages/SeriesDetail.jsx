@@ -61,6 +61,7 @@ export default function SeriesDetail() {
         title={`${seriesName} — Live Score, Schedule & Results`}
         description={`${seriesName} live scores, full match schedule, results with scorecards, points table and top performers. Real-time ball-by-ball updates on Live Cricket Zone.`}
         url={`/series/${id}`}
+        noindex
       />
 
       {/* Back */}

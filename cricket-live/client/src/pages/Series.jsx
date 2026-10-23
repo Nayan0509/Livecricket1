@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchSeries } from "../api";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 
 export default function Series() {
@@ -31,9 +33,11 @@ export default function Series() {
           🏆 Cricket <span style={{ color: "#B026FF" }}>Series</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
-          All international series, leagues and domestic competitions in 2026
+          All international series, leagues and domestic competitions
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/series"]} />
 
       {/* Search */}
       <input
@@ -94,25 +98,6 @@ export default function Series() {
 
       <AdBanner type="auto" />
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
-          Cricket Series 2026 — Complete Guide
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          The cricket series archive on Live Cricket Zone lists every active and upcoming international series, franchise T20 tournament and domestic competition in 2026. Browse by category — international bilateral series, franchise leagues, domestic competitions and women's cricket series — or search by name to find the specific series you're looking for.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          <strong style={{ color: "var(--text2)" }}>International series</strong> in 2026 follow the ICC Future Tours Programme, with bilateral Test, ODI and T20I series scheduled between all 12 ICC full-member nations throughout the year. Major Test series include the Border-Gavaskar Trophy (India vs Australia), The Ashes (England vs Australia), and Pakistan's home series against England and South Africa. These bilateral series are the backbone of Test cricket's World Test Championship cycle.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          <strong style={{ color: "var(--text2)" }}>Franchise leagues</strong> — IPL 2026, PSL 2026, BBL 2025-26, CPL 2026, BPL 2026, The Hundred and Women's IPL — fill the T20 calendar with high-quality competitive cricket. The <strong style={{ color: "var(--text2)" }}>ICC tournaments</strong> are the pinnacle events: the T20 World Cup 2026 in June and the ICC Champions Trophy 2025 are the flagship competitions above bilateral series.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          Click any series to view its full match schedule, live scores for current matches, and results with scorecards for completed matches. All series data is updated in real time — free, no account required.
-        </p>
-      </section>
     </div>
   );
 }

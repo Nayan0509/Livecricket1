@@ -814,6 +814,7 @@ export default function MatchDetail() {
         description={`${match.name || "Cricket Match"} live score today, full scorecard, ball-by-ball commentary, match statistics and toss update. ${match.status || ""}`}
         keywords={`${match.name || "cricket"} live score, ${t1?.name || ""} vs ${t2?.name || ""} live score, scorecard, commentary, live match today`}
         url={`/match/${id}`}
+        noindex
         structuredData={matchSD}
       />
 

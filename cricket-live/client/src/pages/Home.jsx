@@ -7,7 +7,17 @@ import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import { MotionGrid, MotionItem } from "../components/MotionGrid";
 import { trackMatchCardClick } from "../utils/analytics";
-import { ORIGINAL_ARTICLES } from "../utils/articlesData";
+import ContentBlocks, { Faq } from "../components/ContentBlocks";
+import { HOME } from "../content/pages";
+import { GUIDES } from "../content/guides";
+
+// Guides featured on the homepage, in display order.
+const HOME_GUIDES = [
+  "how-to-read-a-cricket-scorecard",
+  "dls-method-explained",
+  "net-run-rate-explained",
+  "drs-explained",
+].map(slug => GUIDES.find(g => g.slug === slug)).filter(Boolean);
 
 /* ── Structured data ── */
 const SITE_SD = [
@@ -16,7 +26,7 @@ const SITE_SD = [
     "@type": "WebSite",
     "name": "Live Cricket Zone",
     "url": "https://www.livecricketzone.com",
-    "description": "Live cricket scores, IPL 2026 points table, T20 World Cup, ODI & Test ball-by-ball commentary",
+    "description": "Live cricket scores and scorecards, plus plain-English guides to how cricket works.",
     "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "https://www.livecricketzone.com/players?search={search_term_string}" }, "query-input": "required name=search_term_string" }
   }
 ];
@@ -512,79 +522,14 @@ function QuickLinks() {
 
 /* ── Editorial Section & FAQ Accordion for AdSense ── */
 function HomeEditorialSection() {
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const faqs = [
-    {
-      q: "How frequently are live scores updated on Live Cricket Zone?",
-      a: "Live scores on Live Cricket Zone refresh automatically every 15 seconds. For active IPL 2026, T20 World Cup, and international matches, our real-time ball-by-ball engine delivers delivery-by-delivery scorecard updates, over summaries, and instant wicket notifications."
-    },
-    {
-      q: "Can I track full scorecards and ball-by-ball commentary?",
-      a: "Yes. Clicking on any live or completed match card opens a comprehensive match dashboard featuring full batting scorecards, bowling figures, partnership graphs, fall of wickets, over-by-over progress bars, and ball-by-ball commentary text."
-    },
-    {
-      q: "What tournaments and cricket formats are covered?",
-      a: "We provide comprehensive 360° coverage across all international and premier domestic formats: Test Cricket (including ICC World Test Championship), One Day Internationals (ODI World Cup, Asia Cup, Champions Trophy), T20 Internationals, Indian Premier League (IPL 2026), Pakistan Super League (PSL), Big Bash League (BBL), Caribbean Premier League (CPL), Bangladesh Premier League (BPL), County Championship, and Women's International Cricket."
-    },
-    {
-      q: "Where are official match video highlights sourced from?",
-      a: "All match video highlights on Live Cricket Zone are embedded strictly from official rights holders' verified YouTube channels (e.g. BCCI, ICC, England Cricket, Cricket Australia). We do not host or stream unverified video content."
-    },
-    {
-      q: "How are ICC Team and Player Rankings calculated?",
-      a: "Our ICC Rankings section updates regularly according to the official International Cricket Council rating formula, ranking top 10 batters, bowlers, and all-rounders across Test, ODI, and T20I formats."
-    }
-  ];
-
   return (
     <div style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 20 }}>
-      {/* Editorial Overview Box */}
-      <section style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px", color: "var(--text2)", fontSize: 14, lineHeight: 1.8 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", marginBottom: 12 }}>
-          Live Cricket Scores, Scorecards & Match Analysis Hub
-        </h2>
-        <p style={{ marginBottom: 14 }}>
-          Welcome to <strong style={{ color: "var(--text)" }}>Live Cricket Zone</strong> — your ultimate destination for real-time cricket updates, live scorecards, ball-by-ball commentary, and match statistics worldwide. Whether you are tracking the high-octane action of <strong style={{ color: "var(--text)" }}>IPL 2026</strong>, international Test series battles, ODI World Cup clashes, or domestic county fixtures, our high-speed platform delivers accurate data updated every 15 seconds.
-        </p>
-        <p style={{ marginBottom: 14 }}>
-          Our coverage spans every major cricket-playing nation, including India, Australia, England, Pakistan, South Africa, New Zealand, West Indies, Sri Lanka, Bangladesh, and Afghanistan. Fans can explore detailed player stats, team head-to-head records, ICC player rankings, upcoming series schedules, and post-match editorial summaries.
-        </p>
-        <p style={{ margin: 0 }}>
-          Designed with a mobile-first performance architecture, Live Cricket Zone ensures seamless reading and fast scorecard loading on 3G, 4G, and 5G mobile networks without intrusive popups or disruptive layouts.
-        </p>
-      </section>
-
-      {/* FAQ Accordion */}
       <section style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px" }}>
-        <h2 style={{ fontSize: 18, fontWeight: 900, color: "var(--text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ color: "#FF1053" }}>❓</span> Frequently Asked Questions (FAQ)
-        </h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {faqs.map((faq, i) => {
-            const isOpen = openFaq === i;
-            return (
-              <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden", background: isOpen ? "rgba(255,255,255,0.02)" : "transparent" }}>
-                <button
-                  onClick={() => setOpenFaq(isOpen ? null : i)}
-                  style={{
-                    width: "100%", padding: "14px 16px", background: "none", border: "none",
-                    textAlign: "left", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center",
-                    color: "var(--text)", fontWeight: 700, fontSize: 14, gap: 12
-                  }}
-                >
-                  <span>{faq.q}</span>
-                  <span style={{ color: "var(--text3)", fontSize: 16, transition: "transform 0.2s", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
-                </button>
-                {isOpen && (
-                  <div style={{ padding: "0 16px 14px", color: "var(--text2)", fontSize: 13, lineHeight: 1.7, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 10 }}>
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", marginBottom: 12 }}>About this site</h2>
+        <ContentBlocks blocks={HOME.intro.map(text => ({ type: "p", text }))} />
+      </section>
+      <section style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "8px 24px 16px" }}>
+        <Faq title="Frequently asked questions" items={HOME.faq} />
       </section>
     </div>
   );
@@ -655,13 +600,7 @@ export default function Home() {
 
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 12px 60px" }}>
-      <SEO
-        title="Live Cricket Score 2026 — IPL, T20 World Cup, Ball-by-Ball"
-        description="Live cricket scores 2026: IPL 2026 points table, T20 World Cup, ODI & Test ball-by-ball commentary, scorecards, rankings and news aggregated from trusted sources."
-        keywords="live cricket score, IPL 2026, cricket score today, ball by ball commentary, T20 World Cup, cricket live"
-        url="/"
-        structuredData={SITE_SD}
-      />
+      <SEO url="/" structuredData={SITE_SD} />
 
       {/* Page H1. Visually compact but a real heading — the homepage previously
           rendered no <h1> at all, which costs the site its clearest on-page
@@ -778,69 +717,15 @@ export default function Home() {
                 <TrendingChips topics={deriveTrendingTopics(allList)} />
               </section>
 
-              {/* LCZ Original Editorial Analysis (High-Value Content & E-E-A-T) */}
+              {/* Guides: the site's own writing */}
               <section style={{ marginBottom: 32 }}>
-                <SectionHeader title="Expert Cricket Analysis & Tactical Features" link="/news" linkLabel="All In-Depth Articles →" accent="#00F0FF" />
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-                  {ORIGINAL_ARTICLES.slice(0, 4).map((art, idx) => (
-                    <Link
-                      key={art.id}
-                      to={`/news/${art.id}`}
-                      state={{ originalNews: art }}
-                      style={{
-                        textDecoration: "none",
-                        display: "flex",
-                        flexDirection: "column",
-                        background: "var(--card)",
-                        border: "1px solid var(--border)",
-                        borderRadius: 14,
-                        overflow: "hidden",
-                        transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.borderColor = "rgba(0,240,255,0.4)";
-                        e.currentTarget.style.transform = "translateY(-3px)";
-                        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.borderColor = "var(--border)";
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
-                    >
-                      <div style={{ height: 140, position: "relative", overflow: "hidden", background: "rgba(0,0,0,0.2)" }}>
-                        <img
-                          src={art.img}
-                          alt={art.title}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                          onError={e => { e.target.style.display = "none"; }}
-                        />
-                        <span style={{
-                          position: "absolute", bottom: 8, left: 8,
-                          fontSize: 10, fontWeight: 800, padding: "3px 8px", borderRadius: 12,
-                          background: "rgba(0,0,0,0.75)", color: "#00F0FF", border: "1px solid rgba(0,240,255,0.3)"
-                        }}>
-                          {art.category}
-                        </span>
-                      </div>
-                      <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", flex: 1 }}>
-                        <h3 style={{
-                          fontSize: 14, fontWeight: 800, color: "var(--text)", lineHeight: 1.45,
-                          margin: "0 0 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden"
-                        }}>
-                          {art.title}
-                        </h3>
-                        <p style={{
-                          fontSize: 12, color: "var(--text3)", lineHeight: 1.6, margin: "0 0 12px",
-                          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden"
-                        }}>
-                          {art.description}
-                        </p>
-                        <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 11, color: "var(--text-muted)" }}>
-                          <span style={{ fontWeight: 600 }}>By {art.author.split(" (")[0]}</span>
-                          <span>{art.readTime}</span>
-                        </div>
-                      </div>
+                <SectionHeader title="Cricket Guides" link="/guides" linkLabel="All Guides →" accent="#00F0FF" />
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+                  {HOME_GUIDES.map(g => (
+                    <Link key={g.slug} to={`/guides/${g.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "16px 18px" }}>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: "#00F0FF", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{g.category}</span>
+                      <h3 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", lineHeight: 1.45, margin: "0 0 8px" }}>{g.title}</h3>
+                      <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.6, margin: 0 }}>{g.description}</p>
                     </Link>
                   ))}
                 </div>
@@ -902,10 +787,10 @@ export default function Home() {
                   Featured Tournaments
                 </div>
                 {[
-                  { to: "/ipl", label: "IPL 2026", dot: "#FF1053" },
+                  { to: "/ipl", label: "IPL", dot: "#FF1053" },
                   { to: "/t20-world-cup", label: "T20 World Cup", dot: "#FFEA00" },
                   { to: "/champions-trophy", label: "Champions Trophy", dot: "#FF2E9A" },
-                  { to: "/psl", label: "PSL 2026", dot: "#D896FF" },
+                  { to: "/psl", label: "PSL", dot: "#D896FF" },
                   { to: "/world-cup", label: "ODI World Cup", dot: "#39FF14" },
                   { to: "/asia-cup", label: "Asia Cup", dot: "#f472b6" },
                   { to: "/bbl", label: "Big Bash League", dot: "#fb923c" },

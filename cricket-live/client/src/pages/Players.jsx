@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { fetchPlayers } from "../api";
 import AdBanner from "../components/AdBanner";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 
 const STAR_PLAYERS = [
   { name: "Virat Kohli", country: "India", role: "Batter", search: "virat" },
@@ -50,6 +52,8 @@ export default function Players() {
           Search player profiles, career stats and records across all formats
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/players"]} />
 
       {/* Search */}
       <form onSubmit={e => { e.preventDefault(); setSearch(input); }}
@@ -115,25 +119,6 @@ export default function Players() {
         </div>
       )}
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
-          Cricket Player Stats & Profiles
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Search any international or IPL cricket player on Live Cricket Zone to find their full career profile — batting averages, bowling figures, centuries, half-centuries, five-wicket hauls, wicket tallies and match records across all three formats: Test, ODI and T20I. Type a player's name in the search bar above to find their complete stats.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          <strong style={{ color: "var(--text2)" }}>Virat Kohli</strong> holds the record for most ODI centuries (50+) and is India's highest run-scorer across formats. <strong style={{ color: "var(--text2)" }}>Babar Azam</strong> is Pakistan's premier batter and consistently ranked in the top 3 across all ICC white-ball rankings. <strong style={{ color: "var(--text2)" }}>Steve Smith</strong> has the highest Test batting average of any active player, while <strong style={{ color: "var(--text2)" }}>Joe Root</strong> is England's all-time leading Test run-scorer. <strong style={{ color: "var(--text2)" }}>Jasprit Bumrah</strong> is ranked among the world's best Test bowlers, and <strong style={{ color: "var(--text2)" }}>Shaheen Shah Afridi</strong> leads Pakistan's pace attack.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Use the quick search chips above to jump straight to profiles for cricket's most searched stars. Each player profile page shows career statistics broken down by format, recent match performances, batting style, bowling style, nationality and age.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          Player data covers all ICC full member nations — India, Australia, England, Pakistan, South Africa, New Zealand, West Indies, Sri Lanka, Bangladesh, Zimbabwe, Afghanistan and Ireland — as well as IPL franchise players. Stats are sourced from Cricbuzz and updated continuously throughout the cricket season.
-        </p>
-      </section>
     </div>
   );
 }

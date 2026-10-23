@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 import CricketStrikerGame from "../components/games/CricketStrikerGame";
 import KachufulGame from "../components/games/KachufulGame";
@@ -81,6 +83,8 @@ export default function Games() {
           Enjoy fun, interactive, and child-friendly cricket games directly in your browser. No download or install required — tap and play instantly on mobile, tablet, or desktop!
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/games"]} />
 
       {/* Game Selection Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 14, marginBottom: 28 }}>

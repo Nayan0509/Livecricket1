@@ -64,6 +64,7 @@ export default function PlayerDetail() {
         title={`${player.name} Cricket Stats — Batting, Bowling & Career Records`}
         description={`${player.name} cricket career stats. ${player.role} from ${player.country}. Batting average, bowling figures, centuries, wickets across Test, ODI and T20 formats.`}
         url={`/players/${id}`}
+        noindex
         image={player.playerImg}
         type="profile"
         structuredData={playerSD}

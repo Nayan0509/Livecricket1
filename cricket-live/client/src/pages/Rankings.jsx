@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRankings } from "../api";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 
 const FORMAT_TABS = {
@@ -36,7 +38,7 @@ export default function Rankings() {
   const rankingsSD = {
     "@context": "https://schema.org",
     "@type": "Dataset",
-    "name": `ICC ${category === "men" ? "Men's" : "Women's"} ${TYPE_LABELS[type]} Rankings ${format.toUpperCase()} 2026`,
+    "name": `ICC ${category === "men" ? "Men's" : "Women's"} ${TYPE_LABELS[type]} Rankings ${format.toUpperCase()}`,
     "description": `Official ICC cricket rankings for ${category} ${type} in ${format} format.`,
     "url": "https://www.livecricketzone.com/rankings",
     "creator": {
@@ -69,12 +71,14 @@ export default function Rankings() {
         border: "1px solid rgba(59,130,246,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          ICC <span style={{ color: "#B026FF" }}>Rankings</span> 2026
+          ICC <span style={{ color: "#B026FF" }}>Rankings</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Official ICC player & team rankings across all formats
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/rankings"]} />
 
       {/* Ad */}
       <AdBanner type="leaderboard" />

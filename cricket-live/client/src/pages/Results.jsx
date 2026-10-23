@@ -4,6 +4,8 @@ import { fetchUpcomingMatches } from "../api";
 import MatchCard from "../components/MatchCard";
 import AdBanner from "../components/AdBanner";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 
 export default function Results() {
   const { data, isLoading, error } = useQuery({
@@ -37,6 +39,8 @@ export default function Results() {
         </p>
       </div>
 
+      <PageIntro intro={PAGE_INTROS["/results"]} />
+
       {isLoading && <div className="spinner" style={{ margin: "40px auto" }} />}
       {error && <div style={{ padding: "20px", color: "#FF5C8A", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 20 }}>Failed to load results.</div>}
 
@@ -55,25 +59,6 @@ export default function Results() {
         )
       )}
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#00F0FF,#00B8D9)", display: "inline-block" }} />
-          Cricket Match Results — Scorecards & Summaries
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Live Cricket Zone's results page gives you the outcomes of all recent cricket matches across every format and competition. Whether you're looking for the <strong style={{ color: "var(--text2)" }}>IPL 2026 match results</strong>, T20 World Cup scores, bilateral ODI series results or Test match final scorecards — all completed matches are listed here with direct links to full ball-by-ball scorecards.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Each result card shows the match name, final scores, result summary and a link to the complete scorecard. Click any completed match to view the full batting card, bowling figures, fall of wickets, partnership records, and over-by-over run progression. For T20 and ODI matches you'll also find the powerplay scores, death-over analysis and player of the match details.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Results are updated in real time as matches complete. The <strong style={{ color: "var(--text2)" }}>IPL 2026 results</strong> update live from each morning game, while international ODI and Test match results are posted ball-by-ball as innings close. For multi-day Test matches, end-of-day scorecards are available after each day's play.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          Coverage includes all IPL 2026 results, T20 internationals, ODI series, Test series, County Championship 2026, PSL 2026, BBL, CPL, BPL and all associate nation cricket — updated continuously throughout the cricket calendar, free with no account required.
-        </p>
-      </section>
     </div>
   );
 }

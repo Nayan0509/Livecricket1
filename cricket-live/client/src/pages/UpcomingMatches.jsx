@@ -4,6 +4,8 @@ import { fetchUpcomingMatches } from "../api";
 import MatchCard from "../components/MatchCard";
 import AdBanner from "../components/AdBanner";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 
 const FORMATS = ["All", "test", "odi", "t20"];
 
@@ -40,6 +42,8 @@ export default function UpcomingMatches() {
         </p>
       </div>
 
+      <PageIntro intro={PAGE_INTROS["/upcoming"]} />
+
       {/* Format filter */}
       <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
         {FORMATS.map(f => (
@@ -73,25 +77,6 @@ export default function UpcomingMatches() {
         )
       )}
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 32, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(56,189,248,0.07)" }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#00F0FF,#00B8D9)", display: "inline-block" }} />
-          Upcoming Cricket Matches — What's Coming Up
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Never miss a cricket match with Live Cricket Zone's upcoming matches page. All scheduled fixtures across every format — <strong style={{ color: "var(--text2)" }}>IPL 2026 upcoming matches</strong>, T20 internationals, bilateral ODI series, Test series, County Championship and global T20 leagues — are listed here with match dates, venues and local start times.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Use the format filter above to see only upcoming <strong style={{ color: "var(--text2)" }}>Test matches</strong>, <strong style={{ color: "var(--text2)" }}>ODIs</strong> or <strong style={{ color: "var(--text2)" }}>T20Is</strong>. Each match card shows the competing teams, format, venue and scheduled date. Click any fixture to jump to that match's dedicated page where live scoring and ball-by-ball commentary go live when the match starts, with official post-match highlights added afterwards.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          The 2026 cricket calendar features a dense schedule of major events. The ICC T20 World Cup 2026 in June brings together 16 nations across 45 matches. IPL 2026 runs from March through May. PSL 2026 occupies February and March. The BBL fills Australia's summer through January and February. County Championship 2026 runs across the English summer from April to September. Bilateral series between India, Australia, England, Pakistan and South Africa fill the gaps in the ICC Future Tours Programme schedule.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          Upcoming match data is refreshed continuously so you always see the latest confirmed fixtures. Bookmark this page to stay on top of the cricket calendar — completely free, no account required.
-        </p>
-      </section>
     </div>
   );
 }

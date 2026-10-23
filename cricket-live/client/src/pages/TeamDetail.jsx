@@ -35,6 +35,7 @@ export default function TeamDetail() {
         title={`${team.name} Cricket Team Profile — Squad, Schedule & Stats`}
         description={`Full profile of the ${team.name} cricket team. Latest squad, upcoming match schedule, and player statistics on Live Cricket Zone.`}
         url={`/teams/${id}`}
+        noindex
       />
 
       <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: "var(--text3)", cursor: "pointer", padding: "16px 0", fontSize: 13, fontWeight: 600 }}>← Back</button>

@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchAllMatches } from "../api";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 
 /* Fantasy Tips Data */
@@ -188,6 +190,8 @@ export default function Fantasy() {
       </div>
 
       <AdBanner type="leaderboard" />
+
+      <PageIntro intro={PAGE_INTROS["/fantasy"]} />
 
       {/* Tabs */}
       <div style={{ display: "flex", borderBottom: "1px solid var(--divider)", marginBottom: 24, marginTop: 20, overflowX: "auto", scrollbarWidth: "none" }}>

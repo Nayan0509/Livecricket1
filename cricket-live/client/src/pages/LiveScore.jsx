@@ -30,6 +30,7 @@ export default function LiveScore() {
         title={match ? `${match.name} Live Score — Ball by Ball Updates` : "Live Cricket Score — Ball by Ball Updates"}
         description={match ? `Live score for ${match.name}. ${match.status}. Real-time ball-by-ball updates every 15 seconds on Live Cricket Zone.` : "Live cricket score with real-time ball-by-ball updates every 15 seconds. Free, no sign-up required."}
         url={`/match/${id}/live-score`}
+        noindex
       />
 
       {/* Back button */}

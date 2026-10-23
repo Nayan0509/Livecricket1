@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchTeams } from "../api";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 
 export default function Teams() {
@@ -34,6 +36,8 @@ export default function Teams() {
           International teams, IPL franchises, domestic sides and women's cricket teams
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/teams"]} />
 
       {/* Search */}
       <input
@@ -89,25 +93,6 @@ export default function Teams() {
 
       <AdBanner type="auto" />
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
-          Cricket Teams — International, Franchise & Domestic
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Live Cricket Zone covers cricket teams at every level — from the 12 ICC full-member international nations to franchise T20 teams and domestic first-class sides. The <strong style={{ color: "var(--text2)" }}>ICC full members</strong> playing international cricket in 2026 are India, Australia, England, Pakistan, South Africa, New Zealand, West Indies, Sri Lanka, Bangladesh, Zimbabwe, Afghanistan and Ireland.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          <strong style={{ color: "var(--text2)" }}>India</strong> are the current T20 World Cup holders and one of the world's best ODI and Test sides. <strong style={{ color: "var(--text2)" }}>Australia</strong> are the most successful World Cup nation in ODI cricket. <strong style={{ color: "var(--text2)" }}>England</strong> are the reigning 50-over World Cup holders and won back-to-back T20 World Cup titles in 2010 and 2022. <strong style={{ color: "var(--text2)" }}>Pakistan</strong> are consistently ranked among the top five in all formats, while <strong style={{ color: "var(--text2)" }}>South Africa</strong> host the 2027 ODI World Cup.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          In franchise cricket, the 10 <strong style={{ color: "var(--text2)" }}>IPL 2026 teams</strong> — Mumbai Indians, Chennai Super Kings, Royal Challengers Bengaluru, Kolkata Knight Riders, Gujarat Titans, Lucknow Super Giants, Delhi Capitals, Punjab Kings, Rajasthan Royals and Sunrisers Hyderabad — are among the most valuable and well-followed cricket franchises in the world. Click any IPL team to find their squad, live scores and upcoming fixtures.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          Domestic cricket teams from the County Championship, Ranji Trophy, Sheffield Shield and other competitions are also covered, alongside women's cricket teams from all ICC member nations. Click any team to see their profile, squad and recent match results.
-        </p>
-      </section>
     </div>
   );
 }

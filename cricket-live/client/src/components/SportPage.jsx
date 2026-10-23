@@ -2,28 +2,22 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SEO from "./SEO";
 import AdBanner from "./AdBanner";
+import ContentBlocks, { Inline, Faq } from "./ContentBlocks";
 import { MotionGrid, MotionItem } from "./MotionGrid";
 import { fetchSportMatches, fetchSportNews } from "../api";
+import { SPORTS } from "../content/sports";
+import { getStaticRouteMeta } from "../content/routeMeta";
 
 /**
  * Shared landing page for a non-cricket sport (football, basketball, tennis).
- * One component, config-driven per sport — mirrors the TournamentPage.jsx
- * pattern used for cricket tournaments, so adding a sport never means
- * hand-duplicating a whole page file.
+ * Written content comes from src/content/sports.js (also read by
+ * api/render.js); scores come from the live feed. These pages are kept out of
+ * the index (noindex) so the indexed site stays focused on cricket.
  */
-export default function SportPage({
-  sport,          // "football" | "basketball" | "tennis"
-  slug,           // URL slug, e.g. "football"
-  name,           // Display name, e.g. "Football"
-  icon,           // emoji
-  leagues = [],   // display list of covered leagues/tours
-  seoTitle,
-  seoDesc,
-  seoKeywords,
-  accentColor = "#B026FF",
-  aboutText,
-  faqItems = [],
-}) {
+export default function SportPage({ sport }) {
+  const cfg = SPORTS[sport] || {};
+  const { slug = sport, name = sport, icon = "", leagues = [], accentColor = "#B026FF" } = cfg;
+  const meta = getStaticRouteMeta(`/${slug}`) || {};
   const [matches, setMatches] = useState({ live: [], upcoming: [], recent: [] });
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,38 +44,14 @@ export default function SportPage({
     return () => { cancelled = true; clearInterval(id); };
   }, [sport]);
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "SportsEvent",
-    "name": `${name} Live Scores`,
-    "description": seoDesc,
-    "sport": name,
-    "url": `https://www.livecricketzone.com/${slug}`,
-    "image": "https://www.livecricketzone.com/og-image.png",
-  };
-
-  const faqSD = faqItems.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqItems.map(f => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": { "@type": "Answer", "text": f.a }
-    }))
-  } : null;
-
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 60 }}>
       <SEO
-        title={seoTitle}
-        description={seoDesc}
-        keywords={seoKeywords}
+        title={meta.title}
+        description={meta.description}
         url={`/${slug}`}
-        structuredData={structuredData}
+        noindex
       />
-      {faqSD && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSD) }} />
-      )}
 
       {/* Hero */}
       <motion.div
@@ -97,9 +67,12 @@ export default function SportPage({
         <h1 className="font-display" style={{ fontSize: 34, fontWeight: 900, marginBottom: 8, color: "var(--text)" }}>
           {icon} {name} Live Scores
         </h1>
-        <p className="font-hud" style={{ fontSize: 16, color: "var(--text2)" }}>
-          {leagues.length > 0 ? leagues.join(" · ") : `Real-time ${name.toLowerCase()} scores worldwide`}
+        <p style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.75, maxWidth: 720, margin: "0 auto 10px" }}>
+          <Inline text={cfg.intro} />
         </p>
+        {leagues.length > 0 && (
+          <p style={{ fontSize: 12, color: "var(--text3)", margin: 0 }}>{leagues.join(" · ")}</p>
+        )}
       </motion.div>
 
       <AdBanner type="leaderboard" />
@@ -166,38 +139,13 @@ export default function SportPage({
         </>
       )}
 
-      {/* FAQ */}
-      {faqItems.length > 0 && (
-        <section aria-label="Frequently Asked Questions" style={{ marginBottom: 28 }}>
-          <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", marginBottom: 14 }}>❓ Frequently Asked Questions</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {faqItems.map((f, i) => (
-              <details key={i} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "14px 18px" }}>
-                <summary style={{ fontWeight: 700, fontSize: 14, color: "var(--text)", cursor: "pointer", listStyle: "none" }}>{f.q}</summary>
-                <p style={{ marginTop: 10, fontSize: 13, color: "var(--text3)", lineHeight: 1.7 }}>{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Written content */}
+      <article style={{ maxWidth: 860 }}>
+        <ContentBlocks blocks={cfg.sections} />
+        <Faq items={cfg.faq} title="Frequently asked questions" />
+      </article>
 
-      <div style={{ marginBottom: 20 }}><AdBanner type="auto" /></div>
-
-      {/* About */}
-      {aboutText && (
-        <section aria-label={`About ${name} on Live Cricket Zone`} style={{
-          padding: "24px 28px", borderRadius: 14,
-          background: "rgba(255,255,255,0.02)", border: `1px solid ${accentColor}15`,
-        }}>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ width: 3, height: 16, borderRadius: 2, background: `linear-gradient(180deg,${accentColor},${accentColor}99)`, display: "inline-block" }} />
-            About {name} on Live Cricket Zone
-          </h2>
-          {String(aboutText).split("\n\n").map((para, i) => (
-            <p key={i} style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>{para}</p>
-          ))}
-        </section>
-      )}
+      <div style={{ marginTop: 20 }}><AdBanner type="auto" /></div>
     </div>
   );
 }

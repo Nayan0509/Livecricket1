@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { getStaticRouteMeta } from "../content/routeMeta";
 
 const SITE_NAME = "Live Cricket Zone";
 const SITE_URL = "https://www.livecricketzone.com";
@@ -7,8 +8,8 @@ const DEFAULT_DESC = "Live Cricket Zone — real-time cricket scores, ball-by-ba
 const DEFAULT_IMG = `${SITE_URL}/og-image.png`;
 
 export default function SEO({
-  title,
-  description = DEFAULT_DESC,
+  title: titleProp,
+  description: descriptionProp,
   keywords = "live cricket score, IPL 2026, cricket score today, ball by ball commentary, T20 World Cup, ICC rankings, cricket news",
   image = DEFAULT_IMG,
   url,
@@ -17,6 +18,15 @@ export default function SEO({
   structuredData,
   article = null,
 }) {
+  // Static routes take their title and description from content/routeMeta.js,
+  // which api/index.js also injects into the server HTML, so both agree.
+  const routeMeta = url ? getStaticRouteMeta(url.split("?")[0]) : null;
+  const title = routeMeta ? routeMeta.title : titleProp;
+  const description = (routeMeta ? routeMeta.description : descriptionProp) || DEFAULT_DESC;
+  const robots = noindex
+    ? "noindex, follow"
+    : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1";
+
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Live Cricket Scores & IPL 2026`;
   const canonical = url ? `${SITE_URL}${url.startsWith("/") ? url : `/${url}`}` : SITE_URL;
 
@@ -57,10 +67,9 @@ export default function SEO({
       <link rel="canonical" href={canonical} />
       
       {/* Search Engine Robots */}
-      {!noindex && <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />}
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
-      <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-      <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <meta name="robots" content={robots} />
+      <meta name="googlebot" content={robots} />
+      <meta name="bingbot" content={robots} />
       
       {/* Additional SEO
           Note: meta keywords, revisit-after, distribution and rating are

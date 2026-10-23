@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 import { fetchYouTubeSearch } from "../api";
 
@@ -115,6 +117,8 @@ export default function Videos() {
 
       <AdBanner type="leaderboard" />
 
+      <PageIntro intro={PAGE_INTROS["/videos"]} />
+
       {/* Category tabs */}
       <div style={{ display: "flex", overflowX: "auto", gap: 8, paddingBottom: 4, marginBottom: 20, scrollbarWidth: "none" }}>
         {SEARCH_QUERIES.map((tab, i) => (
@@ -204,25 +208,6 @@ export default function Videos() {
 
       <div style={{ marginTop: 24 }}><AdBanner type="auto" /></div>
 
-      {/* Rich SEO content */}
-      <section style={{ marginTop: 24, padding: "24px 24px", borderRadius: 14, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(59,130,246,0.07)" }}>
-        <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
-          Cricket Videos — Highlights & Replays
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          The Cricket Videos section on Live Cricket Zone pulls the latest official cricket highlights and match replays directly from the rights holders' YouTube channels so you always see the freshest content. Whether you're looking for <strong style={{ color: "var(--text2)" }}>IPL 2026 match highlights</strong> from last night, the best sixes from the T20 World Cup 2026, or replays from today's Test match, the video library is updated continuously across all six categories.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          The <strong style={{ color: "var(--text2)" }}>IPL 2026 Highlights</strong> tab shows post-match highlight reels for every Indian Premier League fixture — typically uploaded within 90 minutes of the final ball. The <strong style={{ color: "var(--text2)" }}>T20 World Cup</strong> tab surfaces ICC official highlights from all group stage, Super 8 and knockout matches. The <strong style={{ color: "var(--text2)" }}>Test Cricket</strong> and <strong style={{ color: "var(--text2)" }}>ODI Cricket</strong> tabs cover international bilateral series highlights from every touring team throughout the year.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          The <strong style={{ color: "var(--text2)" }}>Best Catches</strong> tab compiles the most acrobatic outfield catches and diving boundary saves across all formats — a fan favourite for cricket fans who enjoy the fielding artistry of modern cricket. The <strong style={{ color: "var(--text2)" }}>Top Sixes</strong> tab curates the longest and most powerful hits from the current cricket season, from Rohit Sharma's trademark pulls to Chris Gayle-style flat-bat maximums.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85 }}>
-          All videos play in an embedded YouTube player directly on this page — no separate app download or subscription required. Click any thumbnail to load the video in the featured player at the top of the page. Videos are sourced from official broadcaster channels including Star Sports, Sky Sports Cricket, ICC, and BCCI. Free, no sign-up, no paywall.
-        </p>
-      </section>
     </div>
   );
 }

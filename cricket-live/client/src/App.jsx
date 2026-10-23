@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Ticker from "./components/Ticker";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { trackPageView } from "./utils/analytics";
+import { ROUTE_REDIRECTS } from "./content/routeMeta";
 
 // Home is eager — it's the most common entry point, so lazy-loading it would
 // only add a round trip before first paint. Every other route is split into its
@@ -29,6 +30,8 @@ const PlayerDetail = lazy(() => import("./pages/PlayerDetail"));
 const Rankings = lazy(() => import("./pages/Rankings"));
 const News = lazy(() => import("./pages/News"));
 const NewsDetail = lazy(() => import("./pages/NewsDetail"));
+const Guides = lazy(() => import("./pages/Guides"));
+const GuideDetail = lazy(() => import("./pages/GuideDetail"));
 const Games = lazy(() => import("./pages/Games"));
 const Schedule = lazy(() => import("./pages/Schedule"));
 const Stats = lazy(() => import("./pages/Stats"));
@@ -47,11 +50,9 @@ const WorldCup = lazy(() => import("./pages/WorldCup"));
 const AsiaCup = lazy(() => import("./pages/AsiaCup"));
 const ChampionsTrophy = lazy(() => import("./pages/ChampionsTrophy"));
 const WomensCricket = lazy(() => import("./pages/WomensCricket"));
-const WatchLive = lazy(() => import("./pages/WatchLive"));
 const Videos = lazy(() => import("./pages/Videos"));
 const CountyChampionship = lazy(() => import("./pages/CountyChampionship"));
 const ICCCWCLeague2 = lazy(() => import("./pages/ICCCWCLeague2"));
-const CricketWebsite = lazy(() => import("./pages/CricketWebsite"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfUse = lazy(() => import("./pages/TermsOfUse"));
 const DMCACopyright = lazy(() => import("./pages/DMCACopyright"));
@@ -85,21 +86,10 @@ function AppShell() {
           <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            {Object.entries(ROUTE_REDIRECTS).map(([from, to]) => (
+              <Route key={from} path={from} element={<Navigate to={to} replace />} />
+            ))}
             <Route path="/live" element={<LiveMatches />} />
-            {/* Retired keyword-variant doorway pages (duplicate content) → canonical /live */}
-            <Route path="/live-cricket-score" element={<Navigate to="/live" replace />} />
-            <Route path="/cricket-score-today" element={<Navigate to="/live" replace />} />
-            <Route path="/cricket-matches-today" element={<Navigate to="/live" replace />} />
-            <Route path="/ball-by-ball" element={<Navigate to="/live" replace />} />
-            <Route path="/watch-live" element={<WatchLive />} />
-            <Route path="/highlights" element={<WatchLive />} />
-            <Route path="/watch" element={<Navigate to="/watch-live" replace />} />
-            <Route path="/live-stream" element={<Navigate to="/watch-live" replace />} />
-            {/* Retired IPL live-stream doorway pages → canonical IPL page */}
-            <Route path="/ipl-live-stream" element={<Navigate to="/ipl" replace />} />
-            <Route path="/ipl-live" element={<Navigate to="/ipl" replace />} />
-            <Route path="/watch-ipl-live" element={<Navigate to="/ipl" replace />} />
-            <Route path="/ipl-stream" element={<Navigate to="/ipl" replace />} />
             <Route path="/videos" element={<Videos />} />
 
             <Route path="/match/:id" element={<MatchDetail />} />
@@ -116,13 +106,14 @@ function AppShell() {
             <Route path="/rankings" element={<Rankings />} />
             <Route path="/news" element={<News />} />
             <Route path="/news/:id" element={<NewsDetail />} />
+            <Route path="/guides" element={<Guides />} />
+            <Route path="/guides/:slug" element={<GuideDetail />} />
             <Route path="/games" element={<Games />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/editorial-policy" element={<EditorialPolicy />} />
-            <Route path="/cricket-website" element={<CricketWebsite />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-use" element={<TermsOfUse />} />
             <Route path="/dmca-copyright" element={<DMCACopyright />} />
@@ -141,9 +132,7 @@ function AppShell() {
             <Route path="/champions-trophy" element={<ChampionsTrophy />} />
             <Route path="/womens-cricket" element={<WomensCricket />} />
             <Route path="/county-championship" element={<CountyChampionship />} />
-            <Route path="/county-cricket" element={<CountyChampionship />} />
             <Route path="/icc-cwc-league-2" element={<ICCCWCLeague2 />} />
-            <Route path="/namibia-vs-scotland" element={<ICCCWCLeague2 />} />
             <Route path="/fantasy" element={<Fantasy />} />
 
             <Route path="/football" element={<Football />} />

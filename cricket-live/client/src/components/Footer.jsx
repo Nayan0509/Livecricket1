@@ -53,7 +53,7 @@ export default function Footer() {
             </div>
             {[
               ["Live Scores",    "/live"],
-              ["Highlights",     "/watch-live"],
+              ["Highlights",     "/videos"],
               ["Upcoming",       "/upcoming"],
               ["Results",        "/results"],
               ["Schedule",       "/schedule"],

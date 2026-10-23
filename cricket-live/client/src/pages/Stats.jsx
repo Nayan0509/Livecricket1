@@ -3,6 +3,8 @@ import { useQuery, useQueries } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchPlayers, fetchRankings, fetchCareerRecords } from "../api";
 import SEO from "../components/SEO";
+import { PageIntro } from "../components/ContentBlocks";
+import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
 
 const QUICK_SEARCHES = ["virat", "rohit", "bumrah", "babar", "root", "cummins", "smith", "head", "gill", "pant"];
@@ -84,7 +86,7 @@ export default function Stats() {
   const statsSD = {
     "@context": "https://schema.org",
     "@type": "Dataset",
-    "name": "Cricket Player Statistics & Career Records 2026",
+    "name": "Cricket Player Statistics & Career Records",
     "description": "Comprehensive career records, batting averages, bowling figures, and statistics across Test, ODI, and T20 cricket formats.",
     "url": "https://www.livecricketzone.com/stats",
     "publisher": {
@@ -125,6 +127,8 @@ export default function Stats() {
           All-time historical cricket records, live ICC rankings, and searchable player career profiles across Test, ODI, and T20 formats.
         </p>
       </div>
+
+      <PageIntro intro={PAGE_INTROS["/stats"]} />
 
       {/* Live ICC #1-ranked leaders */}
       <section style={{ marginBottom: 28 }}>
