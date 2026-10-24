@@ -17,9 +17,6 @@ export default function Teams() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Teams 2026 — International, IPL, Domestic & Women's"
-        description="All cricket teams in 2026 — international teams, IPL franchises, domestic teams and women's cricket teams. Find team profiles, squads and live match links."
-        keywords="cricket teams 2026, international cricket teams, IPL teams 2026, cricket team profiles, India cricket team, Australia cricket team, England cricket team, Pakistan cricket team, domestic cricket teams, women cricket teams, ICC teams"
         url="/teams"
       />
 

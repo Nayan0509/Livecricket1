@@ -90,9 +90,6 @@ export default function Videos() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Videos — IPL 2026 Highlights, T20 World Cup & Replays"
-        description="Watch cricket videos — IPL 2026 official match highlights, T20 World Cup 2026, best catches, biggest sixes and match replays. Updated daily with the latest cricket clips."
-        keywords="cricket videos, IPL 2026 highlights, cricket highlights today, T20 World Cup video, cricket match highlights, IPL highlights video, cricket best catches, cricket sixes, cricket match video 2026, cricket replays"
         url="/videos"
       />
 

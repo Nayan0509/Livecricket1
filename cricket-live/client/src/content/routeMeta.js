@@ -68,6 +68,11 @@ const STATIC_ROUTES = {
     description:
       "Original, plain-English guides to how cricket works: reading a scorecard, DLS, net run rate, DRS, powerplays, dismissals, rankings and more, plus football, tennis and basketball basics.",
   },
+  "/tools": {
+    title: "Cricket Calculators — Net Run Rate, Required Run Rate & Averages",
+    description:
+      "Free calculators for net run rate, the required run rate in a chase, and batting and bowling averages, each with its working shown and the rules explained.",
+  },
   "/videos": {
     title: "Cricket Highlights — Official Match Clips",
     description:
@@ -141,7 +146,7 @@ const STATIC_ROUTES = {
   "/psl": {
     title: "PSL Live Scores & Schedule — Pakistan Super League",
     description:
-      "Pakistan Super League live scores and fixtures, the six franchises and their home cities, the playoff format and the league's history since 2016.",
+      "Pakistan Super League live scores and fixtures, the franchises and their home cities, the playoff format and the league's history since 2016.",
   },
   "/bbl": {
     title: "BBL Live Scores & Schedule — Big Bash League",
@@ -151,12 +156,12 @@ const STATIC_ROUTES = {
   "/cpl": {
     title: "CPL Live Scores & Schedule — Caribbean Premier League",
     description:
-      "Caribbean Premier League live scores and fixtures, the franchises and their home islands, and how the tournament is structured.",
+      "Caribbean Premier League live scores and fixtures, the franchises and their home countries, and how the tournament is structured.",
   },
   "/bpl": {
     title: "BPL Live Scores & Schedule — Bangladesh Premier League",
     description:
-      "Bangladesh Premier League live scores and fixtures, the franchises, the venues in Dhaka, Sylhet and Chattogram, and how the tournament works.",
+      "Bangladesh Premier League live scores and fixtures, the franchises, the main venues and how the tournament works.",
   },
   "/county-championship": {
     title: "County Championship — Scores, Divisions & History",
@@ -231,4 +236,17 @@ const ROUTE_REDIRECTS = {
   "/betting-guide": "/fantasy",
 };
 
-module.exports = { STATIC_ROUTES, ROUTE_REDIRECTS, getStaticRouteMeta };
+// Reachable but kept out of search results: other sports (off-topic for a
+// cricket site), pages that only compile other sites' headlines or video
+// clips, and per-match/player/team/series pages that only repeat third-party
+// data. Used by api/render.js (robots tag, X-Robots-Tag, sitemap) and
+// client/src/components/SEO.jsx, so both always agree.
+const NOINDEX_ROUTES = ["/football", "/basketball", "/tennis", "/news", "/videos"];
+const NOINDEX_PREFIXES = ["/match/", "/players/", "/teams/", "/series/"];
+
+function isNoindexPath(pathname) {
+  const p = (pathname || "/").split("?")[0].replace(/\/+$/, "") || "/";
+  return NOINDEX_ROUTES.includes(p) || NOINDEX_PREFIXES.some(pre => p.startsWith(pre));
+}
+
+module.exports = { STATIC_ROUTES, ROUTE_REDIRECTS, NOINDEX_PREFIXES, getStaticRouteMeta, isNoindexPath };

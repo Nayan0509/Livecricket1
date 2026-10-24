@@ -18,7 +18,6 @@
     { "source": "/sitemap.xml",      "destination": "/api/index.js?file=sitemap.xml" },
     { "source": "/robots.txt",       "destination": "/api/index.js?file=robots.txt" },
     { "source": "/ads.txt",          "destination": "/api/index.js?file=ads.txt" },
-    { "source": "/BingSiteAuth.xml", "destination": "/api/index.js?file=BingSiteAuth.xml" },
     { "source": "/api/(.*)",         "destination": "/api/index.js" },
     { "source": "/(.*)",             "destination": "/api/index.js" }
   ],

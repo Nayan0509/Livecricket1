@@ -32,6 +32,8 @@ const News = lazy(() => import("./pages/News"));
 const NewsDetail = lazy(() => import("./pages/NewsDetail"));
 const Guides = lazy(() => import("./pages/Guides"));
 const GuideDetail = lazy(() => import("./pages/GuideDetail"));
+const Tools = lazy(() => import("./pages/Tools"));
+const ToolDetail = lazy(() => import("./pages/ToolDetail"));
 const Games = lazy(() => import("./pages/Games"));
 const Schedule = lazy(() => import("./pages/Schedule"));
 const Stats = lazy(() => import("./pages/Stats"));
@@ -63,7 +65,15 @@ const Football = lazy(() => import("./pages/Football"));
 const Basketball = lazy(() => import("./pages/Basketball"));
 const Tennis = lazy(() => import("./pages/Tennis"));
 
+// While a route's code downloads: on the first page of a visit, keep showing
+// the server-rendered text for that page (captured in index.js) instead of a
+// spinner, so the content does not disappear and reappear.
 function RouteFallback() {
+  const location = useLocation();
+  const ssr = window.__SSR_PAGE__;
+  if (ssr && ssr.path === location.pathname) {
+    return <div className="container ssr-body" dangerouslySetInnerHTML={{ __html: ssr.html }} />;
+  }
   return <div className="spinner" role="status" aria-label="Loading page" />;
 }
 
@@ -80,7 +90,7 @@ function AppShell() {
     <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
       <Navbar />
       <Ticker />
-      <main style={{ minHeight: "calc(100vh - 140px)", paddingTop: "16px" }} className="animate-fade-in">
+      <main style={{ minHeight: "calc(100vh - 140px)", paddingTop: "16px" }}>
         {/* Keyed by path so a crashed page auto-recovers on navigation */}
         <ErrorBoundary resetKey={location.pathname}>
           <Suspense fallback={<RouteFallback />}>
@@ -108,6 +118,8 @@ function AppShell() {
             <Route path="/news/:id" element={<NewsDetail />} />
             <Route path="/guides" element={<Guides />} />
             <Route path="/guides/:slug" element={<GuideDetail />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/tools/:slug" element={<ToolDetail />} />
             <Route path="/games" element={<Games />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/stats" element={<Stats />} />

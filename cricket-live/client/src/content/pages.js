@@ -11,6 +11,9 @@ const { SITE_NAME, CONTACT_EMAIL } = require("./site");
 
 const LAST_REVIEWED = "17 September 2026";
 
+// Date the privacy policy, terms and copyright policy last changed.
+const POLICIES_UPDATED = "24 October 2026";
+
 // ─── Home ─────────────────────────────────────────────────────────────────────
 
 const HOME = {
@@ -200,7 +203,7 @@ const EDITORIAL = {
 
 const PRIVACY = {
   h1: "Privacy Policy",
-  lede: `Last updated ${LAST_REVIEWED}. Questions to [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}).`,
+  lede: `Last updated ${POLICIES_UPDATED}. Questions to [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}).`,
   blocks: [
     {
       type: "callout",
@@ -213,7 +216,8 @@ const PRIVACY = {
         "**Technical log data.** When you load a page our hosting provider records the request: IP address, browser type, device type, referring page and time. This is standard web-server logging used for security and to keep the site running.",
         "**Analytics.** We use Google Analytics 4 to understand which pages are read and how the site performs. Google Analytics sets cookies and receives your IP address (which it anonymises), pages viewed and approximate location.",
         "**Advertising cookies.** Google AdSense sets cookies to serve and measure ads. See section 2.",
-        "**Local preferences.** A small amount of data such as your cookie-banner choice and game scores is stored in your own browser (localStorage) and never sent to us.",
+        "**Local preferences.** Your cookie choice, your best game score and the name you last used in a game room are stored in your own browser (localStorage). They are not sent to us, except as described under game rooms.",
+        "**Game rooms.** If you play Kachuful with friends in a private room, the display name you type and the moves of the game are held in our server's memory while the room is in use. A room is deleted after two hours without activity, and nothing from it is written to disk or used for anything else.",
         "**Email.** If you email us we keep the message and your address for as long as needed to deal with it.",
       ],
     },
@@ -228,7 +232,7 @@ const PRIVACY = {
         "Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.",
         "You can opt out of personalised advertising by visiting [Google's Ads Settings](https://www.google.com/settings/ads).",
         "You can opt out of some third-party vendors' use of cookies for personalised advertising at [aboutads.info](https://optout.aboutads.info) or [youronlinechoices.com](https://www.youronlinechoices.com).",
-        "Visitors in the European Economic Area and the United Kingdom are shown a consent notice before advertising cookies are used, in line with Google's EU User Consent Policy.",
+        "For visitors in the European Economic Area, the United Kingdom and Switzerland, advertising and analytics cookies stay off until you accept them in the cookie notice; we use Google's consent mode to pass that choice to Google's tags. Visitors elsewhere can decline them in the same notice. Your choice is saved in your browser and you can change it at any time from the Cookie settings link at the bottom of every page.",
       ],
     },
     { type: "h2", text: "3. Other third parties" },
@@ -258,7 +262,7 @@ const PRIVACY = {
     { type: "h2", text: "6. Cookies you can control" },
     {
       type: "p",
-      text: "You can delete or block cookies in your browser settings; the site will still work, although ad personalisation and analytics will stop. The cookie notice shown on first visit lets you decline non-essential cookies.",
+      text: "You can delete or block cookies in your browser settings; the site will still work, although ad personalisation and analytics will stop. The cookie notice shown on your first visit lets you decline advertising and analytics cookies, and the Cookie settings link at the bottom of every page reopens it.",
     },
     { type: "h2", text: "7. Children" },
     {
@@ -277,7 +281,7 @@ const PRIVACY = {
 
 const TERMS = {
   h1: "Terms of Use",
-  lede: `Last updated ${LAST_REVIEWED}. Questions to [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}).`,
+  lede: `Last updated ${POLICIES_UPDATED}. Questions to [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}).`,
   blocks: [
     {
       type: "callout",
@@ -339,7 +343,7 @@ const TERMS = {
 
 const DMCA = {
   h1: "DMCA & Copyright Policy",
-  lede: `Last updated ${LAST_REVIEWED}. Send notices to [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}) with the subject "Copyright notice".`,
+  lede: `Last updated ${POLICIES_UPDATED}. Send notices to [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}) with the subject "Copyright notice".`,
   blocks: [
     {
       type: "callout",

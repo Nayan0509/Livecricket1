@@ -9,6 +9,7 @@ const GUIDES = [
   ...require("./cricketBasics"),
   ...require("./cricketRules"),
   ...require("./cricketCompetitions"),
+  ...require("./cricketLaws"),
 ].map(g => ({ reviewed: LAST_REVIEWED, ...g }));
 
 const GUIDE_CATEGORIES = [...new Set(GUIDES.map(g => g.category))];

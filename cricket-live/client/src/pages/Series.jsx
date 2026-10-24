@@ -17,9 +17,6 @@ export default function Series() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Series 2026 — All International, IPL & Domestic Series"
-        description="All cricket series in 2026 — international series, IPL 2026, T20 leagues, Test series and domestic competitions. Find series schedules, results and live scores."
-        keywords="cricket series 2026, all cricket series, IPL 2026 series, T20 World Cup series, cricket international series 2026, Test series 2026, ODI series 2026, domestic cricket series, cricket series schedule"
         url="/series"
       />
 

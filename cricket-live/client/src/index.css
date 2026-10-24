@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=optional');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -213,6 +213,41 @@ a:hover { color: var(--primary-light); }
   padding: 0 24px;
 }
 @media (max-width: 768px) { .container { padding: 0 16px; } }
+
+/* ============================================
+   SERVER-RENDERED SHELL (api/render.js)
+   The first HTML for every page carries a header the same height as the
+   Navbar (61px) and Ticker (44px), and the page's written content in the
+   same column the React page uses, so nothing moves when React takes over.
+   The content block is reused as the loading state for the first route
+   (see RouteFallback in App.jsx), so these rules must live here, not inside
+   #root, which React replaces.
+   ============================================ */
+.ssr-head {
+  height: 61px; display: flex; align-items: center; gap: 18px;
+  padding: 0 24px; overflow: hidden; white-space: nowrap;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.ssr-head a { color: var(--text2); font-size: 14px; font-weight: 500; }
+.ssr-head .ssr-logo { color: var(--text); font-size: 17px; font-weight: 800; margin-right: 12px; }
+.ssr-tick { height: 44px; border-bottom: 1px solid rgba(59,130,246,0.12); }
+.ssr-main { min-height: calc(100vh - 140px); padding-top: 16px; }
+.ssr-body { max-width: 860px; padding-bottom: 60px; }
+.ssr-body h1 { font-size: 30px; font-weight: 900; line-height: 1.25; margin: 12px 0 10px; }
+.ssr-body h2 { font-size: 20px; font-weight: 800; margin: 28px 0 12px; }
+.ssr-body h3 { font-size: 16px; font-weight: 800; margin: 20px 0 8px; }
+.ssr-body p, .ssr-body li, .ssr-body dd, .ssr-body td, .ssr-body th {
+  color: var(--text2); font-size: 15px; line-height: 1.85;
+}
+.ssr-body p, .ssr-body ul, .ssr-body ol, .ssr-body dl { margin: 0 0 14px; }
+.ssr-body ul, .ssr-body ol { padding-left: 22px; }
+.ssr-body dt { color: var(--text); font-weight: 800; }
+.ssr-body dd { margin: 0 0 8px; }
+.ssr-body strong { color: var(--text); }
+.ssr-body a { color: var(--secondary); }
+.ssr-body table { width: 100%; border-collapse: collapse; margin: 0 0 18px; }
+.ssr-body th, .ssr-body td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); }
+@media (max-width: 768px) { .ssr-head { padding: 0 16px; } }
 
 /* ============================================
    GLASS

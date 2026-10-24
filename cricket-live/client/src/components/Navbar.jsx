@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 
 const PRIMARY_NAV = [
   { to: "/live",       label: "Live"       },
+  { to: "/guides",     label: "Guides"     },
+  { to: "/tools",      label: "Calculators" },
   { to: "/videos",     label: "Highlights" },
-  { to: "/games",      label: "🎮 Games"    },
   { to: "/news",       label: "News"       },
   { to: "/rankings",   label: "Rankings"  },
-  { to: "/series",     label: "Series"    },
   { to: "/stats",      label: "Stats"     },
-  { to: "/teams",      label: "Teams"     },
+  { to: "/games",      label: "🎮 Games"    },
   { to: "/fantasy",    label: "Fantasy"   },
 ];
 

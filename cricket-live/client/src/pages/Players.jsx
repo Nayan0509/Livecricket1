@@ -33,9 +33,6 @@ export default function Players() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Players Stats — Batting & Bowling Records 2026"
-        description="Cricket player profiles with batting averages, bowling records, centuries, wickets and career stats. Search any international or IPL player — Virat Kohli, Babar Azam, Steve Smith, Joe Root and more."
-        keywords="cricket players stats, cricket player profiles, Virat Kohli stats, Babar Azam stats, Steve Smith cricket, Joe Root cricket, Jasprit Bumrah stats, batting average cricket, bowling average, cricket centuries, cricket wickets, player statistics, cricket career records, Test cricket stats, ODI stats, T20 stats, IPL players 2026"
         url="/players"
       />
 

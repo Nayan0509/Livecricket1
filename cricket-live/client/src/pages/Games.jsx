@@ -59,9 +59,6 @@ export default function Games() {
   return (
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Play Free Cricket & Kachuful Games Online — Live Cricket Zone Arcade"
-        description="Play fun free cricket games online! Cricket Super Striker batting challenge, traditional Kachuful (Judgement) card game, Cricket Trivia quiz and memory match puzzle for kids."
-        keywords="cricket game online, play kachuful online, kachuful card game, cricket trivia quiz, cricket games for kids, free cricket batting game"
         url="/games"
         structuredData={gamesSD}
       />

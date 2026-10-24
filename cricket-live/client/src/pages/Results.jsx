@@ -19,9 +19,6 @@ export default function Results() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Match Results 2026 — Scorecards & Summaries"
-        description="Recent cricket match results with full scorecards. IPL 2026, T20 World Cup, ODI and Test match results with batting and bowling summaries. Updated in real time."
-        keywords="cricket results today, cricket match results, IPL 2026 results, T20 cricket results, ODI results, Test match results, cricket scorecard, cricket match summary, cricket results 2026, cricket scores today"
         url="/results"
       />
 

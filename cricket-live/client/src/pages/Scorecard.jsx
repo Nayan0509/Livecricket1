@@ -137,7 +137,6 @@ export default function Scorecard() {
       <SEO
         title={match ? `${match.name} Scorecard — Full Innings Stats & Commentary` : "Cricket Scorecard — Full Batting & Bowling Stats"}
         description={match ? `Full scorecard for ${match.name}. ${match.status || ""}. Batting and bowling figures with ball-by-ball analysis on Live Cricket Zone.` : "Full cricket scorecard with complete batting innings, bowling figures, dismissals and fall of wickets. Live Cricket Zone."}
-        keywords={match ? `${match.name} scorecard, cricket scorecard, ${match.teams?.[0] || ""} vs ${match.teams?.[1] || ""} scorecard, batting figures, bowling figures` : "cricket scorecard, full batting stats, bowling figures"}
         url={`/match/${id}/scorecard`}
         noindex
         structuredData={scorecardSD}

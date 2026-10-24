@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from "react";
 
 // ─── Replace these slot IDs with real ones from your AdSense console ───
 // Go to: Google AdSense → Ads → By ad unit → Create ad unit
-// Then paste the data-ad-slot value below for each ad size.
+// Then paste the numeric data-ad-slot value below for each ad size.
+// Until a slot has a real ID, that banner renders nothing; Auto Ads (enabled
+// by the adsbygoogle script in public/index.html) places ads on its own.
 const PUB = "ca-pub-8179151029580359";
 
 const AD_SLOTS = {
@@ -12,9 +14,11 @@ const AD_SLOTS = {
   rectangle:   { slot: "REPLACE_RECTANGLE_SLOT",   format: "rectangle", fullWidth: false },
   // "In-feed" — responsive — place between content blocks
   infeed:      { slot: "REPLACE_INFEED_SLOT",       format: "fluid",     fullWidth: true },
-  // "Auto" responsive — works with Auto Ads (no specific slot needed)
-  auto:        { slot: "auto",                       format: "auto",      fullWidth: true },
+  // "Auto" — a responsive display unit
+  auto:        { slot: "REPLACE_AUTO_SLOT",         format: "auto",      fullWidth: true },
 };
+
+const hasRealSlot = cfg => /^\d+$/.test(cfg.slot);
 
 export default function AdBanner({
   type = "auto",
@@ -22,26 +26,14 @@ export default function AdBanner({
   style: extraStyle = {},
   className = "",
 }) {
-  const adRef   = useRef(null);
-  const pushed  = useRef(false);
-
-  useEffect(() => {
-    if (pushed.current) return;
-    // Small delay so the DOM is fully ready
-    const t = setTimeout(() => {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        pushed.current = true;
-      } catch (_) {}
-    }, 150);
-    return () => clearTimeout(t);
-  }, []);
-
   const cfg = AD_SLOTS[type] || AD_SLOTS.auto;
-  const isPlaceholder = cfg.slot && typeof cfg.slot === "string" && cfg.slot.startsWith("REPLACE_");
+  const enabled = hasRealSlot(cfg);
+  const pushed = useRef(false);
 
+  // One push per rendered <ins>, and only when one was rendered: pushing
+  // without a matching empty <ins> makes adsbygoogle throw a TagError.
   useEffect(() => {
-    if (isPlaceholder || pushed.current) return;
+    if (!enabled || pushed.current) return undefined;
     const t = setTimeout(() => {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -49,44 +41,24 @@ export default function AdBanner({
       } catch (_) {}
     }, 150);
     return () => clearTimeout(t);
-  }, [isPlaceholder]);
+  }, [enabled]);
 
-  // Before manual ad slots are configured, avoid rendering broken empty boxes
-  // during Google AdSense review. Auto Ads will handle ad placements automatically.
-  if (isPlaceholder) {
-    return null;
-  }
+  if (!enabled) return null;
 
-  const wrapStyle = {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    overflow: "hidden",
-    ...extraStyle,
-  };
-
-  const slotStyle = {
-    display: "block",
-    width: "100%",
-    minHeight: type === "rectangle" ? 250 : type === "leaderboard" ? 90 : 60,
-    background: "transparent",
-    borderRadius: 8,
-    overflow: "hidden",
-  };
+  const minHeight = type === "rectangle" ? 250 : type === "leaderboard" ? 90 : 60;
 
   return (
-    <div style={wrapStyle} className={`ad-container ${className}`}>
-      {label && (
-        <span className="ad-label">Advertisement</span>
-      )}
-      <div className="ad-slot" style={slotStyle}>
+    <div
+      style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", overflow: "hidden", ...extraStyle }}
+      className={`ad-container ${className}`}
+    >
+      {label && <span className="ad-label">Advertisement</span>}
+      <div className="ad-slot" style={{ display: "block", width: "100%", minHeight, background: "transparent", borderRadius: 8, overflow: "hidden" }}>
         <ins
-          ref={adRef}
           className="adsbygoogle"
-          style={{ display: "block", width: "100%", minHeight: slotStyle.minHeight }}
+          style={{ display: "block", width: "100%", minHeight }}
           data-ad-client={PUB}
-          data-ad-slot={cfg.slot !== "auto" ? cfg.slot : undefined}
+          data-ad-slot={cfg.slot}
           data-ad-format={cfg.format}
           data-full-width-responsive={cfg.fullWidth ? "true" : undefined}
         />
@@ -94,4 +66,3 @@ export default function AdBanner({
     </div>
   );
 }
-

@@ -45,9 +45,6 @@ export default function Schedule() {
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Schedule 2026 — Fixtures, Match Timings & Venues"
-        description="Complete cricket schedule 2026 — all upcoming fixtures, match timings and venues. IPL 2026, T20 World Cup, ODI and Test series timetable. Never miss a cricket match."
-        keywords="cricket schedule 2026, cricket fixtures, upcoming cricket matches, IPL 2026 schedule, T20 World Cup schedule 2026, ODI series schedule, Test cricket schedule, cricket calendar 2026, cricket match timings, cricket timetable 2026"
         url="/schedule"
         structuredData={scheduleSD}
       />

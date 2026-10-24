@@ -39,7 +39,7 @@ module.exports = [
       { type: "h2", text: "Fall of wickets" },
       {
         type: "p",
-        text: "The fall of wickets line, often abbreviated **FOW**, records the team score when each wicket fell and who was out: **1-23 (Duckett, 5.4 ov), 2-71 (Crawley, 15.1 ov)** and so on. Reading it shows the shape of an innings at a glance, whether a side collapsed in a heap or lost wickets at even intervals. Many cards also show **partnerships**, the runs added between each pair of batters, which tells you who did the damage together.",
+        text: "The fall of wickets line, often abbreviated **FOW**, records the team score when each wicket fell and who was out, for example **1-23 (Duckett, 5.4 ov), 2-71 (Crawley, 15.1 ov)** and so on. Reading it shows the shape of an innings at a glance, whether a side collapsed in a heap or lost wickets at even intervals. Many cards also show **partnerships**, the runs added between each pair of batters, which tells you who did the damage together.",
       },
       { type: "h2", text: "The bowling card" },
       {
@@ -55,7 +55,7 @@ module.exports = [
       {
         type: "ul",
         items: [
-          "**Toss:** which captain won and what they chose. Choosing to field is written as \"elected to bowl\".",
+          "**Toss:** which captain won and what they chose. Choosing to field is usually written as \"elected to field\".",
           "**Player of the Match:** the adjudicators' award, usually shown at the top of the card.",
           "**Umpires and referee:** the on-field umpires, the TV umpire and the match referee.",
           "**Current run rate (CRR)** and **required run rate (RRR)** appear on live cards: runs per over so far, and runs per over the chasing side needs from the remaining overs.",
@@ -64,7 +64,7 @@ module.exports = [
       },
       {
         type: "callout",
-        text: "Worked example. A card reads: Kohli c Carey b Cummins 54 (63) 4x4 1x6 SR 85.71. Kohli scored 54 from 63 balls including four fours and one six, was caught by wicketkeeper Carey off the bowling of Cummins, and scored at 85.71 runs per 100 balls (54 ÷ 63 × 100).",
+        text: "Worked example (an invented line). A card reads: Kohli c Carey b Cummins 54 (63) 4x4 1x6 SR 85.71. Kohli scored 54 from 63 balls including four fours and one six, was caught by wicketkeeper Carey off the bowling of Cummins, and scored at 85.71 runs per 100 balls (54 ÷ 63 × 100).",
       },
     ],
   },
@@ -87,11 +87,11 @@ module.exports = [
         type: "table",
         head: ["", "Test", "One Day International", "Twenty20 International"],
         rows: [
-          ["Scheduled length", "5 days", "1 day", "About 3 hours"],
+          ["Scheduled length", "Up to 5 days", "1 day", "About 3 hours"],
           ["Overs per side", "Unlimited (two innings each)", "50 (one innings each)", "20 (one innings each)"],
           ["Max overs per bowler", "No limit", "10", "4"],
           ["Fielding restrictions", "None (leg-side limit only)", "Three powerplay phases", "Six-over powerplay"],
-          ["Ball", "Red (pink for day-night), new ball available after 80 overs", "White, two new balls", "White, one new ball"],
+          ["Ball", "Red (pink for day-night), new ball available after 80 overs", "White, two new balls until over 34", "White, one new ball"],
           ["Result if time or weather runs out", "Draw", "DLS revision or no result", "DLS revision or no result"],
           ["Minimum for a result", "N/A", "20 overs per side", "5 overs per side"],
         ],
@@ -99,27 +99,27 @@ module.exports = [
       { type: "h2", text: "Test cricket" },
       {
         type: "p",
-        text: "Test matches are played over five days between the twelve nations the ICC has granted Test status. Each side bats twice, there is no limit on overs or on how many a bowler may deliver, and the only fielding restriction is the general law that no more than two fielders may stand behind square on the leg side. Because a match can be drawn if time runs out, Test tactics revolve around time as well as runs: when to declare, whether to enforce the follow-on, how many overs remain in the day. Since 2019 most Tests count towards the [World Test Championship](/guides/world-test-championship-points-system). The [follow-on and declarations guide](/guides/follow-on-and-declarations-explained) covers the decisions unique to this format.",
+        text: "Test matches are played over five days, or occasionally four, between the twelve nations the ICC has granted Test status. Each side bats twice, there is no limit on overs or on how many a bowler may deliver, and the only fielding restriction is the general law that no more than two fielders may stand behind square on the leg side. Because a match can be drawn if time runs out, Test tactics revolve around time as well as runs: when to declare, whether to enforce the follow-on, how many overs remain in the day. Since 2019 most Tests count towards the [World Test Championship](/guides/world-test-championship-points-system). The [follow-on and declarations guide](/guides/follow-on-and-declarations-explained) covers the decisions unique to this format.",
       },
       { type: "h2", text: "One Day Internationals" },
       {
         type: "p",
-        text: "ODIs give each side one innings of up to 50 overs. Bowlers are limited to ten overs each, so a captain needs at least five. Fielding restrictions come in three phases (overs 1 to 10, 11 to 40 and 41 to 50) and are explained in the [powerplay guide](/guides/powerplay-and-fielding-restrictions-explained). Two new white balls are used, one from each end, so neither ball gets older than 25 overs. Rain-affected games are decided by the [DLS method](/guides/dls-method-explained), and a result needs at least 20 overs per side. The ODI World Cup and the Champions Trophy are the format's global events.",
+        text: "ODIs give each side one innings of up to 50 overs. Bowlers are limited to ten overs each, so a captain needs at least five. Fielding restrictions come in three phases (overs 1 to 10, 11 to 40 and 41 to 50) and are explained in the [powerplay guide](/guides/powerplay-and-fielding-restrictions-explained). Two new white balls are used, one from each end, until the end of the 34th over; the fielding side then chooses one of them for overs 35 to 50, and a match cut to 25 overs a side or fewer before it starts uses one new ball per innings. Rain-affected games are decided by the [DLS method](/guides/dls-method-explained), and a result needs at least 20 overs per side. The ODI World Cup and the Champions Trophy are the format's global events.",
       },
       { type: "h2", text: "Twenty20" },
       {
         type: "p",
-        text: "T20 gives each side 20 overs and limits bowlers to four each. The first six overs are a powerplay with only two fielders allowed outside the 30-yard circle. Ties are settled by a [Super Over](/guides/super-over-and-tie-breakers-explained), and a result needs five overs per side. Most T20 competitions also enforce an innings time limit with an in-match penalty for slow over-rates. T20 began in English county cricket in 2003, went international in 2005 and now supports franchise leagues on every continent; see the [IPL guide](/guides/how-the-ipl-works) for how the biggest of them is organised.",
+        text: "T20 gives each side 20 overs and limits bowlers to four each. The first six overs are a powerplay with only two fielders allowed outside the 30-yard circle. Ties are settled by a [Super Over](/guides/super-over-and-tie-breakers-explained), and a result needs five overs per side. T20 internationals and leagues such as the IPL also enforce an innings time limit with an in-match penalty for slow over-rates. T20 began in English county cricket in 2003, the first internationals followed in 2004 (women) and 2005 (men), and it now supports franchise leagues around the world; see the [IPL guide](/guides/how-the-ipl-works) for how the biggest of them is organised.",
       },
       { type: "h2", text: "Shorter formats: T10 and The Hundred" },
       {
         type: "p",
-        text: "**T10** gives each side ten overs, with bowlers limited to two overs each; it is played in a handful of franchise leagues, most prominently in Abu Dhabi. **The Hundred**, England's domestic competition launched in 2021, gives each side 100 balls instead of overs. Bowlers deliver in blocks of five balls and may bowl ten consecutive balls if the captain chooses; each bowler is limited to 20 balls, the powerplay lasts 25 balls, and a strategic timeout is available to the fielding side. Neither is an international format, and neither counts towards ICC statistics.",
+        text: "**T10** gives each side ten overs, with bowlers limited to two overs each; it is played in a handful of franchise leagues, most prominently in Abu Dhabi. **The Hundred**, England's domestic competition launched in 2021, gives each side 100 balls instead of overs. Bowlers deliver in blocks of five balls and may bowl ten consecutive balls if the captain chooses; each bowler is limited to 20 balls, the powerplay lasts 25 balls, and a strategic timeout is available to the fielding side. Neither is an international format. The ICC classifies The Hundred as Twenty20 cricket, so its matches count in players' T20 records; T10 does not appear on the ICC's list of recognised first-class, List A and Twenty20 competitions.",
       },
       { type: "h2", text: "How matches are classified for statistics" },
       {
         type: "p",
-        text: "Statistics are kept in three pools. **First-class** cricket covers Tests and multi-day domestic competitions such as the County Championship, the Sheffield Shield and the Ranji Trophy, so a player's first-class runs include Tests. **List A** covers ODIs and domestic one-day competitions of 40 to 60 overs. **T20** covers all recognised Twenty20 cricket, international and domestic. Records are also kept separately at international level, which is why you will see a player's \"Test average\" and \"first-class average\" quoted as different numbers.",
+        text: "Statistics are kept in three pools. **First-class** cricket covers Tests and multi-day domestic competitions such as the County Championship, the Sheffield Shield and the Ranji Trophy, so a player's first-class runs include Tests. **List A** covers ODIs and domestic one-day competitions of at least 40 overs a side. **T20** covers all recognised Twenty20 cricket, international and domestic. Records are also kept separately at international level, which is why you will see a player's \"Test average\" and \"first-class average\" quoted as different numbers.",
       },
       { type: "h2", text: "Why the format changes the game" },
       {
@@ -146,12 +146,12 @@ module.exports = [
       { type: "h3", text: "1. Bowled" },
       {
         type: "p",
-        text: "The ball delivered by the bowler hits the stumps and dislodges at least one bail. It does not matter whether the ball touched the bat or the batter first, so a ball that deflects off the pad or the inside edge onto the stumps is still bowled. If the bails are not dislodged (the ball brushes the stumps but they stay put, or the ball lodges between them), the batter is not out. Since 2017 the Laws also allow bails to be dislodged even if they later fall back into place if the umpires judge they were completely removed.",
+        text: "The ball delivered by the bowler hits the stumps and dislodges at least one bail. It does not matter whether the ball touched the bat or the batter first, so a ball that deflects off the pad or the inside edge onto the stumps is still bowled. If the bails are not dislodged (the ball brushes the stumps but they stay put, or the ball lodges between them), the batter is not out. A bail that is only disturbed, even for a moment, does not count: at least one must be completely removed from the top of the stumps.",
       },
       { type: "h3", text: "2. Caught" },
       {
         type: "p",
-        text: "The ball touches the bat (or a glove holding the bat) and is caught by a fielder before it touches the ground. The fielder must have control of the ball and of their own movement, and must be inside the boundary or, if airborne, must have last touched the ground inside it. A catch off the ball's second bounce is not a catch. A ball caught after it has struck only the pad or body is not out, and a catch taken by a helmet or clothing rather than hands is not out either. The batters cross, so the non-striker's position at the moment of the catch decides who faces next.",
+        text: "The ball touches the bat (or a glove holding the bat) and is caught by a fielder before it touches the ground. The fielder must have control of the ball and of their own movement, and must be inside the boundary or, if airborne, must have last touched the ground inside it. A catch off the ball's second bounce is not a catch. A ball caught after it has struck only the pad or body is not out. A catch is still fair if the ball lodges in a fielder's helmet or accidentally in their clothing. Since 2022 the incoming batter goes to the striker's end after a catch, whether or not the batters crossed while the ball was in the air.",
       },
       { type: "h3", text: "3. Leg before wicket (LBW)" },
       {
@@ -187,12 +187,12 @@ module.exports = [
       { type: "h3", text: "9. Timed out" },
       {
         type: "p",
-        text: "After a wicket, the incoming batter must be ready to receive the next ball within three minutes under the Laws, reduced to two minutes in ICC international playing conditions. If they are not, the fielding side may appeal and the batter is out without facing a ball. It had never happened in international cricket until the 2023 World Cup, when Angelo Mathews became the first player to be timed out.",
+        text: "After a wicket, the incoming batter must be ready to receive the next ball within three minutes under the Laws. ICC playing conditions cut this to two minutes in Tests and ODIs and 90 seconds in T20 internationals. If they are not, the fielding side may appeal and the batter is out without facing a ball. It had never happened in international cricket until the 2023 World Cup, when Angelo Mathews became the first player to be timed out.",
       },
       { type: "h3", text: "10. Retired out" },
       {
         type: "p",
-        text: "A batter who leaves the field for any reason other than injury or illness, without the umpire's consent, is retired out and cannot resume. It has been used tactically in T20 cricket to bring in a faster scorer. A batter who leaves injured is **retired hurt**, is not out, and may return later in the innings.",
+        text: "A batter who retires for any reason other than injury, illness or another unavoidable cause is retired out. The Laws let them resume only with the opposing captain's consent, and ICC playing conditions do not let them resume at all. It has been used tactically in T20 cricket to bring in a faster scorer. A batter who leaves injured is **retired hurt**, is not out, and may return later in the innings.",
       },
       { type: "h2", text: "Dismissals that do not count against the bowler" },
       {
@@ -248,12 +248,12 @@ module.exports = [
       { type: "h2", text: "How captains use the positions" },
       {
         type: "p",
-        text: "A Test captain with a new ball and a fast bowler might set three slips, a gully, point, cover, mid-off, mid-on, midwicket and fine leg: nine fielders plus the keeper, seven of them in catching or run-saving positions on the off side, inviting the batter to drive at a ball that might swing away. A spinner on a turning pitch wants a slip, a short leg and a silly point for bat-pad chances, with the rest saving singles. In the closing overs of a T20 the captain may have only the two fielders permitted inside the circle in catching positions, with everyone else on the boundary. The fielding restrictions that shape those choices are explained in the [powerplay guide](/guides/powerplay-and-fielding-restrictions-explained).",
+        text: "A Test captain with a new ball and a fast bowler might set three slips, a gully, point, cover, mid-off, mid-on and fine leg: nine fielders plus the keeper, seven of them in catching or run-saving positions on the off side, inviting the batter to drive at a ball that might swing away. A spinner on a turning pitch wants a slip, a short leg and a silly point for bat-pad chances, with the rest saving singles. In the closing overs of a T20 four fielders must stay inside the circle, and the captain will often post the other five on the boundary. The fielding restrictions that shape those choices are explained in the [powerplay guide](/guides/powerplay-and-fielding-restrictions-explained).",
       },
       { type: "h2", text: "Two positional laws worth knowing" },
       {
         type: "p",
-        text: "No more than two fielders may stand behind square on the leg side at the moment of delivery; a third makes the ball a no-ball. This law dates from the 1930s Bodyline series and still shapes leg-side fields. And no fielder may stand on or over the pitch itself until the ball has been played, so even silly point stays off the cut strip. Beyond those, and the limited-overs circle rules, a captain may put fielders anywhere.",
+        text: "No more than two fielders may stand behind square on the leg side at the moment of delivery; a third makes the ball a no-ball. This restriction dates from around 1960, when it was brought in to stop negative leg-side bowling; it also rules out Bodyline-style fields and still shapes leg-side fields today. And no fielder may stand on or over the pitch itself until the ball has been played, so even silly point stays off the cut strip. Beyond those, and the limited-overs circle rules, a captain may put fielders anywhere.",
       },
     ],
   },
@@ -290,7 +290,7 @@ module.exports = [
         type: "ul",
         items: [
           "**Yorker:** pitched at or just before the batter's feet so it cannot be hit on the full or after the bounce. The main death-overs weapon in limited-overs cricket; a **wide yorker** aims outside off stump to take the leg side out of play.",
-          "**Bouncer:** short-pitched to rise at chest or head height. Limited-overs rules restrict bouncers per over (one in ODIs and most T20 competitions, two in Tests and in some leagues such as the IPL).",
+          "**Bouncer:** short-pitched to rise at chest or head height. ICC playing conditions allow two per over in Tests and ODIs and one in T20 internationals; some T20 leagues allow two, as the IPL has since 2024.",
           "**Slower ball:** delivered with the same action but less pace, using a change of grip (off-cutter, back-of-the-hand, knuckle ball, split-finger). The batter plays too early and lofts a catch or mistimes.",
           "**Slower bouncer:** a short ball at reduced pace that dies on the batter and is hard to pull.",
           "**Good length:** the area, roughly six to eight metres from the stumps, from which the batter cannot comfortably drive or pull. Bowling there consistently is the core skill in Tests.",
@@ -359,7 +359,7 @@ module.exports = [
         type: "kv",
         items: [
           { k: "Dead ball", v: "A ball no longer in play; no runs can be scored and no batter dismissed." },
-          { k: "Death overs", v: "The final overs of a limited-overs innings, usually the last four or five." },
+          { k: "Death overs", v: "The final overs of a limited-overs innings, usually the last four or five of a T20 and the last ten of an ODI." },
           { k: "Declaration", v: "A captain closing their side's innings before all ten wickets have fallen. See [follow-on and declarations](/guides/follow-on-and-declarations-explained)." },
           { k: "DLS", v: "The Duckworth-Lewis-Stern method for resetting targets in rain-affected matches. See the [DLS guide](/guides/dls-method-explained)." },
           { k: "Dot ball", v: "A delivery from which no run is scored." },
@@ -370,7 +370,7 @@ module.exports = [
           { k: "Extras", v: "Runs not scored off the bat: byes, leg byes, wides, no-balls and penalties." },
           { k: "Fifty", v: "A score of 50 or more; also called a half-century." },
           { k: "Follow-on", v: "Making a side that trails heavily after the first innings bat again immediately." },
-          { k: "Free hit", v: "In limited-overs cricket, the delivery after a no-ball, from which the batter cannot be out bowled, caught, LBW or stumped." },
+          { k: "Free hit", v: "In limited-overs cricket, the delivery after a no-ball, from which the batter cannot be out bowled, caught, LBW, stumped or hit wicket." },
           { k: "Full toss", v: "A ball that reaches the batter without bouncing." },
           { k: "Gardening", v: "A batter patting down the pitch between deliveries." },
           { k: "Googly", v: "A leg-spinner's delivery that turns the opposite way to the stock ball; also called a wrong'un." },
@@ -413,7 +413,7 @@ module.exports = [
           { k: "Rough", v: "The scuffed area outside the crease created by bowlers' feet, which spinners aim for." },
           { k: "Run rate", v: "Runs scored per over." },
           { k: "Seam", v: "The stitched ridge around the ball; also movement off the pitch caused by landing on it." },
-          { k: "Sightscreen", v: "The large white (or black, for pink and white balls) screen behind the bowler that helps the batter see the ball." },
+          { k: "Sightscreen", v: "The large screen behind the bowler that helps the batter see the ball: white for a red ball, black for a white ball, and either for a pink ball, as the home board decides." },
           { k: "Slog", v: "A hard, often cross-batted shot with little regard for technique." },
           { k: "Stance", v: "The batter's position while waiting for the ball." },
           { k: "Strike rate (batting)", v: "Runs per 100 balls faced." },
@@ -427,7 +427,7 @@ module.exports = [
         type: "kv",
         items: [
           { k: "Tail", v: "The lower-order batters, usually specialist bowlers." },
-          { k: "Tea", v: "The second interval of the day in Test cricket, between the second and third sessions." },
+          { k: "Tea", v: "The second interval of the day in Test cricket, between the second and third sessions. In day-night Tests the order is reversed: tea comes after the first session and the longer dinner interval after the second." },
           { k: "Toss", v: "The coin toss before the match; the winner chooses to bat or bowl." },
           { k: "Twelfth man", v: "The named substitute fielder who may not bat or bowl." },
           { k: "Umpire's call", v: "A DRS outcome where the technology is too marginal to overturn the on-field decision." },

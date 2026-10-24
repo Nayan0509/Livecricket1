@@ -33,9 +33,9 @@ module.exports = [
         type: "ul",
         items: [
           "**Runs scored.** This is the starting point, but it is adjusted by everything below.",
-          "**The quality of the bowling attack.** Runs made against highly rated bowlers are worth more than the same runs against a weak attack. The method uses the ratings of the bowlers the batter actually faced in the match.",
+          "**The quality of the bowling attack.** Runs made against highly rated bowlers are worth more than the same runs against a weak attack. The method uses the combined ratings of the opposition's bowling attack.",
           "**The run-scoring context of the match.** A score of 60 in a game where both sides struggled to pass 200 is worth more than 60 in a match of 400-run totals.",
-          "**Not-outs.** An unbeaten innings is credited with some allowance for the runs the batter might have gone on to make, so it is not treated the same as a dismissal for the same score.",
+          "**Not-outs.** An unbeaten innings receives a bonus, so it is not treated the same as a dismissal for the same score.",
           "**The result.** Performances in a winning cause carry a bonus, which is larger when the win comes against a strong team.",
         ],
       },
@@ -45,7 +45,7 @@ module.exports = [
         items: [
           "**Wickets, weighted by who was dismissed.** Dismissing a top-rated batter is worth more than dismissing a tail-ender.",
           "**Runs conceded**, judged against the run-scoring context of the match. Conceding three runs an over in a high-scoring T20 is very different from doing so on a slow pitch.",
-          "**Workload.** Bowling a lot of overs in a match is credited, so a bowler cannot climb the table from a handful of short spells.",
+          "**Workload.** Bowling a lot of overs in a match earns some credit, even if no wickets come.",
           "**The result**, as with batters.",
         ],
       },
@@ -112,7 +112,7 @@ module.exports = [
       { type: "h2", text: "Who takes part" },
       {
         type: "p",
-        text: "Nine Full Member teams play in the Championship: Australia, Bangladesh, England, India, New Zealand, Pakistan, South Africa, Sri Lanka and West Indies. Other Test-playing nations still play Test matches, but those matches do not count towards the WTC table.",
+        text: "Nine Full Member teams play in the 2025-27 Championship, as in every cycle so far: Australia, Bangladesh, England, India, New Zealand, Pakistan, South Africa, Sri Lanka and West Indies. Other Test-playing nations still play Test matches, but those matches do not count towards the WTC table.",
       },
       { type: "h2", text: "The cycle" },
       {
@@ -149,7 +149,7 @@ module.exports = [
       },
       {
         type: "p",
-        text: "This was not the original design. In the first cycle every series was worth the same 120 points regardless of length, so a match in a two-Test series was worth 60 points and a match in a five-Test series 24. That made individual Tests unequal in value. From the second cycle onwards the ICC switched to fixed points per match and ranking by percentage, which is the system described here.",
+        text: "This was not the original design. In the first cycle every series was worth the same 120 points regardless of length, so a match in a two-Test series was worth 60 points and a match in a five-Test series 24. That made individual Tests unequal in value. Ranking by percentage began partway through the first cycle, after the pandemic disrupted the fixtures, and from the second cycle the ICC also switched to fixed points per match, which is the system described here.",
       },
       { type: "h2", text: "Over-rate deductions" },
       {
@@ -159,7 +159,7 @@ module.exports = [
       { type: "h2", text: "The final" },
       {
         type: "p",
-        text: "When the cycle ends, the two teams with the highest percentages play a single Test for the Championship. Every final so far has been played at a neutral venue in England, and a reserve day is set aside to make up time lost to weather. If the final ends in a draw or a tie, the two teams share the title. New Zealand won the first final in 2021, Australia the second in 2023 and South Africa the third in 2025.",
+        text: "When the cycle ends, the two teams with the highest percentages play a single Test for the Championship. Every final so far has been played at a neutral venue in England, and a reserve day is set aside to make up time lost to weather. Under the rules used for every final so far, a draw or a tie means the two teams share the title. New Zealand won the first final in 2021, Australia the second in 2023 and South Africa the third in 2025.",
       },
       { type: "h2", text: "Reading the table during a cycle" },
       {
@@ -168,7 +168,7 @@ module.exports = [
           "Early in a cycle the percentages swing wildly, because one result is a large share of a small number of matches. A team at 100 after two Tests has not done anything a team at 50 after twelve cannot overtake.",
           "Look at matches remaining. A team with many home Tests still to play has more chances to move than one that has finished its fixtures.",
           "Draws hurt a percentage more than they appear to. Each draw earns a third of a win, so a run of draws pulls a team's percentage down towards 33.",
-          "Teams level on percentage are separated by the tie-breakers in the competition's regulations, the first of which is the number of series won.",
+          "Teams level on percentage are separated by the number of series won, then by their points percentage in away matches, then by the ICC Test team ranking.",
         ],
       },
       { type: "h2", text: "How the WTC relates to the ICC rankings" },
@@ -191,7 +191,7 @@ module.exports = [
     title: "How the IPL Works: League Stage, Playoffs, Auction and Impact Player",
     category: "Competitions & rankings",
     description:
-      "A plain-English guide to the Indian Premier League: how the ten franchises play 14 league games each, how the points table and playoffs work, how squads are built through retention and the auction, and what the Impact Player and overseas rules mean.",
+      "A plain-English guide to the Indian Premier League: how the league stage is played, how the points table, tie-breakers and playoffs work, how squads are built through retention and the auction, and what the Impact Player and overseas rules mean.",
     related: ["net-run-rate-explained", "super-over-and-tie-breakers-explained", "powerplay-and-fielding-restrictions-explained"],
     blocks: [
       {
@@ -201,11 +201,11 @@ module.exports = [
       { type: "h2", text: "The league stage" },
       {
         type: "p",
-        text: "Ten franchises take part. Each plays **14 league matches**, which means 70 league games in total. Ten teams cannot all play each other home and away in 14 games, so the schedule is balanced through groupings: each side plays five of the other teams twice, home and away, and the remaining four once. Which opponents fall into which category changes from season to season.",
+        text: "Ten franchises take part. In the 2026 season, as in every season since 2022, each played **14 league matches**, which means 70 league games in total. Ten teams cannot all play each other home and away in 14 games, so the schedule is balanced through groupings: each side plays five of the other teams twice, home and away, and the remaining four once. Which opponents fall into which category changes from season to season.",
       },
       {
         type: "p",
-        text: "Every match is a standard 20-over game with the usual [powerplay and fielding restrictions](/guides/powerplay-and-fielding-restrictions-explained). If the scores are level, the match is decided by a [Super Over](/guides/super-over-and-tie-breakers-explained), and further Super Overs are played if that is tied too. So a league match cannot end as a tie.",
+        text: "Every match is a standard 20-over game with the usual [powerplay and fielding restrictions](/guides/powerplay-and-fielding-restrictions-explained). If the scores are level, the match is decided by a [Super Over](/guides/super-over-and-tie-breakers-explained), and further Super Overs are played if that is tied too. So a tied league match is normally settled on the day rather than left as a tie.",
       },
       { type: "h2", text: "The points table" },
       {
@@ -219,7 +219,7 @@ module.exports = [
       },
       {
         type: "p",
-        text: "Teams level on points are separated by [net run rate](/guides/net-run-rate-explained). A side's NRR is how fast it scored minus how fast it conceded, across all its matches. In the closing week of the league stage several teams are often level, so NRR decides who goes through. That is why teams sometimes chase targets faster than they need to.",
+        text: "Teams level on points are separated first by the number of wins and then by [net run rate](/guides/net-run-rate-explained). A side's NRR is how fast it scored minus how fast it conceded, across all its matches. In the closing week of the league stage several teams are often level, so NRR decides who goes through. That is why teams sometimes chase targets faster than they need to.",
       },
       { type: "h2", text: "The playoffs" },
       {
@@ -237,7 +237,7 @@ module.exports = [
       },
       {
         type: "p",
-        text: "A top-two finish therefore gives a team two chances to reach the final. Third or fourth means winning three knockout games in a row. Seventy league matches and four playoff matches make a 74-match season.",
+        text: "A top-two finish therefore gives a team two chances to reach the final. Third or fourth means winning three knockout games in a row. Seventy league matches and four playoff matches gave the 2026 season its 74 matches.",
       },
       { type: "h2", text: "How squads are built: retention, auction and purse" },
       {
@@ -255,7 +255,7 @@ module.exports = [
       { type: "h2", text: "The Impact Player rule" },
       {
         type: "p",
-        text: "Since 2023 the IPL has used the **Impact Player** rule. Along with its playing XI, each team names a short list of substitutes at the toss. At any point in the match it may bring one of them in to replace a member of the XI. The replaced player takes no further part, and the Impact Player can bat and bowl in full, unlike a traditional substitute fielder.",
+        text: "Since 2023 the IPL has used the **Impact Player** rule, and it was still in use in the 2026 season. After the toss, each team names its playing XI and **five substitutes**. Before an innings starts, at the end of an over, or when a wicket falls or a batter retires, it may bring one of them in to replace a member of the XI. The replaced player takes no further part, and the Impact Player can bat and bowl in full, unlike a traditional substitute fielder.",
       },
       {
         type: "p",
@@ -402,7 +402,7 @@ module.exports = [
       },
       {
         type: "p",
-        text: "For where these figures appear on a match card and what the surrounding abbreviations mean, see our [scorecard guide](/guides/how-to-read-a-cricket-scorecard). Player profiles on the [players page](/players) show each of these numbers by format.",
+        text: "For where these figures appear on a match card and what the surrounding abbreviations mean, see our [scorecard guide](/guides/how-to-read-a-cricket-scorecard). To work out a batting or bowling average from your own numbers, use our [batting and bowling average calculator](/tools/batting-and-bowling-average-calculator). Player profiles on the [players page](/players) show each of these numbers by format.",
       },
     ],
   },

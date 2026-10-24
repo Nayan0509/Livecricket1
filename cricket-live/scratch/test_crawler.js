@@ -23,6 +23,15 @@ const pages = [
   { url: '/rankings', status: 200, expect: ['ICC Cricket Rankings', 'Rating points are not averages'] },
   { url: '/live', status: 200, expect: ['Live Cricket Scores'] },
   { url: '/football', status: 200, noindex: true, expect: ['Football'] },
+  { url: '/news', status: 200, noindex: true, expect: ['Cricket News Headlines'] },
+  { url: '/videos', status: 200, noindex: true, expect: ['Cricket Highlights'] },
+  { url: '/tools', status: 200, expect: ['Net Run Rate Calculator', 'Required Run Rate Calculator'] },
+  { url: '/tools/net-run-rate-calculator', status: 200, expect: ['bowled out', 'one run fewer than the revised target'] },
+  { url: '/tools/no-such-tool', status: 404, noindex: true, expect: [] },
+  { url: '/privacy-policy', status: 200, expect: ['Game rooms', 'consent mode', 'Cookie settings'] },
+  { url: '/terms-of-use', status: 200, expect: ['Accuracy of live data'] },
+  { url: '/dmca-copyright', status: 200, expect: ['Counter-notice'] },
+  { url: '/contact', status: 200, expect: ['contact@livecricketzone.com', 'Score correction'], reject: ['Message Received', '<form'] },
   { url: '/match/12345', status: 200, noindex: true, expect: [] },
   { url: '/no-such-page', status: 404, noindex: true, expect: [] },
 ];
@@ -78,10 +87,20 @@ async function run() {
 
   const sm = await call('/sitemap.xml', UAS.googlebot);
   const locs = sm.body.match(/<loc>[^<]+<\/loc>/g) || [];
-  for (const bad of ['/football', '/basketball', '/tennis', '/news/', '/watch-live']) {
+  for (const bad of ['/football', '/basketball', '/tennis', '/news', '/videos', '/watch-live']) {
     if (locs.some(l => l.includes(bad))) fail(`sitemap still lists ${bad}`);
   }
   if (!locs.some(l => l.includes('/guides/how-the-ipl-works'))) fail('sitemap is missing guides');
+  if (!locs.some(l => l.includes('/tools/net-run-rate-calculator'))) fail('sitemap is missing tools');
+
+  // Only one contact address anywhere in the rendered pages.
+  for (const p of pages) {
+    const r = await call(p.url, UAS.browser);
+    const addrs = [...new Set((r.body.match(/[a-z0-9._-]+@livecricketzone\.com/g) || []))];
+    if (addrs.some(a => a !== 'contact@livecricketzone.com')) fail(`${p.url}: other addresses ${addrs}`);
+  }
+  const dupes = locs.filter((l, i) => locs.indexOf(l) !== i);
+  if (dupes.length) fail(`sitemap has duplicates: ${dupes.join(', ')}`);
   console.log(`sitemap.xml: ${locs.length} URLs`);
 
   const robots = await call('/robots.txt', UAS.googlebot);

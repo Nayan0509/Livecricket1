@@ -80,8 +80,6 @@ export default function LiveMatches() {
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: 80, paddingTop: 32, maxWidth: 1000, margin: "0 auto" }}>
       <SEO
-        title="Live Cricket Scores Today — All Matches Live Right Now"
-        description="Live cricket scores updated every 15 seconds. Live, recent and upcoming matches across IPL 2026, T20, ODI, Test and domestic cricket worldwide."
         url="/live"
       />
       

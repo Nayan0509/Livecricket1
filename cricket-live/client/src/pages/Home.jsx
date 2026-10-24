@@ -26,8 +26,7 @@ const SITE_SD = [
     "@type": "WebSite",
     "name": "Live Cricket Zone",
     "url": "https://www.livecricketzone.com",
-    "description": "Live cricket scores and scorecards, plus plain-English guides to how cricket works.",
-    "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "https://www.livecricketzone.com/players?search={search_term_string}" }, "query-input": "required name=search_term_string" }
+    "description": "Live cricket scores and scorecards, plus plain-English guides to how cricket works."
   }
 ];
 
@@ -262,18 +261,6 @@ function OtherSportContent({ sport, data, news, loading }) {
   );
 }
 
-const FALLBACK_IPL_ROWS = [
-  { team: "Kolkata Knight Riders", short: "KKR", p: 14, w: 9, l: 3, nr: 2, nrr: "+1.428", pts: 20, color: "#3A225D" },
-  { team: "Sunrisers Hyderabad", short: "SRH", p: 14, w: 8, l: 5, nr: 1, nrr: "+0.414", pts: 17, color: "#F7A721" },
-  { team: "Rajasthan Royals", short: "RR", p: 14, w: 8, l: 5, nr: 1, nrr: "+0.273", pts: 17, color: "#254AA5" },
-  { team: "Royal Challengers Bengaluru", short: "RCB", p: 14, w: 7, l: 7, nr: 0, nrr: "+0.459", pts: 14, color: "#EC1C24" },
-  { team: "Chennai Super Kings", short: "CSK", p: 14, w: 7, l: 7, nr: 0, nrr: "+0.392", pts: 14, color: "#F9CD05" },
-  { team: "Delhi Capitals", short: "DC", p: 14, w: 7, l: 7, nr: 0, nrr: "-0.377", pts: 14, color: "#0078BC" },
-  { team: "Lucknow Super Giants", short: "LSG", p: 14, w: 7, l: 7, nr: 0, nrr: "-0.667", pts: 14, color: "#A72056" },
-  { team: "Gujarat Titans", short: "GT", p: 14, w: 5, l: 7, nr: 2, nrr: "-1.063", pts: 12, color: "#1B8B4B" },
-  { team: "Punjab Kings", short: "PBKS", p: 14, w: 5, l: 9, nr: 0, nrr: "-0.356", pts: 10, color: "#ED1B24" },
-  { team: "Mumbai Indians", short: "MI", p: 14, w: 4, l: 10, nr: 0, nrr: "-0.318", pts: 8, color: "#004BA0" },
-];
 
 /* ── IPL Points Table Widget ── */
 function IPLStandingsWidget() {
@@ -282,9 +269,9 @@ function IPLStandingsWidget() {
     queryFn: fetchIPLStandings,
     refetchInterval: 300000,
   });
-  const apiRows = Array.isArray(data?.data) ? data.data : [];
-  const isOffSeason = apiRows.length === 0;
-  const rows = isOffSeason ? FALLBACK_IPL_ROWS : apiRows;
+  // Only the current season's table; outside the season the feed is empty.
+  const rows = Array.isArray(data?.data) ? data.data : [];
+  const season = rows[0]?.season;
 
   return (
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
@@ -294,14 +281,18 @@ function IPLStandingsWidget() {
             <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FF1053", display: "inline-block" }} />
             IPL Points Table
           </span>
-          {isOffSeason && (
-            <span style={{ fontSize: 9, color: "var(--text3)", fontWeight: 700, marginLeft: 9, textTransform: "uppercase" }}>Official Standings</span>
+          {season && (
+            <span style={{ fontSize: 9, color: "var(--text3)", fontWeight: 700, marginLeft: 9, textTransform: "uppercase" }}>{season}</span>
           )}
         </div>
         <Link to="/ipl" style={{ fontSize: 11, color: "#FF1053", fontWeight: 700, textDecoration: "none" }}>Full Table →</Link>
       </div>
       {isLoading && rows.length === 0 ? (
         <div style={{ padding: 20, textAlign: "center" }}><div className="spinner" style={{ width: 20, height: 20, margin: "0 auto" }} /></div>
+      ) : rows.length === 0 ? (
+        <p style={{ padding: "14px", margin: 0, fontSize: 12, color: "var(--text3)", lineHeight: 1.6 }}>
+          The table appears here while the IPL season is being played, usually from late March to the end of May.
+        </p>
       ) : (
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -486,7 +477,7 @@ function FantasyPromoCard() {
     <div style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.08) 100%)", border: "1px solid rgba(139,92,246,0.2)", borderRadius: 12, padding: "16px 18px", marginTop: 16 }}>
       <div style={{ fontSize: 10, fontWeight: 800, color: "#FF2E9A", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>🏆 Fantasy Cricket</div>
       <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", margin: "0 0 8px", lineHeight: 1.4 }}>Build Your Dream Team</h3>
-      <p style={{ fontSize: 12, color: "var(--text3)", margin: "0 0 12px", lineHeight: 1.6 }}>Get expert picks, captain suggestions & player form analysis.</p>
+      <p style={{ fontSize: 12, color: "var(--text3)", margin: "0 0 12px", lineHeight: 1.6 }}>How fantasy points are scored and how to think about captaincy and team balance.</p>
       <Link to="/fantasy" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.35)", color: "#FF2E9A", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>
         Fantasy Guide →
       </Link>

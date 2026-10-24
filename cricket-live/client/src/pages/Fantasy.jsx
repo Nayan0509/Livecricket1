@@ -21,74 +21,6 @@ const FANTASY_TIPS = [
 
 const PRIORITY_COLORS = { Must: "#FF1053", Key: "#FFEA00", Bonus: "#B026FF" };
 
-/* Dream Team Template */
-function DreamTeamTemplate({ format }) {
-  const templates = {
-    t20: {
-      wk: [{ name: "KL Rahul", team: "LSG" }],
-      bat: [{ name: "Virat Kohli", team: "RCB" }, { name: "Shubman Gill", team: "GT" }, { name: "David Warner", team: "DC" }],
-      ar: [{ name: "Hardik Pandya", team: "MI" }, { name: "Ravindra Jadeja", team: "CSK" }],
-      bowl: [{ name: "Jasprit Bumrah", team: "MI" }, { name: "Yuzvendra Chahal", team: "RR" }, { name: "Rashid Khan", team: "GT" }, { name: "Pat Cummins", team: "SRH" }, { name: "Arshdeep Singh", team: "PBKS" }],
-    },
-    odi: {
-      wk: [{ name: "Jos Buttler", team: "ENG" }],
-      bat: [{ name: "Rohit Sharma", team: "IND" }, { name: "Babar Azam", team: "PAK" }, { name: "Virat Kohli", team: "IND" }],
-      ar: [{ name: "Ben Stokes", team: "ENG" }, { name: "Shakib Al Hasan", team: "BAN" }],
-      bowl: [{ name: "Jasprit Bumrah", team: "IND" }, { name: "Shaheen Afridi", team: "PAK" }, { name: "Mitchell Starc", team: "AUS" }, { name: "Trent Boult", team: "NZ" }, { name: "Adam Zampa", team: "AUS" }],
-    },
-    test: {
-      wk: [{ name: "Ben Foakes", team: "ENG" }],
-      bat: [{ name: "Joe Root", team: "ENG" }, { name: "Steve Smith", team: "AUS" }, { name: "Kane Williamson", team: "NZ" }],
-      ar: [{ name: "Ravindra Jadeja", team: "IND" }, { name: "Cameron Green", team: "AUS" }],
-      bowl: [{ name: "Jasprit Bumrah", team: "IND" }, { name: "Pat Cummins", team: "AUS" }, { name: "Nathan Lyon", team: "AUS" }, { name: "Ravichandran Ashwin", team: "IND" }, { name: "Stuart Broad", team: "ENG" }],
-    },
-  };
-
-  const team = templates[format] || templates.t20;
-  const rows = [
-    { label: "Wicket Keeper", color: "#B026FF", players: team.wk },
-    { label: "Batsmen", color: "#FF1053", players: team.bat },
-    { label: "All-Rounders", color: "#FFEA00", players: team.ar },
-    { label: "Bowlers", color: "#9D00FF", players: team.bowl },
-  ];
-
-  return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden" }}>
-      <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--divider)", background: "rgba(34,197,94,0.05)" }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: "#00FFA3", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>
-          🏏 Dream XI Template — {format.toUpperCase()}
-        </div>
-        <div style={{ fontSize: 11, color: "var(--text3)" }}>Based on current form and tournament data</div>
-      </div>
-      <div>
-        {rows.map((r, ri) => (
-          <div key={ri} style={{ borderBottom: ri < rows.length - 1 ? "1px solid var(--divider)" : "none" }}>
-            <div style={{ padding: "8px 18px", background: `${r.color}08`, fontSize: 10, fontWeight: 800, color: r.color, textTransform: "uppercase", letterSpacing: 0.5 }}>
-              {r.label}
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "10px 18px 12px" }}>
-              {r.players.map((p, pi) => (
-                <div key={pi} style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 12px", borderRadius: 8, background: `${r.color}10`, border: `1px solid ${r.color}30` }}>
-                  <div style={{ width: 24, height: 24, borderRadius: "50%", background: `${r.color}25`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 900, color: r.color }}>
-                    {p.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{p.name}</div>
-                    <div style={{ fontSize: 9, color: "var(--text3)", fontWeight: 600 }}>{p.team}</div>
-                  </div>
-                  {pi === 0 && r.label === "All-Rounders" && (
-                    <span style={{ fontSize: 9, background: "#FFEA00", color: "#000", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* Scoring System */
 function ScoringSystem({ format }) {
   const batting = format === "test" ? [
@@ -154,9 +86,6 @@ export default function Fantasy() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 80px" }}>
       <SEO
-        title="Fantasy Cricket Tips 2026 — Dream XI, Captain Picks & Scoring Guide"
-        description="Fantasy cricket tips 2026: Dream XI templates, captain & vice-captain picks, player form analysis and scoring system for IPL, T20, ODI & Test cricket."
-        keywords="fantasy cricket tips, dream XI, IPL fantasy cricket, T20 fantasy tips, captain picks fantasy cricket"
         url="/fantasy"
       />
 
@@ -173,7 +102,7 @@ export default function Fantasy() {
           Build Your <span style={{ color: "#FF2E9A" }}>Dream Team</span>
         </h1>
         <p style={{ fontSize: 14, color: "var(--text3)", margin: "0 0 20px", lineHeight: 1.7 }}>
-          Expert picks, captain suggestions, scoring guides, and player form analysis for every format.
+          How fantasy points are scored in each format, and how to think about captaincy, conditions and team balance.
         </p>
         <div style={{ display: "flex", gap: 8 }}>
           {["t20", "odi", "test"].map(f => (
@@ -196,8 +125,7 @@ export default function Fantasy() {
       {/* Tabs */}
       <div style={{ display: "flex", borderBottom: "1px solid var(--divider)", marginBottom: 24, marginTop: 20, overflowX: "auto", scrollbarWidth: "none" }}>
         {[
-          { id: "tips", label: "📋 Expert Tips" },
-          { id: "dream11", label: "🏏 Dream XI" },
+          { id: "tips", label: "📋 Strategy Tips" },
           { id: "scoring", label: "📊 Scoring System" },
           { id: "matches", label: "📅 Upcoming Matches" },
         ].map(t => (
@@ -217,7 +145,7 @@ export default function Fantasy() {
       {activeTab === "tips" && (
         <div>
           <div style={{ fontSize: 13, color: "var(--text3)", marginBottom: 16 }}>
-            Follow these expert strategies to maximize your fantasy cricket points.
+            General strategy principles that apply in most fantasy cricket formats.
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 14 }}>
             {FANTASY_TIPS.map((tip, i) => {
@@ -238,16 +166,6 @@ export default function Fantasy() {
               );
             })}
           </div>
-        </div>
-      )}
-
-      {/* Dream XI Tab */}
-      {activeTab === "dream11" && (
-        <div>
-          <div style={{ marginBottom: 16, padding: "12px 16px", borderRadius: 10, background: "rgba(245,158,11,0.07)", border: "1px solid rgba(245,158,11,0.18)", fontSize: 12, color: "#FFEA00", fontWeight: 600 }}>
-            ⚠️ These are suggested template picks based on player statistics and form. Always check the latest squad announcements before finalizing.
-          </div>
-          <DreamTeamTemplate format={format} />
         </div>
       )}
 

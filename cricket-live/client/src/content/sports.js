@@ -25,7 +25,7 @@ const SPORTS = {
       { type: "h2", text: "How league tables and European qualification work" },
       {
         type: "p",
-        text: "Domestic leagues award three points for a win and one for a draw. When sides finish level, most leagues use goal difference and then goals scored as tie-breakers, though La Liga and Serie A use head-to-head records first. League position decides qualification for the UEFA Champions League, Europa League and Conference League, with the number of places depending on how a country's clubs have performed in Europe over the previous five seasons.",
+        text: "Domestic leagues award three points for a win and one for a draw. When sides finish level, many leagues, including the Premier League and the Bundesliga, use goal difference and then goals scored as tie-breakers, while La Liga and Serie A look at head-to-head results first, and Serie A settles a tie for the title or the last safe place with a play-off. League position, along with the domestic cups, decides qualification for the UEFA Champions League, Europa League and Conference League. The number of places depends on how a country's clubs have performed in Europe over the previous five seasons, and since 2024-25 the two countries whose clubs did best in the previous season have each earned an extra Champions League place.",
       },
     ],
     faq: [
@@ -52,12 +52,12 @@ const SPORTS = {
       { type: "h2", text: "How the NBA season works" },
       {
         type: "p",
-        text: "Thirty teams play an 82-game regular season from October to April, split into Eastern and Western Conferences. In each conference the top six teams qualify for the playoffs directly, and the teams finishing seventh to tenth enter the **play-in tournament** for the last two places. The playoffs are four rounds of best-of-seven series, ending in the NBA Finals in June. A mid-season **NBA Cup** knockout tournament, introduced in 2023, is played within the regular-season schedule.",
+        text: "Thirty teams play an 82-game regular season from October to April, split into Eastern and Western Conferences. In each conference the top six teams qualify for the playoffs directly, and the teams finishing seventh to tenth enter the **play-in tournament** for the last two places. The playoffs are four rounds of best-of-seven series, ending in the NBA Finals in June. The mid-season **NBA Cup**, introduced in 2023, runs inside the regular season: its group games and knockout rounds count towards the 82-game schedule, and only the championship game does not.",
       },
       { type: "h2", text: "WNBA and college basketball" },
       {
         type: "p",
-        text: "The WNBA season runs through the northern summer, from May to October, with a shorter regular season and a playoff bracket. NCAA Division I men's and women's seasons run from November to April and culminate in single-elimination national tournaments, each known as March Madness, in which 68 teams compete.",
+        text: "The WNBA season runs through the northern summer, from May to October, with a shorter regular season and a playoff bracket. NCAA Division I men's and women's seasons run from November to April and culminate in single-elimination national tournaments, each known as March Madness; both fields grow from 68 to 76 teams from the 2027 tournaments.",
       },
     ],
     faq: [

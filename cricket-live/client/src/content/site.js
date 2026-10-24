@@ -17,12 +17,13 @@ const SITE_TAGLINE =
 const NAV_PRIMARY = [
   { to: "/live", label: "Live" },
   { to: "/guides", label: "Guides" },
-  { to: "/schedule", label: "Schedule" },
-  { to: "/results", label: "Results" },
+  { to: "/tools", label: "Calculators" },
+  { to: "/videos", label: "Highlights" },
   { to: "/news", label: "News" },
   { to: "/rankings", label: "Rankings" },
-  { to: "/series", label: "Series" },
+  { to: "/stats", label: "Stats" },
   { to: "/games", label: "Games" },
+  { to: "/fantasy", label: "Fantasy" },
 ];
 
 const NAV_CRICKET = [

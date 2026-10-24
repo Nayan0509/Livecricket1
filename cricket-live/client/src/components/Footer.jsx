@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { OPEN_COOKIE_SETTINGS } from "./CookieConsent";
 import AdBanner from "./AdBanner";
 
 export default function Footer() {
@@ -41,7 +42,7 @@ export default function Footer() {
               </div>
             </div>
             <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.7, maxWidth: 200 }}>
-              Fast live cricket scores, IPL 2026 points table, ball-by-ball commentary and official match highlights.
+              Live cricket scores and scorecards, plain-English guides to the rules, and free cricket calculators.
             </p>
           </div>
 
@@ -94,6 +95,8 @@ export default function Footer() {
               Resources
             </div>
             {[
+              ["Guides",           "/guides"],
+              ["Calculators",      "/tools"],
               ["News",             "/news"],
               ["🎮 Play Games",    "/games"],
               ["ICC Rankings",     "/rankings"],
@@ -155,6 +158,10 @@ export default function Footer() {
                 onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.45)"; }}
               >{label}</Link>
             ))}
+            <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS))}
+              style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+              Cookie settings
+            </button>
           </div>
         </div>
       </div>

@@ -6,23 +6,16 @@
 
 const fs = require("fs");
 const path = require("path");
-const { SITE_NAME, SITE_URL } = require("../client/src/content/site");
+const { SITE_NAME, SITE_URL, NAV_PRIMARY } = require("../client/src/content/site");
 const { inlineToHtml, escapeHtml, stripInline } = require("../client/src/content/inline");
-const { STATIC_ROUTES } = require("../client/src/content/routeMeta");
+const { STATIC_ROUTES, NOINDEX_PREFIXES, isNoindexPath } = require("../client/src/content/routeMeta");
 const PAGES = require("../client/src/content/pages");
 const { GUIDES, GUIDE_CATEGORIES, getGuide } = require("../client/src/content/guides");
 const { TOURNAMENTS } = require("../client/src/content/tournaments");
 const { SPORTS } = require("../client/src/content/sports");
+const { TOOLS, getTool } = require("../client/src/content/tools");
 
-// Routes that stay reachable but are kept out of search results: other
-// sports (off-topic for a cricket site) and per-match/player/team/series
-// pages, which only repeat third-party data.
-const NOINDEX_EXACT = new Set(["/football", "/basketball", "/tennis"]);
-const NOINDEX_PREFIX = ["/match/", "/players/", "/teams/", "/series/"];
-
-function isNoindex(p) {
-  return NOINDEX_EXACT.has(p) || NOINDEX_PREFIX.some(pre => p.startsWith(pre));
-}
+const isNoindex = isNoindexPath;
 
 // ─── Block renderer (mirror of client/src/components/ContentBlocks.jsx) ─────
 
@@ -70,9 +63,28 @@ function pageFor(p) {
         faqToHtml(PAGES.HOME.faq, "Frequently asked questions"),
     };
   }
-  if (p === "/about" || p === "/editorial-policy") {
-    const page = p === "/about" ? PAGES.ABOUT : PAGES.EDITORIAL;
-    return { meta, body: `<h1>${escapeHtml(page.h1)}</h1><p>${inlineToHtml(page.lede)}</p>${blocksToHtml(page.blocks)}` };
+  const written = {
+    "/about": PAGES.ABOUT,
+    "/editorial-policy": PAGES.EDITORIAL,
+    "/privacy-policy": PAGES.PRIVACY,
+    "/terms-of-use": PAGES.TERMS,
+    "/dmca-copyright": PAGES.DMCA,
+  }[p];
+  if (written) {
+    return { meta, body: `<h1>${escapeHtml(written.h1)}</h1><p>${inlineToHtml(written.lede)}</p>${blocksToHtml(written.blocks)}` };
+  }
+  if (p === "/contact") {
+    const c = PAGES.CONTACT;
+    const mail = `<a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a>`;
+    return {
+      meta,
+      body: `<h1>${escapeHtml(c.h1)}</h1><p>${inlineToHtml(c.lede)}</p><p>${mail}</p>` +
+        c.reasons.map(r =>
+          `<h2>${escapeHtml(r.title)}</h2><p>${inlineToHtml(r.body)}</p>` +
+          `<p><a href="mailto:${escapeHtml(c.email)}?subject=${encodeURIComponent(r.subject)}">Email us with the subject "${escapeHtml(r.subject)}"</a></p>`
+        ).join("") +
+        `<p>${inlineToHtml(c.note)}</p>`,
+    };
   }
   if (p === "/guides") {
     return {
@@ -90,6 +102,21 @@ function pageFor(p) {
       meta: { title: g.title, description: stripInline(g.description) },
       ogType: "article",
       body: `<article><h1>${escapeHtml(g.title)}</h1><p>By the ${escapeHtml(SITE_NAME)} editorial team · Last reviewed ${escapeHtml(g.reviewed)}</p>${blocksToHtml(g.blocks)}</article>`,
+    };
+  }
+  if (p === "/tools") {
+    return {
+      meta,
+      body: "<h1>Cricket Calculators</h1>" + `<ul>${TOOLS.map(t =>
+        `<li><a href="/tools/${t.slug}">${escapeHtml(t.title)}</a>: ${escapeHtml(t.description)}</li>`).join("")}</ul>`,
+    };
+  }
+  if (p.startsWith("/tools/")) {
+    const tool = getTool(p.slice("/tools/".length));
+    if (!tool) return null;
+    return {
+      meta: { title: tool.title, description: tool.description },
+      body: `<h1>${escapeHtml(tool.title)}</h1><p>${inlineToHtml(tool.intro)}</p><p><em>The calculator runs in your browser and needs JavaScript.</em></p>${blocksToHtml(tool.blocks)}`,
     };
   }
   const t = TOURNAMENTS[p.slice(1)];
@@ -113,6 +140,19 @@ function pageFor(p) {
   if (intro) return { meta, body: `<h1>${escapeHtml(intro.h1)}</h1>${blocksToHtml(intro.blocks)}` };
   if (meta) return { meta, body: `<h1>${escapeHtml(meta.title)}</h1><p>${escapeHtml(meta.description)}</p>` };
   return null;
+}
+
+// ─── Page shell ───────────────────────────────────────────────────────────────
+
+// Same footprint as the React Navbar + Ticker, so the content below does not
+// move when React mounts. Styles: .ssr-* in client/src/index.css.
+// data-ssr-main marks the block client/src/index.js keeps as the first
+// route's loading state.
+function shell(body) {
+  const nav = NAV_PRIMARY.map(n => `<a href="${n.to}">${escapeHtml(n.label)}</a>`).join("");
+  return `<nav class="ssr-head" aria-label="Main navigation"><a class="ssr-logo" href="/">${escapeHtml(SITE_NAME)}</a>${nav}</nav>` +
+    `<div class="ssr-tick"></div>` +
+    `<main class="ssr-main"><div class="container ssr-body" data-ssr-main>${body}</div></main>`;
 }
 
 // ─── Template injection ───────────────────────────────────────────────────────
@@ -147,7 +187,7 @@ function renderPage(pathname) {
 
   const p = (pathname || "/").replace(/\/+$/, "") || "/";
   const page = pageFor(p);
-  const dynamic = !page && NOINDEX_PREFIX.some(pre => p.startsWith(pre));
+  const dynamic = !page && NOINDEX_PREFIXES.some(pre => p.startsWith(pre));
   const noindex = isNoindex(p) || (!page && !dynamic);
   const status = page || dynamic ? 200 : 404;
 
@@ -172,10 +212,7 @@ function renderPage(pathname) {
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${canonical}"/>`);
 
   if (page && page.body) {
-    html = html.replace(
-      /<div id="root">[\s\S]*<\/div>\s*<\/body>/i,
-      `<div id="root"><main style="max-width:860px;margin:0 auto;padding:24px 16px;line-height:1.7">${page.body}</main></div>\n  </body>`
-    );
+    html = html.replace(/<div id="root">[\s\S]*<\/div>\s*<\/body>/i, `<div id="root">${shell(page.body)}</div>\n  </body>`);
   }
   return { status, html, noindex };
 }

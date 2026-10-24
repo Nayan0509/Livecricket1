@@ -16,12 +16,13 @@ function PointsTable() {
 
   const rows = Array.isArray(data?.data) ? data.data : [];
   if (rows.length === 0) return null;
+  const season = rows[0]?.season;
 
   return (
     <section aria-label="IPL points table" style={{ marginBottom: 28 }}>
       <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", margin: "8px 0 14px", display: "flex", alignItems: "center", gap: 8 }}>
         <span style={{ width: 3, height: 16, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
-        IPL Points Table
+        {season ? `${season} points table` : "IPL points table"}
       </h2>
       <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, color: "var(--text2)", minWidth: 480 }}>

@@ -2411,23 +2411,29 @@ async function cbSeriesStandingsModern(seriesId, slug = null) {
   return [];
 }
 
+// Points table for the IPL season that is in the live feed right now. This
+// used to fall back to a hard-coded series (IPL 2024), which put a two-year-old
+// table on the site as if it were current. Outside the season there is no
+// current table, so return [] and let the pages say so. Each row carries the
+// series name (e.g. "Indian Premier League 2027") so the UI can label it.
 async function cbIPLStandingsModern() {
-  const key = "cb2:ipl:standings:2026";
+  const key = "cb2:ipl:standings:current";
   const cached = scrapeCache.get(key);
   if (cached) return cached;
 
-  let rows = await cbSeriesStandingsModern("7607", "indian-premier-league-2024");
-  if (!rows || rows.length < 4) {
-    try {
-      const allData = await scrapeCricbuzzAllMatches();
-      const allMatches = [...(allData.live || []), ...(allData.recent || []), ...(allData.upcoming || [])];
-      const iplMatch = allMatches.find(m => m.series?.toLowerCase().includes("ipl") || m.name?.toLowerCase().includes("ipl"));
-      if (iplMatch?.seriesId) {
-        const slug = (iplMatch.series || "ipl").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-        rows = await cbSeriesStandingsModern(iplMatch.seriesId, slug);
-      }
-    } catch (_) {}
-  }
+  let rows = [];
+  let season = null;
+  try {
+    const allData = await scrapeCricbuzzAllMatches();
+    const allMatches = [...(allData.live || []), ...(allData.recent || []), ...(allData.upcoming || [])];
+    const isIpl = m => /indian premier league|\bipl\b/i.test(m.series || "") || /\bipl\b/i.test(m.name || "");
+    const iplMatch = allMatches.find(isIpl);
+    if (iplMatch?.seriesId) {
+      season = iplMatch.series || null;
+      const slug = (iplMatch.series || "ipl").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      rows = await cbSeriesStandingsModern(iplMatch.seriesId, slug);
+    }
+  } catch (_) {}
 
   if (rows && rows.length >= 4) {
     const withColors = rows.map(r => {
@@ -2436,11 +2442,12 @@ async function cbIPLStandingsModern() {
         r.team.toLowerCase().includes(t.short.toLowerCase()) ||
         t.team.toLowerCase().includes((r.team || "").toLowerCase().slice(0, 8))
       );
-      return { ...r, color: fb?.color || "#39FF14" };
+      return { ...r, color: fb?.color || "#39FF14", season };
     });
     scrapeCache.set(key, withColors, 300);
     return withColors;
   }
+  scrapeCache.set(key, [], 300);
   return [];
 }
 

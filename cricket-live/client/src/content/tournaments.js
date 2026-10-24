@@ -33,7 +33,7 @@ T.ipl = {
     { type: "h2", text: "How the IPL works" },
     {
       type: "p",
-      text: "Ten franchises play a league stage of 70 matches, each side meeting five opponents twice and four once, for 14 games apiece. A win is worth two points, a no-result one, and ties in the table are broken by net run rate. The top four go into the playoffs: first plays second in **Qualifier 1** for a direct place in the final, third plays fourth in the **Eliminator**, and the Qualifier 1 loser meets the Eliminator winner in **Qualifier 2**. That gives the two best league sides a second chance, which is why finishing in the top two matters so much. Seventy league games plus four playoff games make a 74-match season.",
+      text: "Ten franchises play a league stage of 70 matches, each side meeting five opponents twice and four once, for 14 games apiece. A win is worth two points and a no-result one; teams level on points are separated first by the number of wins and then by net run rate. The top four go into the playoffs: first plays second in **Qualifier 1** for a direct place in the final, third plays fourth in the **Eliminator**, and the Qualifier 1 loser meets the Eliminator winner in **Qualifier 2**. That gives the two best league sides a second chance, which is why finishing in the top two matters so much. Seventy league games plus four playoff games make a 74-match season.",
     },
     {
       type: "p",
@@ -41,12 +41,12 @@ T.ipl = {
     },
     {
       type: "p",
-      text: "Since 2023 the league has used the **Impact Player** rule: each side names a short list of substitutes at the toss and may bring one of them into the game at any point, replacing a player who then takes no further part. In practice it lets a team field an extra specialist batter or bowler, and it is one reason first-innings totals rose sharply after its introduction.",
+      text: "Since 2023, and still in the 2026 season, the league has used the **Impact Player** rule: each side names five substitutes with its XI at the toss and may bring one of them in before an innings, at the end of an over, or when a wicket falls or a batter retires, replacing a player who then takes no further part. In practice it lets a team field an extra specialist batter or bowler, and it is one reason first-innings totals rose sharply after its introduction.",
     },
     { type: "h2", text: "A short history" },
     {
       type: "p",
-      text: "The IPL began in 2008 with eight city franchises and has been played every year since, with the 2009 edition moved to South Africa and the 2020 and part of the 2021 season staged in the United Arab Emirates. It expanded to ten teams in 2022 with the arrival of Gujarat Titans and Lucknow Super Giants. Mumbai Indians and Chennai Super Kings have historically been the most successful franchises. Chris Gayle's 175 not out for Royal Challengers Bangalore against Pune Warriors in 2013 remains the highest individual score in the competition's history.",
+      text: "The IPL began in 2008 with eight city franchises and has been played every year since, with the 2009 edition moved to South Africa and the opening stage of 2014, the whole of 2020 and the second half of 2021 staged in the United Arab Emirates. It expanded to ten teams in 2022 with the arrival of Gujarat Titans and Lucknow Super Giants. Mumbai Indians and Chennai Super Kings have been the most successful franchises, with five titles each. Chris Gayle's 175 not out for Royal Challengers Bangalore against Pune Warriors in 2013 was still the highest individual score in the competition's history after the 2026 season.",
     },
   ],
   faq: [
@@ -56,7 +56,7 @@ T.ipl = {
     },
     {
       q: "How is the IPL points table ordered?",
-      a: "By points first (two for a win, one for a no-result), then by net run rate. Net run rate is explained in our [net run rate guide](/guides/net-run-rate-explained), and the [IPL guide](/guides/how-the-ipl-works) covers the playoff format.",
+      a: "By points first (two for a win, one for a no-result). Teams level on points are separated by the number of wins, and then by net run rate. Net run rate is explained in our [net run rate guide](/guides/net-run-rate-explained), and the [IPL guide](/guides/how-the-ipl-works) covers the playoff format.",
     },
     {
       q: "Is the IPL points table shown here when the league is not on?",
@@ -73,13 +73,13 @@ T["t20-world-cup"] = {
   accentColor: "#FF1053",
   filterKeywords: ["T20 World Cup", "ICC Men's T20 World Cup", "T20 WC"],
   intro:
-    "The ICC Men's T20 World Cup is the global championship of the shortest international format. Live scores appear here while the tournament is on; the format and history below apply every edition.",
-  season: "Held roughly every two years; the 2026 edition was co-hosted by India and Sri Lanka.",
+    "The ICC Men's T20 World Cup is the global championship of the shortest international format. Live scores appear here while the tournament is on; the format and history are explained below.",
+  season: "Held roughly every two years; the 2026 edition was co-hosted by India and Sri Lanka, and the 2028 edition is scheduled for Australia and New Zealand.",
   sections: [
     { type: "h2", text: "Tournament format" },
     {
       type: "p",
-      text: "The tournament expanded to 20 teams from the 2024 edition. Teams are drawn into four groups of five and play each other once. The top two in each group advance to the **Super 8** stage, where eight teams are split into two groups of four and again play each other once. The top two in each Super 8 group reach the semi-finals, and the semi-final winners contest the final. A tied knockout match is settled by a Super Over.",
+      text: "The tournament expanded to 20 teams from the 2024 edition. In 2024 and 2026 the teams were drawn into four groups of five and played each other once. The top two in each group advanced to the **Super 8** stage, where eight teams were split into two groups of four and again played each other once, and the top two in each Super 8 group reached the semi-finals. For 2028 the ICC has announced five groups of four, with the top two in each going into a **Super 10** stage and an eliminator round before the semi-finals. A tied knockout match is settled by a Super Over.",
     },
     {
       type: "p",
@@ -99,17 +99,18 @@ T["t20-world-cup"] = {
         ["2021", "UAE & Oman", "Australia", "New Zealand"],
         ["2022", "Australia", "England", "Pakistan"],
         ["2024", "West Indies & USA", "India", "South Africa"],
+        ["2026", "India & Sri Lanka", "India", "New Zealand"],
       ],
     },
     {
       type: "p",
-      text: "West Indies and England are the only sides to have won the title twice before 2024; India's 2024 victory in Barbados made them the first side to win the competition twice as well. The 2026 edition, co-hosted by India and Sri Lanka, followed the same 20-team format.",
+      text: "West Indies and England were the first sides to win the title twice, and India's 2024 victory in Barbados made them the third. In 2026, on home soil, India became the first side to win it three times, beating New Zealand by 96 runs in the final in Ahmedabad.",
     },
   ],
   faq: [
     {
       q: "How many teams play in the T20 World Cup?",
-      a: "Twenty, since the 2024 edition: four first-round groups of five, then a Super 8 of two groups of four, then semi-finals and a final.",
+      a: "Twenty, since the 2024 edition. The 2024 and 2026 tournaments used four first-round groups of five, then a Super 8 of two groups of four, then semi-finals and a final; the ICC has announced a Super 10 stage for 2028.",
     },
     {
       q: "What happens if a T20 World Cup match is tied?",
@@ -132,7 +133,7 @@ T["world-cup"] = {
     { type: "h2", text: "Format" },
     {
       type: "p",
-      text: "The format has changed several times. The 2019 and 2023 editions used a ten-team single round-robin in which every side played every other side once, followed by semi-finals and a final. From 2027 the tournament returns to 14 teams: two groups of seven, a Super Six stage for the top three in each group, then semi-finals and a final. Qualification combines automatic places for hosts and top-ranked sides with a global qualifying tournament for the rest.",
+      text: "The format has changed several times. The 2019 and 2023 editions used a ten-team single round-robin in which every side played every other side once, followed by semi-finals and a final. From 2027 the tournament returns to 14 teams. Under the format the ICC confirmed in July 2026, the three lowest-ranked qualifiers first play a round-robin **Super Series**, with only the winner going through; the other 12 are split into two groups of six, and the top three in each group plus the best fourth-placed side form a **Super 7** round-robin, whose top four reach the semi-finals. Qualification combines automatic places for hosts and top-ranked sides with a global qualifying tournament for the rest.",
     },
     {
       type: "p",
@@ -150,7 +151,7 @@ T["world-cup"] = {
         ["1992", "Australia & New Zealand", "Pakistan", "England"],
         ["1996", "India, Pakistan & Sri Lanka", "Sri Lanka", "Australia"],
         ["1999", "England", "Australia", "Pakistan"],
-        ["2003", "South Africa", "Australia", "India"],
+        ["2003", "South Africa, Zimbabwe & Kenya", "Australia", "India"],
         ["2007", "West Indies", "Australia", "Sri Lanka"],
         ["2011", "India, Sri Lanka & Bangladesh", "India", "Sri Lanka"],
         ["2015", "Australia & New Zealand", "Australia", "New Zealand"],
@@ -184,7 +185,7 @@ T["champions-trophy"] = {
   filterKeywords: ["Champions Trophy"],
   intro:
     "The ICC Champions Trophy is a compact eight-team ODI tournament often described as the \"mini World Cup\". Live scores appear here when it is being played.",
-  season: "Irregular; the 2025 edition was hosted by Pakistan with India's matches in the UAE, and the next is scheduled for 2029.",
+  season: "Irregular; the 2025 edition was hosted by Pakistan with India's matches in the UAE, and the next is scheduled for India in 2029.",
   sections: [
     { type: "h2", text: "Format" },
     {
@@ -233,7 +234,7 @@ T["asia-cup"] = {
   filterKeywords: ["Asia Cup"],
   intro:
     "The Asia Cup is the continental championship run by the Asian Cricket Council, best known for India-Pakistan meetings that are otherwise rare. Live scores appear here during the tournament.",
-  season: "Roughly every two years, usually in August or September; the format matches the next ICC world event.",
+  season: "Roughly every two years, with recent editions played in August and September; the format matches the next ICC world event.",
   sections: [
     { type: "h2", text: "Format" },
     {
@@ -243,7 +244,7 @@ T["asia-cup"] = {
     { type: "h2", text: "History" },
     {
       type: "p",
-      text: "The first Asia Cup was played in Sharjah in 1984 with three teams. India have won the most titles, with Sri Lanka second; Pakistan have won it twice. The 2023 edition was staged across Pakistan and Sri Lanka under a hybrid model, and the 2025 edition was played as a T20 competition in the United Arab Emirates.",
+      text: "The first Asia Cup was played in Sharjah in 1984 with three teams. India have won the most titles, with Sri Lanka second; Pakistan have won it twice. The 2023 edition was staged across Pakistan and Sri Lanka under a hybrid model, and the 2025 edition was played as a T20 competition in the United Arab Emirates, where India beat Pakistan in the final for their ninth title.",
     },
   ],
   faq: [
@@ -263,35 +264,37 @@ T.psl = {
   filterKeywords: ["PSL", "Pakistan Super League", "HBL PSL"],
   intro:
     "The Pakistan Super League is Pakistan's franchise T20 competition, played mostly in Karachi, Lahore, Rawalpindi and Multan. Live scores appear here during the season.",
-  season: "Typically February to March, though the window has moved in some years.",
+  season: "Traditionally February to March; the 2025 season ran from April to May and the 2026 season from late March to early May.",
   teams: [
-    { name: "Islamabad United", short: "ISL", home: "Rawalpindi Cricket Stadium" },
-    { name: "Karachi Kings", short: "KAR", home: "National Bank Stadium, Karachi" },
+    { name: "Hyderabad Kingsmen", short: "HYD", home: "Hyderabad" },
+    { name: "Islamabad United", short: "ISL", home: "Islamabad" },
+    { name: "Karachi Kings", short: "KAR", home: "National Stadium, Karachi" },
     { name: "Lahore Qalandars", short: "LAH", home: "Gaddafi Stadium, Lahore" },
     { name: "Multan Sultans", short: "MUL", home: "Multan Cricket Stadium" },
-    { name: "Peshawar Zalmi", short: "PES", home: "Rawalpindi Cricket Stadium" },
-    { name: "Quetta Gladiators", short: "QUE", home: "National Bank Stadium, Karachi" },
+    { name: "Peshawar Zalmi", short: "PES", home: "Peshawar" },
+    { name: "Quetta Gladiators", short: "QUE", home: "Quetta" },
+    { name: "Rawalpindiz", short: "RWP", home: "Rawalpindi Cricket Stadium" },
   ],
   sections: [
     { type: "h2", text: "How the PSL works" },
     {
       type: "p",
-      text: "Six franchises play a double round-robin league of 30 matches, each side meeting every other twice. The top four reach the playoffs, which use the same structure as the IPL: Qualifier 1 between first and second, an Eliminator between third and fourth, and Qualifier 2 between the Qualifier 1 loser and the Eliminator winner, before the final. Squads are assembled through a draft in which players are grouped into categories (Platinum, Diamond, Gold and so on) rather than sold at an open auction.",
+      text: "Eight franchises took part in 2026, split into two groups of four: each side played the teams in its own group twice and those in the other group once, ten matches apiece and 40 in all. From 2018 to 2025 six franchises played a double round-robin of 30 matches. The top four reach the playoffs, which use the same structure as the IPL under different names: a Qualifier between first and second, Eliminator 1 between third and fourth, and Eliminator 2 between the Qualifier loser and the Eliminator 1 winner, before the final. Franchises represent cities, but matches are staged at a few central venues rather than home and away, and the whole 2026 season was played in Karachi and Lahore. Until 2025 squads were assembled through a draft in which players were grouped into categories (Platinum, Diamond, Gold and so on); from 2026 the league switched to a player auction.",
     },
     { type: "h2", text: "History" },
     {
       type: "p",
-      text: "The league began in 2016 with five teams and was played entirely in the United Arab Emirates for its first two seasons before matches began returning to Pakistan. Multan Sultans joined as the sixth franchise in 2018, and the 2019 season was the first held entirely on home soil. Islamabad United won the inaugural title and, with Lahore Qalandars, have been the competition's most successful sides.",
+      text: "The league began in 2016 with five teams. The first season was played entirely in the United Arab Emirates, and the 2017 final in Lahore began the return of matches to Pakistan. Multan Sultans joined as the sixth franchise in 2018, and the 2020 season was the first held entirely on home soil. The league expanded to eight teams in 2026: Hyderabad Kingsmen and Rawalpindiz played for the first time, and the Multan Sultans name passed to a new franchise after the original one was sold and moved to Rawalpindi. Islamabad United won the inaugural title and, with Lahore Qalandars, have been the competition's most successful sides, with three titles each to 2026; Peshawar Zalmi won the 2026 final.",
     },
   ],
   faq: [
     {
       q: "How many teams are in the PSL?",
-      a: "Six: Islamabad United, Karachi Kings, Lahore Qalandars, Multan Sultans, Peshawar Zalmi and Quetta Gladiators.",
+      a: "Eight since the 2026 season: Hyderabad Kingsmen, Islamabad United, Karachi Kings, Lahore Qalandars, Multan Sultans, Peshawar Zalmi, Quetta Gladiators and Rawalpindiz. The league had five teams in 2016 and 2017 and six from 2018 to 2025.",
     },
     {
       q: "How do PSL teams sign players?",
-      a: "Through a draft. Players are placed in categories and franchises pick in turn, with rules on how many overseas players each squad may hold.",
+      a: "Through a player auction since 2026, with a limit on how many players each franchise may retain beforehand and rules on how many overseas players a squad may hold. From 2016 to 2025 the PSL used a draft instead, in which players were placed in categories and franchises picked in turn.",
     },
   ],
 };
@@ -320,12 +323,12 @@ T.bbl = {
     { type: "h2", text: "How the BBL works" },
     {
       type: "p",
-      text: "Eight teams play a league stage followed by a five-match finals series. The finals reward the top two: first plays second in the **Qualifier**, with the winner going straight to the final. Third plays fourth in the **Knockout**, the Knockout winner meets the Qualifier loser in the **Challenger**, and the Challenger winner reaches the final. The league has also experimented with rule changes: the **Power Surge**, a two-over batting powerplay the batting side can call after the tenth over, is still used, while the X-Factor substitute and Bash Boost bonus point were trialled and later dropped.",
+      text: "Eight teams play a 40-match league stage, ten games each, followed by a four-match finals series for the top four (the format since 2023-24; from 2019-20 to 2022-23 five teams made the finals). The finals reward the top two: first plays second in the **Qualifier**, with the winner going straight to the final. Third plays fourth in the **Knockout**, the Knockout winner meets the Qualifier loser in the **Challenger**, and the Challenger winner reaches the final. The league has also experimented with rule changes: the **Power Surge**, a two-over batting powerplay the batting side can call after the tenth over, is still used, while the X-Factor substitute and Bash Boost bonus point were trialled for two seasons and dropped in 2022. From BBL|16 in 2026-27, sides may also name a designated batter, who bats but does not field or bowl, and a designated fielder, who fields (and may keep wicket) but does not bowl.",
     },
     { type: "h2", text: "History" },
     {
       type: "p",
-      text: "The BBL replaced the state-based KFC Twenty20 Big Bash in 2011-12, splitting Sydney and Melbourne into two franchises each. Perth Scorchers have been the most successful side, and the Sydney Sixers won the first title. Home grounds range from the 100,000-capacity Melbourne Cricket Ground to Hobart's compact Bellerive Oval, which makes venue a real factor in team strategy.",
+      text: "The BBL replaced the state-based KFC Twenty20 Big Bash in 2011-12, splitting Sydney and Melbourne into two franchises each. Perth Scorchers have been the most successful side, with six titles to 2025-26, and the Sydney Sixers won the first title. Home grounds range from the 100,000-capacity Melbourne Cricket Ground to Hobart's compact Bellerive Oval, which makes venue a real factor in team strategy.",
     },
   ],
   faq: [
@@ -335,7 +338,7 @@ T.bbl = {
     },
     {
       q: "How many teams make the BBL finals?",
-      a: "Five. The Qualifier, Knockout, Challenger and Final decide the champion, with the top two sides given a second chance.",
+      a: "Four, since the 2023-24 season. The Qualifier, Knockout, Challenger and Final decide the champion, with the top two sides given a second chance. From 2019-20 to 2022-23 the finals series had five teams.",
     },
   ],
 };
@@ -348,12 +351,13 @@ T.cpl = {
   accentColor: "#39FF14",
   filterKeywords: ["CPL", "Caribbean Premier League"],
   intro:
-    "The Caribbean Premier League is the West Indies' franchise T20 competition, played across several islands each northern-hemisphere autumn. Live scores appear here during the season.",
-  season: "Late August to early October.",
+    "The Caribbean Premier League is the West Indies' franchise T20 competition, played across several Caribbean countries, usually in August and September. Live scores appear here during the season.",
+  season: "Usually August and September; the 2026 season ran from 7 August to 20 September.",
   teams: [
     { name: "Antigua & Barbuda Falcons", short: "ABF", home: "Sir Vivian Richards Stadium, Antigua" },
-    { name: "Barbados Royals", short: "BR", home: "Kensington Oval, Bridgetown" },
+    { name: "Barbados Tridents", short: "BT", home: "Kensington Oval, Bridgetown" },
     { name: "Guyana Amazon Warriors", short: "GAW", home: "Providence Stadium, Guyana" },
+    { name: "Jamaica Kingsmen", short: "JK", home: "Sabina Park, Kingston" },
     { name: "St Kitts & Nevis Patriots", short: "SKN", home: "Warner Park, Basseterre" },
     { name: "Saint Lucia Kings", short: "SLK", home: "Daren Sammy Cricket Ground, Gros Islet" },
     { name: "Trinbago Knight Riders", short: "TKR", home: "Brian Lara Cricket Academy & Queen's Park Oval, Trinidad" },
@@ -362,18 +366,18 @@ T.cpl = {
     { type: "h2", text: "How the CPL works" },
     {
       type: "p",
-      text: "Six franchises play a double round-robin league followed by playoffs. The playoff structure has varied between a straight semi-final format and the IPL-style Qualifier, Eliminator and Qualifier 2 sequence; the current regulations are published by the league each year. Matches are spread across the home islands of the franchises, so travel and local conditions matter more than in leagues played in one country.",
+      text: "In recent seasons each franchise has played ten league matches, a double round-robin when there were six teams, before the top four go into the playoffs. The playoff structure has varied between a straight semi-final format and the IPL-style Qualifier, Eliminator and Qualifier 2 sequence; the current regulations are published by the league each year. Matches are spread across the franchises' home countries, so travel and local conditions matter more than in leagues played in one country.",
     },
     { type: "h2", text: "History" },
     {
       type: "p",
-      text: "The CPL began in 2013 and Jamaica Tallawahs won the first title. Trinbago Knight Riders have been the most successful franchise. Antigua & Barbuda Falcons joined for the 2024 season, replacing Jamaica Tallawahs. A women's CPL has run alongside the men's tournament since 2022.",
+      text: "The CPL began in 2013 and Jamaica Tallawahs won the first title. Trinbago Knight Riders have been the most successful franchise, with five titles to 2025. Antigua & Barbuda Falcons joined for the 2024 season, replacing Jamaica Tallawahs, and won their first title in 2026, beating the new Jamaica Kingsmen franchise in the final. The 2026 season was the first with seven teams, and the Barbados franchise returned to the Barbados Tridents name it had used before 2021. A women's CPL has run alongside the men's tournament since 2022.",
     },
   ],
   faq: [
     {
       q: "When is the CPL played?",
-      a: "Usually from late August to early October, after the English season and before the Australian one, which lets many overseas players take part.",
+      a: "Usually in August and September; the 2026 season ran from 7 August to the final on 20 September. The window falls between the IPL and the Australian summer, which lets many overseas players take part.",
     },
   ],
 };
@@ -386,29 +390,29 @@ T.bpl = {
   accentColor: "#00B8D9",
   filterKeywords: ["BPL", "Bangladesh Premier League"],
   intro:
-    "The Bangladesh Premier League is Bangladesh's franchise T20 competition, played in Dhaka, Sylhet and Chattogram. Live scores appear here during the season.",
-  season: "Usually January to February.",
+    "The Bangladesh Premier League is Bangladesh's franchise T20 competition, usually played in Dhaka, Sylhet and Chattogram. Live scores appear here during the season.",
+  season: "Usually between late December and February; the 2025-26 season ran from 26 December to 23 January.",
   venues: [
     { name: "Sher-e-Bangla National Cricket Stadium", city: "Mirpur, Dhaka" },
     { name: "Sylhet International Cricket Stadium", city: "Sylhet" },
-    { name: "Zahur Ahmed Chowdhury Stadium", city: "Chattogram" },
+    { name: "Bir Shrestha Flight Lieutenant Matiur Rahman Cricket Stadium (formerly Zahur Ahmed Chowdhury Stadium)", city: "Chattogram" },
   ],
   sections: [
     { type: "h2", text: "How the BPL works" },
     {
       type: "p",
-      text: "Seven franchises typically take part, playing a double round-robin league followed by playoffs in the Qualifier, Eliminator and Qualifier 2 format, with the final at the Sher-e-Bangla National Stadium in Mirpur. Franchise names and ownership have changed frequently since the league began, so team identities are best checked against the current season's fixtures rather than assumed from previous years.",
+      text: "Six or seven franchises take part each season (six in 2025-26), playing a double round-robin league followed by playoffs in the Qualifier 1, Eliminator and Qualifier 2 format, with the final usually at the Sher-e-Bangla National Stadium in Mirpur. Franchise names and ownership have changed frequently since the league began, so team identities are best checked against the current season's fixtures rather than assumed from previous years.",
     },
     { type: "h2", text: "History" },
     {
       type: "p",
-      text: "The BPL was first played in 2012. It was suspended in 2014 after a corruption inquiry and returned in 2015 with new governance. Comilla Victorians have been the league's most successful franchise. The competition is a regular showcase for Bangladesh's international players alongside overseas T20 specialists.",
+      text: "The BPL was first played in 2012. It was suspended in 2014 after a corruption inquiry and returned in 2015 with new governance. Comilla Victorians, who won four titles between 2015 and 2023, have been the league's most successful franchise. The competition is a regular showcase for Bangladesh's international players alongside overseas T20 specialists.",
     },
   ],
   faq: [
     {
       q: "Where are BPL matches played?",
-      a: "At three venues: the Sher-e-Bangla National Stadium in Mirpur, Dhaka, the Sylhet International Cricket Stadium and the Zahur Ahmed Chowdhury Stadium in Chattogram.",
+      a: "Usually at three venues: the Sher-e-Bangla National Stadium in Mirpur, Dhaka, the Sylhet International Cricket Stadium, and the Chattogram ground formerly called the Zahur Ahmed Chowdhury Stadium, renamed Bir Shrestha Flight Lieutenant Matiur Rahman Cricket Stadium in 2025. In 2025-26 every match was played in Sylhet or Dhaka after the Chattogram leg was dropped.",
     },
   ],
 };
@@ -421,7 +425,7 @@ T["county-championship"] = {
   accentColor: "#00B8D9",
   filterKeywords: ["County Championship", "County Cricket", "Division One", "Division Two"],
   intro:
-    "The County Championship is England and Wales's first-class competition and the oldest domestic tournament in the sport. Live scores appear here during the season, which runs through the English summer.",
+    "The County Championship is England and Wales's first-class competition and one of the oldest domestic competitions in the sport. Live scores appear here during the season, which runs through the English summer.",
   season: "April to late September.",
   teams: [
     { name: "Derbyshire", home: "County Ground, Derby" },
@@ -447,7 +451,7 @@ T["county-championship"] = {
     { type: "h2", text: "How the Championship works" },
     {
       type: "p",
-      text: "The 18 first-class counties are split into two divisions, with promotion and relegation between them. Matches last four days and are played with a red ball. Points are awarded for results and for first-innings performance: a win is worth 16 points, a draw 8 and a tie 8, and up to five batting bonus points and three bowling bonus points are available based on runs scored and wickets taken in the first 110 overs of each side's first innings. That bonus system is why a drawn match can still be worth very different amounts to the two sides.",
+      text: "The 18 first-class counties are split into two divisions, ten in Division One and eight in Division Two in 2026, with two counties promoted and two relegated each season. Matches last four days and are played with a red ball. Points are awarded for results and for first-innings performance: a win is worth 16 points, a draw 8 and a tie 8, and up to five batting bonus points and three bowling bonus points are available based on runs scored and wickets taken in the first 110 overs of each side's first innings. That bonus system is why a drawn match can still be worth very different amounts to the two sides.",
     },
     {
       type: "p",
@@ -462,7 +466,7 @@ T["county-championship"] = {
   faq: [
     {
       q: "How many counties are in the County Championship?",
-      a: "Eighteen, split into Division One and Division Two, with promotion and relegation between them each season.",
+      a: "Eighteen: ten in Division One and eight in Division Two in 2026, with two counties promoted and two relegated each season.",
     },
     {
       q: "How are County Championship points scored?",
@@ -480,12 +484,12 @@ T["womens-cricket"] = {
   filterKeywords: ["Women", "Women's", "WPL", "WBBL", "WT20", "WODI"],
   intro:
     "Live scores from women's international cricket and the major women's T20 leagues, with an overview of how the women's game is organised.",
-  season: "Year-round; the WPL is played in February and March and the WBBL in October and November.",
+  season: "Year-round; the WPL is played early in the year (9 January to 5 February in 2026) and the WBBL from late October or November into December.",
   sections: [
     { type: "h2", text: "International competitions" },
     {
       type: "p",
-      text: "The ICC runs two global events for women: the **Women's Cricket World Cup**, played over 50 overs and held every four years since 1973 (two years before the men's tournament began), and the **Women's T20 World Cup**, first held in 2009 and played roughly every two years. Bilateral series run between them, and the **Women's Ashes** between England and Australia is decided on a points system across Tests, ODIs and T20Is rather than any single format. An ICC Women's Championship league of ODI series determines automatic qualification for the 50-over World Cup.",
+      text: "The ICC runs two global events for women: the **Women's Cricket World Cup**, first held in 1973 (two years before the men's tournament began) and now a 50-over event held every four years, and the **Women's T20 World Cup**, first held in 2009 and played roughly every two years. Bilateral series run between them, and the **Women's Ashes** between England and Australia is decided on a points system across Tests, ODIs and T20Is rather than any single format. An ICC Women's Championship league of ODI series determines automatic qualification for the 50-over World Cup.",
     },
     { type: "h2", text: "Franchise leagues" },
     {
@@ -500,7 +504,7 @@ T["womens-cricket"] = {
   faq: [
     {
       q: "How is the Women's Ashes decided?",
-      a: "On points across the whole multi-format series: a set number of points for the Test (with a win worth more than a draw), and points for each ODI and T20I. The side with more points at the end holds the Ashes.",
+      a: "On points across the whole multi-format series: a set number of points for the Test (with a win worth more than a draw), and points for each ODI and T20I. The side with more points at the end holds the Ashes; if the points finish level, the holders keep them, as Australia did after the 8-8 series in 2023.",
     },
   ],
 };
@@ -527,13 +531,13 @@ T.t20 = {
     { type: "h2", text: "Where T20 is played" },
     {
       type: "p",
-      text: "Twenty20 began as an English county competition in 2003 and became an international format in 2005. Today it is played at international level, at the ICC Men's and Women's T20 World Cups, and in franchise leagues on every continent, including the [IPL](/ipl), [PSL](/psl), [BBL](/bbl), [CPL](/cpl) and [BPL](/bpl).",
+      text: "Twenty20 began as an English county competition in 2003. The first international was a women's match between England and New Zealand at Hove in 2004, and the first men's international followed in 2005. Today it is played at international level, at the ICC Men's and Women's T20 World Cups, and in franchise leagues on every continent, including the [IPL](/ipl), [PSL](/psl), [BBL](/bbl), [CPL](/cpl) and [BPL](/bpl).",
     },
   ],
   faq: [
     {
       q: "How many overs can one bowler bowl in a T20?",
-      a: "Four, which is one fifth of the innings. In a rain-shortened game the limit is one fifth of the reduced overs, rounded so that no bowler exceeds the share.",
+      a: "Four, which is one fifth of the innings. In a rain-shortened game the limit falls to one fifth of the reduced overs; when that is not a whole number, a few bowlers may bowl one extra over to make up the total, and in an innings of five to nine overs each bowler may bowl up to two.",
     },
   ],
 };
@@ -551,7 +555,7 @@ T.odi = {
     { type: "h2", text: "How ODI cricket works" },
     {
       type: "p",
-      text: "Each side bats for up to 50 overs. Fielding restrictions run in three phases: in overs 1 to 10 only two fielders may be outside the 30-yard circle, in overs 11 to 40 four may be, and in overs 41 to 50 five may be. A bowler may bowl a maximum of ten overs. Two new balls are used, one from each end, so the ball is 25 overs old at the finish rather than 50, which reduces reverse swing late in the innings.",
+      text: "Each side bats for up to 50 overs. Fielding restrictions run in three phases: in overs 1 to 10 only two fielders may be outside the 30-yard circle, in overs 11 to 40 four may be, and in overs 41 to 50 five may be. A bowler may bowl a maximum of ten overs. Two new balls are used, one from each end. Under the ICC's playing conditions for men's ODIs since July 2025, that lasts only until the end of the 34th over: the fielding side then picks one of the two balls for the rest of the innings, so the ball in use at the finish is about 33 overs old rather than 25, which gives bowlers a better chance of reverse swing.",
     },
     {
       type: "p",
@@ -560,7 +564,7 @@ T.odi = {
     { type: "h2", text: "Where ODIs are played" },
     {
       type: "p",
-      text: "The first ODI was played in Melbourne in 1971. The format's showpiece is the [ICC Cricket World Cup](/world-cup), and the [Champions Trophy](/champions-trophy) is its other global event. Bilateral series usually consist of three or five matches, and the ICC Cricket World Cup Super League and [League 2](/icc-cwc-league-2) give context to ODIs between world events.",
+      text: "The first ODI was played in Melbourne in 1971. The format's showpiece is the [ICC Cricket World Cup](/world-cup), and the [Champions Trophy](/champions-trophy) is its other global event. Bilateral series usually consist of three or five matches. The ICC Cricket World Cup Super League gave ODIs between the leading sides league context from 2020 to 2023 before it was discontinued, and [League 2](/icc-cwc-league-2) does the same for the leading Associate nations.",
     },
   ],
   faq: [
@@ -584,11 +588,11 @@ T.test = {
     { type: "h2", text: "How Test cricket works" },
     {
       type: "p",
-      text: "A Test match is scheduled for five days, each of at least 90 overs split into three sessions. Both sides bat twice, and the winner is the side that scores more runs across its two innings while dismissing the opposition twice. If time runs out first, the match is drawn. A side leading by a large margin after the first innings may enforce the **follow-on**, making the opposition bat again immediately, and a batting side may **declare** its innings closed to leave time to bowl the other side out. There are no fielding restrictions and no limit on a bowler's overs; the ball is changed only after 80 overs, when the fielding side may take a new one.",
+      text: "A Test match is scheduled for five days, each of at least 90 overs split into three sessions. Both sides bat twice, and the winner is the side that scores more runs across its two innings while dismissing the opposition twice. If time runs out first, the match is drawn. A side leading by a large margin after the first innings may enforce the **follow-on**, making the opposition bat again immediately, and a batting side may **declare** its innings closed to leave time to bowl the other side out. There are no powerplays or fielding-circle restrictions and no limit on a bowler's overs, and the fielding side may take a new ball only after 80 overs.",
     },
     {
       type: "p",
-      text: "The **World Test Championship** puts bilateral Test series into a two-year league. Each series counts equally, sides are ranked by the percentage of available points they win, and the top two meet in a one-off final. Our guides explain [the follow-on and declarations](/guides/follow-on-and-declarations-explained) and [how the WTC points system works](/guides/world-test-championship-points-system).",
+      text: "The **World Test Championship** puts bilateral Test series between nine of the Test nations into a two-year league. Every Test is worth the same (12 points for a win, 6 for a tie, 4 for a draw), sides are ranked by the percentage of available points they win, and the top two meet in a one-off final. Our guides explain [the follow-on and declarations](/guides/follow-on-and-declarations-explained) and [how the WTC points system works](/guides/world-test-championship-points-system).",
     },
     { type: "h2", text: "History" },
     {
@@ -613,12 +617,12 @@ T["icc-cwc-league-2"] = {
   filterKeywords: ["League 2", "CWC League", "World Cup League"],
   intro:
     "ICC Cricket World Cup League 2 is the ODI competition through which Associate nations work towards the 50-over World Cup. Live scores appear here when a tri-series is being played.",
-  season: "Tri-series are spread across the cycle, from 2024 to 2027.",
+  season: "Tri-series are spread across a cycle of nearly three years; the 2023-27 cycle began in February 2024 and is scheduled to end in November 2026.",
   sections: [
     { type: "h2", text: "How League 2 works" },
     {
       type: "p",
-      text: "Eight Associate teams hold ODI status for the length of the cycle and play a long league of tri-series, each side meeting every other several times at home, away and at neutral venues. The 2024 to 2027 cycle features Canada, Namibia, Nepal, the Netherlands, Oman, Scotland, the United Arab Emirates and the United States, each scheduled to play 36 ODIs. The top four at the end of the league advance to the **Cricket World Cup Qualifier**, where they meet Full Members who missed automatic qualification; the bottom four drop into a play-off against the leading Challenge League sides.",
+      text: "Eight Associate teams hold ODI status for the length of the cycle and play a long league of tri-series, each side meeting every other several times at home, away and at neutral venues. The 2023-27 cycle, played from 2024 to 2026, features Canada, Namibia, Nepal, the Netherlands, Oman, Scotland, the United Arab Emirates and the United States, each scheduled to play 36 ODIs; the United States clinched first place in October 2026. The top four at the end of the league advance to the **Cricket World Cup Qualifier**, where they meet Full Members who missed automatic qualification; the bottom four drop into a play-off against the leading Challenge League sides.",
     },
     {
       type: "p",
@@ -628,7 +632,7 @@ T["icc-cwc-league-2"] = {
   faq: [
     {
       q: "Which teams are in CWC League 2?",
-      a: "For the 2024 to 2027 cycle: Canada, Namibia, Nepal, the Netherlands, Oman, Scotland, the UAE and the USA.",
+      a: "For the 2023-27 cycle, played from 2024 to 2026: Canada, Namibia, Nepal, the Netherlands, Oman, Scotland, the UAE and the USA.",
     },
   ],
 };

@@ -493,6 +493,7 @@ async function getNews() {
 
 const { STATIC_ROUTES, ROUTE_REDIRECTS } = require("../client/src/content/routeMeta");
 const { GUIDES } = require("../client/src/content/guides");
+const { TOOLS } = require("../client/src/content/tools");
 const { retiredArticleTarget } = require("../client/src/content/retiredArticles");
 const { renderPage, isNoindex } = require("./render");
 
@@ -527,20 +528,22 @@ function serveMeta(url, res, req) {
     return true;
   }
 
-  // Main sitemap: every indexable static route plus every guide.
+  // Main sitemap: every indexable static route (which includes /guides and
+  // /tools), plus every guide and every calculator page.
   if (reqPath.includes("sitemap.xml") || reqPath.includes("sitemap-main.xml")) {
     const pages = Object.keys(STATIC_ROUTES)
       .filter(p => !isNoindex(p))
       .map(p => `  <url><loc>${base}${p}</loc></url>`);
-    const guides = [`  <url><loc>${base}/guides</loc></url>`].concat(GUIDES.map(g => {
+    const guides = GUIDES.map(g => {
       const lastmod = isoDate(g.reviewed);
       return `  <url><loc>${base}/guides/${g.slug}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
-    }));
+    });
+    const tools = TOOLS.map(t => `  <url><loc>${base}/tools/${t.slug}</loc></url>`);
 
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
     res.status(200).send(
-      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.concat(guides).join("\n")}\n</urlset>`
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.concat(guides, tools).join("\n")}\n</urlset>`
     );
     return true;
   }
@@ -589,12 +592,6 @@ ${items}
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=86400");
     res.status(200).send("google.com, pub-8179151029580359, DIRECT, f08c47fec0942fa0\n");
-    return true;
-  }
-  if (reqPath.includes("BingSiteAuth.xml")) {
-    res.setHeader("Content-Type", "application/xml; charset=utf-8");
-    res.setHeader("Cache-Control", "public, max-age=86400");
-    res.status(200).send('<?xml version="1.0"?><users><user>A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6</user></users>');
     return true;
   }
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useQueries } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { fetchPlayers, fetchRankings, fetchCareerRecords } from "../api";
+import { fetchPlayers, fetchRankings } from "../api";
 import SEO from "../components/SEO";
 import { PageIntro } from "../components/ContentBlocks";
 import { PAGE_INTROS } from "../content/pages";
@@ -21,49 +21,13 @@ const RANK_CATS = [
 export default function Stats() {
   const [searchTerm, setSearchTerm] = useState("virat");
   const [inputVal, setInputVal] = useState("");
-  const [activeRecordTab, setActiveRecordTab] = useState("runs");
 
   const { data: searchData, isLoading: isSearchLoading } = useQuery({
     queryKey: ["players", searchTerm],
     queryFn: () => fetchPlayers(searchTerm),
   });
 
-  const { data: recordsData } = useQuery({
-    queryKey: ["careerRecords"],
-    queryFn: fetchCareerRecords,
-    staleTime: 86400000,
-  });
-
   const players = Array.isArray(searchData?.data) ? searchData.data : [];
-  const records = recordsData?.data || {
-    mostRuns: [
-      { player: "Sachin Tendulkar", country: "India", matches: 664, runs: 34357, avg: "48.52", hundreds: 100 },
-      { player: "Kumar Sangakkara", country: "Sri Lanka", matches: 594, runs: 28016, avg: "46.77", hundreds: 63 },
-      { player: "Ricky Ponting", country: "Australia", matches: 560, runs: 27483, avg: "45.95", hundreds: 71 },
-      { player: "Virat Kohli", country: "India", matches: 540, runs: 27150, avg: "53.20", hundreds: 80 },
-      { player: "Jacques Kallis", country: "South Africa", matches: 519, runs: 25534, avg: "49.10", hundreds: 62 },
-      { player: "Brian Lara", country: "West Indies", matches: 430, runs: 22358, avg: "46.28", hundreds: 53 },
-      { player: "Rahul Dravid", country: "India", matches: 509, runs: 24208, avg: "45.41", hundreds: 48 },
-    ],
-    mostWickets: [
-      { player: "Muttiah Muralitharan", country: "Sri Lanka", matches: 495, wickets: 1347, avg: "22.86", fiveWkts: 77 },
-      { player: "Shane Warne", country: "Australia", matches: 339, wickets: 1001, avg: "25.51", fiveWkts: 38 },
-      { player: "James Anderson", country: "England", matches: 401, wickets: 991, avg: "27.20", fiveWkts: 34 },
-      { player: "Anil Kumble", country: "India", matches: 403, wickets: 956, avg: "30.06", fiveWkts: 37 },
-      { player: "Glenn McGrath", country: "Australia", matches: 376, wickets: 949, avg: "21.76", fiveWkts: 36 },
-      { player: "Wasim Akram", country: "Pakistan", matches: 460, wickets: 916, avg: "23.57", fiveWkts: 31 },
-    ],
-    highestScores: [
-      { player: "Brian Lara", format: "Test", score: "400*", opponent: "England", year: "2004" },
-      { player: "Matthew Hayden", format: "Test", score: "380", opponent: "Zimbabwe", year: "2003" },
-      { player: "Rohit Sharma", format: "ODI", score: "264", opponent: "Sri Lanka", year: "2014" },
-      { player: "Martin Guptill", format: "ODI", score: "237*", opponent: "West Indies", year: "2015" },
-      { player: "Virender Sehwag", format: "ODI", score: "219", opponent: "West Indies", year: "2011" },
-      { player: "Aaron Finch", format: "T20I", score: "172", opponent: "Zimbabwe", year: "2018" },
-      { player: "Hazratullah Zazai", format: "T20I", score: "162*", opponent: "Ireland", year: "2019" },
-    ]
-  };
-
   const rankQueries = useQueries({
     queries: RANK_CATS.map((c) => ({
       queryKey: ["rankings", c.type, c.format, "men"],
@@ -86,8 +50,8 @@ export default function Stats() {
   const statsSD = {
     "@context": "https://schema.org",
     "@type": "Dataset",
-    "name": "Cricket Player Statistics & Career Records",
-    "description": "Comprehensive career records, batting averages, bowling figures, and statistics across Test, ODI, and T20 cricket formats.",
+    "name": "Cricket Player Statistics",
+    "description": "Current ICC ranking leaders and searchable player career statistics across Test, ODI and T20 cricket.",
     "url": "https://www.livecricketzone.com/stats",
     "publisher": {
       "@type": "Organization",
@@ -104,9 +68,6 @@ export default function Stats() {
   return (
     <div style={{ maxWidth: 1040, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Cricket Player Stats 2026 — Batting, Bowling & All-Round Records"
-        description="Cricket player stats 2026 — batting averages, bowling figures, centuries, wickets and career records across Test, ODI and T20 formats. Virat Kohli, Babar Azam, Joe Root, Jasprit Bumrah and more."
-        keywords="cricket player stats, cricket statistics 2026, batting average cricket, bowling average, cricket centuries, most runs cricket, most wickets cricket, Virat Kohli stats, Babar Azam stats, Joe Root stats, Jasprit Bumrah stats, T20 stats cricket, ODI stats cricket, Test cricket stats, IPL stats 2026"
         url="/stats"
         structuredData={statsSD}
       />
@@ -121,10 +82,10 @@ export default function Stats() {
           <span>📊</span> CRICKET ANALYTICS &amp; RECORDS
         </div>
         <h1 style={{ fontSize: 30, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
-          Cricket <span style={{ color: "#00F0FF" }}>Statistics &amp; Records</span>
+          Cricket <span style={{ color: "#00F0FF" }}>Statistics</span>
         </h1>
         <p style={{ fontSize: 14, color: "var(--text2)", margin: 0, maxWidth: 650 }}>
-          All-time historical cricket records, live ICC rankings, and searchable player career profiles across Test, ODI, and T20 formats.
+          Current ICC number ones in each format, and searchable player career profiles across Test, ODI and T20 cricket.
         </p>
       </div>
 
@@ -155,123 +116,6 @@ export default function Stats() {
               )}
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* All-Time Historical Cricket Records */}
-      <section style={{ marginBottom: 32 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ width: 3, height: 16, borderRadius: 2, background: "#B026FF", display: "inline-block" }} />
-            All-Time Historical Cricket Records
-          </h2>
-          <div style={{ display: "flex", gap: 8 }}>
-            {[
-              { id: "runs", label: "🏏 Most Runs" },
-              { id: "wickets", label: "🎯 Most Wickets" },
-              { id: "scores", label: "💥 Highest Scores" },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveRecordTab(tab.id)}
-                style={{
-                  padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, cursor: "pointer",
-                  background: activeRecordTab === tab.id ? "rgba(176,38,255,0.2)" : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${activeRecordTab === tab.id ? "#B026FF" : "rgba(255,255,255,0.07)"}`,
-                  color: activeRecordTab === tab.id ? "#fff" : "var(--text3)",
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ overflowX: "auto", borderRadius: 14, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.015)" }}>
-          {activeRecordTab === "runs" && (
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, textAlign: "left" }}>
-              <thead>
-                <tr style={{ background: "rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.08)", color: "var(--text3)" }}>
-                  <th style={{ padding: "12px 14px" }}>#</th>
-                  <th style={{ padding: "12px 14px" }}>Player</th>
-                  <th style={{ padding: "12px 14px" }}>Country</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center" }}>Matches</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, color: "#00F0FF" }}>Runs</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center" }}>Average</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center", color: "#B026FF" }}>100s</th>
-                </tr>
-              </thead>
-              <tbody>
-                {records.mostRuns.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
-                    <td style={{ padding: "12px 14px", fontWeight: 700 }}>{i + 1}</td>
-                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "var(--text)" }}>{r.player}</td>
-                    <td style={{ padding: "12px 14px", color: "var(--text2)" }}>{r.country}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", color: "var(--text3)" }}>{r.matches}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", fontWeight: 900, color: "#00F0FF" }}>{r.runs.toLocaleString()}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", color: "var(--text2)" }}>{r.avg}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, color: "#B026FF" }}>{r.hundreds}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
-          {activeRecordTab === "wickets" && (
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, textAlign: "left" }}>
-              <thead>
-                <tr style={{ background: "rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.08)", color: "var(--text3)" }}>
-                  <th style={{ padding: "12px 14px" }}>#</th>
-                  <th style={{ padding: "12px 14px" }}>Player</th>
-                  <th style={{ padding: "12px 14px" }}>Country</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center" }}>Matches</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, color: "#00F0FF" }}>Wickets</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center" }}>Average</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center", color: "#B026FF" }}>5W Hauls</th>
-                </tr>
-              </thead>
-              <tbody>
-                {records.mostWickets.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
-                    <td style={{ padding: "12px 14px", fontWeight: 700 }}>{i + 1}</td>
-                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "var(--text)" }}>{r.player}</td>
-                    <td style={{ padding: "12px 14px", color: "var(--text2)" }}>{r.country}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", color: "var(--text3)" }}>{r.matches}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", fontWeight: 900, color: "#00F0FF" }}>{r.wickets.toLocaleString()}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", color: "var(--text2)" }}>{r.avg}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, color: "#B026FF" }}>{r.fiveWkts}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
-          {activeRecordTab === "scores" && (
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, textAlign: "left" }}>
-              <thead>
-                <tr style={{ background: "rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.08)", color: "var(--text3)" }}>
-                  <th style={{ padding: "12px 14px" }}>#</th>
-                  <th style={{ padding: "12px 14px" }}>Player</th>
-                  <th style={{ padding: "12px 14px" }}>Format</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, color: "#00F0FF" }}>Score</th>
-                  <th style={{ padding: "12px 14px" }}>Against</th>
-                  <th style={{ padding: "12px 14px", textAlign: "center" }}>Year</th>
-                </tr>
-              </thead>
-              <tbody>
-                {records.highestScores.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
-                    <td style={{ padding: "12px 14px", fontWeight: 700 }}>{i + 1}</td>
-                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "var(--text)" }}>{r.player}</td>
-                    <td style={{ padding: "12px 14px", color: "var(--text2)" }}>{r.format}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", fontWeight: 900, color: "#00F0FF" }}>{r.score}</td>
-                    <td style={{ padding: "12px 14px", color: "var(--text2)" }}>{r.opponent}</td>
-                    <td style={{ padding: "12px 14px", textAlign: "center", color: "var(--text3)" }}>{r.year}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
         </div>
       </section>
 
@@ -356,17 +200,16 @@ export default function Stats() {
 
       <AdBanner type="auto" />
 
-      {/* Rich Editorial Guide */}
-      <section style={{ marginTop: 24, padding: "24px 28px", borderRadius: 16, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(56,189,248,0.08)" }}>
-        <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 3, height: 16, borderRadius: 2, background: "linear-gradient(180deg,#00F0FF,#00B8D9)", display: "inline-block" }} />
-          Cricket Statistics Guide — Batting, Bowling &amp; All-Round Metrics
-        </h2>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          Cricket statistics are the quantitative foundation of the sport. <strong style={{ color: "var(--text2)" }}>Batting average</strong> — total runs divided by dismissals — remains the definitive metric for evaluating consistency. A Test batting average above 45 is world-class, while averages above 50 (like Virat Kohli, Steve Smith, and Kumar Sangakkara) represent true greatness. In modern white-ball cricket, <strong style={{ color: "var(--text2)" }}>strike rate</strong> is equally vital, especially in T20 leagues where a 140+ strike rate at the top of the order creates match-winning momentum.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.85, marginBottom: 12 }}>
-          <strong style={{ color: "var(--text2)" }}>Bowling statistics</strong> evaluate wicket-taking capability and run suppression. A Test bowling average below 25 is elite, while in ODIs and T20s, economy rate and dot-ball percentage are paramount. Bowlers like Jasprit Bumrah, Pat Cummins, Mitchell Starc, and Rashid Khan maintain exceptional economy rates alongside consistent strike rates across all three international formats.
+      {/* What the numbers mean */}
+      <section style={{ marginTop: 24, padding: "20px 24px", borderRadius: 16, background: "rgba(255,255,255,0.015)", border: "1px solid rgba(56,189,248,0.08)" }}>
+        <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 10 }}>What the numbers mean</h2>
+        <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.85, margin: 0 }}>
+          Averages, strike rates and economy rates each answer a different question, and what counts as good
+          depends on the format. Our guide to{" "}
+          <Link to="/guides/batting-average-strike-rate-economy-explained" style={{ color: "var(--secondary)" }}>batting average, strike rate and economy</Link>{" "}
+          explains each one, and the{" "}
+          <Link to="/tools/batting-and-bowling-average-calculator" style={{ color: "var(--secondary)" }}>average calculator</Link>{" "}
+          works them out from raw figures.
         </p>
       </section>
     </div>

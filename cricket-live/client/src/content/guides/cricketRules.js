@@ -1,6 +1,7 @@
 // Guides: cricket rules and calculations. Evergreen explainers checked
-// against the ICC playing conditions and MCC Laws current for the 2025-26
-// season. Where competitions differ, the guide says so.
+// against the ICC playing conditions effective October 2026 and the MCC Laws
+// edition in force from 1 October 2026. Where competitions differ, the guide
+// says so.
 
 module.exports = [
   // ───────────────────────────────────────────────────────────────────────────
@@ -42,7 +43,7 @@ module.exports = [
       { type: "h2", text: "The par score" },
       {
         type: "p",
-        text: "During a chase, broadcasters show a DLS **par score**: the score Team 2 would need to be on, with its current number of wickets lost, to be level with Team 1 if the match were abandoned at that moment. A side ahead of par would win if no more play were possible; a side behind it would lose. The par score rises with every ball and jumps when a wicket falls, because losing a wicket removes resources. If a match is called off, the result is decided by comparing Team 2's score with par: level is a tie, and in most competitions a tie stands as a tie rather than going to a Super Over when DLS has been applied.",
+        text: "During a chase, broadcasters show a DLS **par score**: the score Team 2 would need to be on, with its current number of wickets lost, to be level with Team 1 if the match were abandoned at that moment. A side ahead of par would win if no more play were possible; a side behind it would lose. The par score rises with every ball and jumps when a wicket falls, because losing a wicket removes resources. If a match is called off, the result is decided by comparing Team 2's score with par: level is a tie, and because play has been called off there is no Super Over.",
       },
       { type: "h2", text: "Minimum overs for a result" },
       {
@@ -56,7 +57,7 @@ module.exports = [
           "**It is not just proportional to overs.** Halving the overs does not halve the target, because wickets in hand are worth a great deal and because a full-length innings involves a cautious start that a shortened one does not need.",
           "**The chasing side is not always favoured.** A side that has lost wickets cheaply before a break can find its target barely reduced.",
           "**Bowlers' over limits change too.** In a shortened innings each bowler's maximum is recalculated as one fifth of the new total, so a 35-over ODI innings allows seven overs per bowler.",
-          "**Net run rate uses the revised figures.** In a DLS-affected match the side batting second is credited with the revised target minus one over the revised overs when NRR is calculated. See the [net run rate guide](/guides/net-run-rate-explained).",
+          "**Net run rate uses the revised figures.** In a DLS-affected match the side batting first is credited, for NRR, with one run fewer than the revised target from the overs the chasing side was set; the chasing side keeps the runs and overs it actually made. See the [net run rate guide](/guides/net-run-rate-explained).",
         ],
       },
       {
@@ -77,7 +78,7 @@ module.exports = [
     blocks: [
       {
         type: "p",
-        text: "Net run rate, or NRR, is the tie-breaker used in almost every limited-overs league and tournament group when sides finish level on points. It is a measure of how much faster a team has scored than it has conceded across all its matches. The formula is short, but two details in how it is applied catch people out every tournament.",
+        text: "Net run rate, or NRR, is the main tie-breaker used in almost every limited-overs league and tournament group when sides finish level on points, usually after the number of wins. It is a measure of how much faster a team has scored than it has conceded across all its matches. The formula is short, but two details in how it is applied catch people out every tournament.",
       },
       { type: "h2", text: "The formula" },
       {
@@ -102,7 +103,7 @@ module.exports = [
       {
         type: "ul",
         items: [
-          "If a match is decided by the [DLS method](/guides/dls-method-explained), the side batting second is credited with a score of **one run fewer than its revised target** from its revised overs, and the side batting first is credited with the runs it actually made from the overs it actually faced.",
+          "If a match is completed after a [DLS](/guides/dls-method-explained) revision, the side batting **first** is credited with **one run fewer than the revised target**, from the overs the chasing side was set. If play is abandoned and the result comes from the DLS par score, the side batting first is credited with the **par score** from the overs the chasing side had faced. Either way the chasing side is credited with the runs it actually made from the overs it actually faced.",
           "If the match is a **no-result**, it is excluded from both sides' NRR entirely; only the shared points count.",
           "If the chasing side wins, it is credited with the runs it actually scored from the overs it actually took, which is why chasing sides try to finish quickly when a group is tight.",
         ],
@@ -135,7 +136,7 @@ module.exports = [
       },
       {
         type: "p",
-        text: "Notice how the bowled-out rule works against this side in match 2: its 180 runs are spread over 50 overs rather than the 41.3 it actually faced, cutting its scoring rate for that game from 4.34 to 3.60. Notice also that the opponents in match 2 chased 184 in 38.2 overs, and those 38.2 overs are what count against our side, not 50, because the chase finished early.",
+        text: "Notice how the bowled-out rule works against this side in match 2: its 180 runs are spread over 50 overs rather than the 41.3 it actually faced, cutting its scoring rate for that game from 4.34 to 3.60. Notice also that the opponents in match 2 chased 184 in 38.2 overs, and those 38.2 overs are what count against our side, not 50, because the chase finished early. To work through your own figures, use our [net run rate calculator](/tools/net-run-rate-calculator).",
       },
       { type: "h2", text: "Why teams talk about it before the last group game" },
       {
@@ -156,12 +157,12 @@ module.exports = [
     blocks: [
       {
         type: "p",
-        text: "The Decision Review System lets players challenge an on-field umpire's decision and lets umpires check their own calls with television replays and tracking technology. It was introduced in Tests in 2008 and 2009 and is now used in almost all international cricket and the major franchise leagues. This guide explains who can review what, how many reviews are available and how the technology produces its verdicts.",
+        text: "The Decision Review System lets players challenge an on-field umpire's decision and lets umpires check their own calls with television replays and tracking technology. It was introduced in Tests in 2008 and 2009 and is now used in much of international cricket and in the major franchise leagues. This guide explains who can review what, how many reviews are available and how the technology produces its verdicts.",
       },
       { type: "h2", text: "Player reviews" },
       {
         type: "p",
-        text: "Either the batter given out or the fielding captain may challenge an umpire's decision on a dismissal by making a T sign with the arms within **15 seconds** of the decision. Each side has a fixed number of **unsuccessful** reviews per innings: **three in a Test innings** and **two in an ODI or T20I innings** under current ICC playing conditions (the T20I allowance rose from one to two in 2022). A successful review, one that overturns the decision, does not cost the side anything. Reviews are per innings, so a Test side gets a fresh three when the opposition bats again.",
+        text: "Either the batter given out or the fielding captain may challenge an umpire's decision on a dismissal by making a T sign with the arms within **15 seconds** of the decision. Each side has a fixed number of **unsuccessful** reviews per innings: **three in a Test innings** and **two in an ODI or T20I innings** under current ICC playing conditions (each allowance went up by one in 2020 and has stayed there). A successful review, one that overturns the decision, does not cost the side anything. Reviews are per innings, so a Test side gets a fresh three when the opposition bats again.",
       },
       {
         type: "p",
@@ -170,7 +171,7 @@ module.exports = [
       { type: "h2", text: "Umpire reviews" },
       {
         type: "p",
-        text: "The on-field umpires may refer some decisions to the TV umpire themselves without using a team's reviews: run-outs, stumpings, whether a catch was taken cleanly, whether a ball reached the boundary, and whether a delivery was a no-ball. Since 2020 the TV umpire also checks the front foot on **every delivery** in international cricket and calls no-balls directly, and since 2023 the on-field umpire's \"soft signal\" on catches has been abolished, so the TV umpire decides catches on the evidence alone.",
+        text: "The on-field umpires may refer some decisions to the TV umpire themselves without using a team's reviews: run-outs, stumpings, whether a catch was taken cleanly, whether a ball reached the boundary, and whether a delivery was a no-ball. Under current ICC playing conditions the TV umpire also checks the bowler's front foot and calls front-foot no-balls directly, and since 2023 the on-field umpire's \"soft signal\" on catches has been abolished, so the TV umpire decides catches on the evidence alone.",
       },
       { type: "h2", text: "The technology" },
       {
@@ -178,7 +179,7 @@ module.exports = [
         items: [
           "**Ball-tracking** (Hawk-Eye or a similar system) uses multiple high-speed cameras to record the ball's path and projects where it would have gone had it not hit the batter. It is used for LBW.",
           "**UltraEdge** or **Snickometer** synchronises a stump microphone's audio with slow-motion video. A spike in sound as the ball passes the bat indicates contact; its absence indicates none. It is the main tool for caught-behind and for the \"did it hit bat first\" question in LBW.",
-          "**Hot Spot**, an infrared camera that shows heat from friction where the ball struck, is used in some countries as a second check on edges.",
+          "**Hot Spot**, an infrared camera that shows heat from friction where the ball struck, has been used in some countries as a second check on edges. It is optional: the ICC's minimum DRS kit is ball-tracking plus sound-based edge detection.",
           "**Slow-motion and ultra-motion replays** cover run-outs, stumpings, catches and boundaries.",
         ],
       },
@@ -190,7 +191,7 @@ module.exports = [
       { type: "h2", text: "Umpire's call" },
       {
         type: "p",
-        text: "Ball-tracking is precise but not perfect, and the umpire on the field had a real-time view the cameras do not. So for the questions of where the ball pitched, where it struck the batter and whether it would have hit the stumps, the system builds in a margin. If the projection shows less than **half the ball** within the relevant zone, or the centre of the ball outside a defined area of the stumps, the technology is not considered conclusive and the **on-field decision stands**, marked as \"umpire's call\". This means the same ball-tracking picture can be out if the umpire originally gave it out and not out if they did not.",
+        text: "Ball-tracking is precise but not perfect, and the umpire on the field had a real-time view the cameras do not. So for two of those questions, where the ball struck the batter and whether it would have hit the stumps, the system builds in a margin. If the projection shows part of the ball inside the relevant zone but its **centre** outside it (the zone is in line with the stumps for the impact, and the outline of the stumps and bails for hitting), the technology is not considered conclusive and the **on-field decision stands**, marked as \"umpire's call\". Where the ball pitched has no such margin: it is judged on the centre of the ball alone. This means the same ball-tracking picture can be out if the umpire originally gave it out and not out if they did not.",
       },
       {
         type: "p",
@@ -200,7 +201,7 @@ module.exports = [
       {
         type: "ul",
         items: [
-          "A batter cannot be given out on review for something that was not appealed for, and a review cannot introduce a new mode of dismissal that the umpire did not consider unless the evidence clearly shows it.",
+          "A review can end in a different mode of dismissal. If the TV umpire sees that a batter given out caught was not caught but could be out another way, such as LBW, that is checked too, with the umpire's original decision of out as the starting point.",
           "If the TV umpire finds a no-ball during a review of a dismissal, the batter is not out and the no-ball is called, regardless of what the review was for.",
           "Reviews do not carry over from one innings to the next, and unused reviews are not banked.",
           "The final decision is displayed on the big screen as OUT or NOT OUT, and the on-field umpire then signals it.",
@@ -225,7 +226,7 @@ module.exports = [
       { type: "h2", text: "The 30-yard circle" },
       {
         type: "p",
-        text: "Two semicircles of 30-yard (27.4 m) radius are drawn from the centre of each set of stumps and joined by straight lines to form an oval around the pitch, marked by painted dots or a line. Fielding restrictions are expressed as the maximum number of fielders allowed **outside** this circle at the moment the ball is bowled. A breach is a no-ball, called by either umpire, and in most competitions results in a free hit.",
+        text: "Two semicircles of 30-yard (27.4 m) radius are drawn from the centre of each set of stumps and joined by straight lines to form an oval around the pitch, marked by painted dots or a line. Fielding restrictions are expressed as the maximum number of fielders allowed **outside** this circle at the moment the ball is bowled. A breach is a no-ball, called by the square-leg umpire, and in most competitions results in a free hit.",
       },
       { type: "h2", text: "ODI: three phases" },
       {
@@ -251,19 +252,19 @@ module.exports = [
         type: "ul",
         items: [
           "No more than **two fielders behind square on the leg side** at the moment of delivery. A third makes the ball a no-ball. This comes from the Laws and applies in Tests too.",
-          "No fielder may stand **on or over the pitch** until the ball has left the bowler's hand.",
-          "Fielders may not move significantly, or distract the batter, until the ball is delivered; doing so is a dead ball and in serious cases a penalty.",
+          "No fielder other than the bowler may stand **on or over the pitch** until the ball has touched the striker's bat or body or passed the bat.",
+          "Fielders other than the wicketkeeper may not move significantly between the bowler starting the run-up and the ball reaching the striker, and no fielder may deliberately distract the batter; either is a dead ball and five penalty runs to the batting side.",
         ],
       },
       { type: "h2", text: "When overs are lost to rain" },
       {
         type: "p",
-        text: "If an innings is shortened before it begins, the powerplay overs are scaled down in proportion. In ODIs the ICC publishes a table: a 40-over innings, for example, has an eight-over first powerplay, a 24-over middle phase and an eight-over final phase. In T20s the powerplay is also reduced, to five overs for a 15-over innings, down to two overs for a five-over innings. Bowlers' maximum overs are recalculated as one fifth of the new total. If an innings is interrupted after it has started, the remaining powerplay overs are recalculated from the new total in a similar way.",
+        text: "If an innings is shortened before it begins, the powerplay overs are scaled down in proportion. In ODIs the ICC publishes a table: a 40-over innings, for example, has an eight-over first powerplay, a 24-over middle phase and an eight-over final phase. In T20 internationals the powerplay is also reduced, and since 2025 it has been counted to the nearest ball: 4.3 overs (27 balls) for a 15-over innings, down to 1.3 overs (9 balls) for a five-over innings. Bowlers' maximum overs are recalculated as one fifth of the new total. If an innings is interrupted after it has started, the remaining powerplay overs are recalculated from the new total in a similar way.",
       },
       { type: "h2", text: "The slow over-rate fielding penalty" },
       {
         type: "p",
-        text: "Since 2022 the ICC has enforced an in-match penalty for slow bowling in limited-overs internationals. Each innings has a scheduled finishing time, and if the fielding side has not begun the final over by that time, one fewer fielder is allowed outside the circle for the rest of the innings: four instead of five in a T20I or ODI final phase. The IPL and other leagues apply the same rule. It has made the closing overs noticeably faster and occasionally decided close finishes, since a side forced to bring a boundary fielder in with two overs left has fewer options against the batters.",
+        text: "The ICC brought in an in-match penalty for slow bowling in T20 internationals in January 2022 and extended it to ODIs in 2023. Each innings has a scheduled finishing time, and if the fielding side has not begun the final over by that time, one fewer fielder is allowed outside the circle for the rest of the innings: four instead of five in a T20I or ODI final phase. The IPL has used the same rule since 2023. It has made the closing overs noticeably faster and occasionally decided close finishes, since a side forced to bring a boundary fielder in with two overs left has fewer options against the batters.",
       },
       { type: "h2", text: "How captains and batters use the phases" },
       {
@@ -289,17 +290,17 @@ module.exports = [
       { type: "h2", text: "When a tie is a tie" },
       {
         type: "p",
-        text: "In a Test match a tie is a full result in its own right, and it has happened only twice in Test history, in 1960 and 1986. In group-stage limited-overs matches many competitions simply record a tie and share the points, while others, including the IPL and the ICC World Cups, play a Super Over in every match. Knockout matches always need a winner. The competition's playing conditions say which applies, and the scorecard result line will read either \"Match tied\" or name the Super Over winner.",
+        text: "In a Test match a tie is a full result in its own right, and it has happened only twice in Test history, in 1960 and 1986. Whether a group-stage tie in a limited-overs match goes to a Super Over depends on the competition: the IPL, the ICC World Cups and, under the ICC's current playing conditions, every ODI and T20 international use one, while in a competition without one the tie stands and the points are shared. In knockout matches a tie normally goes to a Super Over. The competition's playing conditions say which applies, and the scorecard result line will read either \"Match tied\" or name the Super Over winner.",
       },
       { type: "h2", text: "How a Super Over is played" },
       {
         type: "ol",
         items: [
           "The side that batted **second** in the match bats first in the Super Over.",
-          "Each side nominates **three batters** and **one bowler**. The bowler may be anyone from the team, regardless of how many overs they bowled in the match.",
+          "Each side can use at most **three batters**, since two wickets end its innings, and **one bowler**. The bowler may be anyone from the team, regardless of how many overs they bowled in the match.",
           "Each side faces **one over** of six legal deliveries. The innings ends early if the batting side loses **two wickets**.",
           "The fielding restrictions of the final phase of the match apply, so in a T20 five fielders may be outside the circle.",
-          "The side with more runs in the Super Over wins. Wickets lost in the Super Over do not matter unless both sides are bowled out for the same score.",
+          "The side with more runs in the Super Over wins, however many wickets it lost.",
         ],
       },
       {
@@ -309,22 +310,22 @@ module.exports = [
       { type: "h2", text: "If the Super Over is tied" },
       {
         type: "p",
-        text: "Under ICC playing conditions since October 2019, a tied Super Over is followed by **another Super Over**, and so on until one side scores more. In each subsequent Super Over the side that batted second in the previous one bats first, a batter dismissed in an earlier Super Over may not bat again, and a bowler who bowled an earlier Super Over may not bowl again. The first double Super Over in international cricket came in a New Zealand v India T20I in January 2020.",
+        text: "Under the ICC's current playing conditions, a tied Super Over is followed by **another Super Over**, and so on until one side scores more; if time or weather stops the Super Overs being completed, the match is tied. In each subsequent Super Over the side that batted second in the previous one bats first, a batter dismissed in any earlier Super Over may not bat again, and the bowler of the previous Super Over may not bowl the next one. The first men's T20 international to need a second Super Over was India v Afghanistan in Bengaluru in January 2024.",
       },
       { type: "h2", text: "The boundary count, and why it was abolished" },
       {
         type: "p",
-        text: "Before October 2019 a tied Super Over was settled by comparing the number of boundaries each side had hit in the match and Super Over combined. That rule decided the 2019 World Cup final at Lord's, where England and New Zealand tied both the match and the Super Over and England were awarded the trophy on boundaries. The rule was widely criticised for deciding a world final on a statistic unrelated to the result, and the ICC removed it weeks later in favour of repeated Super Overs.",
+        text: "Before October 2019 a tied Super Over was settled by comparing the number of boundaries each side had hit in the match and Super Over combined. That rule decided the 2019 World Cup final at Lord's, where England and New Zealand tied both the match and the Super Over and England were awarded the trophy on boundaries. The rule was widely criticised for deciding a world final on a statistic unrelated to the result, and the ICC removed it in October 2019 in favour of repeated Super Overs.",
       },
       { type: "h2", text: "Ties in DLS-affected matches" },
       {
         type: "p",
-        text: "If a match is decided by the [DLS method](/guides/dls-method-explained) and the chasing side finishes exactly on the par score, the match is a tie. Most competitions do not then play a Super Over, because there may be no time or conditions to do so, and the tie stands with points shared; knockout matches have separate provisions such as a reserve day or a bowl-out-free tiebreak based on group position.",
+        text: "If a chase under a [DLS](/guides/dls-method-explained) revised target ends exactly one run short of it, the scores count as level. Under the ICC's ODI and T20I playing conditions a Super Over then follows if time and weather allow; if not, the tie stands and points are shared. If play is abandoned with the chasing side exactly on the par score, the match is a tie with no Super Over. Knockout matches usually have a reserve day, and if no result is possible the playing conditions say which side goes through, often the one placed higher in the group.",
       },
       { type: "h2", text: "Ties in the standings" },
       {
         type: "p",
-        text: "Sides level on points in a group or league are separated by a fixed sequence set out in the competition regulations. The usual order is: **most wins**, then **[net run rate](/guides/net-run-rate-explained)**, then **head-to-head result** between the tied sides, and finally a draw of lots or original seeding. The IPL, for instance, uses points, then wins, then NRR. In the World Test Championship, where percentage of points won is the primary measure, sides level on percentage are separated by series wins and then by runs per wicket ratio. When a competition's knockout stage needs a winner from a washed-out match with no reserve day, the higher-placed side in the group usually advances, which is another reason group position matters.",
+        text: "Sides level on points in a group or league are separated by a fixed sequence set out in the competition regulations. Most start with **most wins**; the next steps are usually **[net run rate](/guides/net-run-rate-explained)** and the **head-to-head result** between the tied sides, in an order that varies, and finally rankings, seeding or a draw of lots. The 2026 T20 World Cup, for instance, used wins, then NRR, then head-to-head, while the ICC's standard ODI and T20I conditions for other multi-team events put head-to-head wins before NRR. The IPL uses points, then wins, then NRR. In the World Test Championship, where percentage of points won is the primary measure, sides level on percentage are separated by the number of series won, then by their points percentage in away matches, then by the ICC Test team ranking. When a competition's knockout stage needs a winner from a washed-out match with no reserve day, the higher-placed side in the group usually advances, which is another reason group position matters.",
       },
     ],
   },
@@ -345,7 +346,7 @@ module.exports = [
       { type: "h2", text: "The follow-on rule" },
       {
         type: "p",
-        text: "In a match scheduled for **five days**, if the side batting second finishes its first innings **200 or more runs** behind, the side batting first may require it to bat again immediately, instead of batting itself. This is enforcing the follow-on. The lead required falls with the length of the match: **150** in a match of three or four days, **100** in a two-day match and **75** in a one-day first-class match. If the first day of a match is lost entirely, the match is treated as one day shorter for this purpose, so a five-day Test that starts on day two needs only a 150-run lead.",
+        text: "In a match scheduled for **five days**, if the side batting second finishes its first innings **200 or more runs** behind, the side batting first may require it to bat again immediately, instead of batting itself. This is enforcing the follow-on. The lead required falls with the length of the match: **150** in a match of three or four days, **100** in a two-day match and **75** in a one-day match. If the first day of a match is lost entirely, the match is treated as one day shorter for this purpose, so a five-day Test that starts on day two needs only a 150-run lead.",
       },
       {
         type: "p",
@@ -364,7 +365,7 @@ module.exports = [
       { type: "h2", text: "Declarations" },
       {
         type: "p",
-        text: "A captain may declare an innings closed at any time the ball is dead, and may also **forfeit** an innings before it starts. The usual purpose is to leave enough time to bowl the opposition out: a side 400 ahead with a day and a half to play gains nothing from another 50 runs but loses the overs it takes to score them. Declarations are also used at the end of a day, so that a side's bowlers get a few overs at tired opening batters in poor light, and in rain-affected matches to manufacture a result from a game heading for a draw.",
+        text: "Except in the final innings of the match, a captain may declare an innings closed at any time the ball is dead, and may also **forfeit** an innings before it starts. The usual purpose is to leave enough time to bowl the opposition out: a side 400 ahead with a day and a half to play gains nothing from another 50 runs but loses the overs it takes to score them. Declarations are also used at the end of a day, so that a side's bowlers get a few overs at tired opening batters in poor light, and in rain-affected matches to manufacture a result from a game heading for a draw.",
       },
       { type: "h2", text: "The arithmetic of a declaration" },
       {
@@ -452,7 +453,7 @@ module.exports = [
       { type: "h2", text: "Why the ICC rates pitches" },
       {
         type: "p",
-        text: "After every international match the referee rates the pitch and outfield on a scale from very good to unfit. Ratings of below average or worse earn demerit points for the venue, and accumulated demerits lead to suspensions from hosting internationals. The system exists to stop pitches being prepared that make a fair contest between bat and ball impossible in either direction, whether that is a surface that turns square from ball one or one on which nothing happens for five days.",
+        text: "After every international match the referee rates the pitch and outfield on a scale from very good to unfit. Ratings of unsatisfactory or unfit earn demerit points for the venue, which stay active for five years, and a venue that reaches six points is suspended from hosting internationals for 12 months. The system exists to stop pitches being prepared that make a fair contest between bat and ball impossible in either direction, whether that is a surface that turns square from ball one or one on which nothing happens for five days.",
       },
     ],
   },

@@ -22,9 +22,6 @@ export default function UpcomingMatches() {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px 60px" }}>
       <SEO
-        title="Upcoming Cricket Matches 2026 — Fixtures, Dates & Venues"
-        description="Upcoming cricket matches 2026 — all fixtures with dates, venues and match timings. IPL 2026, T20 World Cup, ODI and Test series upcoming schedule. Never miss a cricket match."
-        keywords="upcoming cricket matches, upcoming cricket 2026, cricket fixtures 2026, IPL 2026 upcoming matches, T20 World Cup 2026 fixtures, upcoming ODI matches, upcoming Test matches, next cricket match, cricket today upcoming, cricket schedule today"
         url="/upcoming"
       />
 

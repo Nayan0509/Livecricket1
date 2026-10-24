@@ -124,7 +124,7 @@ export default function Ticker() {
       <div style={{
         background: "rgba(59,130,246,0.05)",
         borderBottom: "1px solid rgba(59,130,246,0.1)",
-        height: 36, display: "flex", alignItems: "center",
+        height: 44, display: "flex", alignItems: "center",
         padding: "0 16px", gap: 12,
       }}>
         <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#B026FF", background: "rgba(59,130,246,0.12)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>

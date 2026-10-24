@@ -1,16 +1,15 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { getStaticRouteMeta } from "../content/routeMeta";
+import { getStaticRouteMeta, isNoindexPath } from "../content/routeMeta";
 
 const SITE_NAME = "Live Cricket Zone";
 const SITE_URL = "https://www.livecricketzone.com";
-const DEFAULT_DESC = "Live Cricket Zone — real-time cricket scores, ball-by-ball commentary, IPL 2026, T20 World Cup, ODI & Test scorecards, player stats and ICC rankings.";
+const DEFAULT_DESC = "Live cricket scores and scorecards, plain-English guides to how cricket works, and free cricket calculators.";
 const DEFAULT_IMG = `${SITE_URL}/og-image.png`;
 
 export default function SEO({
   title: titleProp,
   description: descriptionProp,
-  keywords = "live cricket score, IPL 2026, cricket score today, ball by ball commentary, T20 World Cup, ICC rankings, cricket news",
   image = DEFAULT_IMG,
   url,
   type = "website",
@@ -23,11 +22,11 @@ export default function SEO({
   const routeMeta = url ? getStaticRouteMeta(url.split("?")[0]) : null;
   const title = routeMeta ? routeMeta.title : titleProp;
   const description = (routeMeta ? routeMeta.description : descriptionProp) || DEFAULT_DESC;
-  const robots = noindex
+  const robots = noindex || (url && isNoindexPath(url))
     ? "noindex, follow"
     : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1";
 
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Live Cricket Scores & IPL 2026`;
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
   const canonical = url ? `${SITE_URL}${url.startsWith("/") ? url : `/${url}`}` : SITE_URL;
 
   // Build hierarchical breadcrumbs
@@ -106,8 +105,6 @@ export default function SEO({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
       <meta name="twitter:image:alt" content={title || "Live Cricket Zone - Live Cricket Score"} />
-      <meta name="twitter:site" content="@LiveCricketZone" />
-      <meta name="twitter:creator" content="@LiveCricketZone" />
 
       {/* Structured Data: JSON-LD */}
       {structuredData && !Array.isArray(structuredData) && (

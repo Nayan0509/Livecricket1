@@ -1,26 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// Tells Google's tags (Analytics and AdSense) what the visitor chose. The
+// defaults, and a choice saved on an earlier visit, are applied in
+// public/index.html before those tags load.
+function applyConsent(granted) {
+  const v = granted ? "granted" : "denied";
+  if (typeof window.gtag === "function") {
+    window.gtag("consent", "update", { ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v });
+  }
+  window.adsbygoogle = window.adsbygoogle || [];
+  window.adsbygoogle.requestNonPersonalizedAds = granted ? 0 : 1;
+}
+
+// Footer "Cookie settings" link dispatches this to reopen the notice.
+export const OPEN_COOKIE_SETTINGS = "lcz:cookie-settings";
+
 export default function CookieConsent() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("lcz_cookie_consent");
-    if (!consent) {
-      const timer = setTimeout(() => setShow(true), 1200);
-      return () => clearTimeout(timer);
-    }
+    let consent = null;
+    try { consent = localStorage.getItem("lcz_cookie_consent"); } catch (_) {}
+    const open = () => setShow(true);
+    window.addEventListener(OPEN_COOKIE_SETTINGS, open);
+    let timer;
+    if (!consent) timer = setTimeout(open, 1200);
+    return () => { clearTimeout(timer); window.removeEventListener(OPEN_COOKIE_SETTINGS, open); };
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem("lcz_cookie_consent", "accepted");
+  const choose = (granted) => {
+    try { localStorage.setItem("lcz_cookie_consent", granted ? "accepted" : "essential_only"); } catch (_) {}
+    applyConsent(granted);
     setShow(false);
   };
-
-  const handleDecline = () => {
-    localStorage.setItem("lcz_cookie_consent", "essential_only");
-    setShow(false);
-  };
+  const handleAccept = () => choose(true);
+  const handleDecline = () => choose(false);
 
   if (!show) return null;
 
@@ -50,7 +65,7 @@ export default function CookieConsent() {
             Cookie &amp; Privacy Choices
           </div>
           <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6, margin: 0 }}>
-            Live Cricket Zone uses cookies and similar technologies (including Google AdSense and analytics) to personalize content, analyze site traffic, and deliver relevant advertisements. You can review your rights in our{" "}
+            We would like to use cookies from Google AdSense (advertising) and Google Analytics (visitor statistics). The site works the same either way, and you can change your choice later from the Cookie settings link at the bottom of every page. Details are in our{" "}
             <Link to="/privacy-policy" style={{ color: "#00F0FF", textDecoration: "underline" }}>
               Privacy Policy
             </Link>.
@@ -72,7 +87,7 @@ export default function CookieConsent() {
             cursor: "pointer",
           }}
         >
-          Essential Only
+          Decline
         </button>
         <button
           onClick={handleAccept}
@@ -88,7 +103,7 @@ export default function CookieConsent() {
             boxShadow: "0 0 12px rgba(0, 240, 255, 0.35)",
           }}
         >
-          Accept All Cookies
+          Accept
         </button>
       </div>
     </div>
