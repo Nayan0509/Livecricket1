@@ -6,13 +6,13 @@ import { oversToBalls, ballsToOvers, chase, netRunRate, battingFigures, bowlingF
 
 const INPUT = {
   width: "100%", padding: "9px 12px", borderRadius: 10, boxSizing: "border-box",
-  background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)",
+  background: "var(--card)", border: "1px solid rgba(15,23,42,0.12)",
   color: "var(--text)", fontSize: 14,
 };
 const LABEL = { display: "block", fontSize: 12, fontWeight: 700, color: "var(--text3)", marginBottom: 6 };
-const PANEL = { padding: "18px 20px", borderRadius: 14, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 18 };
+const PANEL = { padding: "18px 20px", borderRadius: 14, background: "var(--card)", border: "1px solid rgba(15,23,42,0.08)", marginBottom: 18 };
 const GRID = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12 };
-const ERROR = { color: "#FF5C8A", fontSize: 13, margin: "10px 0 0" };
+const ERROR = { color: "#c81e28", fontSize: 13, margin: "10px 0 0" };
 
 function Field({ label, value, onChange, placeholder, hint }) {
   return (
@@ -26,7 +26,7 @@ function Field({ label, value, onChange, placeholder, hint }) {
 
 function Check({ label, checked, onChange }) {
   return (
-    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--text2)", cursor: "pointer" }}>
+    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--text2)", cursor: "pointer", whiteSpace: "nowrap" }}>
       <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} />
       {label}
     </label>
@@ -37,7 +37,7 @@ function Result({ items }) {
   return (
     <div style={{ ...GRID, marginTop: 16 }}>
       {items.map(([label, value]) => (
-        <div key={label} style={{ padding: "12px 14px", borderRadius: 12, background: "rgba(0,240,255,0.06)", border: "1px solid rgba(0,240,255,0.18)" }}>
+        <div key={label} style={{ padding: "12px 14px", borderRadius: 12, background: "rgba(11,99,196,0.06)", border: "1px solid rgba(11,99,196,0.18)" }}>
           <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", marginTop: 4 }}>{value}</div>
         </div>
@@ -93,7 +93,7 @@ function NetRunRateCalculator() {
     <div style={PANEL}>
       <QuotaSelect value={quota} onChange={setQuota} />
       {matches.map((m, i) => (
-        <fieldset key={i} style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 14px", margin: "14px 0 0" }}>
+        <fieldset key={i} style={{ border: "1px solid rgba(15,23,42,0.08)", borderRadius: 12, padding: "12px 14px", margin: "14px 0 0" }}>
           <legend style={{ fontSize: 12, fontWeight: 800, color: "var(--text2)", padding: "0 6px" }}>Match {i + 1}</legend>
           <div style={GRID}>
             <Field label="Runs scored" value={m.runsFor} onChange={v => update(i, "runsFor", v)} placeholder="e.g. 172" />
@@ -161,7 +161,7 @@ function RequiredRunRateCalculator() {
       </div>
       {invalid && complete === false && <p style={ERROR}>Enter whole numbers for the target and score, and overs in cricket notation (15.2 means 15 overs and 2 balls).</p>}
       {invalid && complete && <p style={ERROR}>The overs bowled cannot be more than the innings length, and the target must be at least 1.</p>}
-      {r && r.won && <p style={{ ...ERROR, color: "#39FF14" }}>The target has been reached.</p>}
+      {r && r.won && <p style={{ ...ERROR, color: "#15803d" }}>The target has been reached.</p>}
       {r && r.impossible && <p style={ERROR}>No balls are left: the chasing side has fallen short.</p>}
       {r && !r.won && !r.impossible && (
         <Result items={[

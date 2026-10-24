@@ -22,12 +22,12 @@ function VideoCard({ video, isActive, onClick }) {
         cursor: "pointer",
         borderRadius: 10,
         overflow: "hidden",
-        border: isActive ? "2px solid #B026FF" : "2px solid rgba(255,255,255,0.06)",
-        background: "rgba(255,255,255,0.02)",
+        border: isActive ? "2px solid #0b7a55" : "2px solid rgba(15,23,42,0.06)",
+        background: "var(--card)",
         transition: "all 0.2s",
       }}
-      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"; e.currentTarget.style.background = "rgba(59,130,246,0.04)"; }}}
-      onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}}
+      onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(11,99,196,0.3)"; e.currentTarget.style.background = "rgba(11,99,196,0.04)"; }}}
+      onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = "rgba(15,23,42,0.06)"; e.currentTarget.style.background = "rgba(15,23,42,0.02)"; }}}
     >
       <div style={{ position: "relative", aspectRatio: "16/9", background: "#111" }}>
         <img
@@ -43,13 +43,13 @@ function VideoCard({ video, isActive, onClick }) {
         }}>
           <div style={{
             width: 40, height: 40, borderRadius: "50%",
-            background: isActive ? "rgba(59,130,246,0.9)" : "rgba(0,0,0,0.6)",
+            background: isActive ? "rgba(11,99,196,0.9)" : "rgba(0,0,0,0.6)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 16, color: "#fff", transition: "background 0.2s",
-          }}>▶</div>
+          }}>▶︎</div>
         </div>
         {video.isLive && (
-          <div style={{ position: "absolute", top: 8, left: 8, background: "#FF1053", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 7px", borderRadius: 4 }}>
+          <div style={{ position: "absolute", top: 8, left: 8, background: "#d1202a", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 7px", borderRadius: 4 }}>
             ● LIVE
           </div>
         )}
@@ -96,18 +96,18 @@ export default function Videos() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(59,130,246,0.09) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(59,130,246,0.15)",
+        background: "linear-gradient(135deg, rgba(11,99,196,0.09) 0%, rgba(255,255,255,0.98) 100%)",
+        border: "1px solid rgba(11,99,196,0.15)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          📺 Cricket <span style={{ color: "#B026FF" }}>Videos</span>
+          Cricket <span style={{ color: "#0b7a55" }}>Videos</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 12px" }}>
           IPL 2026 highlights · T20 World Cup · Best catches · Replays
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {["IPL Highlights", "T20 WC", "Replays", "Free"].map(t => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)", color: "#B026FF" }}>{t}</span>
+            <span key={t} style={{ fontSize: 11, fontWeight: 700, padding: "3px 11px", borderRadius: 20, background: "rgba(11,99,196,0.08)", border: "1px solid rgba(11,99,196,0.18)", color: "#0b7a55" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -121,9 +121,9 @@ export default function Videos() {
         {SEARCH_QUERIES.map((tab, i) => (
           <button key={i} onClick={() => setActiveTab(i)} style={{
             flexShrink: 0, padding: "8px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
-            background: activeTab === i ? "#B026FF" : "rgba(255,255,255,0.04)",
+            background: activeTab === i ? "#0b7a55" : "rgba(15,23,42,0.04)",
             color: activeTab === i ? "#000" : "var(--text3)",
-            border: activeTab === i ? "none" : "1px solid rgba(255,255,255,0.08)",
+            border: activeTab === i ? "none" : "1px solid rgba(15,23,42,0.08)",
             cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif",
           }}>
             {tab.label}
@@ -141,8 +141,8 @@ export default function Videos() {
           {/* Featured player */}
           {featured && (
             <div style={{ marginBottom: 24 }}>
-              <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>▶ Now Playing</div>
-              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(59,130,246,0.2)" }}>
+              <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Now Playing</div>
+              <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid rgba(11,99,196,0.2)" }}>
                 <div style={{ position: "relative", paddingTop: "56.25%", background: "#000" }}>
                   <iframe
                     key={featured.videoId}
@@ -179,24 +179,24 @@ export default function Videos() {
               rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px",
-                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#B026FF",
-                background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
+                borderRadius: 20, fontSize: 13, fontWeight: 700, color: "#0b7a55",
+                background: "rgba(11,99,196,0.08)", border: "1px solid rgba(11,99,196,0.2)",
                 textDecoration: "none", transition: "all 0.15s",
               }}
             >
-              ▶ View More on YouTube →
+              View More on YouTube →
             </a>
           </div>
         </>
       ) : (
-        <div style={{ padding: "40px 24px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>📺</div>
+        <div style={{ padding: "40px 24px", textAlign: "center", background: "var(--card)", borderRadius: 12, border: "1px solid rgba(15,23,42,0.06)" }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}></div>
           <p style={{ color: "var(--text3)", fontSize: 14, marginBottom: 16 }}>Videos could not be loaded right now.</p>
           <a
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(SEARCH_QUERIES[activeTab].q)}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 13, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}
+            style={{ fontSize: 13, color: "#0b7a55", fontWeight: 700, textDecoration: "none" }}
           >
             Search on YouTube →
           </a>

@@ -23,11 +23,11 @@ export default function Teams() {
       {/* Hero */}
       <div style={{
         margin: "16px 0 24px", padding: "28px 24px", borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(59,130,246,0.14)",
+        background: "linear-gradient(135deg, rgba(11,99,196,0.08) 0%, rgba(255,255,255,0.98) 100%)",
+        border: "1px solid rgba(11,99,196,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          👥 Cricket <span style={{ color: "#B026FF" }}>Teams</span>
+          Cricket <span style={{ color: "#0b7a55" }}>Teams</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           International teams, IPL franchises, domestic sides and women's cricket teams
@@ -41,17 +41,17 @@ export default function Teams() {
         value={search}
         onChange={e => setSearch(e.target.value)}
         placeholder="Search teams..."
-        style={{ maxWidth: 400, width: "100%", padding: "10px 16px", borderRadius: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--text)", fontSize: 13, marginBottom: 24 }}
+        style={{ maxWidth: 400, width: "100%", padding: "10px 16px", borderRadius: 10, background: "var(--card)", border: "1px solid rgba(15,23,42,0.1)", color: "var(--text)", fontSize: 13, marginBottom: 24 }}
       />
 
       {isLoading && <div className="spinner" style={{ margin: "40px auto" }} />}
-      {error && <div style={{ padding: "16px", color: "#FF5C8A", background: "rgba(248,113,113,0.08)", borderRadius: 10, marginBottom: 16 }}>Failed to load teams.</div>}
+      {error && <div style={{ padding: "16px", color: "#c81e28", background: "rgba(209,32,42,0.08)", borderRadius: 10, marginBottom: 16 }}>Failed to load teams.</div>}
 
       {!isLoading && !error && Object.keys(categories).map(catKey => {
         const filtered = filterList(categories[catKey]);
         if (!filtered.length) return null;
-        const catColors = { international: "#B026FF", domestic: "#00F0FF", league: "#FF5C8A", women: "#e879f9" };
-        const catColor = catColors[catKey] || "#B026FF";
+        const catColors = { international: "#0b7a55", domestic: "#0b63c4", league: "#c81e28", women: "#7c3aed" };
+        const catColor = catColors[catKey] || "#0b7a55";
         return (
           <section key={catKey} style={{ marginBottom: 32 }}>
             <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", marginBottom: 14, textTransform: "capitalize", display: "flex", alignItems: "center", gap: 8 }}>
@@ -63,17 +63,17 @@ export default function Teams() {
                 <Link key={t.id} to={`/teams/${t.id}`} state={{ team: t }} style={{ textDecoration: "none" }}>
                   <div style={{
                     display: "flex", alignItems: "center", gap: 12, padding: "14px 16px",
-                    borderRadius: 10, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
+                    borderRadius: 10, background: "var(--card)", border: "1px solid rgba(15,23,42,0.06)",
                     transition: "all 0.15s",
                   }}
                     onMouseEnter={e => { e.currentTarget.style.background = `${catColor}08`; e.currentTarget.style.borderColor = `${catColor}25`; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(15,23,42,0.02)"; e.currentTarget.style.borderColor = "rgba(15,23,42,0.06)"; }}
                   >
                     <img
                       src={t.img}
                       alt={t.name}
                       onError={e => { e.target.src = "https://www.cricbuzz.com/a/img/v1/72x72/i1/c1/team-flag.jpg"; }}
-                      style={{ width: 38, height: 38, borderRadius: "50%", objectFit: "cover", flexShrink: 0, background: "rgba(255,255,255,0.05)" }}
+                      style={{ width: 38, height: 38, borderRadius: "50%", objectFit: "cover", flexShrink: 0, background: "rgba(15,23,42,0.05)" }}
                     />
                     <div style={{ fontWeight: 700, fontSize: 13, color: "var(--text)", lineHeight: 1.3 }}>{t.name}</div>
                   </div>

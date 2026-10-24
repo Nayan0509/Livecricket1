@@ -6,6 +6,7 @@ import ContentBlocks from "../components/ContentBlocks";
 import NotFound from "./NotFound";
 import { getGuide } from "../content/guides";
 import { stripInline } from "../content/inline";
+import { EDITOR_NAME } from "../content/site";
 
 export default function GuideDetail() {
   const { slug } = useParams();
@@ -19,7 +20,8 @@ export default function GuideDetail() {
     "@type": "Article",
     "headline": guide.title,
     "description": stripInline(guide.description),
-    "author": { "@type": "Organization", "name": "Live Cricket Zone Editorial Team", "url": "https://www.livecricketzone.com/about" },
+    "author": { "@type": "Organization", "name": "Live Cricket Zone", "url": "https://www.livecricketzone.com/about" },
+    "editor": { "@type": "Person", "name": EDITOR_NAME, "url": "https://www.livecricketzone.com/about" },
     "publisher": { "@type": "Organization", "name": "Live Cricket Zone", "url": "https://www.livecricketzone.com" },
     "mainEntityOfPage": `https://www.livecricketzone.com${url}`,
   };
@@ -36,12 +38,12 @@ export default function GuideDetail() {
       <article>
         <h1 style={{ fontSize: 30, fontWeight: 900, color: "var(--text)", lineHeight: 1.25, margin: "0 0 10px" }}>{guide.title}</h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: "0 0 24px" }}>
-          By the Live Cricket Zone editorial team · Last reviewed {guide.reviewed}
+          Edited by <Link to="/about" style={{ color: "var(--secondary)" }}>{EDITOR_NAME}</Link> · Last reviewed {guide.reviewed}
         </p>
         <ContentBlocks blocks={guide.blocks} />
 
         {guide.corrections.length > 0 && (
-          <section aria-label="Corrections" style={{ marginTop: 28, padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          <section aria-label="Corrections" style={{ marginTop: 28, padding: "14px 18px", borderRadius: 12, background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)" }}>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>Corrections</h2>
             <ul style={{ margin: 0, paddingLeft: 20, color: "var(--text2)", fontSize: 14, lineHeight: 1.8 }}>
               {guide.corrections.map((c, i) => (

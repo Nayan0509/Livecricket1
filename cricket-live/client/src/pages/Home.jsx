@@ -31,10 +31,10 @@ const SITE_SD = [
 ];
 
 const SPORT_SWITCH = [
-  { key: "cricket",    label: "🏏 Cricket"    },
-  { key: "football",   label: "⚽ Football"   },
-  { key: "basketball", label: "🏀 Basketball" },
-  { key: "tennis",     label: "🎾 Tennis"     },
+  { key: "cricket",    label: "Cricket"    },
+  { key: "football",   label: "Football"   },
+  { key: "basketball", label: "Basketball" },
+  { key: "tennis",     label: "Tennis"     },
 ];
 
 const FORMAT_TABS = [
@@ -61,7 +61,7 @@ function filterByFormat(matches, fmt) {
 /* ── Live Dot ── */
 function LiveDot() {
   return (
-    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#FF1053", display: "inline-block", animation: "livePulse 1.5s infinite", marginRight: 5 }} />
+    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#d1202a", display: "inline-block", animation: "livePulse 1.5s infinite", marginRight: 5 }} />
   );
 }
 
@@ -71,7 +71,7 @@ function ScoreBar({ score }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8 }}>
       {score.map((s, i) => (
-        <span key={i} style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", background: "rgba(255,255,255,0.07)", padding: "3px 8px", borderRadius: 6 }}>
+        <span key={i} style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", background: "rgba(15,23,42,0.07)", padding: "3px 8px", borderRadius: 6 }}>
           {s.inning?.split(" ")[0] || ""} {s.r}/{s.w} ({s.o} ov)
         </span>
       ))}
@@ -85,19 +85,19 @@ function MatchCard({ match, onClick }) {
   const isCompleted = match.matchEnded;
   const [t1, t2] = match.teamInfo || [];
 
-  const statusColor = isLive ? "#FF1053" : isCompleted ? "var(--text3)" : "#D896FF";
-  const statusBg = isLive ? "rgba(239,68,68,0.1)" : isCompleted ? "rgba(255,255,255,0.04)" : "rgba(96,165,250,0.1)";
+  const statusColor = isLive ? "#d1202a" : isCompleted ? "var(--text3)" : "#0b63c4";
+  const statusBg = isLive ? "rgba(209,32,42,0.1)" : isCompleted ? "rgba(15,23,42,0.04)" : "rgba(96,165,250,0.1)";
 
   return (
     <div
       className="match-card-cb"
       onClick={onClick}
       style={{ cursor: "pointer", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", transition: "all 0.2s", position: "relative" }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(239,68,68,0.3)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(209,32,42,0.3)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
       onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
     >
       {/* Top strip */}
-      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#FF1053,#FF6B00)" : isCompleted ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#B026FF,#D896FF)" }} />
+      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#d1202a,#c2410c)" : isCompleted ? "rgba(15,23,42,0.08)" : "linear-gradient(90deg,#0b7a55,#0b63c4)" }} />
 
       <div style={{ padding: "12px 14px" }}>
         {/* Series + status */}
@@ -119,10 +119,10 @@ function MatchCard({ match, onClick }) {
               <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
                   {team?.img ? (
-                    <img src={team.img} alt={team.name} style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover", background: "rgba(255,255,255,0.05)" }}
+                    <img src={team.img} alt={team.name} style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover", background: "rgba(15,23,42,0.05)" }}
                       onError={e => { e.target.style.display = "none"; }} />
                   ) : (
-                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "var(--text3)" }}>
+                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(15,23,42,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "var(--text3)" }}>
                       {(team?.shortname || team?.name || "?").slice(0, 2)}
                     </div>
                   )}
@@ -141,7 +141,7 @@ function MatchCard({ match, onClick }) {
 
         {/* Status text */}
         <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--divider)" }}>
-          <p style={{ fontSize: 11, color: isLive ? "#FF5C8A" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
+          <p style={{ fontSize: 11, color: isLive ? "#c81e28" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
             {match.status || (match.matchStarted ? "In Progress" : `${match.date || ""}`)}
           </p>
         </div>
@@ -154,12 +154,12 @@ function MatchCard({ match, onClick }) {
 function GenericMatchCard({ match }) {
   const [a, b] = match.teams || [];
   const isLive = match.isLive;
-  const statusColor = isLive ? "#FF1053" : match.matchEnded ? "var(--text3)" : "#D896FF";
-  const statusBg = isLive ? "rgba(239,68,68,0.1)" : match.matchEnded ? "rgba(255,255,255,0.04)" : "rgba(96,165,250,0.1)";
+  const statusColor = isLive ? "#d1202a" : match.matchEnded ? "var(--text3)" : "#0b63c4";
+  const statusBg = isLive ? "rgba(209,32,42,0.1)" : match.matchEnded ? "rgba(15,23,42,0.04)" : "rgba(96,165,250,0.1)";
 
   return (
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
-      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#FF1053,#FF6B00)" : match.matchEnded ? "rgba(255,255,255,0.08)" : "linear-gradient(90deg,#B026FF,#D896FF)" }} />
+      <div style={{ height: 2, background: isLive ? "linear-gradient(90deg,#d1202a,#c2410c)" : match.matchEnded ? "rgba(15,23,42,0.08)" : "linear-gradient(90deg,#0b7a55,#0b63c4)" }} />
       <div style={{ padding: "12px 14px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, maxWidth: "70%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -179,7 +179,7 @@ function GenericMatchCard({ match }) {
           ))}
         </div>
         <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--divider)" }}>
-          <p style={{ fontSize: 11, color: isLive ? "#FF5C8A" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
+          <p style={{ fontSize: 11, color: isLive ? "#c81e28" : "var(--text3)", fontWeight: isLive ? 700 : 500, margin: 0, lineHeight: 1.4 }}>
             {match.status}{match.venue ? ` — ${match.venue}` : ""}
           </p>
         </div>
@@ -209,7 +209,7 @@ function OtherSportContent({ sport, data, news, loading }) {
     <>
       {live.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <SectionHeader title={`${name} — Live Now`} link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#FF1053" />
+          <SectionHeader title={`${name} — Live Now`} link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#d1202a" />
           <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
             {live.map(m => <MotionItem key={m.id}><GenericMatchCard match={m} /></MotionItem>)}
           </MotionGrid>
@@ -220,7 +220,7 @@ function OtherSportContent({ sport, data, news, loading }) {
 
       {news.length > 0 && (
         <section style={{ marginBottom: 24, marginTop: 20 }}>
-          <SectionHeader title={`${name} News`} accent="#B026FF" />
+          <SectionHeader title={`${name} News`} accent="#0b7a55" />
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {news.slice(0, 6).map(n => (
               <a key={n.id} href={n.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
@@ -235,7 +235,7 @@ function OtherSportContent({ sport, data, news, loading }) {
 
       {recent.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <SectionHeader title="Recent Results" accent="#9D00FF" />
+          <SectionHeader title="Recent Results" accent="#6d28d9" />
           <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
             {recent.slice(0, 6).map(m => <MotionItem key={m.id}><GenericMatchCard match={m} /></MotionItem>)}
           </MotionGrid>
@@ -244,7 +244,7 @@ function OtherSportContent({ sport, data, news, loading }) {
 
       {upcoming.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <SectionHeader title="Upcoming" link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#FFEA00" />
+          <SectionHeader title="Upcoming" link={SPORT_PAGE[sport]} linkLabel="Full Page →" accent="#b45309" />
           <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
             {upcoming.slice(0, 6).map(m => <MotionItem key={m.id}><GenericMatchCard match={m} /></MotionItem>)}
           </MotionGrid>
@@ -254,7 +254,7 @@ function OtherSportContent({ sport, data, news, loading }) {
       {live.length === 0 && upcoming.length === 0 && recent.length === 0 && (
         <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card)", borderRadius: 14, border: "1px solid var(--border)" }}>
           <h3 style={{ color: "var(--text)", marginBottom: 8, fontSize: 18 }}>No {name.toLowerCase()} matches found right now</h3>
-          <p style={{ color: "var(--text3)", fontSize: 13 }}>Check back soon, or visit the full <Link to={SPORT_PAGE[sport]} style={{ color: "#B026FF" }}>{name} page</Link>.</p>
+          <p style={{ color: "var(--text3)", fontSize: 13 }}>Check back soon, or visit the full <Link to={SPORT_PAGE[sport]} style={{ color: "#0b7a55" }}>{name} page</Link>.</p>
         </div>
       )}
     </>
@@ -278,14 +278,14 @@ function IPLStandingsWidget() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderBottom: "1px solid var(--divider)" }}>
         <div>
           <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FF1053", display: "inline-block" }} />
+            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#d1202a", display: "inline-block" }} />
             IPL Points Table
           </span>
           {season && (
             <span style={{ fontSize: 9, color: "var(--text3)", fontWeight: 700, marginLeft: 9, textTransform: "uppercase" }}>{season}</span>
           )}
         </div>
-        <Link to="/ipl" style={{ fontSize: 11, color: "#FF1053", fontWeight: 700, textDecoration: "none" }}>Full Table →</Link>
+        <Link to="/ipl" style={{ fontSize: 11, color: "#d1202a", fontWeight: 700, textDecoration: "none" }}>Full Table →</Link>
       </div>
       {isLoading && rows.length === 0 ? (
         <div style={{ padding: 20, textAlign: "center" }}><div className="spinner" style={{ width: 20, height: 20, margin: "0 auto" }} /></div>
@@ -297,7 +297,7 @@ function IPLStandingsWidget() {
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "rgba(239,68,68,0.05)" }}>
+              <tr style={{ background: "rgba(209,32,42,0.05)" }}>
                 {["#", "Team", "P", "W", "L", "NRR", "Pts"].map(h => (
                   <th key={h} style={{ padding: "7px 10px", fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.5, color: "var(--text3)", textAlign: h === "Team" ? "left" : "center", borderBottom: "1px solid var(--divider)" }}>{h}</th>
                 ))}
@@ -305,10 +305,10 @@ function IPLStandingsWidget() {
             </thead>
             <tbody>
               {rows.slice(0, 10).map((r, i) => (
-                <tr key={r.short || i} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)", background: i < 4 ? "rgba(239,68,68,0.03)" : "transparent", transition: "background 0.15s" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(239,68,68,0.03)" : "transparent"; }}>
-                  <td style={{ padding: "8px 10px", fontSize: 11, color: i < 4 ? "#FF1053" : "var(--text3)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
+                <tr key={r.short || i} style={{ borderBottom: "1px solid rgba(15,23,42,0.03)", background: i < 4 ? "rgba(209,32,42,0.03)" : "transparent", transition: "background 0.15s" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.03)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = i < 4 ? "rgba(209,32,42,0.03)" : "transparent"; }}>
+                  <td style={{ padding: "8px 10px", fontSize: 11, color: i < 4 ? "#d1202a" : "var(--text3)", fontWeight: 700, textAlign: "center" }}>{i + 1}</td>
                   <td style={{ padding: "8px 10px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                       <div style={{ width: 20, height: 20, borderRadius: "50%", background: `${r.color}22`, border: `1.5px solid ${r.color}60`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7, fontWeight: 900, color: r.color, flexShrink: 0 }}>
@@ -318,7 +318,7 @@ function IPLStandingsWidget() {
                     </div>
                   </td>
                   {["p", "w", "l", "nrr", "pts"].map(k => (
-                    <td key={k} style={{ padding: "8px 10px", textAlign: "center", fontSize: 11, fontWeight: k === "pts" ? 900 : 600, color: k === "pts" ? "#FF1053" : k === "nrr" ? (String(r[k]).startsWith("+") ? "#39FF14" : "#FF5C8A") : "var(--text2)" }}>
+                    <td key={k} style={{ padding: "8px 10px", textAlign: "center", fontSize: 11, fontWeight: k === "pts" ? 900 : 600, color: k === "pts" ? "#d1202a" : k === "nrr" ? (String(r[k]).startsWith("+") ? "#15803d" : "#c81e28") : "var(--text2)" }}>
                       {r[k]}
                     </td>
                   ))}
@@ -346,14 +346,14 @@ function RankingsWidget() {
     <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderBottom: "1px solid var(--divider)" }}>
         <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#B026FF", display: "inline-block" }} />
+          <span style={{ width: 3, height: 14, borderRadius: 2, background: "#0b7a55", display: "inline-block" }} />
           ICC Rankings — Batting
         </span>
-        <Link to="/rankings" style={{ fontSize: 11, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}>Full →</Link>
+        <Link to="/rankings" style={{ fontSize: 11, color: "#0b7a55", fontWeight: 700, textDecoration: "none" }}>Full →</Link>
       </div>
       <div style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--divider)" }}>
         {["tests", "odis", "t20s"].map(f => (
-          <button key={f} onClick={() => setFormat(f)} style={{ flex: 1, background: "none", border: "none", padding: "8px 4px", fontSize: 10, fontWeight: format === f ? 800 : 600, color: format === f ? "#B026FF" : "var(--text3)", borderBottom: format === f ? "2px solid #B026FF" : "2px solid transparent", cursor: "pointer", textTransform: "uppercase", letterSpacing: 0.5 }}>
+          <button key={f} onClick={() => setFormat(f)} style={{ flex: 1, background: "none", border: "none", padding: "8px 4px", fontSize: 10, fontWeight: format === f ? 800 : 600, color: format === f ? "#0b7a55" : "var(--text3)", borderBottom: format === f ? "2px solid #0b7a55" : "2px solid transparent", cursor: "pointer", textTransform: "uppercase", letterSpacing: 0.5 }}>
             {f === "tests" ? "Test" : f === "odis" ? "ODI" : "T20"}
           </button>
         ))}
@@ -363,13 +363,13 @@ function RankingsWidget() {
       ) : (
         <div>
           {ranks.slice(0, 5).map((r, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 14px", borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-              <span style={{ width: 18, textAlign: "center", fontSize: 11, fontWeight: 800, color: i < 3 ? "#FF1053" : "var(--text3)" }}>{i + 1}</span>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 14px", borderBottom: i < 4 ? "1px solid rgba(15,23,42,0.04)" : "none" }}>
+              <span style={{ width: 18, textAlign: "center", fontSize: 11, fontWeight: 800, color: i < 3 ? "#d1202a" : "var(--text3)" }}>{i + 1}</span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>{r.name}</div>
                 <div style={{ fontSize: 10, color: "var(--text3)" }}>{r.country}</div>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 900, color: "#B026FF", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{r.rating}</span>
+              <span style={{ fontSize: 13, fontWeight: 900, color: "#0b7a55", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{r.rating}</span>
             </div>
           ))}
         </div>
@@ -378,51 +378,27 @@ function RankingsWidget() {
   );
 }
 
-/* ── News Card ── */
-function NewsCardSidebar({ item, idx }) {
+/* ── News cards: headline, source and age (the feed carries no images) ── */
+function newsAge(item) {
+  return item.hoursAgo < 24 ? `${item.hoursAgo}h ago` : `${Math.floor((item.hoursAgo || 0) / 24)}d ago`;
+}
+
+function NewsCardSidebar({ item }) {
   return (
-    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "flex", gap: 10, padding: "10px 0", borderBottom: "1px solid var(--divider)" }}>
-      <div style={{ width: 68, height: 52, borderRadius: 8, overflow: "hidden", flexShrink: 0, background: "rgba(255,255,255,0.05)" }}>
-        {item.img ? (
-          <img src={item.img} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />
-        ) : (
-          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🏏</div>
-        )}
-      </div>
-      <div style={{ flex: 1 }}>
-        <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", lineHeight: 1.4, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-          {item.title}
-        </p>
-        <span style={{ fontSize: 10, color: "var(--text3)", marginTop: 4, display: "block" }}>{item.source} · {item.hoursAgo < 24 ? `${item.hoursAgo}h` : `${item.daysAgo}d`} ago</span>
-      </div>
+    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "block", padding: "10px 0", borderBottom: "1px solid var(--divider)" }}>
+      <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", lineHeight: 1.45, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+        {item.title}
+      </p>
+      <span style={{ fontSize: 11, color: "var(--text3)", marginTop: 4, display: "block" }}>{item.source} · {newsAge(item)}</span>
     </a>
   );
 }
 
-/* ── News Featured Card (large) ── */
-function NewsCardFeatured({ item, idx }) {
-  const colors = ["#FF1053", "#B026FF", "#FFEA00", "#9D00FF"];
-  const color = colors[idx % colors.length];
+function NewsCardFeatured({ item }) {
   return (
-    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "flex", flexDirection: "column", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", transition: "all 0.2s" }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = `${color}40`; e.currentTarget.style.transform = "translateY(-2px)"; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; }}>
-      <div style={{ height: 140, background: "rgba(255,255,255,0.03)", overflow: "hidden", position: "relative" }}>
-        {item.img ? (
-          <img src={item.img} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
-        ) : (
-          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, background: `${color}10` }}>🏏</div>
-        )}
-        <div style={{ position: "absolute", bottom: 8, left: 8 }}>
-          <span style={{ fontSize: 9, fontWeight: 800, color: color, background: `${color}22`, border: `1px solid ${color}40`, padding: "2px 7px", borderRadius: 20, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            {item.category || "Cricket"}
-          </span>
-        </div>
-      </div>
-      <div style={{ padding: "12px 14px" }}>
-        <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", lineHeight: 1.5, margin: "0 0 6px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</h3>
-        <span style={{ fontSize: 10, color: "var(--text3)" }}>{item.source} · {item.hoursAgo < 24 ? `${item.hoursAgo}h ago` : `${item.daysAgo}d ago`}</span>
-      </div>
+    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 10, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "14px 16px" }}>
+      <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", lineHeight: 1.45, margin: 0, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</h3>
+      <span style={{ fontSize: 11, color: "var(--text3)" }}>{item.source} · {newsAge(item)}</span>
     </a>
   );
 }
@@ -446,9 +422,9 @@ function TrendingChips({ topics }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
       {topics.map(t => (
-        <button key={t} onClick={() => navigate(`/players?search=${encodeURIComponent(t)}`)} style={{ padding: "6px 13px", borderRadius: 20, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "var(--text2)", fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.25)"; e.currentTarget.style.color = "#FF1053"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "var(--text2)"; }}>
+        <button key={t} onClick={() => navigate(`/players?search=${encodeURIComponent(t)}`)} style={{ padding: "6px 13px", borderRadius: 20, background: "var(--card)", border: "1px solid rgba(15,23,42,0.09)", color: "var(--text2)", fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s", fontFamily: "'Inter',sans-serif" }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(209,32,42,0.1)"; e.currentTarget.style.borderColor = "rgba(209,32,42,0.25)"; e.currentTarget.style.color = "#d1202a"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(15,23,42,0.04)"; e.currentTarget.style.borderColor = "rgba(15,23,42,0.09)"; e.currentTarget.style.color = "var(--text2)"; }}>
           {t}
         </button>
       ))}
@@ -457,7 +433,7 @@ function TrendingChips({ topics }) {
 }
 
 /* ── Section Header ── */
-function SectionHeader({ title, link, linkLabel, accent = "#FF1053" }) {
+function SectionHeader({ title, link, linkLabel, accent = "#d1202a" }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
       <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
@@ -474,11 +450,11 @@ function SectionHeader({ title, link, linkLabel, accent = "#FF1053" }) {
 /* ── Fantasy Promo Card ── */
 function FantasyPromoCard() {
   return (
-    <div style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.08) 100%)", border: "1px solid rgba(139,92,246,0.2)", borderRadius: 12, padding: "16px 18px", marginTop: 16 }}>
-      <div style={{ fontSize: 10, fontWeight: 800, color: "#FF2E9A", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>🏆 Fantasy Cricket</div>
+    <div style={{ background: "linear-gradient(135deg, rgba(109,40,217,0.12) 0%, rgba(11,99,196,0.08) 100%)", border: "1px solid rgba(109,40,217,0.2)", borderRadius: 12, padding: "16px 18px", marginTop: 16 }}>
+      <div style={{ fontSize: 10, fontWeight: 800, color: "#0b7a55", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>Fantasy Cricket</div>
       <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", margin: "0 0 8px", lineHeight: 1.4 }}>Build Your Dream Team</h3>
       <p style={{ fontSize: 12, color: "var(--text3)", margin: "0 0 12px", lineHeight: 1.6 }}>How fantasy points are scored and how to think about captaincy and team balance.</p>
-      <Link to="/fantasy" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.35)", color: "#FF2E9A", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>
+      <Link to="/fantasy" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 8, background: "rgba(109,40,217,0.2)", border: "1px solid rgba(109,40,217,0.35)", color: "#0b7a55", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>
         Fantasy Guide →
       </Link>
     </div>
@@ -488,26 +464,22 @@ function FantasyPromoCard() {
 /* ── Quick Links ── */
 function QuickLinks() {
   const LINKS = [
-    { label: "Live Scores", to: "/live", emoji: "🔴" },
-    { label: "Schedule", to: "/schedule", emoji: "📅" },
-    { label: "Series", to: "/series", emoji: "🏆" },
-    { label: "Rankings", to: "/rankings", emoji: "📊" },
-    { label: "Stats", to: "/stats", emoji: "📈" },
-    { label: "Teams", to: "/teams", emoji: "🌍" },
-    { label: "Videos", to: "/videos", emoji: "🎬" },
-    { label: "Fantasy", to: "/fantasy", emoji: "✨" },
+    { label: "Live scores", to: "/live" },
+    { label: "Schedule", to: "/schedule" },
+    { label: "Results", to: "/results" },
+    { label: "Series", to: "/series" },
+    { label: "Rankings", to: "/rankings" },
+    { label: "Guides", to: "/guides" },
+    { label: "Calculators", to: "/tools" },
   ];
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 20 }}>
+    <nav aria-label="Sections" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
       {LINKS.map(l => (
-        <Link key={l.to} to={l.to} style={{ textDecoration: "none", display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "12px 6px", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, transition: "all 0.2s" }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(239,68,68,0.3)"; e.currentTarget.style.background = "rgba(239,68,68,0.04)"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.background = "var(--card)"; }}>
-          <span style={{ fontSize: 18 }}>{l.emoji}</span>
-          <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text2)", textAlign: "center" }}>{l.label}</span>
+        <Link key={l.to} to={l.to} style={{ padding: "7px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 6, textDecoration: "none" }}>
+          {l.label}
         </Link>
       ))}
-    </div>
+    </nav>
   );
 }
 
@@ -601,8 +573,8 @@ export default function Home() {
         color: "var(--text)", margin: "14px 0 4px",
       }}>
         {activeSport === "cricket"
-          ? "Live Cricket Scores Today — Ball-by-Ball Commentary & Scorecards"
-          : `${SPORT_NAMES[activeSport]} Live Scores Today — Fixtures & Results`}
+          ? HOME.h1
+          : `${SPORT_NAMES[activeSport]} Live Scores, Fixtures & Results`}
       </h1>
 
       {/* Sport Switcher */}
@@ -613,9 +585,9 @@ export default function Home() {
             <button key={s.key} onClick={() => setActiveSport(s.key)} className="font-hud" style={{
               position: "relative", padding: "7px 18px", borderRadius: 20, fontSize: 14,
               fontWeight: active ? 700 : 500,
-              background: "rgba(255,255,255,0.03)",
-              border: `1px solid ${active ? "rgba(0,240,255,0.35)" : "rgba(255,255,255,0.09)"}`,
-              color: active ? "#F5F0FF" : "var(--text2)", cursor: "pointer", overflow: "hidden",
+              background: "var(--card)",
+              border: `1px solid ${active ? "rgba(11,99,196,0.35)" : "rgba(15,23,42,0.09)"}`,
+              color: active ? "#1a2027" : "var(--text2)", cursor: "pointer", overflow: "hidden",
             }}>
               {active && (
                 <motion.div
@@ -634,7 +606,7 @@ export default function Home() {
       {activeSport === "cricket" && (
         <div style={{ display: "flex", gap: 0, marginBottom: 16, borderBottom: "1px solid var(--divider)", overflowX: "auto", scrollbarWidth: "none" }}>
           {FORMAT_TABS.map(t => (
-            <button key={t.key} onClick={() => setFmt(t.key)} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", padding: "10px 18px", fontSize: 13, fontWeight: fmt === t.key ? 800 : 600, color: fmt === t.key ? "#FF1053" : "var(--text3)", borderBottom: `2px solid ${fmt === t.key ? "#FF1053" : "transparent"}`, transition: "all 0.18s", fontFamily: "'Inter',sans-serif" }}>
+            <button key={t.key} onClick={() => setFmt(t.key)} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", padding: "10px 18px", fontSize: 13, fontWeight: fmt === t.key ? 800 : 600, color: fmt === t.key ? "#d1202a" : "var(--text3)", borderBottom: `2px solid ${fmt === t.key ? "#d1202a" : "transparent"}`, transition: "all 0.18s", fontFamily: "'Inter',sans-serif" }}>
               {t.label}
             </button>
           ))}
@@ -642,7 +614,7 @@ export default function Home() {
       )}
 
       {/* 2-column layout: main (65%) + sidebar (35%) */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20, alignItems: "start" }}>
+      <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 340px", gap: 20, alignItems: "start" }}>
 
         {/* ── LEFT COLUMN ── */}
         <div>
@@ -662,7 +634,7 @@ export default function Home() {
               {/* LIVE MATCHES */}
               {!isLoading && filteredLive.length > 0 && (
                 <section style={{ marginBottom: 24 }}>
-                  <SectionHeader title="Live Matches" link="/live" linkLabel="All Live →" accent="#FF1053" />
+                  <SectionHeader title="Live Matches" link="/live" linkLabel="All Live →" accent="#d1202a" />
                   <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
                     {filteredLive.map(m => <MotionItem key={m.id}><MatchCard match={m} onClick={() => goToMatch(m)} /></MotionItem>)}
                   </MotionGrid>
@@ -675,9 +647,9 @@ export default function Home() {
               {/* NEWS GRID (featured articles) */}
               {newsItems.length > 0 && (
                 <section style={{ marginBottom: 24, marginTop: 20 }}>
-                  <SectionHeader title="Top Stories" link="/news" linkLabel="All News →" accent="#B026FF" />
+                  <SectionHeader title="Top Stories" link="/news" linkLabel="All News →" accent="#0b7a55" />
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 }}>
-                    {newsItems.slice(0, 6).map((n, i) => <NewsCardFeatured key={n.id || i} item={n} idx={i} />)}
+                    {newsItems.slice(0, 6).map((n, i) => <NewsCardFeatured key={n.id || i} item={n} />)}
                   </div>
                 </section>
               )}
@@ -685,7 +657,7 @@ export default function Home() {
               {/* RECENT RESULTS */}
               {!isLoading && filteredRecent.length > 0 && (
                 <section style={{ marginBottom: 24 }}>
-                  <SectionHeader title="Recent Results" link="/results" linkLabel="All Results →" accent="#9D00FF" />
+                  <SectionHeader title="Recent Results" link="/results" linkLabel="All Results →" accent="#6d28d9" />
                   <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
                     {filteredRecent.slice(0, 6).map(m => <MotionItem key={m.id}><MatchCard match={m} onClick={() => goToMatch(m)} /></MotionItem>)}
                   </MotionGrid>
@@ -695,7 +667,7 @@ export default function Home() {
               {/* UPCOMING MATCHES */}
               {!isLoading && filteredUpcoming.length > 0 && (
                 <section style={{ marginBottom: 24 }}>
-                  <SectionHeader title="Upcoming Matches" link="/upcoming" linkLabel="Full Schedule →" accent="#FFEA00" />
+                  <SectionHeader title="Upcoming Matches" link="/upcoming" linkLabel="Full Schedule →" accent="#b45309" />
                   <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 12 }}>
                     {filteredUpcoming.slice(0, 6).map(m => <MotionItem key={m.id}><MatchCard match={m} onClick={() => goToMatch(m)} /></MotionItem>)}
                   </MotionGrid>
@@ -704,17 +676,17 @@ export default function Home() {
 
               {/* Trending */}
               <section style={{ marginBottom: 24 }}>
-                <SectionHeader title="Trending" accent="#FFEA00" />
+                <SectionHeader title="Trending" accent="#b45309" />
                 <TrendingChips topics={deriveTrendingTopics(allList)} />
               </section>
 
               {/* Guides: the site's own writing */}
               <section style={{ marginBottom: 32 }}>
-                <SectionHeader title="Cricket Guides" link="/guides" linkLabel="All Guides →" accent="#00F0FF" />
+                <SectionHeader title="Cricket Guides" link="/guides" linkLabel="All Guides →" accent="#0b63c4" />
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
                   {HOME_GUIDES.map(g => (
                     <Link key={g.slug} to={`/guides/${g.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "16px 18px" }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: "#00F0FF", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{g.category}</span>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: "#0b63c4", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{g.category}</span>
                       <h3 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", lineHeight: 1.45, margin: "0 0 8px" }}>{g.title}</h3>
                       <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.6, margin: 0 }}>{g.description}</p>
                     </Link>
@@ -725,7 +697,7 @@ export default function Home() {
               {/* All-format empty state */}
               {!isLoading && filtered.length === 0 && (
                 <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card)", borderRadius: 14, border: "1px solid var(--border)" }}>
-                  <div style={{ fontSize: 40, marginBottom: 12 }}>🏏</div>
+                  <div style={{ fontSize: 40, marginBottom: 12 }}></div>
                   <h3 style={{ color: "var(--text)", marginBottom: 8, fontSize: 18 }}>No matches for this filter</h3>
                   <p style={{ color: "var(--text3)", fontSize: 13 }}>Try a different category or check back soon.</p>
                 </div>
@@ -758,13 +730,13 @@ export default function Home() {
                 <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
                   <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FFEA00", display: "inline-block" }} />
+                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#b45309", display: "inline-block" }} />
                       Latest News
                     </span>
-                    <Link to="/news" style={{ fontSize: 11, color: "#FFEA00", fontWeight: 700, textDecoration: "none" }}>All →</Link>
+                    <Link to="/news" style={{ fontSize: 11, color: "#b45309", fontWeight: 700, textDecoration: "none" }}>All →</Link>
                   </div>
                   <div style={{ padding: "4px 14px" }}>
-                    {newsItems.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} idx={i} />)}
+                    {newsItems.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} />)}
                   </div>
                 </div>
               )}
@@ -774,20 +746,20 @@ export default function Home() {
               {/* Featured Tournaments */}
               <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px" }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
+                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#0b63c4", display: "inline-block" }} />
                   Featured Tournaments
                 </div>
                 {[
-                  { to: "/ipl", label: "IPL", dot: "#FF1053" },
-                  { to: "/t20-world-cup", label: "T20 World Cup", dot: "#FFEA00" },
-                  { to: "/champions-trophy", label: "Champions Trophy", dot: "#FF2E9A" },
-                  { to: "/psl", label: "PSL", dot: "#D896FF" },
-                  { to: "/world-cup", label: "ODI World Cup", dot: "#39FF14" },
-                  { to: "/asia-cup", label: "Asia Cup", dot: "#f472b6" },
-                  { to: "/bbl", label: "Big Bash League", dot: "#fb923c" },
-                  { to: "/womens-cricket", label: "Women's Cricket", dot: "#e879f9" },
+                  { to: "/ipl", label: "IPL", dot: "#d1202a" },
+                  { to: "/t20-world-cup", label: "T20 World Cup", dot: "#b45309" },
+                  { to: "/champions-trophy", label: "Champions Trophy", dot: "#0b7a55" },
+                  { to: "/psl", label: "PSL", dot: "#0b63c4" },
+                  { to: "/world-cup", label: "ODI World Cup", dot: "#15803d" },
+                  { to: "/asia-cup", label: "Asia Cup", dot: "#be185d" },
+                  { to: "/bbl", label: "Big Bash League", dot: "#c2410c" },
+                  { to: "/womens-cricket", label: "Women's Cricket", dot: "#7c3aed" },
                 ].map(s => (
-                  <Link key={s.to} to={s.to} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                  <Link key={s.to} to={s.to} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: "1px solid rgba(15,23,42,0.04)" }}>
                     <span style={{ width: 6, height: 6, borderRadius: "50%", background: s.dot, display: "inline-block", flexShrink: 0 }} />
                     <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text2)", transition: "color 0.15s" }}>{s.label}</span>
                   </Link>
@@ -801,12 +773,12 @@ export default function Home() {
                 <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
                   <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#FFEA00", display: "inline-block" }} />
+                      <span style={{ width: 3, height: 14, borderRadius: 2, background: "#b45309", display: "inline-block" }} />
                       Latest News
                     </span>
                   </div>
                   <div style={{ padding: "4px 14px" }}>
-                    {otherSportNews.data.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} idx={i} />)}
+                    {otherSportNews.data.slice(0, 8).map((n, i) => <NewsCardSidebar key={n.id || i} item={n} />)}
                   </div>
                 </div>
               )}
@@ -814,11 +786,11 @@ export default function Home() {
               {/* Other Sports quick links */}
               <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px" }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
+                  <span style={{ width: 3, height: 14, borderRadius: 2, background: "#0b63c4", display: "inline-block" }} />
                   More Sports
                 </div>
                 {SPORT_SWITCH.filter(s => s.key !== activeSport).map(s => (
-                  <button key={s.key} onClick={() => setActiveSport(s.key)} style={{ width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "var(--text2)", fontSize: 12, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                  <button key={s.key} onClick={() => setActiveSport(s.key)} style={{ width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: "1px solid rgba(15,23,42,0.04)", color: "var(--text2)", fontSize: 12, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                     {s.label}
                   </button>
                 ))}

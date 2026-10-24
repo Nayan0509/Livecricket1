@@ -7,6 +7,10 @@ const SITE_URL = "https://www.livecricketzone.com";
 const CONTACT_EMAIL = "contact@livecricketzone.com";
 const TWITTER = "@LiveCricketZone";
 
+// The site's owner and editor, named on About, the Editorial Policy, guide
+// bylines and in structured data (approved by the owner on 24 October 2026).
+const EDITOR_NAME = "Nayan Makvana";
+
 // One honest sentence about what the site is. Reused in meta descriptions,
 // the About page and the Organization schema so the story is consistent.
 const SITE_TAGLINE =
@@ -68,6 +72,7 @@ const NAV_LEGAL = [
 ];
 
 module.exports = {
+  EDITOR_NAME,
   SITE_NAME,
   SITE_URL,
   CONTACT_EMAIL,

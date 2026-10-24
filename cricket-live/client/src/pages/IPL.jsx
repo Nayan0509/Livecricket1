@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import TournamentPage from "../components/TournamentPage";
 import { fetchIPLStandings } from "../api";
 
-const CELL = { padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.07)", textAlign: "center" };
+const CELL = { padding: "10px 12px", borderBottom: "1px solid rgba(15,23,42,0.07)", textAlign: "center" };
 
 /* Live IPL points table. Rendered only when the standings feed returns rows;
    off-season or on a feed failure the section is omitted entirely. */
@@ -21,13 +21,13 @@ function PointsTable() {
   return (
     <section aria-label="IPL points table" style={{ marginBottom: 28 }}>
       <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", margin: "8px 0 14px", display: "flex", alignItems: "center", gap: 8 }}>
-        <span style={{ width: 3, height: 16, borderRadius: 2, background: "#00F0FF", display: "inline-block" }} />
+        <span style={{ width: 3, height: 16, borderRadius: 2, background: "#0b63c4", display: "inline-block" }} />
         {season ? `${season} points table` : "IPL points table"}
       </h2>
-      <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }}>
+      <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(15,23,42,0.08)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, color: "var(--text2)", minWidth: 480 }}>
           <thead>
-            <tr style={{ background: "rgba(255,255,255,0.04)", color: "var(--text)" }}>
+            <tr style={{ background: "rgba(15,23,42,0.04)", color: "var(--text)" }}>
               {["#", "Team", "P", "W", "L", "NR", "NRR", "Pts"].map(h => (
                 <th key={h} style={{ ...CELL, textAlign: h === "Team" ? "left" : "center" }}>{h}</th>
               ))}
@@ -35,10 +35,10 @@ function PointsTable() {
           </thead>
           <tbody>
             {rows.map((r, i) => (
-              <tr key={r.team} style={{ background: i < 4 ? "rgba(0,240,255,0.04)" : "transparent" }}>
+              <tr key={r.team} style={{ background: i < 4 ? "rgba(11,99,196,0.04)" : "transparent" }}>
                 <td style={CELL}>{i + 1}</td>
                 <td style={{ ...CELL, textAlign: "left", color: "var(--text)", fontWeight: 700 }}>
-                  <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: r.color || "#00F0FF", marginRight: 8 }} />
+                  <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: r.color || "#0b63c4", marginRight: 8 }} />
                   {r.team}
                 </td>
                 <td style={CELL}>{r.p}</td>

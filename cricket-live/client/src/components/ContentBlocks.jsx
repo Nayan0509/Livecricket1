@@ -28,7 +28,7 @@ export function Inline({ text }) {
 const P = { color: "var(--text2)", lineHeight: 1.85, fontSize: 15, margin: "0 0 14px" };
 const H2 = { fontSize: 20, fontWeight: 800, color: "var(--text)", margin: "28px 0 12px" };
 const H3 = { fontSize: 16, fontWeight: 800, color: "var(--text)", margin: "20px 0 8px" };
-const CELL = { padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.07)", textAlign: "left", verticalAlign: "top" };
+const CELL = { padding: "10px 12px", borderBottom: "1px solid rgba(15,23,42,0.07)", textAlign: "left", verticalAlign: "top" };
 
 function Block({ b }) {
   switch (b.type) {
@@ -37,7 +37,7 @@ function Block({ b }) {
     case "p": return <p style={P}><Inline text={b.text} /></p>;
     case "callout":
       return (
-        <div style={{ ...P, padding: "14px 18px", borderRadius: 12, background: "rgba(0,240,255,0.06)", border: "1px solid rgba(0,240,255,0.2)" }}>
+        <div style={{ ...P, padding: "14px 18px", borderRadius: 12, background: "rgba(11,99,196,0.06)", border: "1px solid rgba(11,99,196,0.2)" }}>
           <Inline text={b.text} />
         </div>
       );
@@ -63,10 +63,10 @@ function Block({ b }) {
       );
     case "table":
       return (
-        <div style={{ overflowX: "auto", margin: "0 0 18px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ overflowX: "auto", margin: "0 0 18px", borderRadius: 12, border: "1px solid rgba(15,23,42,0.08)" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, color: "var(--text2)" }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.04)", color: "var(--text)" }}>
+              <tr style={{ background: "rgba(15,23,42,0.04)", color: "var(--text)" }}>
                 {b.head.map((h, i) => <th key={i} style={CELL}><Inline text={h} /></th>)}
               </tr>
             </thead>
@@ -91,7 +91,7 @@ export function Faq({ items, title }) {
     <section style={{ margin: "8px 0 18px" }}>
       {title && <h2 style={H2}>{title}</h2>}
       {items.map((f, i) => (
-        <div key={i} style={{ padding: "14px 18px", borderRadius: 12, marginBottom: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+        <div key={i} style={{ padding: "14px 18px", borderRadius: 12, marginBottom: 10, background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)" }}>
           <h3 style={{ ...H3, margin: "0 0 6px", fontSize: 15 }}><Inline text={f.q} /></h3>
           <p style={{ ...P, margin: 0, fontSize: 14 }}><Inline text={f.a} /></p>
         </div>

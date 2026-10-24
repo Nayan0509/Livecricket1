@@ -20,7 +20,7 @@ import { stripInline } from "../content/inline";
 export default function TournamentPage({ slug, children }) {
   const t = TOURNAMENTS[slug];
   const meta = getStaticRouteMeta(`/${slug}`) || {};
-  const accentColor = t?.accentColor || "#3B82F6";
+  const accentColor = t?.accentColor || "#0b63c4";
   const filterKeywords = t?.filterKeywords;
 
   const [liveMatches, setLiveMatches] = useState([]);
@@ -101,26 +101,26 @@ export default function TournamentPage({ slug, children }) {
         transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
         style={{
           padding: "36px 24px", marginBottom: 24, textAlign: "center",
-          background: `linear-gradient(135deg, ${accentColor}25 0%, rgba(13,20,38,0.98) 100%)`,
+          background: `linear-gradient(135deg, ${accentColor}25 0%, rgba(255,255,255,0.98) 100%)`,
           borderRadius: 20, border: `1px solid ${accentColor}30`,
           boxShadow: `0 10px 30px -10px ${accentColor}25`
         }}
       >
         <h1 className="font-display" style={{ fontSize: 34, fontWeight: 900, marginBottom: 12, color: "var(--text)" }}>
-          {t.icon} {t.name}
+          {t.name}
         </h1>
         <p style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.75, maxWidth: 720, margin: "0 auto 20px" }}>
           <Inline text={t.intro} />
         </p>
 
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link to="/live" style={{ padding: "9px 20px", borderRadius: 10, background: accentColor, color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none", boxShadow: `0 0 16px ${accentColor}50` }}>
+          <Link to="/live" style={{ padding: "9px 20px", borderRadius: 10, background: accentColor, color: "#fff", fontWeight: 800, fontSize: 13, textDecoration: "none", boxShadow: "none" }}>
             All Live Matches
           </Link>
-          <Link to="/schedule" style={{ padding: "9px 20px", borderRadius: 10, border: `1px solid ${accentColor}50`, color: accentColor, fontWeight: 700, fontSize: 13, textDecoration: "none", background: "rgba(255,255,255,0.02)" }}>
+          <Link to="/schedule" style={{ padding: "9px 20px", borderRadius: 10, border: `1px solid ${accentColor}50`, color: accentColor, fontWeight: 700, fontSize: 13, textDecoration: "none", background: "var(--card)" }}>
             Cricket Schedule
           </Link>
-          <Link to="/guides" style={{ padding: "9px 20px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", color: "var(--text2)", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
+          <Link to="/guides" style={{ padding: "9px 20px", borderRadius: 10, border: "1px solid rgba(15,23,42,0.12)", color: "var(--text2)", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
             Guides
           </Link>
         </div>
@@ -135,18 +135,17 @@ export default function TournamentPage({ slug, children }) {
         {!loading && !hasFeed && (
           <div style={{
             padding: "14px 18px", borderRadius: 12,
-            background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)",
+            background: "var(--card)", border: "1px solid rgba(15,23,42,0.08)",
             fontSize: 14, color: "var(--text2)", lineHeight: 1.7
           }}>
             No {t.shortName} matches are in the live feed right now. Scores, results and fixtures appear here automatically while the competition is being played.
-            {t.season && <> <strong style={{ color: "var(--text)" }}>When it is played:</strong> {t.season}</>}
           </div>
         )}
 
         {liveMatches.length > 0 && (
           <div style={{ marginBottom: 28 }}>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF1053", display: "inline-block", animation: "livePulse 1.5s infinite" }} />
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#d1202a", display: "inline-block", animation: "livePulse 1.5s infinite" }} />
               {t.shortName} Live Now
             </h2>
             <MotionGrid style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
@@ -161,7 +160,7 @@ export default function TournamentPage({ slug, children }) {
 
         {recentMatches.length > 0 && (
           <div style={{ marginBottom: 28 }}>
-            <SectionTitle color="#34D399">{t.shortName} Recent Results</SectionTitle>
+            <SectionTitle color="#047857">{t.shortName} Recent Results</SectionTitle>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
               {recentMatches.map(m => <MatchLinkCard key={m.id} m={m} accentColor={accentColor} />)}
             </div>
@@ -192,10 +191,10 @@ export default function TournamentPage({ slug, children }) {
         {t.teams && t.teams.length > 0 && (
           <section style={{ marginBottom: 8 }}>
             <SectionTitle color={accentColor} as="h2">Teams and home grounds</SectionTitle>
-            <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", marginBottom: 18 }}>
+            <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid rgba(15,23,42,0.08)", marginBottom: 18 }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, color: "var(--text2)" }}>
                 <thead>
-                  <tr style={{ background: "rgba(255,255,255,0.04)", color: "var(--text)" }}>
+                  <tr style={{ background: "rgba(15,23,42,0.04)", color: "var(--text)" }}>
                     <th style={CELL}>Team</th>
                     <th style={CELL}>Short</th>
                     <th style={CELL}>Home ground</th>
@@ -236,7 +235,7 @@ export default function TournamentPage({ slug, children }) {
   );
 }
 
-const CELL = { padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.07)", textAlign: "left", verticalAlign: "top" };
+const CELL = { padding: "10px 12px", borderBottom: "1px solid rgba(15,23,42,0.07)", textAlign: "left", verticalAlign: "top" };
 
 function SectionTitle({ children, color, as: Tag = "h2" }) {
   return (
@@ -252,12 +251,12 @@ function MatchLinkCard({ m, live, accentColor }) {
     <Link to={`/match/${m.id}`} style={{ textDecoration: "none" }}>
       <div style={{
         padding: "16px 18px", borderRadius: 12, height: "100%",
-        background: live ? "rgba(255,16,83,0.08)" : "rgba(255,255,255,0.025)",
-        border: `1px solid ${live ? "rgba(255,16,83,0.3)" : "rgba(255,255,255,0.07)"}`
+        background: live ? "rgba(209,32,42,0.08)" : "rgba(15,23,42,0.025)",
+        border: `1px solid ${live ? "rgba(209,32,42,0.3)" : "rgba(15,23,42,0.07)"}`
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 8 }}>
           {live
-            ? <span style={{ color: "#FF5C8A", background: "rgba(255,16,83,0.15)", padding: "2px 8px", borderRadius: 6 }}>LIVE</span>
+            ? <span style={{ color: "#c81e28", background: "rgba(209,32,42,0.15)", padding: "2px 8px", borderRadius: 6 }}>LIVE</span>
             : <span>{m.date || ""}</span>}
           <span style={{ color: accentColor }}>{m.matchType || ""}</span>
         </div>
@@ -265,14 +264,14 @@ function MatchLinkCard({ m, live, accentColor }) {
         {m.score?.length > 0 && (
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 6 }}>
             {m.score.map((sc, i) => (
-              <span key={i} style={{ fontSize: 11, fontWeight: 800, color: "var(--text)", background: "rgba(255,255,255,0.08)", padding: "2px 6px", borderRadius: 4 }}>
+              <span key={i} style={{ fontSize: 11, fontWeight: 800, color: "var(--text)", background: "rgba(15,23,42,0.08)", padding: "2px 6px", borderRadius: 4 }}>
                 {sc.inning?.split(" ")[0]} {sc.r}/{sc.w}
               </span>
             ))}
           </div>
         )}
         {m.venue && <div style={{ fontSize: 12, color: "var(--text3)", marginBottom: 4 }}>{m.venue}</div>}
-        <div style={{ fontSize: 12, color: live ? "#FF5C8A" : "var(--text2)", lineHeight: 1.4 }}>{m.status}</div>
+        <div style={{ fontSize: 12, color: live ? "#c81e28" : "var(--text2)", lineHeight: 1.4 }}>{m.status}</div>
       </div>
     </Link>
   );

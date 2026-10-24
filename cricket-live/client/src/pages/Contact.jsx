@@ -22,7 +22,7 @@ export default function Contact() {
       </p>
 
       {CONTACT.reasons.map(r => (
-        <section key={r.title} style={{ padding: "16px 20px", borderRadius: 12, marginBottom: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+        <section key={r.title} style={{ padding: "16px 20px", borderRadius: 12, marginBottom: 12, background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)" }}>
           <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", margin: "0 0 6px" }}>{r.title}</h2>
           <p style={{ color: "var(--text2)", lineHeight: 1.8, fontSize: 14, margin: "0 0 8px" }}><Inline text={r.body} /></p>
           <a href={`mailto:${CONTACT.email}?subject=${encodeURIComponent(r.subject)}`} style={{ color: "var(--secondary)", fontSize: 13, fontWeight: 700 }}>

@@ -8,16 +8,16 @@ function BattingTable({ team, score, batsmen }) {
   return (
     <div style={{ marginBottom: 32 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-        <span style={{ width: 3, height: 18, borderRadius: 2, background: "linear-gradient(180deg,#B026FF,#8B00FF)", display: "inline-block" }} />
+        <span style={{ width: 3, height: 18, borderRadius: 2, background: "linear-gradient(180deg,#0b7a55,#6d28d9)", display: "inline-block" }} />
         <div>
           <span style={{ fontSize: 15, fontWeight: 900, color: "var(--text)" }}>{team}</span>
-          {score && <span style={{ marginLeft: 12, fontSize: 14, fontWeight: 700, color: "#B026FF" }}>{score}</span>}
+          {score && <span style={{ marginLeft: 12, fontSize: 14, fontWeight: 700, color: "#0b7a55" }}>{score}</span>}
         </div>
       </div>
-      <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(15,23,42,0.07)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 580 }}>
           <thead>
-            <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+            <tr style={{ background: "rgba(15,23,42,0.03)" }}>
               {["Batsman", "Status", "R", "B", "4s", "6s", "SR"].map(h => (
                 <th key={h} style={{
                   padding: "12px 16px",
@@ -33,8 +33,8 @@ function BattingTable({ team, score, batsmen }) {
           </thead>
           <tbody>
             {batsmen.map((b, i) => (
-              <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)", transition: "background 0.15s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.02)"}
+              <tr key={i} style={{ borderTop: "1px solid rgba(15,23,42,0.05)", transition: "background 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(15,23,42,0.02)"}
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
                 <td style={{ padding: "12px 16px", fontWeight: 700, fontSize: 13, color: "var(--text)", whiteSpace: "nowrap" }}>{b.name}</td>
@@ -43,7 +43,7 @@ function BattingTable({ team, score, batsmen }) {
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.b}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.fours}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text3)" }}>{b.sixes}</td>
-                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: 12, color: "#00F0FF" }}>{b.sr}</td>
+                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: 12, color: "#0b63c4" }}>{b.sr}</td>
               </tr>
             ))}
           </tbody>
@@ -59,10 +59,10 @@ function BowlingTable({ bowlers }) {
       <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>
         Bowling Analysis
       </div>
-      <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(15,23,42,0.07)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 400 }}>
           <thead>
-            <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+            <tr style={{ background: "rgba(15,23,42,0.03)" }}>
               {["Bowler", "O", "M", "R", "W", "Econ"].map(h => (
                 <th key={h} style={{
                   padding: "12px 16px",
@@ -77,15 +77,15 @@ function BowlingTable({ bowlers }) {
           </thead>
           <tbody>
             {bowlers.map((b, i) => (
-              <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)", transition: "background 0.15s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.02)"}
+              <tr key={i} style={{ borderTop: "1px solid rgba(15,23,42,0.05)", transition: "background 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(15,23,42,0.02)"}
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
                 <td style={{ padding: "12px 16px", fontWeight: 700, fontSize: 13, color: "var(--text)", whiteSpace: "nowrap" }}>{b.name}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{b.o}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{b.m}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontSize: 12, color: "var(--text2)" }}>{b.r}</td>
-                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 900, fontSize: 15, color: "#B026FF" }}>{b.w}</td>
+                <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 900, fontSize: 15, color: "#0b7a55" }}>{b.w}</td>
                 <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: 12, color: "var(--text2)" }}>{b.eco}</td>
               </tr>
             ))}
@@ -147,7 +147,7 @@ export default function Scorecard() {
         onClick={() => navigate(-1)}
         style={{
           marginTop: 16, marginBottom: 16, padding: "8px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700,
-          background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+          background: "var(--card)", border: "1px solid rgba(15,23,42,0.1)",
           color: "var(--text3)", cursor: "pointer", fontFamily: "'Inter',sans-serif",
         }}
       >
@@ -157,19 +157,19 @@ export default function Scorecard() {
       {/* Match header */}
       <div style={{
         padding: "22px 24px", borderRadius: 14, marginBottom: 20,
-        background: "linear-gradient(135deg, rgba(34,197,94,0.07) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(34,197,94,0.12)",
+        background: "linear-gradient(135deg, rgba(21,128,61,0.07) 0%, rgba(255,255,255,0.98) 100%)",
+        border: "1px solid rgba(21,128,61,0.12)",
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
           <div>
             <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 700, marginBottom: 5, textTransform: "uppercase", letterSpacing: 1 }}>
-              📊 Match Scorecard
+              Match Scorecard
             </div>
             <h1 style={{ fontSize: 18, fontWeight: 900, color: "var(--text)", margin: "0 0 4px", lineHeight: 1.3 }}>
               {match?.name || "Loading scorecard…"}
             </h1>
             {match?.status && (
-              <div style={{ fontSize: 12, color: isLive ? "#FF5C8A" : "#D896FF", fontWeight: 700 }}>
+              <div style={{ fontSize: 12, color: isLive ? "#c81e28" : "#0b63c4", fontWeight: 700 }}>
                 {isLive && "● "}{match.status}
               </div>
             )}
@@ -177,7 +177,7 @@ export default function Scorecard() {
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
             <Link to={`/match/${id}`} style={{
               padding: "7px 14px", borderRadius: 8, fontSize: 11, fontWeight: 700,
-              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+              background: "var(--card)", border: "1px solid rgba(15,23,42,0.1)",
               color: "var(--text3)", textDecoration: "none",
             }}>
               Details
@@ -185,8 +185,8 @@ export default function Scorecard() {
             {isLive && (
               <Link to={`/match/${id}/live-score`} style={{
                 padding: "7px 14px", borderRadius: 8, fontSize: 11, fontWeight: 700,
-                background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)",
-                color: "#FF5C8A", textDecoration: "none",
+                background: "rgba(209,32,42,0.1)", border: "1px solid rgba(209,32,42,0.2)",
+                color: "#c81e28", textDecoration: "none",
               }}>
                 ● Live
               </Link>
@@ -203,9 +203,9 @@ export default function Scorecard() {
       )}
 
       {error && (
-        <div style={{ padding: "40px 24px", textAlign: "center", background: "rgba(248,113,113,0.06)", borderRadius: 12, border: "1px solid rgba(248,113,113,0.15)" }}>
-          <div style={{ fontSize: 32, marginBottom: 10 }}>⚠️</div>
-          <h2 style={{ color: "#FF5C8A", fontSize: 16, fontWeight: 800, marginBottom: 6 }}>Scorecard Unavailable</h2>
+        <div style={{ padding: "40px 24px", textAlign: "center", background: "rgba(209,32,42,0.06)", borderRadius: 12, border: "1px solid rgba(209,32,42,0.15)" }}>
+          <div style={{ fontSize: 32, marginBottom: 10 }}></div>
+          <h2 style={{ color: "#c81e28", fontSize: 16, fontWeight: 800, marginBottom: 6 }}>Scorecard Unavailable</h2>
           <p style={{ color: "var(--text3)", fontSize: 13 }}>Scorecard data for match {id} could not be loaded. Try again shortly.</p>
         </div>
       )}
@@ -213,16 +213,16 @@ export default function Scorecard() {
       {!isLoading && !error && innings.length > 0 && (
         <>
           {/* Innings selector */}
-          <div style={{ display: "inline-flex", padding: 4, borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", marginBottom: 24, gap: 4, flexWrap: "wrap" }}>
+          <div style={{ display: "inline-flex", padding: 4, borderRadius: 12, background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)", marginBottom: 24, gap: 4, flexWrap: "wrap" }}>
             {innings.map((inn, i) => (
               <button
                 key={i}
                 onClick={() => setInnIdx(i)}
                 style={{
                   padding: "8px 18px", borderRadius: 8, fontSize: 12, fontWeight: 700,
-                  background: innIdx === i ? "rgba(34,197,94,0.15)" : "transparent",
-                  color: innIdx === i ? "#B026FF" : "var(--text3)",
-                  border: innIdx === i ? "1px solid rgba(34,197,94,0.3)" : "1px solid transparent",
+                  background: innIdx === i ? "rgba(21,128,61,0.15)" : "transparent",
+                  color: innIdx === i ? "#0b7a55" : "var(--text3)",
+                  border: innIdx === i ? "1px solid rgba(21,128,61,0.3)" : "1px solid transparent",
                   cursor: "pointer", transition: "all 0.15s", fontFamily: "'Inter',sans-serif",
                 }}
               >
@@ -244,10 +244,10 @@ export default function Scorecard() {
             {innings[innIdx].partnerships?.length > 0 && (
               <div style={{ marginBottom: 32 }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Partnerships</div>
-                <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid rgba(15,23,42,0.07)" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
-                      <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+                      <tr style={{ background: "rgba(15,23,42,0.03)" }}>
                         {["Batsmen", "Runs", "Balls"].map(h => (
                           <th key={h} style={{ padding: "12px 16px", textAlign: h === "Batsmen" ? "left" : "center", fontSize: 10, color: "var(--text3)", fontWeight: 900 }}>{h}</th>
                         ))}
@@ -255,9 +255,9 @@ export default function Scorecard() {
                     </thead>
                     <tbody>
                       {innings[innIdx].partnerships.map((p, i) => (
-                        <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                        <tr key={i} style={{ borderTop: "1px solid rgba(15,23,42,0.05)" }}>
                           <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text2)" }}>{p.batsman1} & {p.batsman2}</td>
-                          <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#B026FF", textAlign: "center" }}>{p.runs}</td>
+                          <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#0b7a55", textAlign: "center" }}>{p.runs}</td>
                           <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text3)", textAlign: "center" }}>{p.balls}</td>
                         </tr>
                       ))}
@@ -267,13 +267,13 @@ export default function Scorecard() {
               </div>
             )}
             {innings[innIdx].fow?.length > 0 && (
-              <div style={{ padding: "16px 20px", borderRadius: 10, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", marginBottom: 20 }}>
+              <div style={{ padding: "16px 20px", borderRadius: 10, background: "var(--card)", border: "1px solid rgba(15,23,42,0.06)", marginBottom: 20 }}>
                 <div style={{ fontSize: 11, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>
                   Fall of Wickets
                 </div>
                 <div style={{ fontSize: 12, color: "var(--text2)", display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {innings[innIdx].fow.map((w, i) => (
-                    <span key={i} style={{ background: "rgba(255,255,255,0.04)", padding: "3px 10px", borderRadius: 6 }}>{w}</span>
+                    <span key={i} style={{ background: "rgba(15,23,42,0.04)", padding: "3px 10px", borderRadius: 6 }}>{w}</span>
                   ))}
                 </div>
               </div>
@@ -288,13 +288,13 @@ export default function Scorecard() {
       )}
 
       {!isLoading && !error && innings.length === 0 && (
-        <div style={{ padding: "60px 24px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>🕐</div>
+        <div style={{ padding: "60px 24px", textAlign: "center", background: "var(--card)", borderRadius: 12, border: "1px solid rgba(15,23,42,0.06)" }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}></div>
           <h2 style={{ color: "var(--text)", fontSize: 16, fontWeight: 800, marginBottom: 6 }}>Scorecard Not Yet Available</h2>
           <p style={{ color: "var(--text3)", fontSize: 13, marginBottom: 16 }}>
             {isLive ? "The match is live — scorecard data is initialising." : "Scorecard will be available once the match begins."}
           </p>
-          <Link to={`/match/${id}`} style={{ fontSize: 13, color: "#B026FF", fontWeight: 700, textDecoration: "none" }}>
+          <Link to={`/match/${id}`} style={{ fontSize: 13, color: "#0b7a55", fontWeight: 700, textDecoration: "none" }}>
             View Match Details →
           </Link>
         </div>

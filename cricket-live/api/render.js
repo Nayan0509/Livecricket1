@@ -6,7 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { SITE_NAME, SITE_URL, NAV_PRIMARY } = require("../client/src/content/site");
+const { SITE_NAME, SITE_URL, NAV_PRIMARY, EDITOR_NAME } = require("../client/src/content/site");
 const { inlineToHtml, escapeHtml, stripInline } = require("../client/src/content/inline");
 const { STATIC_ROUTES, NOINDEX_PREFIXES, isNoindexPath } = require("../client/src/content/routeMeta");
 const PAGES = require("../client/src/content/pages");
@@ -104,7 +104,7 @@ function pageFor(p) {
     return {
       meta: { title: g.title, description: stripInline(g.description) },
       ogType: "article",
-      body: `<article><h1>${escapeHtml(g.title)}</h1><p>By the ${escapeHtml(SITE_NAME)} editorial team · Last reviewed ${escapeHtml(g.reviewed)}</p>${blocksToHtml(g.blocks)}${corrections}</article>`,
+      body: `<article><h1>${escapeHtml(g.title)}</h1><p>Edited by <a href="/about">${escapeHtml(EDITOR_NAME)}</a> · Last reviewed ${escapeHtml(g.reviewed)}</p>${blocksToHtml(g.blocks)}${corrections}</article>`,
     };
   }
   if (p === "/tools") {

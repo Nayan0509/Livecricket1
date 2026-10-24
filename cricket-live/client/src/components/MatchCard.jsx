@@ -60,7 +60,7 @@ export default function MatchCard({ match }) {
           <span style={{ fontSize: 10, color: "var(--green)", fontWeight: 700, background: "rgba(129,201,149,0.15)", padding: "4px 10px", borderRadius: 100 }}>✓ FINAL</span>
         )}
         {!isLive && !isCompleted && (
-           <span style={{ fontSize: 10, color: "#00F0FF", fontWeight: 700, background: "rgba(56,189,248,0.12)", padding: "4px 10px", borderRadius: 100 }}>UPCOMING</span>
+           <span style={{ fontSize: 10, color: "#0b63c4", fontWeight: 700, background: "rgba(11,99,196,0.12)", padding: "4px 10px", borderRadius: 100 }}>UPCOMING</span>
         )}
       </div>
 
@@ -123,7 +123,7 @@ export default function MatchCard({ match }) {
               <span style={{ color: "var(--text3)", fontWeight: 600, fontSize: 13 }}>
                 {s.inning?.replace(" Inning", "").replace(" INN 1", "").replace(" INN 2", "")}
               </span>
-              <span style={{ fontWeight: 900, fontSize: 16, color: isLive ? "#B026FF" : "var(--text)", fontFamily: "Roboto, sans-serif" }}>
+              <span style={{ fontWeight: 900, fontSize: 16, color: isLive ? "#0b7a55" : "var(--text)", fontFamily: "Roboto, sans-serif" }}>
                 {s.r}/{s.w}
                 {s.o > 0 && <span style={{ color: "var(--text3)", fontSize: 12, fontWeight: 500, marginLeft: 6 }}>({s.o})</span>}
               </span>
@@ -156,17 +156,17 @@ export default function MatchCard({ match }) {
           onClick={handleWatch}
           style={{
             display: "flex", alignItems: "center", gap: 6,
-            background: isLive ? "rgba(239,68,68,0.12)" : "rgba(59,130,246,0.07)",
-            border: `1px solid ${isLive ? "rgba(239,68,68,0.3)" : "rgba(59,130,246,0.18)"}`,
-            color: isLive ? "#FF5C8A" : "#B026FF",
+            background: isLive ? "rgba(209,32,42,0.12)" : "rgba(11,99,196,0.07)",
+            border: `1px solid ${isLive ? "rgba(209,32,42,0.3)" : "rgba(11,99,196,0.18)"}`,
+            color: isLive ? "#c81e28" : "#0b7a55",
             borderRadius: 100, padding: "8px 16px",
             fontSize: 13, fontWeight: 700, cursor: "pointer",
             transition: "all 0.2s cubic-bezier(0.2,0,0,1)", flexShrink: 0,
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.22)" : "rgba(59,130,246,0.16)"; e.currentTarget.style.color = "#fff"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(239,68,68,0.12)" : "rgba(59,130,246,0.07)"; e.currentTarget.style.color = isLive ? "#FF5C8A" : "#B026FF"; }}
+          onMouseEnter={e => { e.currentTarget.style.background = isLive ? "rgba(209,32,42,0.22)" : "rgba(11,99,196,0.16)"; e.currentTarget.style.color = "var(--text)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = isLive ? "rgba(209,32,42,0.12)" : "rgba(11,99,196,0.07)"; e.currentTarget.style.color = isLive ? "#c81e28" : "#0b7a55"; }}
         >
-          ▶ Watch
+          Watch
         </button>
       </div>
     </div>

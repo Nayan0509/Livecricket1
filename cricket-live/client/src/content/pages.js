@@ -7,7 +7,7 @@
 //   { type: "faq", items: [{ q, a }] }
 // Inline markup inside `text`: **bold** and [label](/path).
 
-const { SITE_NAME, CONTACT_EMAIL } = require("./site");
+const { SITE_NAME, CONTACT_EMAIL, EDITOR_NAME } = require("./site");
 
 const LAST_REVIEWED = "17 September 2026";
 
@@ -37,7 +37,7 @@ const HOME = {
     },
     {
       q: "What is in the guides section?",
-      a: "Evergreen explainers written by the site's editorial team: how to read a scorecard, how DLS and net run rate are calculated, how DRS reviews work, the ten ways a batter can be out, how ICC rankings are weighted, and how the IPL auction and playoffs work, among others. Each guide carries a last-reviewed date.",
+      a: `Evergreen explainers edited by the site's owner, ${EDITOR_NAME}: how to read a scorecard, how DLS and net run rate are calculated, how DRS reviews work, the ten ways a batter can be out, how ICC rankings are weighted, and how the IPL auction and playoffs work, among others. Each guide carries a last-reviewed date.`,
     },
     {
       q: "Is there any betting or fantasy money involved?",
@@ -55,7 +55,7 @@ const ABOUT = {
     { type: "h2", text: "What this site is" },
     {
       type: "p",
-      text: `${SITE_NAME} is an independent, self-funded website. It started as a cricket live-score project and now also carries football, basketball and tennis scores. It is run by a small team of cricket followers and developers, not by a media company, and it has no affiliation with the ICC, any national board, league or broadcaster.`,
+      text: `${SITE_NAME} is an independent, self-funded website. It started as a cricket live-score project and now also carries football, basketball and tennis scores. It is owned, run and edited by ${EDITOR_NAME}, a software developer, not by a media company, and it has no affiliation with the ICC, any national board, league or broadcaster.`,
     },
     {
       type: "p",
@@ -77,7 +77,7 @@ const ABOUT = {
     { type: "h2", text: "What we write ourselves" },
     {
       type: "p",
-      text: "Every guide on this site is original writing by the Live Cricket Zone editorial team. Guides are checked against the ICC playing conditions, the MCC Laws of Cricket and the published regulations of the competition concerned, and each one shows the date it was last reviewed. We keep guides evergreen on purpose: they explain rules, formats and calculations rather than reporting on individual matches, so they stay accurate between seasons. When a rule changes, the guide is updated and the review date moves. Our [editorial policy](/editorial-policy) sets out the process in full, including how to request a correction.",
+      text: `Every guide on this site is original to ${SITE_NAME}. Guides are researched and drafted with the help of software tools and edited by ${EDITOR_NAME}, who checks them against the ICC playing conditions, the MCC Laws of Cricket and the published regulations of the competition concerned, and each one shows the date it was last reviewed. We keep guides evergreen on purpose: they explain rules, formats and calculations rather than reporting on individual matches, so they stay accurate between seasons. When a rule changes, the guide is updated and the review date moves. Our [editorial policy](/editorial-policy) sets out the process in full, including how to request a correction.`,
     },
     { type: "h2", text: "What we deliberately do not do" },
     {
@@ -135,7 +135,7 @@ const CONTACT = {
       subject: "Feedback",
     },
   ],
-  note: "We are a small team and do not run a phone line or a postal helpdesk. Email is read every working day and we aim to reply within a few working days. Legal notices receive priority.",
+  note: `${SITE_NAME} is run by its editor, ${EDITOR_NAME}, and does not have a phone line or a postal helpdesk. Email is read every working day and we aim to reply within a few working days. Legal notices receive priority.`,
 };
 
 // ─── Editorial policy ─────────────────────────────────────────────────────────
@@ -150,7 +150,7 @@ const EDITORIAL = {
       items: [
         {
           k: "Guides",
-          v: "Original explanatory writing by our editorial team. These are the only pages on the site that we author, and the only pages that carry an author line and a last-reviewed date.",
+          v: `Original explanatory writing, edited by ${EDITOR_NAME}. These are the only pages on the site that we author, and the only pages that carry an author line and a last-reviewed date.`,
         },
         {
           k: "Live data",
@@ -169,7 +169,7 @@ const EDITORIAL = {
     },
     {
       type: "p",
-      text: "We use software tools for drafting, spell-checking and consistency checks. Every guide is reviewed and approved by the site's editor before it is published, and nothing is published automatically.",
+      text: `We use software tools for drafting, spell-checking and consistency checks. Every guide is reviewed and approved by the site's editor, ${EDITOR_NAME}, before it is published, and nothing is published automatically.`,
     },
     { type: "h2", text: "3. Numbers and records" },
     {

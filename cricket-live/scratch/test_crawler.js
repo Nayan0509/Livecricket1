@@ -13,10 +13,10 @@ const UAS = {
 
 const pages = [
   { url: '/', status: 200, expect: ['Live Cricket Scores, Scorecards &amp; Guides', 'Frequently asked questions'] },
-  { url: '/about', status: 200, expect: ['What this site is', 'What we deliberately do not do'], reject: ['Arjun Mehta', 'David Richardson'] },
+  { url: '/about', status: 200, expect: ['What this site is', 'edited by Nayan Makvana'], reject: ['Arjun Mehta', 'David Richardson', 'small team'] },
   { url: '/editorial-policy', status: 200, expect: ['Corrections', 'Content attributed to people who did not write it.'] },
   { url: '/guides', status: 200, expect: ['How to Read a Cricket Scorecard', 'How the IPL Works'] },
-  { url: '/guides/dls-method-explained', status: 200, expect: ['Last reviewed 24 October 2026', '<h2>Corrections</h2>', 'side batting first'] },
+  { url: '/guides/dls-method-explained', status: 200, expect: ['Edited by <a href="/about">Nayan Makvana</a>', 'Last reviewed 24 October 2026', '<h2>Corrections</h2>', 'side batting first'] },
   { url: '/guides/icc-rankings-explained', status: 200, expect: ['<article>'] },
   { url: '/ipl', status: 200, expect: ['Indian Premier League', 'Chennai Super Kings'] },
   { url: '/psl', status: 200, expect: ['Pakistan Super League', 'Hyderabad Kingsmen', 'last checked on 24 October 2026'], reject: ['Multan Sultans vs Karachi Kings'] },

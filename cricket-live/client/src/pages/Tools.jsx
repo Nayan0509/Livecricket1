@@ -18,7 +18,7 @@ export default function Tools() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
         {TOOLS.map(t => (
           <Link key={t.slug} to={`/tools/${t.slug}`} style={{ textDecoration: "none" }}>
-            <article style={{ height: "100%", padding: "18px 20px", borderRadius: 14, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <article style={{ height: "100%", padding: "18px 20px", borderRadius: 14, background: "var(--card)", border: "1px solid rgba(15,23,42,0.08)" }}>
               <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>{t.title}</h2>
               <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.7, margin: 0 }}>{t.description}</p>
             </article>

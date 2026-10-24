@@ -19,7 +19,7 @@ function AnalysisTab({ matchId }) {
   if (isLoading) return <div style={{ display: "flex", justifyContent: "center", padding: "60px 0" }}><div className="spinner" /></div>;
   if (!analysis) return (
     <div style={{ padding: "60px 0", textAlign: "center" }}>
-      <div style={{ fontSize: 40, marginBottom: 12 }}>📝</div>
+      <div style={{ fontSize: 40, marginBottom: 12 }}></div>
       <p style={{ color: "var(--text3)" }}>No detailed analysis available for this match yet.</p>
     </div>
   );
@@ -30,7 +30,7 @@ function AnalysisTab({ matchId }) {
       <div style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
         {analysis.content}
       </div>
-      <div style={{ marginTop: 24, padding: "16px", borderRadius: 12, background: "rgba(59,130,246,0.05)", border: "1px solid rgba(59,130,246,0.1)", fontSize: 13, color: "var(--text3)" }}>
+      <div style={{ marginTop: 24, padding: "16px", borderRadius: 12, background: "rgba(11,99,196,0.05)", border: "1px solid rgba(11,99,196,0.1)", fontSize: 13, color: "var(--text3)" }}>
         <strong>Note:</strong> This analysis is retrieved from live editorial feeds and professional match reporting services.
       </div>
     </div>
@@ -39,16 +39,16 @@ function AnalysisTab({ matchId }) {
 
 function eventColor(event) {
   if (!event) return "var(--text3)";
-  if (event === "SIX")    return "#00F0FF";
-  if (event === "FOUR")   return "#B026FF";
-  if (event === "WICKET") return "#FF5C8A";
-  if (event === "WIDE" || event === "NO_BALL") return "#FF2E9A";
+  if (event === "SIX")    return "#0b63c4";
+  if (event === "FOUR")   return "#0b7a55";
+  if (event === "WICKET") return "#c81e28";
+  if (event === "WIDE" || event === "NO_BALL") return "#0b7a55";
   return "var(--text3)";
 }
 function eventBg(event) {
-  if (event === "SIX")    return "rgba(56,189,248,0.1)";
-  if (event === "FOUR")   return "rgba(34,197,94,0.1)";
-  if (event === "WICKET") return "rgba(248,113,113,0.1)";
+  if (event === "SIX")    return "rgba(11,99,196,0.1)";
+  if (event === "FOUR")   return "rgba(21,128,61,0.1)";
+  if (event === "WICKET") return "rgba(209,32,42,0.1)";
   return "transparent";
 }
 function eventEmoji(event) {
@@ -78,7 +78,7 @@ function BallStrip({ commentary }) {
         {balls.map((b, i) => (
           <div key={i} style={{
             width: 28, height: 28, borderRadius: "50%",
-            background: eventBg(b.event) || "rgba(255,255,255,0.05)",
+            background: eventBg(b.event) || "rgba(15,23,42,0.05)",
             border: `1.5px solid ${eventColor(b.event)}40`,
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 11, fontWeight: 900, color: eventColor(b.event),
@@ -110,7 +110,7 @@ function ScorecardTab({ matchId }) {
   );
   if (!innings.length) return (
     <div style={{ padding: "60px 0", textAlign: "center" }}>
-      <div style={{ fontSize: 48, marginBottom: 16 }}>📡</div>
+      <div style={{ fontSize: 48, marginBottom: 16 }}></div>
       <p style={{ color: "var(--text3)", fontSize: 15 }}>Scorecard data is pending. Check back when the match starts.</p>
     </div>
   );
@@ -126,9 +126,9 @@ function ScorecardTab({ matchId }) {
             key={idx}
             onClick={() => setInnIdx(idx)}
             style={{
-              background: innIdx === idx ? "rgba(34,197,94,0.15)" : "rgba(255,255,255,0.04)",
-              color: innIdx === idx ? "#B026FF" : "var(--text2)",
-              border: `1.5px solid ${innIdx === idx ? "rgba(34,197,94,0.4)" : "rgba(255,255,255,0.08)"}`,
+              background: innIdx === idx ? "rgba(21,128,61,0.15)" : "rgba(15,23,42,0.04)",
+              color: innIdx === idx ? "#0b7a55" : "var(--text2)",
+              border: `1.5px solid ${innIdx === idx ? "rgba(21,128,61,0.4)" : "rgba(15,23,42,0.08)"}`,
               borderRadius: 100, padding: "8px 18px", fontWeight: 700, fontSize: 13,
               cursor: "pointer", transition: "all 0.2s",
             }}
@@ -158,7 +158,7 @@ function ScorecardTab({ matchId }) {
         <div style={{ overflowX: "auto", borderRadius: 16, border: "1px solid var(--border)", background: "var(--card)" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border)" }}>
+              <tr style={{ background: "rgba(15,23,42,0.02)", borderBottom: "1px solid var(--border)" }}>
                 {["Batsman", "Dismissal", "R", "B", "4s", "6s", "SR"].map(h => (
                   <th key={h} style={{ padding: "13px 16px", textAlign: h === "Batsman" || h === "Dismissal" ? "left" : "right", fontSize: 11, color: "var(--text3)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.4 }}>{h}</th>
                 ))}
@@ -169,22 +169,22 @@ function ScorecardTab({ matchId }) {
                 <tr
                   key={i}
                   style={{ borderBottom: i < inn.batsmen.length - 1 ? "1px solid var(--border)" : "none", transition: "background 0.15s" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.02)"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                 >
                   <td style={{ padding: "14px 16px", fontWeight: 700, fontSize: 14 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       {b.name}
                       {b.dismissal === "not out" && (
-                        <span style={{ fontSize: 10, color: "#B026FF", background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)", padding: "2px 7px", borderRadius: 20, fontWeight: 800 }}>NOT OUT</span>
+                        <span style={{ fontSize: 10, color: "#0b7a55", background: "rgba(21,128,61,0.12)", border: "1px solid rgba(21,128,61,0.25)", padding: "2px 7px", borderRadius: 20, fontWeight: 800 }}>NOT OUT</span>
                       )}
                     </div>
                   </td>
                   <td style={{ padding: "14px 16px", fontSize: 12, color: "var(--text3)", maxWidth: 200 }}>{b.dismissal}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 900, fontSize: 16, color: "var(--text)", fontFamily: "'Poppins',sans-serif" }}>{b.r}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{b.b}</td>
-                  <td style={{ padding: "14px 16px", textAlign: "right", color: "#B026FF", fontWeight: 700 }}>{b.fours}</td>
-                  <td style={{ padding: "14px 16px", textAlign: "right", color: "#00F0FF", fontWeight: 700 }}>{b.sixes}</td>
+                  <td style={{ padding: "14px 16px", textAlign: "right", color: "#0b7a55", fontWeight: 700 }}>{b.fours}</td>
+                  <td style={{ padding: "14px 16px", textAlign: "right", color: "#0b63c4", fontWeight: 700 }}>{b.sixes}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{b.sr}</td>
                 </tr>
               ))}
@@ -195,8 +195,8 @@ function ScorecardTab({ matchId }) {
 
       {/* Fall of Wickets */}
       {inn.fow && inn.fow.length > 0 && (
-        <div style={{ marginBottom: 24, padding: "14px 18px", background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.15)", borderRadius: 12, fontSize: 12, color: "var(--text2)" }}>
-          <span style={{ fontWeight: 700, color: "#FF5C8A", marginRight: 10 }}>Fall of Wickets:</span>
+        <div style={{ marginBottom: 24, padding: "14px 18px", background: "rgba(209,32,42,0.05)", border: "1px solid rgba(209,32,42,0.15)", borderRadius: 12, fontSize: 12, color: "var(--text2)" }}>
+          <span style={{ fontWeight: 700, color: "#c81e28", marginRight: 10 }}>Fall of Wickets:</span>
           <span style={{ lineHeight: 2 }}>{inn.fow.join("  •  ")}</span>
         </div>
       )}
@@ -208,7 +208,7 @@ function ScorecardTab({ matchId }) {
           <div style={{ overflowX: "auto", borderRadius: 16, border: "1px solid var(--border)", background: "var(--card)" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border)" }}>
+                <tr style={{ background: "rgba(15,23,42,0.02)", borderBottom: "1px solid var(--border)" }}>
                   {["Batsmen", "Runs", "Balls"].map(h => (
                     <th key={h} style={{ padding: "12px 16px", textAlign: h === "Batsmen" ? "left" : "center", fontSize: 11, color: "var(--text3)", fontWeight: 700 }}>{h}</th>
                   ))}
@@ -218,7 +218,7 @@ function ScorecardTab({ matchId }) {
                 {inn.partnerships.map((p, i) => (
                   <tr key={i} style={{ borderBottom: i < inn.partnerships.length - 1 ? "1px solid var(--border)" : "none" }}>
                     <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text2)" }}>{p.batsman1} & {p.batsman2}</td>
-                    <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#B026FF", textAlign: "center" }}>{p.runs}</td>
+                    <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 900, color: "#0b7a55", textAlign: "center" }}>{p.runs}</td>
                     <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--text3)", textAlign: "center" }}>{p.balls}</td>
                   </tr>
                 ))}
@@ -234,7 +234,7 @@ function ScorecardTab({ matchId }) {
         <div style={{ overflowX: "auto", borderRadius: 16, border: "1px solid var(--border)", background: "var(--card)" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 460 }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid var(--border)" }}>
+              <tr style={{ background: "rgba(15,23,42,0.02)", borderBottom: "1px solid var(--border)" }}>
                 {["Bowler", "O", "M", "R", "W", "Econ"].map(h => (
                   <th key={h} style={{ padding: "13px 16px", textAlign: h === "Bowler" ? "left" : "right", fontSize: 11, color: "var(--text3)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.4 }}>{h}</th>
                 ))}
@@ -245,14 +245,14 @@ function ScorecardTab({ matchId }) {
                 <tr
                   key={i}
                   style={{ borderBottom: i < inn.bowlers.length - 1 ? "1px solid var(--border)" : "none", transition: "background 0.15s" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.02)"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                 >
                   <td style={{ padding: "14px 16px", fontWeight: 700, fontSize: 14 }}>{bw.name}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{bw.o}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text2)", fontWeight: 600 }}>{bw.m}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", color: "var(--text)", fontWeight: 600 }}>{bw.r}</td>
-                  <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 900, fontSize: 16, color: "#B026FF", fontFamily: "'Poppins',sans-serif" }}>{bw.w}</td>
+                  <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 900, fontSize: 16, color: "#0b7a55", fontFamily: "'Poppins',sans-serif" }}>{bw.w}</td>
                   <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: 600, color: "var(--text2)" }}>{bw.eco}</td>
                 </tr>
               ))}
@@ -280,8 +280,8 @@ function CommentaryTab({ matchId }) {
   return (
     <div className="animate-fade-in">
       {/* Current over strip */}
-      <div style={{ background: "rgba(34,197,94,0.04)", border: "1px solid rgba(34,197,94,0.12)", borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#B026FF", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>Current Over</div>
+      <div style={{ background: "rgba(21,128,61,0.04)", border: "1px solid rgba(21,128,61,0.12)", borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#0b7a55", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>Current Over</div>
         <BallStrip commentary={commentary} />
       </div>
 
@@ -292,10 +292,10 @@ function CommentaryTab({ matchId }) {
             return (
               <div key={`sep-${i}`} style={{
                 margin: "12px 0 6px", padding: "12px 20px", borderRadius: 14,
-                background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--card)", border: "1px solid rgba(15,23,42,0.08)",
                 display: "flex", justifyContent: "space-between", alignItems: "center"
               }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: "#B026FF" }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#0b7a55" }}>
                   End of Over {c.over}
                 </div>
                 <div style={{ display: "flex", gap: 16, fontSize: 12, color: "var(--text2)" }}>
@@ -341,7 +341,7 @@ function CommentaryTab({ matchId }) {
                 <div style={{
                   minWidth: 34, height: 34, borderRadius: "50%", flexShrink: 0,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  background: eventBg(c.event) || "rgba(255,255,255,0.04)",
+                  background: eventBg(c.event) || "rgba(15,23,42,0.04)",
                   border: `1.5px solid ${eventColor(c.event)}40`,
                   color: eventColor(c.event), fontSize: 14, fontWeight: 900,
                 }}>
@@ -378,7 +378,7 @@ function MatchInfoTab({ match }) {
           <div
             key={i}
             style={{ display: "flex", padding: "16px 20px", borderBottom: i < infoRows.length - 1 ? "1px solid var(--border)" : "none", alignItems: "flex-start", transition: "background 0.15s" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.02)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           >
             <div style={{ minWidth: 140, fontSize: 12, fontWeight: 700, color: "var(--text3)", paddingTop: 1 }}>{row.label}</div>
@@ -403,11 +403,11 @@ function H2HSection({ matchId }) {
   if (isLoading || !h2h.length) return null;
 
   return (
-    <div style={{ padding: "20px 24px", borderRadius: 18, background: "rgba(56,189,248,0.05)", border: "1px solid rgba(56,189,248,0.12)", marginBottom: 20 }}>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#00F0FF", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Head to Head (Last 5)</div>
+    <div style={{ padding: "20px 24px", borderRadius: 18, background: "rgba(11,99,196,0.05)", border: "1px solid rgba(11,99,196,0.12)", marginBottom: 20 }}>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#0b63c4", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Head to Head (Last 5)</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {h2h.map((itm, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: i < h2h.length - 1 ? "1px solid rgba(56,189,248,0.1)" : "none", paddingBottom: 10 }}>
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: i < h2h.length - 1 ? "1px solid rgba(11,99,196,0.1)" : "none", paddingBottom: 10 }}>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{itm.result}</div>
               <div style={{ fontSize: 11, color: "var(--text3)" }}>{itm.series} • {itm.date}</div>
@@ -434,9 +434,9 @@ function LiveDataPanel({ matchId, isLive }) {
   if (!ms || !isLive) return null;
 
   return (
-    <div style={{ marginBottom: 16, padding: "16px 20px", borderRadius: 14, background: "rgba(34,197,94,0.05)", border: "1px solid rgba(34,197,94,0.18)" }}>
-      <div style={{ fontSize: 10, fontWeight: 900, color: "#B026FF", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
-        🟢 Live Match Situation
+    <div style={{ marginBottom: 16, padding: "16px 20px", borderRadius: 14, background: "rgba(21,128,61,0.05)", border: "1px solid rgba(21,128,61,0.18)" }}>
+      <div style={{ fontSize: 10, fontWeight: 900, color: "#0b7a55", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
+        Live Match Situation
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
@@ -444,8 +444,8 @@ function LiveDataPanel({ matchId, isLive }) {
         <div>
           <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase" }}>Batting</div>
           {[ms.batsman1, ms.batsman2].filter(b => b?.name).map((b, i) => (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: b.isStriker ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.03)", border: `1px solid ${b.isStriker ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.05)"}` }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: b.isStriker ? "#B026FF" : "var(--text2)" }}>
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: b.isStriker ? "rgba(21,128,61,0.08)" : "rgba(15,23,42,0.03)", border: `1px solid ${b.isStriker ? "rgba(21,128,61,0.2)" : "rgba(15,23,42,0.05)"}` }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: b.isStriker ? "#0b7a55" : "var(--text2)" }}>
                 {b.name}{b.isStriker ? " *" : ""}
               </span>
               <span style={{ fontSize: 12, fontWeight: 900, color: "var(--text)" }}>{b.runs} <span style={{ fontSize: 10, color: "var(--text3)" }}>({b.balls}) SR:{b.sr}</span></span>
@@ -456,8 +456,8 @@ function LiveDataPanel({ matchId, isLive }) {
         <div>
           <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase" }}>Bowling</div>
           {[ms.bowler, ms.bowler2].filter(b => b?.name).map((b, i) => (
-            <div key={i} style={{ padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: i === 0 ? "rgba(239,68,68,0.06)" : "rgba(255,255,255,0.03)", border: `1px solid ${i === 0 ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)"}` }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: i === 0 ? "#FF5C8A" : "var(--text2)" }}>{b.name}</div>
+            <div key={i} style={{ padding: "6px 10px", borderRadius: 8, marginBottom: 4, background: i === 0 ? "rgba(209,32,42,0.06)" : "rgba(15,23,42,0.03)", border: `1px solid ${i === 0 ? "rgba(209,32,42,0.15)" : "rgba(15,23,42,0.05)"}` }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: i === 0 ? "#c81e28" : "var(--text2)" }}>{b.name}</div>
               <div style={{ fontSize: 11, color: "var(--text3)" }}>{b.overs}-{b.maidens}-{b.runs}-{b.wickets} | Econ: {b.economy}</div>
             </div>
           ))}
@@ -466,22 +466,22 @@ function LiveDataPanel({ matchId, isLive }) {
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
         {ms.partnership?.balls > 0 && (
-          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(56,189,248,0.1)", border: "1px solid rgba(56,189,248,0.2)", fontSize: 11, color: "#00F0FF", fontWeight: 700 }}>
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(11,99,196,0.1)", border: "1px solid rgba(11,99,196,0.2)", fontSize: 11, color: "#0b63c4", fontWeight: 700 }}>
             Partnership: {ms.partnership.runs}({ms.partnership.balls})
           </div>
         )}
         {ms.currentRunRate && (
-          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(56,189,248,0.1)", border: "1px solid rgba(56,189,248,0.2)", fontSize: 11, color: "#00F0FF", fontWeight: 700 }}>
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(11,99,196,0.1)", border: "1px solid rgba(11,99,196,0.2)", fontSize: 11, color: "#0b63c4", fontWeight: 700 }}>
             CRR: {ms.currentRunRate}
           </div>
         )}
         {ms.requiredRunRate && (
-          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", fontSize: 11, color: "#FF5C8A", fontWeight: 700 }}>
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(209,32,42,0.1)", border: "1px solid rgba(209,32,42,0.2)", fontSize: 11, color: "#c81e28", fontWeight: 700 }}>
             RRR: {ms.requiredRunRate}
           </div>
         )}
         {ms.target && (
-          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.2)", fontSize: 11, color: "#FF2E9A", fontWeight: 700 }}>
+          <div style={{ padding: "5px 12px", borderRadius: 20, background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.2)", fontSize: 11, color: "#0b7a55", fontWeight: 700 }}>
             Target: {ms.target}
             {ms.remRuns != null ? ` | Need ${ms.remRuns}` : ""}
           </div>
@@ -495,7 +495,7 @@ function LiveDataPanel({ matchId, isLive }) {
         </div>
       )}
       {ms.lastWicket && (
-        <div style={{ fontSize: 11, color: "#FF5C8A", marginTop: 4 }}>
+        <div style={{ fontSize: 11, color: "#c81e28", marginTop: 4 }}>
           <span style={{ fontWeight: 700, marginRight: 6 }}>Last wicket:</span>
           {ms.lastWicket}
         </div>
@@ -520,26 +520,26 @@ function SquadTab({ matchId }) {
     <div className="animate-fade-in">
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
         {teams.map(([teamName, players]) => (
-          <div key={teamName} style={{ borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden" }}>
-            <div style={{ padding: "12px 16px", background: "rgba(34,197,94,0.07)", borderBottom: "1px solid rgba(34,197,94,0.15)", fontWeight: 800, fontSize: 14, color: "#B026FF" }}>
+          <div key={teamName} style={{ borderRadius: 14, border: "1px solid rgba(15,23,42,0.07)", overflow: "hidden" }}>
+            <div style={{ padding: "12px 16px", background: "rgba(21,128,61,0.07)", borderBottom: "1px solid rgba(21,128,61,0.15)", fontWeight: 800, fontSize: 14, color: "#0b7a55" }}>
               {teamName}
             </div>
             <div>
               {players.map((p, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < players.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#B026FF", flexShrink: 0 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < players.length - 1 ? "1px solid rgba(15,23,42,0.04)" : "none" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(21,128,61,0.1)", border: "1px solid rgba(21,128,61,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#0b7a55", flexShrink: 0 }}>
                     {i + 1}
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
                       {p.name}
-                      {p.isCaptain  && <span style={{ fontSize: 9, background: "#00F0FF", color: "#000", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>}
-                      {p.isVCaptain && <span style={{ fontSize: 9, background: "rgba(56,189,248,0.3)", color: "#00F0FF", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>VC</span>}
-                      {p.isWk       && <span style={{ fontSize: 9, background: "rgba(56,189,248,0.2)", color: "#00F0FF", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>WK</span>}
+                      {p.isCaptain  && <span style={{ fontSize: 9, background: "#0b63c4", color: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>C</span>}
+                      {p.isVCaptain && <span style={{ fontSize: 9, background: "rgba(11,99,196,0.3)", color: "#0b63c4", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>VC</span>}
+                      {p.isWk       && <span style={{ fontSize: 9, background: "rgba(11,99,196,0.2)", color: "#0b63c4", padding: "1px 5px", borderRadius: 3, fontWeight: 900 }}>WK</span>}
                     </div>
                     {p.role && <div style={{ fontSize: 11, color: "var(--text3)" }}>{p.role}</div>}
                   </div>
-                  {!p.isPlayingXI && <span style={{ fontSize: 9, color: "var(--text3)", background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 4 }}>Sub</span>}
+                  {!p.isPlayingXI && <span style={{ fontSize: 9, color: "var(--text3)", background: "rgba(15,23,42,0.05)", padding: "2px 6px", borderRadius: 4 }}>Sub</span>}
                 </div>
               ))}
             </div>
@@ -562,16 +562,16 @@ function OverSummaryTab({ matchId }) {
   if (isLoading) return <div style={{ padding: "40px 0", textAlign: "center" }}><div className="spinner" style={{ margin: "0 auto" }} /></div>;
   if (!overs.length) return (
     <div style={{ padding: "50px 24px", textAlign: "center" }}>
-      <div style={{ fontSize: 36, marginBottom: 12 }}>📋</div>
+      <div style={{ fontSize: 36, marginBottom: 12 }}></div>
       <p style={{ color: "var(--text3)", fontSize: 14 }}>Over summary not available yet. Check back once the match begins.</p>
     </div>
   );
 
   const runColors = (runs) => {
-    if (runs >= 18) return "#FF1053";
-    if (runs >= 12) return "#FF6B00";
-    if (runs >= 8) return "#FFEA00";
-    if (runs <= 3) return "#00F0FF";
+    if (runs >= 18) return "#d1202a";
+    if (runs >= 12) return "#c2410c";
+    if (runs >= 8) return "#b45309";
+    if (runs <= 3) return "#0b63c4";
     return "#a3e635";
   };
 
@@ -585,7 +585,7 @@ function OverSummaryTab({ matchId }) {
               <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5 }}>Over {ov.overNum}</span>
               <div style={{ display: "flex", gap: 6 }}>
                 <span style={{ fontSize: 14, fontWeight: 900, color: runColors(ov.runs), fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{ov.runs} runs</span>
-                {ov.wickets > 0 && <span style={{ fontSize: 12, fontWeight: 800, color: "#FF5C8A", background: "rgba(239,68,68,0.1)", padding: "1px 7px", borderRadius: 10 }}>{ov.wickets}W</span>}
+                {ov.wickets > 0 && <span style={{ fontSize: 12, fontWeight: 800, color: "#c81e28", background: "rgba(209,32,42,0.1)", padding: "1px 7px", borderRadius: 10 }}>{ov.wickets}W</span>}
               </div>
             </div>
             {ov.summary && <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 6 }}>
@@ -594,7 +594,7 @@ function OverSummaryTab({ matchId }) {
                 const isFour = ball === "4";
                 const isSix = ball === "6";
                 const isExtra = ball.startsWith("wd") || ball.startsWith("nb") || ball === "Wd" || ball === "Nb";
-                const bg = isWicket ? "#FF1053" : isSix ? "#00F0FF" : isFour ? "#B026FF" : isExtra ? "#FF2E9A" : "rgba(255,255,255,0.08)";
+                const bg = isWicket ? "#d1202a" : isSix ? "#0b63c4" : isFour ? "#0b7a55" : isExtra ? "#0b7a55" : "rgba(15,23,42,0.08)";
                 const color = isWicket || isSix || isFour || isExtra ? "#fff" : "var(--text2)";
                 return (
                   <span key={bi} style={{ width: 26, height: 26, borderRadius: "50%", background: bg, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color, flexShrink: 0 }}>
@@ -633,13 +633,13 @@ function EnhancedMatchInfoTab({ matchId, match }) {
   const date = info?.date ? new Date(info.date).toLocaleString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", timeZoneName: "short" }) : match.date;
 
   const infoRows = [
-    { label: "Series", value: info?.series || match.series || match.matchType, icon: "🏆" },
-    { label: "Match Format", value: info?.matchType || match.matchType, icon: "🏏" },
+    { label: "Series", value: info?.series || match.series || match.matchType, icon: "" },
+    { label: "Match Format", value: info?.matchType || match.matchType, icon: "" },
     { label: "Match No.", value: info?.matchNumber || match.matchType, icon: "#️⃣" },
-    { label: "Venue", value: venue.fullName || "TBA", icon: "📍" },
-    { label: "Date & Time", value: date || "TBA", icon: "📅" },
-    { label: "Toss", value: toss?.text || "TBA", icon: "🪙" },
-    { label: "Status", value: info?.status || match.status || "Scheduled", icon: "📡" },
+    { label: "Venue", value: venue.fullName || "TBA", icon: "" },
+    { label: "Date & Time", value: date || "TBA", icon: "" },
+    { label: "Toss", value: toss?.text || "TBA", icon: "" },
+    { label: "Status", value: info?.status || match.status || "Scheduled", icon: "" },
   ].filter(r => r.value && r.value !== "TBA");
 
   return (
@@ -650,10 +650,10 @@ function EnhancedMatchInfoTab({ matchId, match }) {
 
       {/* Toss Banner */}
       {toss?.text && (
-        <div style={{ marginBottom: 16, padding: "14px 18px", borderRadius: 12, background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 22 }}>🪙</span>
+        <div style={{ marginBottom: 16, padding: "14px 18px", borderRadius: 12, background: "rgba(180,83,9,0.08)", border: "1px solid rgba(180,83,9,0.2)", display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 22 }}></span>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#FFEA00", marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.5 }}>Toss</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#b45309", marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.5 }}>Toss</div>
             <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>{toss.text}</div>
           </div>
         </div>
@@ -663,7 +663,7 @@ function EnhancedMatchInfoTab({ matchId, match }) {
       <div style={{ borderRadius: 14, border: "1px solid var(--border)", background: "var(--card)", overflow: "hidden", marginBottom: 16 }}>
         {infoRows.map((row, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", padding: "14px 18px", borderBottom: i < infoRows.length - 1 ? "1px solid var(--divider)" : "none", transition: "background 0.15s" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.02)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
             <span style={{ fontSize: 16, marginRight: 12, flexShrink: 0 }}>{row.icon}</span>
             <div style={{ minWidth: 130, fontSize: 12, fontWeight: 700, color: "var(--text3)" }}>{row.label}</div>
@@ -676,7 +676,7 @@ function EnhancedMatchInfoTab({ matchId, match }) {
       {umpires.length > 0 && (
         <div style={{ borderRadius: 14, border: "1px solid var(--border)", background: "var(--card)", overflow: "hidden", marginBottom: 16 }}>
           <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--divider)", fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#B026FF", display: "inline-block" }} />
+            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#0b7a55", display: "inline-block" }} />
             Officials
           </div>
           {umpires.map((u, i) => (
@@ -692,7 +692,7 @@ function EnhancedMatchInfoTab({ matchId, match }) {
       {(venue.city || venue.country || venue.capacity) && (
         <div style={{ borderRadius: 14, border: "1px solid var(--border)", background: "var(--card)", overflow: "hidden", marginBottom: 16 }}>
           <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--divider)", fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#00FFA3", display: "inline-block" }} />
+            <span style={{ width: 3, height: 14, borderRadius: 2, background: "#047857", display: "inline-block" }} />
             Venue Details
           </div>
           {[venue.city && ["City", venue.city], venue.country && ["Country", venue.country], venue.capacity && ["Capacity", venue.capacity], venue.established && ["Established", venue.established]].filter(Boolean).map(([lbl, val], i, arr) => (
@@ -747,9 +747,9 @@ export default function MatchDetail() {
   if (!match) return (
     <div className="container" style={{ paddingTop: 60 }}>
       <div className="card" style={{ textAlign: "center", padding: "40px 24px" }}>
-        <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+        <div style={{ fontSize: 40, marginBottom: 12 }}></div>
         <p style={{ color: "var(--text3)", fontSize: 15 }}>Match not found.</p>
-        <button onClick={() => navigate("/")} style={{ marginTop: 16, padding: "9px 22px", borderRadius: 100, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)", color: "#B026FF", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>← Back to Home</button>
+        <button onClick={() => navigate("/")} style={{ marginTop: 16, padding: "9px 22px", borderRadius: 100, background: "rgba(21,128,61,0.12)", border: "1px solid rgba(21,128,61,0.3)", color: "#0b7a55", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>← Back to Home</button>
       </div>
     </div>
   );
@@ -771,10 +771,10 @@ export default function MatchDetail() {
 
   /* gradient based on match state */
   const heroBg = isLive
-    ? "linear-gradient(160deg, rgba(22,163,74,0.14) 0%, rgba(9,9,11,1) 55%)"
+    ? "linear-gradient(160deg, rgba(22,163,74,0.14) 0%, rgba(255,255,255,1) 55%)"
     : matchEnded
-      ? "linear-gradient(160deg, rgba(34,197,94,0.08) 0%, rgba(9,9,11,1) 55%)"
-      : "linear-gradient(160deg, rgba(56,189,248,0.08) 0%, rgba(9,9,11,1) 55%)";
+      ? "linear-gradient(160deg, rgba(21,128,61,0.08) 0%, rgba(255,255,255,1) 55%)"
+      : "linear-gradient(160deg, rgba(11,99,196,0.08) 0%, rgba(255,255,255,1) 55%)";
 
   const matchSD = {
     "@context": "https://schema.org",
@@ -821,7 +821,7 @@ export default function MatchDetail() {
       <button
         onClick={() => navigate(-1)}
         style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "transparent", border: "none", color: "var(--text3)", padding: "16px 0 12px", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "color 0.2s" }}
-        onMouseEnter={e => { e.currentTarget.style.color = "#B026FF"; }}
+        onMouseEnter={e => { e.currentTarget.style.color = "#0b7a55"; }}
         onMouseLeave={e => { e.currentTarget.style.color = "var(--text3)"; }}
       >
         ← Back
@@ -830,30 +830,30 @@ export default function MatchDetail() {
       {/* ── HERO ── */}
       <div style={{
         background: heroBg,
-        border: `1px solid ${isLive ? "rgba(34,197,94,0.25)" : "rgba(255,255,255,0.08)"}`,
+        border: `1px solid ${isLive ? "rgba(21,128,61,0.25)" : "rgba(15,23,42,0.08)"}`,
         borderRadius: 24, padding: "28px 32px", marginBottom: 20,
         position: "relative", overflow: "hidden",
-        boxShadow: isLive ? "0 0 60px rgba(34,197,94,0.08)" : "none",
+        boxShadow: isLive ? "none" : "none",
       }}>
         {/* Decorative */}
-        <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "repeating-linear-gradient(90deg, #B026FF 0 1px, transparent 1px 60px)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "repeating-linear-gradient(90deg, #0b7a55 0 1px, transparent 1px 60px)", pointerEvents: "none" }} />
 
         {/* Status row */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, position: "relative" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             {isLive && (
-              <span style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.35)", color: "#B026FF", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#B026FF", animation: "livePulse 1.8s infinite" }} />
+              <span style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(21,128,61,0.12)", border: "1px solid rgba(21,128,61,0.35)", color: "#0b7a55", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#0b7a55", animation: "livePulse 1.8s infinite" }} />
                 LIVE
               </span>
             )}
             {matchEnded && (
-              <span style={{ background: "rgba(74,222,128,0.12)", border: "1px solid rgba(74,222,128,0.3)", color: "#D896FF", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
+              <span style={{ background: "rgba(74,222,128,0.12)", border: "1px solid rgba(74,222,128,0.3)", color: "#0b63c4", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
                 FINAL
               </span>
             )}
             {!isLive && !matchEnded && (
-              <span style={{ background: "rgba(56,189,248,0.1)", border: "1px solid rgba(56,189,248,0.25)", color: "#00F0FF", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
+              <span style={{ background: "rgba(11,99,196,0.1)", border: "1px solid rgba(11,99,196,0.25)", color: "#0b63c4", padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 800 }}>
                 UPCOMING
               </span>
             )}
@@ -866,20 +866,20 @@ export default function MatchDetail() {
               onClick={() => navigate(`/match/${id}?watch=1`)}
               style={{
                 display: "flex", alignItems: "center", gap: 6,
-                background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.35)",
-                color: "#FF5C8A", borderRadius: 100, padding: "8px 18px",
+                background: "rgba(209,32,42,0.12)", border: "1px solid rgba(209,32,42,0.35)",
+                color: "#c81e28", borderRadius: 100, padding: "8px 18px",
                 fontSize: 12, fontWeight: 800, cursor: "pointer", transition: "all 0.2s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.24)"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.12)"; e.currentTarget.style.color = "#FF5C8A"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(209,32,42,0.24)"; e.currentTarget.style.color = "var(--text)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "rgba(209,32,42,0.12)"; e.currentTarget.style.color = "#c81e28"; }}
             >
-              ▶ Highlights
+              Highlights
             </button>
           )}
         </div>
 
         {/* Series name */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: isIPL ? "#00F0FF" : "var(--text3)", marginBottom: 16, position: "relative" }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: isIPL ? "#0b63c4" : "var(--text3)", marginBottom: 16, position: "relative" }}>
           {match.series || match.name}
         </div>
 
@@ -889,8 +889,8 @@ export default function MatchDetail() {
           {/* Team 1 */}
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {t1?.img
-              ? <img src={t1.img} alt={t1.name} style={{ width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(34,197,94,0.3)", objectFit: "cover", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-              : <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "2px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, color: "#B026FF", flexShrink: 0 }}>
+              ? <img src={t1.img} alt={t1.name} style={{ width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(21,128,61,0.3)", objectFit: "cover", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
+              : <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(21,128,61,0.1)", border: "2px solid rgba(21,128,61,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, color: "#0b7a55", flexShrink: 0 }}>
                   {t1?.shortname?.slice(0, 2) || "?"}
                 </div>
             }
@@ -899,7 +899,7 @@ export default function MatchDetail() {
               <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>{t1?.shortname}</div>
               {s1 ? (
                 <div style={{ fontFamily: "'Poppins',sans-serif" }}>
-                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#B026FF" : "var(--text)", lineHeight: 1 }}>{s1.r}/{s1.w}</span>
+                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#0b7a55" : "var(--text)", lineHeight: 1 }}>{s1.r}/{s1.w}</span>
                   <span style={{ fontSize: 13, color: "var(--text3)", fontWeight: 500, marginLeft: 8 }}>({s1.o} ov)</span>
                 </div>
               ) : (
@@ -911,7 +911,7 @@ export default function MatchDetail() {
           {/* VS */}
           <div style={{
             padding: "10px 18px", borderRadius: 12,
-            background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)",
             fontSize: 13, fontWeight: 900, color: "var(--text-muted)", textAlign: "center",
           }}>
             <div>VS</div>
@@ -921,8 +921,8 @@ export default function MatchDetail() {
           {/* Team 2 */}
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexDirection: "row-reverse" }}>
             {t2?.img
-              ? <img src={t2.img} alt={t2.name} style={{ width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(56,189,248,0.3)", objectFit: "cover", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
-              : <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(56,189,248,0.1)", border: "2px solid rgba(56,189,248,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, color: "#00F0FF", flexShrink: 0 }}>
+              ? <img src={t2.img} alt={t2.name} style={{ width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(11,99,196,0.3)", objectFit: "cover", flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
+              : <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(11,99,196,0.1)", border: "2px solid rgba(11,99,196,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, color: "#0b63c4", flexShrink: 0 }}>
                   {t2?.shortname?.slice(0, 2) || "?"}
                 </div>
             }
@@ -931,7 +931,7 @@ export default function MatchDetail() {
               <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>{t2?.shortname}</div>
               {s2 ? (
                 <div style={{ fontFamily: "'Poppins',sans-serif" }}>
-                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#B026FF" : "var(--text)", lineHeight: 1 }}>{s2.r}/{s2.w}</span>
+                  <span style={{ fontSize: 32, fontWeight: 900, color: isLive ? "#0b7a55" : "var(--text)", lineHeight: 1 }}>{s2.r}/{s2.w}</span>
                   <span style={{ fontSize: 13, color: "var(--text3)", fontWeight: 500, marginLeft: 8 }}>({s2.o} ov)</span>
                 </div>
               ) : (
@@ -944,20 +944,20 @@ export default function MatchDetail() {
         {/* Match status banner */}
         <div style={{
           marginTop: 20, padding: "11px 16px", borderRadius: 12,
-          background: isLive ? "rgba(34,197,94,0.07)" : matchEnded ? "rgba(74,222,128,0.05)" : "rgba(255,255,255,0.03)",
-          border: `1px solid ${isLive ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.07)"}`,
+          background: isLive ? "rgba(21,128,61,0.07)" : matchEnded ? "rgba(74,222,128,0.05)" : "rgba(15,23,42,0.03)",
+          border: `1px solid ${isLive ? "rgba(21,128,61,0.2)" : "rgba(15,23,42,0.07)"}`,
           fontSize: 14, fontWeight: 600,
-          color: isLive ? "#D896FF" : matchEnded ? "#B026FF" : "var(--text2)",
+          color: isLive ? "#0b63c4" : matchEnded ? "#0b7a55" : "var(--text2)",
           display: "flex", alignItems: "center", gap: 8, position: "relative",
         }}>
-          {isLive && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#B026FF", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />}
+          {isLive && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#0b7a55", animation: "livePulse 1.8s infinite", flexShrink: 0 }} />}
           {match.status || "Scheduled"}
         </div>
 
         {/* Toss */}
         {match.tossWinner && (
           <div style={{ marginTop: 10, fontSize: 12, color: "var(--text-muted)", paddingLeft: 4 }}>
-            🪙 <strong style={{ color: "var(--text3)" }}>{match.tossWinner}</strong> won the toss · elected to <strong style={{ color: "var(--text3)" }}>{match.tossChoice}</strong>
+            <strong style={{ color: "var(--text3)" }}>{match.tossWinner}</strong> won the toss · elected to <strong style={{ color: "var(--text3)" }}>{match.tossChoice}</strong>
           </div>
         )}
       </div>
@@ -973,7 +973,7 @@ export default function MatchDetail() {
       <div style={{ marginBottom: 20 }}><AdBanner type="leaderboard" /></div>
 
       {/* ── Tabs ── */}
-      <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(255,255,255,0.07)", marginBottom: 24, overflowX: "auto", scrollbarWidth: "none" }}>
+      <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(15,23,42,0.07)", marginBottom: 24, overflowX: "auto", scrollbarWidth: "none" }}>
         {[
           { id: "scorecard",   label: "Scorecard" },
           { id: "commentary",  label: "Commentary" },
@@ -988,8 +988,8 @@ export default function MatchDetail() {
             style={{
               flexShrink: 0, background: "transparent", border: "none", cursor: "pointer",
               padding: "14px 18px", fontSize: 13, fontWeight: tab === t.id ? 800 : 600,
-              color: tab === t.id ? "#FF1053" : "var(--text3)",
-              borderBottom: tab === t.id ? "2.5px solid #FF1053" : "2.5px solid transparent",
+              color: tab === t.id ? "#d1202a" : "var(--text3)",
+              borderBottom: tab === t.id ? "2.5px solid #d1202a" : "2.5px solid transparent",
               marginBottom: -1, transition: "color 0.2s", fontFamily: "'Inter',sans-serif",
               whiteSpace: "nowrap",
             }}

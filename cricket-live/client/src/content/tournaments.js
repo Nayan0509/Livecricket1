@@ -12,7 +12,7 @@ T.ipl = {
   name: "Indian Premier League",
   shortName: "IPL",
   icon: "🏆",
-  accentColor: "#00F0FF",
+  accentColor: "#0b63c4",
   filterKeywords: ["IPL", "Indian Premier League"],
   intro:
     "The Indian Premier League is the world's biggest T20 franchise competition. This page shows live IPL scores and fixtures while the season is on, and explains how the league works the rest of the year.",
@@ -70,7 +70,7 @@ T["t20-world-cup"] = {
   name: "ICC Men's T20 World Cup",
   shortName: "T20 World Cup",
   icon: "🌍",
-  accentColor: "#FF1053",
+  accentColor: "#d1202a",
   filterKeywords: ["T20 World Cup", "ICC Men's T20 World Cup", "T20 WC"],
   intro:
     "The ICC Men's T20 World Cup is the global championship of the shortest international format. Live scores appear here while the tournament is on; the format and history are explained below.",
@@ -124,7 +124,7 @@ T["world-cup"] = {
   name: "ICC Men's Cricket World Cup",
   shortName: "World Cup",
   icon: "🏏",
-  accentColor: "#B026FF",
+  accentColor: "#0b7a55",
   filterKeywords: ["Cricket World Cup", "ICC Cricket World Cup", "ODI World Cup", "CWC"],
   intro:
     "The 50-over ICC Cricket World Cup is the oldest and most prestigious limited-overs tournament. This page shows live scores during the event, and explains the format and history in between.",
@@ -181,7 +181,7 @@ T["champions-trophy"] = {
   name: "ICC Champions Trophy",
   shortName: "Champions Trophy",
   icon: "🥇",
-  accentColor: "#FF2E9A",
+  accentColor: "#0b7a55",
   filterKeywords: ["Champions Trophy"],
   intro:
     "The ICC Champions Trophy is a compact eight-team ODI tournament often described as the \"mini World Cup\". Live scores appear here when it is being played.",
@@ -230,7 +230,7 @@ T["asia-cup"] = {
   name: "Asia Cup",
   shortName: "Asia Cup",
   icon: "🌏",
-  accentColor: "#00F0FF",
+  accentColor: "#0b63c4",
   filterKeywords: ["Asia Cup"],
   intro:
     "The Asia Cup is the continental championship run by the Asian Cricket Council, best known for India-Pakistan meetings that are otherwise rare. Live scores appear here during the tournament.",
@@ -260,7 +260,7 @@ T.psl = {
   name: "Pakistan Super League",
   shortName: "PSL",
   icon: "🦁",
-  accentColor: "#D896FF",
+  accentColor: "#0b63c4",
   filterKeywords: ["PSL", "Pakistan Super League", "HBL PSL"],
   intro:
     "The Pakistan Super League is Pakistan's franchise T20 competition, played mostly in Karachi, Lahore, Rawalpindi and Multan. Live scores appear here during the season.",
@@ -304,7 +304,7 @@ T.bbl = {
   name: "Big Bash League",
   shortName: "BBL",
   icon: "🔥",
-  accentColor: "#FF6B00",
+  accentColor: "#c2410c",
   filterKeywords: ["BBL", "Big Bash"],
   intro:
     "The Big Bash League is Australia's franchise T20 competition, played through the Australian summer with eight city-based teams. Live scores appear here during the season.",
@@ -348,7 +348,7 @@ T.cpl = {
   name: "Caribbean Premier League",
   shortName: "CPL",
   icon: "🌴",
-  accentColor: "#39FF14",
+  accentColor: "#15803d",
   filterKeywords: ["CPL", "Caribbean Premier League"],
   intro:
     "The Caribbean Premier League is the West Indies' franchise T20 competition, played across several Caribbean countries, usually in August and September. Live scores appear here during the season.",
@@ -387,7 +387,7 @@ T.bpl = {
   name: "Bangladesh Premier League",
   shortName: "BPL",
   icon: "🐯",
-  accentColor: "#00B8D9",
+  accentColor: "#0a58ad",
   filterKeywords: ["BPL", "Bangladesh Premier League"],
   intro:
     "The Bangladesh Premier League is Bangladesh's franchise T20 competition, usually played in Dhaka, Sylhet and Chattogram. Live scores appear here during the season.",
@@ -422,7 +422,7 @@ T["county-championship"] = {
   name: "County Championship",
   shortName: "County Championship",
   icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  accentColor: "#00B8D9",
+  accentColor: "#0a58ad",
   filterKeywords: ["County Championship", "County Cricket", "Division One", "Division Two"],
   intro:
     "The County Championship is England and Wales's first-class competition and one of the oldest domestic competitions in the sport. Live scores appear here during the season, which runs through the English summer.",
@@ -514,7 +514,7 @@ T.t20 = {
   name: "T20 Cricket",
   shortName: "T20",
   icon: "⚡",
-  accentColor: "#B026FF",
+  accentColor: "#0b7a55",
   filterKeywords: ["T20", "Twenty20", "T20I"],
   intro:
     "Live scores from every T20 match in the feed, international and franchise, plus a short guide to how the 20-over format works.",
@@ -547,7 +547,7 @@ T.odi = {
   name: "ODI Cricket",
   shortName: "ODI",
   icon: "🎯",
-  accentColor: "#00F0FF",
+  accentColor: "#0b63c4",
   filterKeywords: ["ODI", "One Day", "One-Day"],
   intro:
     "Live scores from One Day Internationals and other 50-over matches in the feed, plus a guide to how the format works.",
@@ -580,7 +580,7 @@ T.test = {
   name: "Test Cricket",
   shortName: "Test",
   icon: "🏛️",
-  accentColor: "#9D00FF",
+  accentColor: "#6d28d9",
   filterKeywords: ["Test"],
   intro:
     "Live scores from Test matches and other first-class cricket in the feed, plus a guide to how the five-day format works.",
@@ -613,7 +613,7 @@ T["icc-cwc-league-2"] = {
   name: "ICC Cricket World Cup League 2",
   shortName: "CWC League 2",
   icon: "🌐",
-  accentColor: "#00FFA3",
+  accentColor: "#047857",
   filterKeywords: ["League 2", "CWC League", "World Cup League"],
   intro:
     "ICC Cricket World Cup League 2 is the ODI competition through which Associate nations work towards the 50-over World Cup. Live scores appear here when a tri-series is being played.",

@@ -47,11 +47,11 @@ export default function CookieConsent() {
       right: 20,
       maxWidth: 720,
       margin: "0 auto",
-      background: "rgba(13, 20, 38, 0.96)",
-      border: "1px solid rgba(0, 240, 255, 0.25)",
+      background: "rgba(255,255,255,0.96)",
+      border: "1px solid rgba(11,99,196,0.25)",
       borderRadius: 16,
       padding: "18px 24px",
-      boxShadow: "0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.15)",
+      boxShadow: "0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(11,99,196,0.15)",
       backdropFilter: "blur(12px)",
       zIndex: 99999,
       display: "flex",
@@ -59,14 +59,14 @@ export default function CookieConsent() {
       gap: 12,
     }}>
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-        <span style={{ fontSize: 24, flexShrink: 0 }}>🍪</span>
+        <span style={{ fontSize: 24, flexShrink: 0 }}></span>
         <div>
-          <div style={{ fontWeight: 800, fontSize: 14, color: "#fff", marginBottom: 4 }}>
+          <div style={{ fontWeight: 800, fontSize: 14, color: "var(--text)", marginBottom: 4 }}>
             Cookie &amp; Privacy Choices
           </div>
           <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6, margin: 0 }}>
             We would like to use cookies from Google AdSense (advertising) and Google Analytics (visitor statistics). The site works the same either way, and you can change your choice later from the Cookie settings link at the bottom of every page. Details are in our{" "}
-            <Link to="/privacy-policy" style={{ color: "#00F0FF", textDecoration: "underline" }}>
+            <Link to="/privacy-policy" style={{ color: "#0b63c4", textDecoration: "underline" }}>
               Privacy Policy
             </Link>.
           </p>
@@ -79,8 +79,8 @@ export default function CookieConsent() {
           style={{
             padding: "8px 16px",
             borderRadius: 8,
-            background: "rgba(255, 255, 255, 0.06)",
-            border: "1px solid rgba(255, 255, 255, 0.15)",
+            background: "rgba(15,23,42,0.06)",
+            border: "1px solid rgba(15,23,42,0.15)",
             color: "var(--text2)",
             fontSize: 12,
             fontWeight: 700,
@@ -94,13 +94,13 @@ export default function CookieConsent() {
           style={{
             padding: "8px 20px",
             borderRadius: 8,
-            background: "linear-gradient(135deg, #00F0FF, #00B8D9)",
+            background: "linear-gradient(135deg, #0b63c4, #0a58ad)",
             border: "none",
-            color: "#000",
+            color: "#fff",
             fontSize: 12,
             fontWeight: 800,
             cursor: "pointer",
-            boxShadow: "0 0 12px rgba(0, 240, 255, 0.35)",
+            boxShadow: "none",
           }}
         >
           Accept

@@ -10,38 +10,36 @@ const PRIMARY_NAV = [
   { to: "/news",       label: "News"       },
   { to: "/rankings",   label: "Rankings"  },
   { to: "/stats",      label: "Stats"     },
-  { to: "/games",      label: "🎮 Games"    },
+  { to: "/games",      label: "Games"      },
   { to: "/fantasy",    label: "Fantasy"   },
 ];
 
 const SPORTS = [
-  { to: "/football",   label: "Football",   dot: "#39FF14" },
-  { to: "/basketball",  label: "Basketball", dot: "#FF6B00" },
-  { to: "/tennis",      label: "Tennis",     dot: "#FFEA00" },
+  { to: "/football",   label: "Football",   dot: "#15803d" },
+  { to: "/basketball",  label: "Basketball", dot: "#c2410c" },
+  { to: "/tennis",      label: "Tennis",     dot: "#b45309" },
 ];
 
 const LEAGUES = [
-  { to: "/ipl",                 label: "IPL 2026",            dot: "#00F0FF" },
-  { to: "/t20-world-cup",       label: "T20 World Cup",       dot: "#FF1053" },
-  { to: "/world-cup",           label: "ODI World Cup",       dot: "#B026FF" },
-  { to: "/asia-cup",            label: "Asia Cup",            dot: "#00F0FF" },
-  { to: "/champions-trophy",    label: "Champions Trophy",    dot: "#FF2E9A" },
-  { to: "/psl",                 label: "PSL 2026",            dot: "#D896FF" },
-  { to: "/county-championship", label: "County Championship", dot: "#00B8D9" },
+  { to: "/ipl",                 label: "IPL 2026",            dot: "#0b63c4" },
+  { to: "/t20-world-cup",       label: "T20 World Cup",       dot: "#d1202a" },
+  { to: "/world-cup",           label: "ODI World Cup",       dot: "#0b7a55" },
+  { to: "/asia-cup",            label: "Asia Cup",            dot: "#0b63c4" },
+  { to: "/champions-trophy",    label: "Champions Trophy",    dot: "#0b7a55" },
+  { to: "/psl",                 label: "PSL 2026",            dot: "#0b63c4" },
+  { to: "/county-championship", label: "County Championship", dot: "#0a58ad" },
 ];
 
 /* ── Premium cricket logo mark ── */
 function LogoMark() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="13" cy="13" r="12" fill="#0D1120" stroke="rgba(255,255,255,0.10)" strokeWidth="1" />
-      <circle cx="13" cy="13" r="8" fill="#B026FF" opacity="0.15" />
-      {/* Cricket wickets */}
-      <rect x="10" y="7" width="1.5" height="9" rx="0.75" fill="#B026FF" />
-      <rect x="13.25" y="7" width="1.5" height="9" rx="0.75" fill="#B026FF" />
-      {/* Bail */}
-      <rect x="9.5" y="7" width="7" height="1.2" rx="0.6" fill="#00F0FF" />
-      <rect x="9.5" y="16" width="7" height="1.2" rx="0.6" fill="rgba(255,255,255,0.18)" />
+      <circle cx="13" cy="13" r="12.5" fill="#0b7a55" />
+      {/* Stumps and bails */}
+      <rect x="8.6" y="8" width="1.6" height="10" rx="0.8" fill="#fff" />
+      <rect x="12.2" y="8" width="1.6" height="10" rx="0.8" fill="#fff" />
+      <rect x="15.8" y="8" width="1.6" height="10" rx="0.8" fill="#fff" />
+      <rect x="8.4" y="6.6" width="9.2" height="1.1" rx="0.55" fill="#fff" />
     </svg>
   );
 }
@@ -78,19 +76,18 @@ export default function Navbar() {
         aria-label="Main navigation"
         style={{
           position: "sticky", top: 0, zIndex: 1000,
-          background: scrolled ? "rgba(8,12,20,0.96)" : "var(--bg)",
+          background: scrolled ? "rgba(255,255,255,0.96)" : "var(--bg)",
           backdropFilter: scrolled ? "blur(20px) saturate(160%)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(20px) saturate(160%)" : "none",
           borderBottom: "1px solid var(--border)",
-          boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.4)" : "none",
+          boxShadow: scrolled ? "0 1px 6px rgba(15,23,42,0.08)" : "none",
           transition: "background 0.25s cubic-bezier(0.2,0,0,1), box-shadow 0.25s cubic-bezier(0.2,0,0,1)",
         }}
       >
-        {/* Subtle emerald accent line */}
+        {/* Brand accent line */}
         <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-          background: "#B026FF",
-          opacity: 0.55,
+          position: "absolute", top: 0, left: 0, right: 0, height: "3px",
+          background: "var(--primary)",
         }} />
 
         <div
@@ -106,26 +103,17 @@ export default function Navbar() {
             }}
             aria-label="Live Cricket Zone Home"
           >
-            <motion.div
-              animate={{ filter: [
-                "drop-shadow(0 0 4px rgba(176,38,255,0.5))",
-                "drop-shadow(0 0 12px rgba(0,240,255,0.7))",
-                "drop-shadow(0 0 4px rgba(176,38,255,0.5))",
-              ] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <LogoMark />
-            </motion.div>
+            <LogoMark />
             <div style={{ lineHeight: 1 }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
                 <span className="font-display" style={{
                   fontWeight: 700, fontSize: 15,
-                  color: "#F5F0FF", letterSpacing: "-0.01em",
+                  color: "#1a2027", letterSpacing: "-0.01em",
                 }}>
                   LiveCricket
                 </span>
-                <span className="neon-text font-display" style={{
-                  fontWeight: 800, fontSize: 15,
+                <span className="font-display" style={{
+                  fontWeight: 800, fontSize: 15, color: "var(--primary)",
                   letterSpacing: "-0.01em",
                 }}>
                   Zone
@@ -135,7 +123,7 @@ export default function Navbar() {
                 fontSize: 9, fontWeight: 600, color: "var(--text-muted)",
                 letterSpacing: "1.2px", textTransform: "uppercase", marginTop: 2,
               }}>
-                Live Scores · News · Highlights
+                Scores · Guides · Calculators
               </div>
             </div>
           </Link>
@@ -151,16 +139,16 @@ export default function Navbar() {
                   className="font-hud"
                   style={{
                     position: "relative",
-                    padding: "6px 13px",
+                    padding: "6px 10px",
                     fontSize: 14,
                     fontWeight: isActive ? 700 : 500,
-                    color: isActive ? "#F5F0FF" : "var(--text2)",
+                    color: isActive ? "#1a2027" : "var(--text2)",
                     background: "transparent",
                     transition: "color 0.15s",
                     display: "flex",
                     alignItems: "center",
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = "#F5F0FF"; }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#1a2027"; }}
                   onMouseLeave={e => { e.currentTarget.style.color = ""; }}
                 >
                   {isActive && (
@@ -170,9 +158,9 @@ export default function Navbar() {
                       style={{
                         position: "absolute", inset: "2px 2px",
                         borderRadius: 8,
-                        background: "linear-gradient(135deg, rgba(255,46,154,0.16), rgba(176,38,255,0.16))",
-                        border: "1px solid rgba(0,240,255,0.30)",
-                        boxShadow: "0 0 14px rgba(255,46,154,0.30)",
+                        background: "linear-gradient(135deg, rgba(11,122,85,0.16), rgba(11,122,85,0.16))",
+                        border: "1px solid rgba(11,99,196,0.30)",
+                        boxShadow: "none",
                       }}
                     />
                   )}
@@ -191,7 +179,7 @@ export default function Navbar() {
                 padding: "6px 13px",
                 fontSize: 13,
                 fontWeight: 400,
-                color: showLeagues ? "#F1F5F9" : "var(--text2)",
+                color: showLeagues ? "#1a2027" : "var(--text2)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -222,9 +210,9 @@ export default function Navbar() {
                 left: 0,
                 width: 224,
                 borderRadius: 12,
-                background: "#0C1221",
-                border: "1px solid rgba(255,255,255,0.10)",
-                boxShadow: "0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04)",
+                background: "#ffffff",
+                border: "1px solid rgba(15,23,42,0.10)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(15,23,42,0.04)",
                 padding: "6px",
                 opacity: showLeagues ? 1 : 0,
                 transform: showLeagues ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.97)",
@@ -234,7 +222,7 @@ export default function Navbar() {
               }}>
                 <div style={{
                   padding: "5px 12px 8px",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  borderBottom: "1px solid rgba(15,23,42,0.06)",
                   marginBottom: 4,
                 }}>
                   <span style={{
@@ -261,8 +249,8 @@ export default function Navbar() {
                       transition: "background 0.12s, color 0.12s",
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.background = "rgba(255,255,255,0.045)";
-                      e.currentTarget.style.color = "#F1F5F9";
+                      e.currentTarget.style.background = "rgba(15,23,42,0.045)";
+                      e.currentTarget.style.color = "#1a2027";
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.background = "transparent";
@@ -289,7 +277,7 @@ export default function Navbar() {
                 padding: "6px 13px",
                 fontSize: 13,
                 fontWeight: 400,
-                color: showSports ? "#F1F5F9" : "var(--text2)",
+                color: showSports ? "#1a2027" : "var(--text2)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -318,9 +306,9 @@ export default function Navbar() {
                 left: 0,
                 width: 180,
                 borderRadius: 12,
-                background: "#0C1221",
-                border: "1px solid rgba(255,255,255,0.10)",
-                boxShadow: "0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04)",
+                background: "#ffffff",
+                border: "1px solid rgba(15,23,42,0.10)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(15,23,42,0.04)",
                 padding: "6px",
                 opacity: showSports ? 1 : 0,
                 transform: showSports ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.97)",
@@ -330,7 +318,7 @@ export default function Navbar() {
               }}>
                 <div style={{
                   padding: "5px 12px 8px",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  borderBottom: "1px solid rgba(15,23,42,0.06)",
                   marginBottom: 4,
                 }}>
                   <span style={{
@@ -357,8 +345,8 @@ export default function Navbar() {
                       transition: "background 0.12s, color 0.12s",
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.background = "rgba(255,255,255,0.045)";
-                      e.currentTarget.style.color = "#F1F5F9";
+                      e.currentTarget.style.background = "rgba(15,23,42,0.045)";
+                      e.currentTarget.style.color = "#1a2027";
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.background = "transparent";
@@ -383,7 +371,7 @@ export default function Navbar() {
             >
               <button style={{
                 padding: "6px 13px", fontSize: 13, fontWeight: 400,
-                color: showMore ? "#F1F5F9" : "var(--text2)",
+                color: showMore ? "#1a2027" : "var(--text2)",
                 background: "transparent", border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", gap: 5,
                 transition: "color 0.15s", fontFamily: "'Inter', sans-serif",
@@ -399,8 +387,8 @@ export default function Navbar() {
 
               <div style={{
                 position: "absolute", top: "calc(100% + 6px)", left: 0, width: 200,
-                borderRadius: 12, background: "#0C1221",
-                border: "1px solid rgba(255,255,255,0.10)",
+                borderRadius: 12, background: "#ffffff",
+                border: "1px solid rgba(15,23,42,0.10)",
                 boxShadow: "0 16px 40px rgba(0,0,0,0.65)",
                 padding: "6px",
                 opacity: showMore ? 1 : 0,
@@ -409,19 +397,19 @@ export default function Navbar() {
                 transition: "opacity 0.15s cubic-bezier(0.2,0,0,1), transform 0.15s cubic-bezier(0.2,0,0,1)",
                 zIndex: 100,
               }}>
-                <div style={{ padding: "5px 12px 8px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 4 }}>
+                <div style={{ padding: "5px 12px 8px", borderBottom: "1px solid rgba(15,23,42,0.06)", marginBottom: 4 }}>
                   <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-muted)", letterSpacing: "1.2px", textTransform: "uppercase" }}>More Sections</span>
                 </div>
                 {[
-                  { to: "/schedule",      label: "Schedule",     dot: "#D896FF" },
-                  { to: "/results",       label: "Results",      dot: "#39FF14" },
-                  { to: "/players",       label: "Players",      dot: "#FFEA00" },
-                  { to: "/videos",        label: "Videos",       dot: "#FF5C8A" },
-                  { to: "/about",         label: "About",        dot: "#FF2E9A" },
+                  { to: "/schedule",      label: "Schedule",     dot: "#0b63c4" },
+                  { to: "/results",       label: "Results",      dot: "#15803d" },
+                  { to: "/players",       label: "Players",      dot: "#b45309" },
+                  { to: "/videos",        label: "Videos",       dot: "#c81e28" },
+                  { to: "/about",         label: "About",        dot: "#0b7a55" },
                 ].map(l => (
                   <Link key={l.to} to={l.to} onClick={() => setShowMore(false)}
                     style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 13, fontWeight: 400, color: "var(--text2)", transition: "background 0.12s, color 0.12s" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.045)"; e.currentTarget.style.color = "#F1F5F9"; }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.045)"; e.currentTarget.style.color = "#1a2027"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}>
                     <span style={{ width: 6, height: 6, borderRadius: "50%", background: l.dot, flexShrink: 0, opacity: 0.85 }} />
                     {l.label}
@@ -448,28 +436,28 @@ export default function Navbar() {
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search players or teams…"
-              aria-label="Search players or teams"
+              placeholder="Search players…"
+              aria-label="Search players"
               style={{
-                width: 240,
+                width: 170,
                 padding: "8px 14px 8px 33px",
                 fontSize: 13,
                 borderRadius: 8,
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.09)",
+                background: "var(--card)",
+                border: "1px solid rgba(15,23,42,0.09)",
                 color: "var(--text)",
                 outline: "none",
                 transition: "all 0.18s cubic-bezier(0.2,0,0,1)",
                 fontFamily: "'Inter', sans-serif",
               }}
               onFocus={e => {
-                e.target.style.background = "rgba(255,255,255,0.07)";
-                e.target.style.borderColor = "rgba(59,130,246,0.45)";
-                e.target.style.boxShadow = "0 0 0 3px rgba(59,130,246,0.08)";
+                e.target.style.background = "rgba(15,23,42,0.07)";
+                e.target.style.borderColor = "rgba(11,99,196,0.45)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(11,99,196,0.08)";
               }}
               onBlur={e => {
-                e.target.style.background = "rgba(255,255,255,0.04)";
-                e.target.style.borderColor = "rgba(255,255,255,0.09)";
+                e.target.style.background = "rgba(15,23,42,0.04)";
+                e.target.style.borderColor = "rgba(15,23,42,0.09)";
                 e.target.style.boxShadow = "none";
               }}
             />
@@ -512,7 +500,7 @@ export default function Navbar() {
           overflow: "hidden",
           maxHeight: open ? "700px" : "0",
           transition: "max-height 0.30s cubic-bezier(0.2,0,0,1)",
-          background: "rgba(8,12,20,0.99)",
+          background: "rgba(255,255,255,0.99)",
           borderTop: open ? "1px solid var(--border)" : "none",
         }}>
           <div style={{ padding: "12px 16px 20px", display: "flex", flexDirection: "column", gap: 2 }}>
@@ -538,7 +526,7 @@ export default function Navbar() {
                     transition: "background 0.12s, color 0.12s",
                     display: "block",
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#F1F5F9"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.04)"; e.currentTarget.style.color = "#1a2027"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
                 >
                   {n.label}
@@ -570,7 +558,7 @@ export default function Navbar() {
                     alignItems: "center",
                     gap: 10,
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#F1F5F9"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.04)"; e.currentTarget.style.color = "#1a2027"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
                 >
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: l.dot, flexShrink: 0, opacity: 0.8 }} />
@@ -603,7 +591,7 @@ export default function Navbar() {
                     alignItems: "center",
                     gap: 10,
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#F1F5F9"; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.04)"; e.currentTarget.style.color = "#1a2027"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text2)"; }}
                 >
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: s.dot, flexShrink: 0, opacity: 0.8 }} />
@@ -661,7 +649,7 @@ export default function Navbar() {
                   width: "100%",
                   padding: "11px 14px 11px 36px",
                   borderRadius: 8,
-                  background: "rgba(255,255,255,0.04)",
+                  background: "var(--card)",
                   border: "1px solid var(--border)",
                   color: "var(--text)",
                   fontSize: 14,

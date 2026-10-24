@@ -6,7 +6,7 @@ const SPORTS = {
     slug: "football",
     name: "Football",
     icon: "⚽",
-    accentColor: "#39FF14",
+    accentColor: "#15803d",
     leagues: [
       "Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1",
       "UEFA Champions League", "UEFA Europa League", "MLS", "Eredivisie",
@@ -44,7 +44,7 @@ const SPORTS = {
     slug: "basketball",
     name: "Basketball",
     icon: "🏀",
-    accentColor: "#FF6B00",
+    accentColor: "#c2410c",
     leagues: ["NBA", "WNBA", "NCAA Men's Basketball", "NCAA Women's Basketball"],
     intro:
       "Live basketball scores, tip-off times and recent results from the NBA, the WNBA and NCAA college basketball. Scores refresh automatically during games.",
@@ -72,7 +72,7 @@ const SPORTS = {
     slug: "tennis",
     name: "Tennis",
     icon: "🎾",
-    accentColor: "#FFEA00",
+    accentColor: "#b45309",
     leagues: ["ATP Tour", "WTA Tour", "Grand Slams"],
     intro:
       "Live tennis scores and results from ATP and WTA tournaments, including the four Grand Slams. Set-by-set scores refresh automatically while matches are in play.",

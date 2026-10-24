@@ -14,17 +14,17 @@ function MatchChip({ match, onClick }) {
       display: "flex", flexDirection: "column",
       alignItems: align === "right" ? "flex-end" : "flex-start",
     }}>
-      <span style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: 0.4 }}>
+      <span style={{ fontSize: 10, fontWeight: 800, color: "rgba(15,23,42,0.6)", textTransform: "uppercase", letterSpacing: 0.4 }}>
         {team?.shortname || "TBD"}
       </span>
       {score
-        ? <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#fff", lineHeight: 1 }}>
+        ? <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "var(--text)", lineHeight: 1 }}>
             {score.r}/{score.w}
-            <span style={{ fontSize: 9, fontWeight: 500, color: "rgba(255,255,255,0.45)", marginLeft: 3 }}>
+            <span style={{ fontSize: 9, fontWeight: 500, color: "rgba(15,23,42,0.45)", marginLeft: 3 }}>
               ({score.o})
             </span>
           </span>
-        : <span style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>—</span>
+        : <span style={{ fontSize: 10, color: "rgba(15,23,42,0.35)", fontStyle: "italic" }}>—</span>
       }
     </div>
   );
@@ -39,26 +39,26 @@ function MatchChip({ match, onClick }) {
         gap: 10,
         padding: "6px 14px",
         borderRadius: 100,
-        background: "rgba(59,130,246,0.12)",
-        border: "1px solid rgba(59,130,246,0.28)",
+        background: "var(--card)",
+        border: "1px solid var(--border)",
         cursor: "pointer",
         transition: "all 0.2s",
         outline: "none",
         position: "relative",
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.background = "rgba(59,130,246,0.22)";
-        e.currentTarget.style.borderColor = "rgba(59,130,246,0.5)";
+        e.currentTarget.style.background = "var(--bg2)";
+        e.currentTarget.style.borderColor = "var(--border-light)";
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.background = "rgba(59,130,246,0.12)";
-        e.currentTarget.style.borderColor = "rgba(59,130,246,0.28)";
+        e.currentTarget.style.background = "var(--card)";
+        e.currentTarget.style.borderColor = "var(--border)";
       }}
     >
       {/* Live pulse dot */}
       <span style={{
         width: 5, height: 5, borderRadius: "50%",
-        background: "#B026FF",
+        background: "#0b7a55",
         animation: "livePulse 1.8s ease-in-out infinite",
         flexShrink: 0,
       }} />
@@ -67,7 +67,7 @@ function MatchChip({ match, onClick }) {
       {teamLabel(t1, s1, "left")}
 
       {/* VS */}
-      <span style={{ fontSize: 9, fontWeight: 900, color: "rgba(255,255,255,0.3)", letterSpacing: 1 }}>vs</span>
+      <span style={{ fontSize: 9, fontWeight: 900, color: "rgba(15,23,42,0.3)", letterSpacing: 1 }}>vs</span>
 
       {/* Team 2 */}
       {teamLabel(t2, s2, "right")}
@@ -75,9 +75,9 @@ function MatchChip({ match, onClick }) {
       {/* Status text */}
       {match.status && (
         <span style={{
-          fontSize: 9, fontWeight: 700, color: "rgba(59,130,246,0.8)",
+          fontSize: 9, fontWeight: 700, color: "var(--text3)",
           maxWidth: 100, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-          borderLeft: "1px solid rgba(59,130,246,0.2)", paddingLeft: 8,
+          borderLeft: "1px solid var(--border)", paddingLeft: 8,
         }}>
           {match.status}
         </span>
@@ -122,12 +122,12 @@ export default function Ticker() {
   if (!matches.length) {
     return (
       <div style={{
-        background: "rgba(59,130,246,0.05)",
-        borderBottom: "1px solid rgba(59,130,246,0.1)",
+        background: "var(--card)",
+        borderBottom: "1px solid var(--border)",
         height: 44, display: "flex", alignItems: "center",
         padding: "0 16px", gap: 12,
       }}>
-        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#B026FF", background: "rgba(59,130,246,0.12)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>
+        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#fff", background: "var(--live)", padding: "3px 10px", borderRadius: 100, flexShrink: 0 }}>
           LIVE FEED
         </span>
         <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 600 }}>
@@ -142,8 +142,8 @@ export default function Ticker() {
 
   return (
     <div style={{
-      background: "rgba(9,9,11,0.98)",
-      borderBottom: "1px solid rgba(59,130,246,0.12)",
+      background: "rgba(255,255,255,0.98)",
+      borderBottom: "1px solid var(--border)",
       height: 44,
       display: "flex",
       alignItems: "center",
@@ -158,12 +158,12 @@ export default function Ticker() {
         display: "flex",
         alignItems: "center",
         padding: "0 14px",
-        background: "linear-gradient(135deg,#8B00FF,#B026FF)",
+        background: "var(--live)",
         gap: 6,
-        borderRight: "1px solid rgba(59,130,246,0.2)",
+        borderRight: "1px solid var(--border)",
       }}>
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff", animation: "livePulse 1.8s infinite" }} />
-        <span style={{ fontSize: 10, fontWeight: 900, color: "#fff", letterSpacing: "1.2px", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+        <span style={{ fontSize: 10, fontWeight: 900, color: "var(--text)", letterSpacing: "1.2px", textTransform: "uppercase", whiteSpace: "nowrap" }}>
           Live
         </span>
       </div>
@@ -193,12 +193,12 @@ export default function Ticker() {
       {/* Fade edges */}
       <div style={{
         position: "absolute", left: 84, top: 0, bottom: 0, width: 32,
-        background: "linear-gradient(to right, rgba(9,9,11,0.9), transparent)",
+        background: "linear-gradient(to right, rgba(255,255,255,0.9), transparent)",
         pointerEvents: "none",
       }} />
       <div style={{
         position: "absolute", right: 0, top: 0, bottom: 0, width: 40,
-        background: "linear-gradient(to left, rgba(9,9,11,0.9), transparent)",
+        background: "linear-gradient(to left, rgba(255,255,255,0.9), transparent)",
         pointerEvents: "none",
       }} />
 

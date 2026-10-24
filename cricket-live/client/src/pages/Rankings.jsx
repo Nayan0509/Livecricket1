@@ -30,6 +30,10 @@ export default function Rankings() {
 
   const ranks = data?.response || [];
 
+  // The source sometimes returns no rating points; hide the column then rather than show it empty.
+
+  const hasRating = ranks.some(r => r.rating);
+
   const handleCategoryChange = (c) => {
     setCategory(c);
     if (c === "women" && format === "tests") setFormat("odis");
@@ -64,11 +68,11 @@ export default function Rankings() {
         margin: "16px 0 24px",
         padding: "28px 24px",
         borderRadius: 18,
-        background: "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(9,9,11,0.98) 100%)",
-        border: "1px solid rgba(59,130,246,0.14)",
+        background: "linear-gradient(135deg, rgba(11,99,196,0.08) 0%, rgba(255,255,255,0.98) 100%)",
+        border: "1px solid rgba(11,99,196,0.14)",
       }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-          ICC <span style={{ color: "#B026FF" }}>Rankings</span>
+          ICC <span style={{ color: "#0b7a55" }}>Rankings</span>
         </h1>
         <p style={{ fontSize: 13, color: "var(--text3)", margin: 0 }}>
           Official ICC player & team rankings across all formats
@@ -89,9 +93,9 @@ export default function Rankings() {
             style={{
               padding: "9px 22px", borderRadius: 100, cursor: "pointer",
               fontWeight: 700, fontSize: 13, textTransform: "capitalize",
-              background: category === c ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.04)",
-              color: category === c ? "#B026FF" : "var(--text3)",
-              border: `1.5px solid ${category === c ? "rgba(59,130,246,0.4)" : "rgba(255,255,255,0.08)"}`,
+              background: category === c ? "rgba(11,99,196,0.15)" : "rgba(15,23,42,0.04)",
+              color: category === c ? "#0b7a55" : "var(--text3)",
+              border: `1.5px solid ${category === c ? "rgba(11,99,196,0.4)" : "rgba(15,23,42,0.08)"}`,
               transition: "all 0.2s",
             }}
           >{c === "men" ? "Men's" : "Women's"}</button>
@@ -99,9 +103,9 @@ export default function Rankings() {
       </div>
 
       {/* Main container */}
-      <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, overflow: "hidden" }}>
+      <div style={{ background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)", borderRadius: 16, overflow: "hidden" }}>
         {/* Type tabs */}
-        <div style={{ display: "flex", borderBottom: "1px solid rgba(255,255,255,0.06)", overflowX: "auto", scrollbarWidth: "none" }}>
+        <div style={{ display: "flex", borderBottom: "1px solid rgba(15,23,42,0.06)", overflowX: "auto", scrollbarWidth: "none" }}>
           {Object.keys(TYPE_LABELS).map(t => (
             <button
               key={t}
@@ -109,8 +113,8 @@ export default function Rankings() {
               style={{
                 flex: 1, background: "none", border: "none", cursor: "pointer",
                 padding: "12px 16px", fontSize: 13, fontWeight: type === t ? 800 : 600,
-                color: type === t ? "#B026FF" : "var(--text3)",
-                borderBottom: type === t ? "2px solid #B026FF" : "2px solid transparent",
+                color: type === t ? "#0b7a55" : "var(--text3)",
+                borderBottom: type === t ? "2px solid #0b7a55" : "2px solid transparent",
                 marginBottom: -1, transition: "color 0.2s", whiteSpace: "nowrap",
                 fontFamily: "'Inter',sans-serif",
               }}
@@ -119,18 +123,18 @@ export default function Rankings() {
         </div>
 
         {/* Format radio */}
-        <div style={{ display: "flex", gap: 12, padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ display: "flex", gap: 12, padding: "12px 16px", borderBottom: "1px solid rgba(15,23,42,0.05)" }}>
           {FORMAT_TABS[category].map(f => (
             <label key={f} style={{
               display: "flex", alignItems: "center", gap: 6, cursor: "pointer",
               fontSize: 12, fontWeight: format === f ? 800 : 600,
-              color: format === f ? "#00F0FF" : "var(--text3)",
+              color: format === f ? "#0b63c4" : "var(--text3)",
             }}>
               <input
                 type="radio" name="format"
                 checked={format === f}
                 onChange={() => setFormat(f)}
-                style={{ accentColor: "#00F0FF", width: 13, height: 13 }}
+                style={{ accentColor: "#0b63c4", width: 13, height: 13 }}
               />
               {f.toUpperCase()}
             </label>
@@ -152,36 +156,38 @@ export default function Rankings() {
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 400 }}>
               <thead>
-                <tr style={{ background: "rgba(59,130,246,0.04)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <tr style={{ background: "rgba(11,99,196,0.04)", borderBottom: "1px solid rgba(15,23,42,0.06)" }}>
                   <th style={thStyle}>Pos</th>
                   <th style={{ ...thStyle, textAlign: "left" }}>{type === "teams" ? "Team" : "Player"}</th>
                   {type !== "teams" && <th style={thStyle}>Country</th>}
-                  <th style={thStyle}>Rating</th>
+                  {hasRating && <th style={thStyle}>Rating</th>}
                 </tr>
               </thead>
               <tbody>
                 {ranks.length > 0 ? ranks.map((r, i) => (
                   <tr
                     key={i}
-                    style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", transition: "background 0.15s" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.025)"; }}
+                    style={{ borderBottom: "1px solid rgba(15,23,42,0.04)", transition: "background 0.15s" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,23,42,0.025)"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                   >
                     <td style={tdStyle}>
                       <div style={{
                         width: 28, height: 28, borderRadius: "50%", display: "inline-flex",
                         alignItems: "center", justifyContent: "center",
-                        background: i < 3 ? "rgba(56,189,248,0.12)" : "rgba(255,255,255,0.04)",
-                        border: i < 3 ? "1px solid rgba(56,189,248,0.3)" : "1px solid rgba(255,255,255,0.06)",
+                        background: i < 3 ? "rgba(11,99,196,0.12)" : "rgba(15,23,42,0.04)",
+                        border: i < 3 ? "1px solid rgba(11,99,196,0.3)" : "1px solid rgba(15,23,42,0.06)",
                         fontSize: 12, fontWeight: 900,
-                        color: i < 3 ? "#00F0FF" : "var(--text3)",
+                        color: i < 3 ? "#0b63c4" : "var(--text3)",
                       }}>{r.rank || i + 1}</div>
                     </td>
                     <td style={{ ...tdStyle, textAlign: "left", fontWeight: 700, fontSize: 14, color: "var(--text)" }}>{r.name}</td>
                     {type !== "teams" && <td style={{ ...tdStyle, color: "var(--text3)", fontSize: 13 }}>{r.country}</td>}
-                    <td style={{ ...tdStyle }}>
-                      <span style={{ fontWeight: 900, fontSize: 15, color: "#B026FF", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>{r.rating}</span>
-                    </td>
+                    {hasRating && (
+                      <td style={{ ...tdStyle }}>
+                        <span style={{ fontWeight: 800, fontSize: 15, color: "var(--text)" }}>{r.rating}</span>
+                      </td>
+                    )}
                   </tr>
                 )) : (
                   <tr>

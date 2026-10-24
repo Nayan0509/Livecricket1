@@ -87,13 +87,13 @@ export default function PlayerDetail() {
           <div>
             <h1 style={{ fontSize: 26, fontWeight: 800 }}>{player.name}</h1>
             <div style={{ color: "var(--text2)", fontSize: 14, marginTop: 4 }}>
-              🌍 {player.country} &nbsp;•&nbsp; 🎭 {player.role}
+              {player.country} &nbsp;•&nbsp; {player.role}
             </div>
             <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 4 }}>
-              🏏 {player.battingStyle} &nbsp;•&nbsp; 🎳 {player.bowlingStyle}
+              {player.battingStyle} &nbsp;•&nbsp; {player.bowlingStyle}
             </div>
             <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 2 }}>
-              🎂 {player.born || player.dateOfBirth?.split("T")[0]} &nbsp;•&nbsp; 📍 {player.birthPlace || player.placeOfBirth}
+              {player.born || player.dateOfBirth?.split("T")[0]} &nbsp;•&nbsp; {player.birthPlace || player.placeOfBirth}
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function PlayerDetail() {
           { label: "Birth Place", value: player.birthPlace || player.placeOfBirth },
           { label: "Height", value: player.height },
         ].filter(i => i.value).map((item, i) => (
-          <div key={i} style={{ padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div key={i} style={{ padding: "14px 18px", borderRadius: 12, background: "var(--card)", border: "1px solid rgba(15,23,42,0.06)" }}>
             <div style={{ fontSize: 10, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", marginBottom: 4 }}>{item.label}</div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text2)" }}>{item.value}</div>
           </div>
@@ -128,7 +128,7 @@ export default function PlayerDetail() {
       {/* Batting Stats */}
       {battingFormats.length > 0 && (
         <div className="card" style={{ marginBottom: 20 }}>
-          <h3 style={{ fontWeight: 700, marginBottom: 16, color: "var(--green)" }}>🏏 Batting</h3>
+          <h3 style={{ fontWeight: 700, marginBottom: 16, color: "var(--green)" }}>Batting</h3>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
@@ -165,7 +165,7 @@ export default function PlayerDetail() {
       {/* Bowling Stats */}
       {bowlingFormats.length > 0 && (
         <div className="card" style={{ marginBottom: 20 }}>
-          <h3 style={{ fontWeight: 700, marginBottom: 16, color: "var(--text2)" }}>🎳 Bowling</h3>
+          <h3 style={{ fontWeight: 700, marginBottom: 16, color: "var(--text2)" }}>Bowling</h3>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
@@ -204,7 +204,7 @@ export default function PlayerDetail() {
       {/* Chart */}
       {chartData.length > 0 && (
         <div className="card">
-          <h3 style={{ fontWeight: 700, marginBottom: 16 }}>📊 Runs by Format</h3>
+          <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Runs by Format</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -232,12 +232,12 @@ function PlayerNewsSection({ playerName }) {
   return (
     <div style={{ marginBottom: 32 }}>
       <h3 style={{ fontWeight: 800, fontSize: 16, color: "var(--text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
-        <span style={{ fontSize: 20 }}>📰</span> Latest news on {playerName}
+        <span style={{ fontSize: 20 }}></span> Latest news on {playerName}
       </h3>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
         {items.map((n, i) => (
-          <div key={i} style={{ padding: "16px", borderRadius: 14, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
-            <div style={{ fontSize: 10, color: "#B026FF", fontWeight: 800, marginBottom: 8, textTransform: "uppercase" }}>{n.source}</div>
+          <div key={i} style={{ padding: "16px", borderRadius: 14, background: "var(--card)", border: "1px solid rgba(15,23,42,0.07)" }}>
+            <div style={{ fontSize: 10, color: "#0b7a55", fontWeight: 800, marginBottom: 8, textTransform: "uppercase" }}>{n.source}</div>
             <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text2)", lineHeight: 1.4, marginBottom: 8 }}>{n.title}</div>
             <div style={{ fontSize: 11, color: "var(--text3)" }}>{n.hoursAgo}h ago</div>
           </div>
