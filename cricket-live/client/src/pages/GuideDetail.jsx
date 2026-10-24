@@ -39,6 +39,17 @@ export default function GuideDetail() {
           By the Live Cricket Zone editorial team · Last reviewed {guide.reviewed}
         </p>
         <ContentBlocks blocks={guide.blocks} />
+
+        {guide.corrections.length > 0 && (
+          <section aria-label="Corrections" style={{ marginTop: 28, padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>Corrections</h2>
+            <ul style={{ margin: 0, paddingLeft: 20, color: "var(--text2)", fontSize: 14, lineHeight: 1.8 }}>
+              {guide.corrections.map((c, i) => (
+                <li key={i}><strong style={{ color: "var(--text)" }}>{c.date}:</strong> {c.text}</li>
+              ))}
+            </ul>
+          </section>
+        )}
       </article>
 
       <AdBanner type="auto" />

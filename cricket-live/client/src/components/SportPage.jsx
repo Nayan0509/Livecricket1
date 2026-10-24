@@ -5,7 +5,7 @@ import AdBanner from "./AdBanner";
 import ContentBlocks, { Inline, Faq } from "./ContentBlocks";
 import { MotionGrid, MotionItem } from "./MotionGrid";
 import { fetchSportMatches, fetchSportNews } from "../api";
-import { SPORTS } from "../content/sports";
+import { SPORTS, FACTS_NOTE } from "../content/sports";
 import { getStaticRouteMeta } from "../content/routeMeta";
 
 /**
@@ -143,6 +143,7 @@ export default function SportPage({ sport }) {
       <article style={{ maxWidth: 860 }}>
         <ContentBlocks blocks={cfg.sections} />
         <Faq items={cfg.faq} title="Frequently asked questions" />
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.7, margin: "18px 0 0" }}><Inline text={FACTS_NOTE} /></p>
       </article>
 
       <div style={{ marginTop: 20 }}><AdBanner type="auto" /></div>

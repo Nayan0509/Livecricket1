@@ -640,4 +640,9 @@ T["icc-cwc-league-2"] = {
 const TOURNAMENTS = T;
 const TOURNAMENT_SLUGS = Object.keys(T);
 
-module.exports = { TOURNAMENTS, TOURNAMENT_SLUGS };
+// When the facts above were last checked against sources. Team lists, formats
+// and venues change most seasons: re-check before each season and move this date.
+const FACTS_CHECKED = "24 October 2026";
+const FACTS_NOTE = `Facts on this page were last checked on ${FACTS_CHECKED}. If something is out of date, [tell us](/contact).`;
+
+module.exports = { TOURNAMENTS, TOURNAMENT_SLUGS, FACTS_CHECKED, FACTS_NOTE };

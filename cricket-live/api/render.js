@@ -11,8 +11,8 @@ const { inlineToHtml, escapeHtml, stripInline } = require("../client/src/content
 const { STATIC_ROUTES, NOINDEX_PREFIXES, isNoindexPath } = require("../client/src/content/routeMeta");
 const PAGES = require("../client/src/content/pages");
 const { GUIDES, GUIDE_CATEGORIES, getGuide } = require("../client/src/content/guides");
-const { TOURNAMENTS } = require("../client/src/content/tournaments");
-const { SPORTS } = require("../client/src/content/sports");
+const { TOURNAMENTS, FACTS_NOTE: TOURNAMENT_FACTS_NOTE } = require("../client/src/content/tournaments");
+const { SPORTS, FACTS_NOTE: SPORT_FACTS_NOTE } = require("../client/src/content/sports");
 const { TOOLS, getTool } = require("../client/src/content/tools");
 
 const isNoindex = isNoindexPath;
@@ -98,10 +98,13 @@ function pageFor(p) {
   if (p.startsWith("/guides/")) {
     const g = getGuide(p.slice("/guides/".length));
     if (!g) return null;
+    const corrections = g.corrections.length
+      ? `<h2>Corrections</h2><ul>${g.corrections.map(c => `<li><strong>${escapeHtml(c.date)}:</strong> ${escapeHtml(c.text)}</li>`).join("")}</ul>`
+      : "";
     return {
       meta: { title: g.title, description: stripInline(g.description) },
       ogType: "article",
-      body: `<article><h1>${escapeHtml(g.title)}</h1><p>By the ${escapeHtml(SITE_NAME)} editorial team · Last reviewed ${escapeHtml(g.reviewed)}</p>${blocksToHtml(g.blocks)}</article>`,
+      body: `<article><h1>${escapeHtml(g.title)}</h1><p>By the ${escapeHtml(SITE_NAME)} editorial team · Last reviewed ${escapeHtml(g.reviewed)}</p>${blocksToHtml(g.blocks)}${corrections}</article>`,
     };
   }
   if (p === "/tools") {
@@ -126,14 +129,14 @@ function pageFor(p) {
       : "";
     return {
       meta,
-      body: `<h1>${escapeHtml(t.name)}</h1><p>${inlineToHtml(t.intro)}</p>${t.season ? `<p>${inlineToHtml(t.season)}</p>` : ""}${teams}${blocksToHtml(t.sections)}${faqToHtml(t.faq, "Frequently asked questions")}`,
+      body: `<h1>${escapeHtml(t.name)}</h1><p>${inlineToHtml(t.intro)}</p>${t.season ? `<p>${inlineToHtml(t.season)}</p>` : ""}${teams}${blocksToHtml(t.sections)}${faqToHtml(t.faq, "Frequently asked questions")}<p>${inlineToHtml(TOURNAMENT_FACTS_NOTE)}</p>`,
     };
   }
   const s = SPORTS[p.slice(1)];
   if (s) {
     return {
       meta,
-      body: `<h1>${escapeHtml(s.name)}</h1><p>${inlineToHtml(s.intro)}</p>${blocksToHtml(s.sections)}${faqToHtml(s.faq, "Frequently asked questions")}`,
+      body: `<h1>${escapeHtml(s.name)}</h1><p>${inlineToHtml(s.intro)}</p>${blocksToHtml(s.sections)}${faqToHtml(s.faq, "Frequently asked questions")}<p>${inlineToHtml(SPORT_FACTS_NOTE)}</p>`,
     };
   }
   const intro = PAGES.PAGE_INTROS[p];

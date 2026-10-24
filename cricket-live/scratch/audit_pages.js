@@ -11,7 +11,10 @@ for (const file of files) {
   const content = fs.readFileSync(path.join(pagesDir, file), 'utf8');
   // Check for common red flags:
   // 1. empty components
-  if (content.length < 200) {
+  // Thin wrappers that render <TournamentPage slug> or <SportPage sport> get
+  // their text from src/content, so a short file is expected there.
+  const isWrapper = /<(TournamentPage|SportPage)\b/.test(content);
+  if (content.length < 200 && !isWrapper) {
     console.warn(`⚠️ Warning: ${file} is very short (${content.length} chars)`);
   }
   // 2. check for lorem ipsum

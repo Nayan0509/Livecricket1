@@ -6,7 +6,7 @@ import AdBanner from "./AdBanner";
 import ContentBlocks, { Inline, Faq } from "./ContentBlocks";
 import { MotionGrid, MotionItem } from "./MotionGrid";
 import { fetchAllMatches, subscribeLiveMatchStream } from "../api";
-import { TOURNAMENTS } from "../content/tournaments";
+import { TOURNAMENTS, FACTS_NOTE } from "../content/tournaments";
 import { getStaticRouteMeta } from "../content/routeMeta";
 import { stripInline } from "../content/inline";
 
@@ -228,6 +228,7 @@ export default function TournamentPage({ slug, children }) {
 
         <ContentBlocks blocks={t.sections} />
         <Faq items={faqItems} title="Frequently asked questions" />
+        <p style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.7, margin: "18px 0 0" }}><Inline text={FACTS_NOTE} /></p>
       </article>
 
       <div style={{ marginTop: 28 }}><AdBanner type="auto" /></div>

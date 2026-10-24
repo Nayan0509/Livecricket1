@@ -97,4 +97,8 @@ const SPORTS = {
   },
 };
 
-module.exports = { SPORTS, SPORT_SLUGS: Object.keys(SPORTS) };
+// When the facts above were last checked against sources; move it after each review.
+const FACTS_CHECKED = "24 October 2026";
+const FACTS_NOTE = `Facts on this page were last checked on ${FACTS_CHECKED}. If something is out of date, [tell us](/contact).`;
+
+module.exports = { SPORTS, SPORT_SLUGS: Object.keys(SPORTS), FACTS_CHECKED, FACTS_NOTE };
