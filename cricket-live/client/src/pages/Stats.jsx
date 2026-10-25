@@ -6,6 +6,7 @@ import SEO from "../components/SEO";
 import { PageIntro } from "../components/ContentBlocks";
 import { PAGE_INTROS } from "../content/pages";
 import AdBanner from "../components/AdBanner";
+import RecordsSection from "../components/RecordsSection";
 
 const QUICK_SEARCHES = ["virat", "rohit", "bumrah", "babar", "root", "cummins", "smith", "head", "gill", "pant"];
 
@@ -118,6 +119,8 @@ export default function Stats() {
           ))}
         </div>
       </section>
+
+      <RecordsSection />
 
       {/* Player Search & Directory */}
       <section style={{ marginBottom: 28 }}>

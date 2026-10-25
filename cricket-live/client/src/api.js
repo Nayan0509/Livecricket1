@@ -38,7 +38,6 @@ export const fetchMatchScorecard    = (id) => api.get(`/matches/${id}/scorecard`
 export const fetchMatchCommentary   = (id, page = 0) => api.get(`/matches/${id}/commentary`, { params: { page } }).then(r => r.data);
 export const fetchMatchLiveData     = (id) => api.get(`/matches/${id}/live-data`).then(r => r.data);
 export const fetchMatchSquad        = (id) => api.get(`/matches/${id}/squad`).then(r => r.data);
-export const fetchMatchAnalysis     = (id) => api.get(`/matches/${id}/analysis`).then(r => r.data);
 export const fetchMatchH2H          = (id) => api.get(`/matches/${id}/h2h`).then(r => r.data);
 export const fetchMatchFullInfo     = (id) => api.get(`/matches/${id}/info`).then(r => r.data);
 export const fetchMatchOvers        = (id) => api.get(`/matches/${id}/overs`).then(r => r.data);
@@ -66,7 +65,8 @@ export const fetchIPLStandings      = () => api.get("/matches/standings").then(r
 export const fetchVenueInfo         = (id) => api.get(`/venues/${id}`).then(r => r.data);
 export const fetchSeriesArchive     = (year) => api.get(`/series/archive/${year}`).then(r => r.data);
 export const fetchDetailedSchedule  = (type, month, year) => api.get("/schedule", { params: { type, month, year } }).then(r => r.data);
-export const fetchGlobalStats       = (format, type, category) => api.get("/stats", { params: { format, type, category } }).then(r => r.data);
+// International records computed from Cricsheet data (format: test|odi|t20i, gender: men|women)
+export const fetchRecords          = (format, gender) => api.get("/stats", { params: { format, gender } }).then(r => r.data);
 
 // ─── YouTube ─────────────────────────────────────────────────────────────────
 export const fetchYouTubeSearch     = (q) => api.get("/youtube/search", { params: { q } }).then(r => r.data);

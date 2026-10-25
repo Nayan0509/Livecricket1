@@ -1,0 +1,744 @@
+{
+  "source": "Cricsheet",
+  "url": "https://cricsheet.org",
+  "licence": "Open Data Commons Attribution License (ODC-By) v1.0",
+  "licenceUrl": "https://opendatacommons.org/licenses/by/1-0/",
+  "licencePage": "https://cricsheet.org/licensing/",
+  "attribution": "Contains information from Cricsheet (https://cricsheet.org), which is made available under the ODC Attribution License (https://opendatacommons.org/licenses/by/1-0/).",
+  "builtAt": "2026-10-24T11:41:16.528Z",
+  "downloads": [
+    {
+      "url": "https://cricsheet.org/downloads/tests_json.zip",
+      "bytes": 17313440,
+      "lastModified": "Wed, 14 Oct 2026 22:22:43 GMT"
+    },
+    {
+      "url": "https://cricsheet.org/downloads/odis_json.zip",
+      "bytes": 21679439,
+      "lastModified": "Wed, 14 Oct 2026 22:22:59 GMT"
+    },
+    {
+      "url": "https://cricsheet.org/downloads/t20s_json.zip",
+      "bytes": 23063106,
+      "lastModified": "Wed, 14 Oct 2026 22:23:07 GMT"
+    }
+  ],
+  "perFormat": {
+    "test": {
+      "men": {
+        "matches": 896,
+        "firstDate": "2001-12-19",
+        "lastDate": "2026-10-09"
+      },
+      "women": {
+        "matches": 24,
+        "firstDate": "2003-02-22",
+        "lastDate": "2026-07-10"
+      }
+    },
+    "odi": {
+      "men": {
+        "matches": 2596,
+        "firstDate": "2002-06-27",
+        "lastDate": "2026-10-13"
+      },
+      "women": {
+        "matches": 617,
+        "firstDate": "2007-01-22",
+        "lastDate": "2026-10-14"
+      }
+    },
+    "t20i": {
+      "men": {
+        "matches": 3627,
+        "firstDate": "2005-02-17",
+        "lastDate": "2026-10-14"
+      },
+      "women": {
+        "matches": 2183,
+        "firstDate": "2009-06-18",
+        "lastDate": "2026-10-07"
+      }
+    }
+  },
+  "byYear": {
+    "test": {
+      "men": {
+        "2001": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2002": {
+          "matches": 2,
+          "missingNumbers": 55,
+          "share": 0.04
+        },
+        "2003": {
+          "matches": 20,
+          "missingNumbers": 20,
+          "share": 0.5
+        },
+        "2004": {
+          "matches": 17,
+          "missingNumbers": 34,
+          "share": 0.33
+        },
+        "2005": {
+          "matches": 24,
+          "missingNumbers": 29,
+          "share": 0.45
+        },
+        "2006": {
+          "matches": 39,
+          "missingNumbers": 7,
+          "share": 0.85
+        },
+        "2007": {
+          "matches": 30,
+          "missingNumbers": 1,
+          "share": 0.97
+        },
+        "2008": {
+          "matches": 43,
+          "missingNumbers": 3,
+          "share": 0.93
+        },
+        "2009": {
+          "matches": 41,
+          "missingNumbers": 1,
+          "share": 0.98
+        },
+        "2010": {
+          "matches": 43,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2011": {
+          "matches": 39,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2012": {
+          "matches": 42,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2013": {
+          "matches": 44,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2014": {
+          "matches": 41,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2015": {
+          "matches": 43,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2016": {
+          "matches": 47,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2017": {
+          "matches": 47,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2018": {
+          "matches": 47,
+          "missingNumbers": 1,
+          "share": 0.98
+        },
+        "2019": {
+          "matches": 36,
+          "missingNumbers": 3,
+          "share": 0.92
+        },
+        "2020": {
+          "matches": 22,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2021": {
+          "matches": 42,
+          "missingNumbers": 2,
+          "share": 0.95
+        },
+        "2022": {
+          "matches": 43,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2023": {
+          "matches": 33,
+          "missingNumbers": 1,
+          "share": 0.97
+        },
+        "2024": {
+          "matches": 50,
+          "missingNumbers": 2,
+          "share": 0.96
+        },
+        "2025": {
+          "matches": 40,
+          "missingNumbers": 3,
+          "share": 0.93
+        },
+        "2026": {
+          "matches": 20,
+          "missingNumbers": 2,
+          "share": 0.91
+        }
+      },
+      "women": {
+        "2003": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2005": {
+          "matches": 1,
+          "missingNumbers": 6,
+          "share": 0.14
+        },
+        "2006": {
+          "matches": 1,
+          "missingNumbers": 2,
+          "share": 0.33
+        },
+        "2008": {
+          "matches": 1,
+          "missingNumbers": 2,
+          "share": 0.33
+        },
+        "2009": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2011": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2013": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2014": {
+          "matches": 1,
+          "missingNumbers": 1,
+          "share": 0.5
+        },
+        "2015": {
+          "matches": 1,
+          "missingNumbers": 1,
+          "share": 0.5
+        },
+        "2017": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2019": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2021": {
+          "matches": 2,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2022": {
+          "matches": 2,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2023": {
+          "matches": 3,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2024": {
+          "matches": 3,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2025": {
+          "matches": 1,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2026": {
+          "matches": 2,
+          "missingNumbers": 0,
+          "share": 1
+        }
+      }
+    },
+    "odi": {
+      "men": {
+        "2002": {
+          "matches": 3,
+          "missingNumbers": 78,
+          "share": 0.04
+        },
+        "2003": {
+          "matches": 119,
+          "missingNumbers": 27,
+          "share": 0.82
+        },
+        "2004": {
+          "matches": 79,
+          "missingNumbers": 50,
+          "share": 0.61
+        },
+        "2005": {
+          "matches": 67,
+          "missingNumbers": 40,
+          "share": 0.63
+        },
+        "2006": {
+          "matches": 119,
+          "missingNumbers": 40,
+          "share": 0.75
+        },
+        "2007": {
+          "matches": 151,
+          "missingNumbers": 41,
+          "share": 0.79
+        },
+        "2008": {
+          "matches": 99,
+          "missingNumbers": 27,
+          "share": 0.79
+        },
+        "2009": {
+          "matches": 116,
+          "missingNumbers": 34,
+          "share": 0.77
+        },
+        "2010": {
+          "matches": 105,
+          "missingNumbers": 37,
+          "share": 0.74
+        },
+        "2011": {
+          "matches": 137,
+          "missingNumbers": 9,
+          "share": 0.94
+        },
+        "2012": {
+          "matches": 84,
+          "missingNumbers": 6,
+          "share": 0.93
+        },
+        "2013": {
+          "matches": 124,
+          "missingNumbers": 12,
+          "share": 0.91
+        },
+        "2014": {
+          "matches": 104,
+          "missingNumbers": 17,
+          "share": 0.86
+        },
+        "2015": {
+          "matches": 127,
+          "missingNumbers": 19,
+          "share": 0.87
+        },
+        "2016": {
+          "matches": 85,
+          "missingNumbers": 15,
+          "share": 0.85
+        },
+        "2017": {
+          "matches": 107,
+          "missingNumbers": 22,
+          "share": 0.83
+        },
+        "2018": {
+          "matches": 105,
+          "missingNumbers": 23,
+          "share": 0.82
+        },
+        "2019": {
+          "matches": 127,
+          "missingNumbers": 23,
+          "share": 0.85
+        },
+        "2020": {
+          "matches": 44,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2021": {
+          "matches": 65,
+          "missingNumbers": 5,
+          "share": 0.93
+        },
+        "2022": {
+          "matches": 148,
+          "missingNumbers": 14,
+          "share": 0.91
+        },
+        "2023": {
+          "matches": 195,
+          "missingNumbers": 24,
+          "share": 0.89
+        },
+        "2024": {
+          "matches": 89,
+          "missingNumbers": 15,
+          "share": 0.86
+        },
+        "2025": {
+          "matches": 108,
+          "missingNumbers": 7,
+          "share": 0.94
+        },
+        "2026": {
+          "matches": 89,
+          "missingNumbers": 8,
+          "share": 0.92
+        }
+      },
+      "women": {
+        "2007": {
+          "matches": 3,
+          "missingNumbers": 14,
+          "share": 0.18
+        },
+        "2008": {
+          "matches": 5,
+          "missingNumbers": 37,
+          "share": 0.12
+        },
+        "2009": {
+          "matches": 3,
+          "missingNumbers": 67,
+          "share": 0.04
+        },
+        "2011": {
+          "matches": 3,
+          "missingNumbers": 74,
+          "share": 0.04
+        },
+        "2012": {
+          "matches": 7,
+          "missingNumbers": 38,
+          "share": 0.16
+        },
+        "2013": {
+          "matches": 24,
+          "missingNumbers": 29,
+          "share": 0.45
+        },
+        "2014": {
+          "matches": 14,
+          "missingNumbers": 24,
+          "share": 0.37
+        },
+        "2015": {
+          "matches": 11,
+          "missingNumbers": 23,
+          "share": 0.32
+        },
+        "2016": {
+          "matches": 27,
+          "missingNumbers": 33,
+          "share": 0.45
+        },
+        "2017": {
+          "matches": 62,
+          "missingNumbers": 8,
+          "share": 0.89
+        },
+        "2018": {
+          "matches": 31,
+          "missingNumbers": 8,
+          "share": 0.79
+        },
+        "2019": {
+          "matches": 40,
+          "missingNumbers": 4,
+          "share": 0.91
+        },
+        "2020": {
+          "matches": 6,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2021": {
+          "matches": 45,
+          "missingNumbers": 4,
+          "share": 0.92
+        },
+        "2022": {
+          "matches": 77,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2023": {
+          "matches": 50,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2024": {
+          "matches": 70,
+          "missingNumbers": 1,
+          "share": 0.99
+        },
+        "2025": {
+          "matches": 94,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2026": {
+          "matches": 45,
+          "missingNumbers": 2,
+          "share": 0.96
+        }
+      }
+    },
+    "t20i": {
+      "men": {
+        "2005": {
+          "matches": 3,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2006": {
+          "matches": 8,
+          "missingNumbers": 1,
+          "share": 0.89
+        },
+        "2007": {
+          "matches": 36,
+          "missingNumbers": 2,
+          "share": 0.95
+        },
+        "2008": {
+          "matches": 15,
+          "missingNumbers": 14,
+          "share": 0.52
+        },
+        "2009": {
+          "matches": 48,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2010": {
+          "matches": 56,
+          "missingNumbers": 12,
+          "share": 0.82
+        },
+        "2011": {
+          "matches": 21,
+          "missingNumbers": 0,
+          "share": 1
+        },
+        "2012": {
+          "matches": 72,
+          "missingNumbers": 10,
+          "share": 0.88
+        },
+        "2013": {
+          "matches": 42,
+          "missingNumbers": 11,
+          "share": 0.79
+        },
+        "2014": {
+          "matches": 58,
+          "missingNumbers": 3,
+          "share": 0.95
+        },
+        "2015": {
+          "matches": 45,
+          "missingNumbers": 16,
+          "share": 0.74
+        },
+        "2016": {
+          "matches": 82,
+          "missingNumbers": 16,
+          "share": 0.84
+        },
+        "2017": {
+          "matches": 53,
+          "missingNumbers": 13,
+          "share": 0.8
+        },
+        "2018": {
+          "matches": 74,
+          "missingNumbers": 7,
+          "share": 0.91
+        },
+        "2019": {
+          "matches": 206,
+          "missingNumbers": 103,
+          "share": 0.66
+        },
+        "2020": {
+          "matches": 72,
+          "missingNumbers": 23,
+          "share": 0.76
+        },
+        "2021": {
+          "matches": 289,
+          "missingNumbers": 44,
+          "share": 0.87
+        },
+        "2022": {
+          "matches": 444,
+          "missingNumbers": 86,
+          "share": 0.84
+        },
+        "2023": {
+          "matches": 345,
+          "missingNumbers": 100,
+          "share": 0.77
+        },
+        "2024": {
+          "matches": 611,
+          "missingNumbers": 46,
+          "share": 0.93
+        },
+        "2025": {
+          "matches": 531,
+          "missingNumbers": 54,
+          "share": 0.91
+        },
+        "2026": {
+          "matches": 516,
+          "missingNumbers": 28,
+          "share": 0.95
+        }
+      },
+      "women": {
+        "2009": {
+          "matches": 4,
+          "missingNumbers": 4,
+          "share": 0.5
+        },
+        "2010": {
+          "matches": 4,
+          "missingNumbers": 41,
+          "share": 0.09
+        },
+        "2011": {
+          "matches": 2,
+          "missingNumbers": 29,
+          "share": 0.06
+        },
+        "2012": {
+          "matches": 32,
+          "missingNumbers": 31,
+          "share": 0.51
+        },
+        "2013": {
+          "matches": 18,
+          "missingNumbers": 19,
+          "share": 0.49
+        },
+        "2014": {
+          "matches": 41,
+          "missingNumbers": 28,
+          "share": 0.59
+        },
+        "2015": {
+          "matches": 18,
+          "missingNumbers": 14,
+          "share": 0.56
+        },
+        "2016": {
+          "matches": 36,
+          "missingNumbers": 20,
+          "share": 0.64
+        },
+        "2017": {
+          "matches": 10,
+          "missingNumbers": 3,
+          "share": 0.77
+        },
+        "2018": {
+          "matches": 113,
+          "missingNumbers": 30,
+          "share": 0.79
+        },
+        "2019": {
+          "matches": 141,
+          "missingNumbers": 143,
+          "share": 0.49
+        },
+        "2020": {
+          "matches": 49,
+          "missingNumbers": 11,
+          "share": 0.82
+        },
+        "2021": {
+          "matches": 101,
+          "missingNumbers": 33,
+          "share": 0.75
+        },
+        "2022": {
+          "matches": 211,
+          "missingNumbers": 111,
+          "share": 0.66
+        },
+        "2023": {
+          "matches": 258,
+          "missingNumbers": 132,
+          "share": 0.66
+        },
+        "2024": {
+          "matches": 348,
+          "missingNumbers": 101,
+          "share": 0.77
+        },
+        "2025": {
+          "matches": 415,
+          "missingNumbers": 50,
+          "share": 0.89
+        },
+        "2026": {
+          "matches": 382,
+          "missingNumbers": 31,
+          "share": 0.92
+        }
+      }
+    }
+  },
+  "coverageNotes": [
+    "Cricsheet does not hold every international match. The data starts on 2001-12-19 (test men), 2003-02-22 (test women), 2002-06-27 (odi men), 2007-01-22 (odi women), 2005-02-17 (t20i men), 2009-06-18 (t20i women). Careers before those dates are incomplete, and early years are sparse (see byYear.share).",
+    "Since 14 November 2024 Cricsheet withholds all matches involving the Afghanistan men's team (https://cricsheet.org/withheld-matches). They are not counted here, including for their opponents.",
+    "Matches abandoned without a ball bowled are not in Cricsheet, so head-to-head no-result counts can be lower than official records."
+  ],
+  "countingRules": [
+    "Players are aggregated by Cricsheet person identifier, not by name; the name shown is the one used in the player's latest match in the data.",
+    "A player's matches are the matches where Cricsheet lists them in info.players for that format and gender.",
+    "Batting: an innings is counted for anyone who faced a ball, stood as non-striker or was dismissed. Not out means batted and not dismissed; 'retired hurt' and 'retired not out' are not dismissals. Balls faced exclude wides and include no-balls. Fours and sixes exclude runs flagged non_boundary.",
+    "Bowling: runs conceded are batter runs plus wides and no-balls (not byes, leg-byes or penalty runs). Wickets credited to the bowler: bowled, caught, caught and bowled, lbw, stumped, hit wicket. Balls exclude wides and no-balls.",
+    "Team totals include penalty runs; wickets exclude retired-hurt and retired-not-out. Super overs are excluded from all player and team figures.",
+    "Head-to-head: a tie decided by a Super Over or bowl-out counts as a tie; the tie-break winner is listed in tieBreakWins and in the result text.",
+    "Venues: Cricsheet spellings of the same ground are merged by name rules plus a short alias list (scripts/cricsheet/venues.js). Average first-innings totals exclude no-result matches; they include rain-reduced matches.",
+    "byYear: matches = matches in the data that year; missingNumbers = official match numbers (info.match_type_number) between consecutive matches in the data that have no file (not in Cricsheet, withheld, or abandoned without a ball, which still receive a number); share = matches with a number / (those + missingNumbers), an estimate and a lower bound of how much of that year the data holds.",
+    "mayBeIncomplete marks players whose first match in the data is in the first year of that format's data or in a year with share below 0.8, so some of their matches are probably missing. Players without the flag can still miss withheld matches."
+  ],
+  "inputs": {
+    "files": {
+      "test": 920,
+      "odi": 3213,
+      "t20i": 5810
+    },
+    "skipped": {},
+    "unregisteredNames": 0
+  }
+}

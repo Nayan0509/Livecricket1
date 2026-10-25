@@ -64,7 +64,11 @@ const ABOUT = {
     { type: "h2", text: "Where the data comes from" },
     {
       type: "p",
-      text: "Live scores, scorecards, fixtures and rankings are collected automatically from publicly available match-centre data and public sports data feeds, and refreshed while play is on. We do not hold an official data licence from any board or league. For that reason we treat this data as what it is: factual match information that we display but did not create. It is labelled as live data, it is never rewritten into articles, and where a figure differs from the official scorer's, the official figure is correct.",
+      text: "Live scores, scorecards, fixtures and rankings are collected automatically from publicly available match-centre data and public sports data feeds, mainly Cricbuzz's match centre, with ESPN's public scoreboard adding domestic and Associate competitions that feed does not carry. They are refreshed while play is on. We do not hold an official data licence from any board or league. For that reason we treat this data as what it is: factual match information that we display but did not create. It is labelled as live data, it is never rewritten into articles, and where a figure differs from the official scorer's, the official figure is correct.",
+    },
+    {
+      type: "p",
+      text: "International records, head-to-head results and ground records are worked out by us from [Cricsheet](https://cricsheet.org)'s open ball-by-ball data, used under the [Open Data Commons Attribution License](https://opendatacommons.org/licenses/by/1-0/). That data starts between 2001 and 2009 depending on format and does not include every match, so these figures are labelled as records within the data, not all-time records.",
     },
     {
       type: "p",
@@ -498,7 +502,7 @@ const PAGE_INTROS = {
     blocks: [
       {
         type: "p",
-        text: "Look up any cricketer's career figures and see who currently leads the ICC batting and bowling rankings in each format. Statistics are collected from public sources; where a figure is unavailable the section says so rather than showing an old snapshot.",
+        text: "Look up any cricketer's career figures, see who currently leads the ICC batting and bowling rankings in each format, and browse international records worked out from open ball-by-ball data. Statistics are collected from public sources; where a figure is unavailable the section says so rather than showing an old snapshot.",
       },
     ],
     empty: "Statistics are unavailable right now.",

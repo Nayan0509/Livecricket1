@@ -2,6 +2,8 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const NodeCache = require("node-cache");
 const scraper = require("./scraper");
+const espnCricket = require("./espnCricket");
+const cricsheet = require("./cricsheet");
 const multiSport = require("./multiSportScraper");
 const kachufulEngine = require("./kachufulRooms");
 
@@ -92,8 +94,8 @@ async function searchPlayers(query) {
 
 // ─── ALL MATCHES (JSON extraction from Cricbuzz) ─────────────────────────────
 
-async function getAllMatches() {
-  const cacheKey = "all-matches";
+async function getCricbuzzMatches() {
+  const cacheKey = "cricbuzz-matches";
   const cached = cache.get(cacheKey);
   if (cached) return cached;
 
@@ -153,6 +155,8 @@ async function getAllMatches() {
             id: info.matchId ? String(info.matchId) : String(Math.random()),
             name: info.team1 && info.team2 ? `${info.team1.teamName} vs ${info.team2.teamName}` : "Match",
             matchType: info.matchFormat || "Match",
+            series: info.seriesName || s.seriesName || "",
+            seriesId: info.seriesId || s.seriesId || null,
             status: info.status || info.state || "Scheduled",
             venue: info.venueInfo ? `${info.venueInfo.ground}, ${info.venueInfo.city}` : "",
             date: matchDate.toLocaleDateString(),
@@ -174,12 +178,67 @@ async function getAllMatches() {
     });
 
     cache.set(cacheKey, result);
-    console.log(`[API] allMatches: live=${result.live.length} recent=${result.recent.length} upcoming=${result.upcoming.length}`);
+    console.log(`[API] cricbuzz: live=${result.live.length} recent=${result.recent.length} upcoming=${result.upcoming.length}`);
     return result;
   } catch (e) {
     console.error("[API] getAllMatches failed:", e.message);
     return result;
   }
+}
+
+// ─── ALL MATCHES: Cricbuzz first, ESPN adds competitions Cricbuzz's feed misses ──
+// and covers for it when Cricbuzz fails. Duplicates are dropped in favour of the
+// Cricbuzz entry (see mergeMatchLists in api/espnCricket.js).
+async function getAllMatches() {
+  const cached = cache.get("all-matches");
+  if (cached) return cached;
+
+  const [cb, espn] = await Promise.all([
+    getCricbuzzMatches(),
+    espnCricket.getEspnMatches().catch(() => ({ live: [], recent: [], upcoming: [] })),
+  ]);
+  // ESPN lists some matches as live with no coverage at all (no score): leave those out.
+  espn.live = (espn.live || []).filter(m => m.score && m.score.length);
+
+  const merged = espnCricket.mergeMatchLists(cb, espn);
+  const time = m => new Date(m.dateTimeGMT).getTime() || 0;
+  merged.upcoming.sort((a, b) => time(a) - time(b));
+  merged.recent.sort((a, b) => time(b) - time(a));
+
+  cache.set("all-matches", merged);
+  console.log(`[API] allMatches: live=${merged.live.length} recent=${merged.recent.length} upcoming=${merged.upcoming.length} (cricbuzz ${cb.live.length}/${cb.recent.length}/${cb.upcoming.length})`);
+  return merged;
+}
+
+// ─── CRICSHEET: head-to-head and venue records for international matches ─────
+// Figures are computed from Cricsheet's open ball-by-ball data (see
+// api/cricsheet.js); every response that carries them includes the attribution.
+
+// Cricsheet only covers internationals: map the site's matchType to its format.
+function cricsheetFormat(matchType) {
+  const t = String(matchType || "").toUpperCase();
+  if (t === "TEST") return "test";
+  if (t === "ODI") return "odi";
+  if (t === "T20" || t === "T20I") return "t20i";
+  return null;
+}
+const isWomen = names => names.some(n => /\bwomen\b|\bw$/i.test(String(n || "").trim()));
+
+async function matchHeadToHead(match) {
+  const fmt = cricsheetFormat(match && match.matchType);
+  const [a, b] = (match && match.teams) || [];
+  if (!fmt || !a || !b) return null;
+  const h2h = cricsheet.getHeadToHead(a, b, fmt, isWomen([a, b]) ? "women" : "men");
+  return h2h ? { ...h2h, attribution: cricsheet.ATTRIBUTION } : null;
+}
+
+function venueRecord(venueName, matchType, teams) {
+  const fmt = cricsheetFormat(matchType);
+  if (!fmt || !venueName) return null;
+  const v = cricsheet.getVenue(venueName);
+  const stats = v && v.formats && v.formats[fmt] && v.formats[fmt][isWomen(teams || []) ? "women" : "men"];
+  if (!stats || !stats.matches) return null;
+  return { name: v.label || v.name, format: fmt, firstDate: v.firstDate, lastDate: v.lastDate, ...stats, attribution: cricsheet.ATTRIBUTION };
 }
 
 // ─── MATCH INFO ──────────────────────────────────────────────────────────────
@@ -749,6 +808,27 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", response: { schedules } });
     }
 
+    // ── ESPN matches (ids "espn-<league>-<event>") ──────────────────────────
+    if (parts[0] === "matches" && /^espn-\d+-\d+$/.test(parts[1] || "")) {
+      const sm = await espnCricket.getEspnMatchSummary(null, parts[1]);
+      const sub = parts[2] || "";
+      let data = null;
+      if (sm) {
+        if (!sub) data = espnCricket.summaryToMatchInfo(sm);
+        else if (sub === "scorecard") data = espnCricket.summaryToScorecard(sm);
+        else if (sub === "commentary") data = espnCricket.summaryToCommentary(sm);
+        else if (sub === "score") data = espnCricket.summaryToMatchInfo(sm).score;
+        else if (sub === "info") {
+          data = espnCricket.summaryToInfoTab(sm);
+          data.venueRecord = venueRecord(sm.venue, sm.matchType, (sm.teams || []).map(t => t.name));
+        }
+        else if (sub === "h2h") data = await matchHeadToHead(espnCricket.summaryToMatchInfo(sm));
+      }
+      // Tabs ESPN has no data for (live-data, overs, squad) get an empty answer.
+      if (data == null) data = ["commentary", "overs"].includes(sub) ? [] : null;
+      return res.json({ status: "success", data });
+    }
+
     // ── Match commentary ─────────────────────────────────────────────────────
     if (parts[0] === "matches" && parts[2] === "commentary") {
       let data = await scraper.scrapeCommentary(parts[1]);
@@ -783,15 +863,25 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data });
     }
 
-    // ── Match head-to-head ───────────────────────────────────────────────────
-    if (parts[0] === "matches" && parts[2] === "h2h") {
-      const data = await scraper.scrapeMatchH2H(parts[1]);
+    // ── Match recent overs (latest 10 from Cricbuzz) ─────────────────────────
+    if (parts[0] === "matches" && parts[2] === "overs") {
+      const data = await scraper.scrapeMatchOvers(parts[1]);
       return res.json({ status: "success", data });
     }
 
-    // ── Match analysis (preview / report) ────────────────────────────────────
-    if (parts[0] === "matches" && parts[2] === "analysis") {
-      const data = await scraper.scrapeMatchAnalysis(parts[1]);
+    // ── Match info: toss, officials, venue ──────────────────────────────────
+    if (parts[0] === "matches" && parts[2] === "info") {
+      const data = await scraper.scrapeMatchInfoFull(parts[1]);
+      if (data) {
+        const match = await getMatchInfo(parts[1]);
+        data.venueRecord = venueRecord(data.venue && data.venue.fullName, data.matchType || match.matchType, match.teams);
+      }
+      return res.json({ status: "success", data });
+    }
+
+    // ── Match head-to-head ───────────────────────────────────────────────────
+    if (parts[0] === "matches" && parts[2] === "h2h") {
+      const data = await matchHeadToHead(await getMatchInfo(parts[1]));
       return res.json({ status: "success", data });
     }
 
@@ -866,12 +956,13 @@ module.exports = async (req, res) => {
       return res.json({ status: "success", data });
     }
 
-    // ── Career Stats & Records ───────────────────────────────────────────────
+    // ── Records computed from Cricsheet (replaces a hard-coded list) ─────────
     if (parts[0] === "stats") {
-      const data = typeof scraper.scrapeCareerRecords === "function"
-        ? scraper.scrapeCareerRecords()
-        : {};
-      return res.json({ status: "success", data });
+      const format = ["test", "odi", "t20i"].includes(qp(req, "format")) ? qp(req, "format") : "test";
+      const gender = qp(req, "gender") === "women" ? "women" : "men";
+      const records = cricsheet.getRecords(format, gender);
+      res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=86400");
+      return res.json({ status: "success", data: records ? { ...records, attribution: cricsheet.ATTRIBUTION } : null });
     }
 
     // ── Venue info ──────────────────────────────────────────────────────────

@@ -1359,11 +1359,31 @@ async function scrapeRankings(category = "men", type = "batting", format = "test
   // HTML fallback
   try {
     const { data: html } = await axios.get(
-      `https://www.cricbuzz.com/cricket-stats/icc-rankings/${category}/${type}`,
+      `https://www.cricbuzz.com/cricket-stats/icc-rankings/${category}/${type === "all-rounders" ? "all-rounder" : type}`,
       { headers: htmlHeaders, timeout: 10000 }
     );
     const $ = cheerio.load(html);
     const ranks = [];
+
+    // Current Cricbuzz pages embed every format's list with ratings:
+    // "formatTypesData":{"test":{"rank":[...]},"odi":{...},"t20":{...}}.
+    // (Reading the page's default list instead gave the Test list for every format.)
+    const byFormat = _cbExtract(String(html).replace(/\\"/g, '"'), "formatTypesData");
+    const fmtKey = { tests: "test", odis: "odi", t20s: "t20" }[format] || "test";
+    const list = byFormat && byFormat[fmtKey] && byFormat[fmtKey].rank;
+    if (Array.isArray(list) && list.length) {
+      list.forEach(p => ranks.push({
+        rank: String(p.rank || ranks.length + 1),
+        name: p.name || p.teamName || "",
+        country: p.country || p.teamName || "",
+        rating: String(p.rating || p.points || ""),
+        img: p.faceImageId ? `https://static.cricbuzz.com/a/img/v1/75x75/i1/c${p.faceImageId}/i.jpg` : (getTeamImageUrl(p.country || p.name) || null),
+        id: p.id || null,
+      }));
+      staticCache.set(key, ranks);
+      return ranks;
+    }
+
     // Try __NEXT_DATA__ first
     const nd = $("script#__NEXT_DATA__").html();
     if (nd) {
@@ -2234,8 +2254,126 @@ async function cbLiveDataModern(matchId) {
     const header = _cbExtract(plain, "matchHeader") || {};
     const norm = { ...mini, partnership: mini.partnership || mini.partnerShip };
     const parsed = parseMiniscore(norm);
+    // The page does not always carry strike rate / economy; work them out
+    // from runs, balls and overs rather than showing "0.00".
+    for (const b of [parsed.batsman1, parsed.batsman2]) {
+      if (b && b.balls > 0 && !(parseFloat(b.sr) > 0)) b.sr = ((b.runs * 100) / b.balls).toFixed(2);
+    }
+    for (const bw of [parsed.bowler, parsed.bowler2]) {
+      if (bw && !(parseFloat(bw.economy) > 0)) {
+        const [o, part = "0"] = String(bw.overs || 0).split(".");
+        const balls = Number(o) * 6 + Number(part);
+        if (balls > 0) bw.economy = ((bw.runs * 6) / balls).toFixed(2);
+      }
+    }
     const out = { ...parsed, status: mini.status || header.status || "" };
     scrapeCache.set(key, out, 20);
+    return out;
+  } catch (_) { return null; }
+}
+
+// Parse the first JSON object that contains `"key":` and belongs to this match
+// (pages also embed other matches for the score ticker).
+function _cbObjectForMatch(plain, key, matchId) {
+  const marker = '"' + key + '":';
+  let idx = plain.indexOf(marker);
+  while (idx !== -1) {
+    let depth = 0, start = -1;
+    for (let k = idx; k >= 0; k--) {
+      const c = plain[k];
+      if (c === "}") depth++;
+      else if (c === "{") { if (depth === 0) { start = k; break; } depth--; }
+    }
+    if (start >= 0) {
+      let d = 0;
+      for (let k = start; k < plain.length; k++) {
+        const c = plain[k];
+        if (c === "{") d++;
+        else if (c === "}") {
+          d--;
+          if (d === 0) {
+            try {
+              const obj = JSON.parse(plain.slice(start, k + 1));
+              if (String(obj.matchId) === String(matchId)) return obj;
+            } catch (_) { /* not valid JSON here, keep looking */ }
+            break;
+          }
+        }
+      }
+    }
+    idx = plain.indexOf(marker, idx + 1);
+  }
+  return null;
+}
+
+// ── Recent overs (Cricbuzz's over-by-over page lists the latest 10) ──
+async function cbOversModern(matchId) {
+  const key = `cb2:overs:${matchId}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+  try {
+    const plain = await _cbPage(`https://www.cricbuzz.com/live-cricket-over-by-over/${matchId}/m`);
+    // Only trust the list when the page is for this match.
+    if (!plain.includes(`"matchId":${matchId}`)) return [];
+    const list = _cbExtract(plain, "overSummaryList") || [];
+    const out = list
+      .filter(o => o && o.overs != null)
+      .map(o => {
+        const summary = String(o.ovrSummary || "").trim();
+        return {
+          inningsId: o.inningsId,
+          overNum: o.overs,
+          runs: o.runs || 0,
+          // `wickets` on the page is the innings total; count this over's from the balls
+          wickets: summary.split(/\s+/).filter(b => /^W/.test(b) && !/^Wd/i.test(b)).length,
+          score: `${o.score}/${o.wickets}`,
+          summary,
+          batTeam: o.batTeamName || "",
+          batStriker: (o.batStrikerNames || []).join(", "),
+          bowlStriker: (o.bowlNames || o.bowlStrikerNames || []).join(", "),
+        };
+      })
+      .sort((a, b) => (a.inningsId - b.inningsId) || (a.overNum - b.overNum));
+    scrapeCache.set(key, out, 30);
+    return out;
+  } catch (_) { return []; }
+}
+
+// ── Match info: toss, officials, venue, match number, start time ──
+async function cbMatchInfoModern(matchId) {
+  const key = `cb2:matchinfo:${matchId}`;
+  const cached = scrapeCache.get(key);
+  if (cached) return cached;
+  try {
+    const plain = await _cbPage(`https://www.cricbuzz.com/live-cricket-scores/${matchId}/m`);
+    const mi = _cbObjectForMatch(plain, "umpire1", matchId) || _cbObjectForMatch(plain, "tossResults", matchId);
+    if (!mi) return null;
+    const toss = mi.tossResults && mi.tossResults.tossWinnerName
+      ? {
+          winner: mi.tossResults.tossWinnerName,
+          decision: String(mi.tossResults.decision || "").toLowerCase(),
+          text: `${mi.tossResults.tossWinnerName} won the toss and chose to ${/bowl/i.test(mi.tossResults.decision) ? "bowl" : "bat"}`,
+        }
+      : null;
+    const official = (o, type) => (o && o.name ? { name: `${o.name}${o.country ? ` (${o.country})` : ""}`, type } : null);
+    const venue = mi.venue || {};
+    const out = {
+      series: (mi.series && (mi.series.name || mi.series.seriesName)) || mi.seriesName || "",
+      matchType: mi.matchFormat || "",
+      matchNumber: mi.matchDescription || "",
+      venue: { fullName: [venue.name, venue.city, venue.country].filter(Boolean).join(", ") },
+      date: mi.matchStartTimestamp ? new Date(Number(mi.matchStartTimestamp)).toISOString() : null,
+      toss,
+      umpires: [
+        official(mi.umpire1, "On-field umpire"),
+        official(mi.umpire2, "On-field umpire"),
+        official(mi.umpire3, "TV umpire"),
+        official(mi.referee, "Match referee"),
+      ].filter(Boolean),
+      playersOfTheMatch: (mi.playersOfTheMatch || []).map(p => p.fullName || p.name).filter(Boolean),
+      status: mi.status || "",
+    };
+    scrapeCache.set(key, out, mi.complete ? 3600 : 60);
     return out;
   } catch (_) { return null; }
 }
@@ -2267,16 +2405,16 @@ async function cbSquadModern(matchId) {
           });
         });
         if (players.length) {
-          teams.push({ teamName: players[0].teamName || (teams.length ? "Team 2" : "Team 1"), players });
+          // The team this list belongs to is named just before it:
+          // "team1":{"team":{"teamId":161,"teamName":"Namibia",...},"players":{...}}
+          const before = plain.slice(Math.max(0, idx - 1500), idx);
+          const names = [...before.matchAll(/"teamName":"([^"]+)"/g)];
+          const teamName = names.length ? names[names.length - 1][1] : (teams.length ? "Team 2" : "Team 1");
+          teams.push({ teamName, players });
         }
       }
       idx = plain.indexOf('"players":{', idx + 1);
     }
-    // Recover proper team names from the page header if present
-    const t1 = _cbExtract(plain, "team1");
-    const t2 = _cbExtract(plain, "team2");
-    if (teams[0] && (t1?.name || t1?.teamName)) teams[0].teamName = t1.name || t1.teamName;
-    if (teams[1] && (t2?.name || t2?.teamName)) teams[1].teamName = t2.name || t2.teamName;
     const out = { teams };
     if (teams.length) staticCache.set(key, out);
     return out;
@@ -2288,6 +2426,8 @@ module.exports.scrapeCricbuzzScorecard = cbScorecardModern;
 module.exports.scrapeCommentary        = cbCommentaryModern;
 module.exports.scrapeMatchLiveData     = cbLiveDataModern;
 module.exports.scrapeMatchSquad        = cbSquadModern;
+module.exports.scrapeMatchOvers        = cbOversModern;
+module.exports.scrapeMatchInfoFull     = cbMatchInfoModern;
 
 
 // ── Series schedule (modern): walk embedded matchInfo objects on the series page ──

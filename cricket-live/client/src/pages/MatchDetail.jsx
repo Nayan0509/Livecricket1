@@ -1,38 +1,74 @@
 import React, { useState, useEffect } from "react";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad, fetchMatchAnalysis, fetchMatchH2H, fetchMatchFullInfo, fetchMatchOvers } from "../api";
+import { fetchMatchInfo, fetchMatchScorecard, fetchMatchCommentary, fetchMatchLiveData, fetchMatchSquad, fetchMatchH2H, fetchMatchFullInfo, fetchMatchOvers } from "../api";
 import SEO from "../components/SEO";
 import AdBanner from "../components/AdBanner";
 import WatchSection from "../components/WatchSection";
 import StreamDisclaimer from "../components/StreamDisclaimer";
 import { trackMatchView, trackTabSwitch } from "../utils/analytics";
 
-/* ── Analysis Tab ── */
-function AnalysisTab({ matchId }) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["analysis", matchId],
-    queryFn: () => fetchMatchAnalysis(matchId),
-  });
-  const analysis = data?.data;
+/* ── Match numbers: figures the site works out from the live data ── */
+const FORMAT_OVERS = { T20: 20, T20I: 20, ODI: 50, ODIS: 50 };
 
-  if (isLoading) return <div style={{ display: "flex", justifyContent: "center", padding: "60px 0" }}><div className="spinner" /></div>;
-  if (!analysis) return (
-    <div style={{ padding: "60px 0", textAlign: "center" }}>
-      <div style={{ fontSize: 40, marginBottom: 12 }}></div>
-      <p style={{ color: "var(--text3)" }}>No detailed analysis available for this match yet.</p>
-    </div>
+function ballsOf(oversStr) {
+  const [o, b = "0"] = String(oversStr || 0).split(".");
+  return Number(o) * 6 + Number(b);
+}
+
+function MatchNumbersTab({ matchId, match }) {
+  const { data: liveRes, isLoading: l1 } = useQuery({ queryKey: ["livedata", matchId], queryFn: () => fetchMatchLiveData(matchId), refetchInterval: 15000 });
+  const { data: oversRes, isLoading: l2 } = useQuery({ queryKey: ["overs", matchId], queryFn: () => fetchMatchOvers(matchId), refetchInterval: 30000 });
+  const live = liveRes?.data;
+  const overs = oversRes?.data || [];
+
+  if (l1 || l2) return <div style={{ display: "flex", justifyContent: "center", padding: "60px 0" }}><div className="spinner" /></div>;
+  if (!live && !overs.length) return (
+    <p style={{ padding: "40px 0", textAlign: "center", color: "var(--text3)" }}>Match numbers appear here once play is under way.</p>
   );
 
+  const quota = FORMAT_OVERS[String(match?.matchType || "").toUpperCase()];
+  const rows = [];
+  if (live) {
+    const crr = parseFloat(live.currentRunRate);
+    if (crr > 0) rows.push(["Current run rate", crr.toFixed(2)]);
+    if (live.target) {
+      rows.push(["Target", live.target]);
+      if (live.remRuns != null) rows.push(["Runs needed", live.remRuns]);
+      if (live.remBalls != null) rows.push(["Balls left", live.remBalls]);
+      if (parseFloat(live.requiredRunRate) > 0) rows.push(["Required run rate", parseFloat(live.requiredRunRate).toFixed(2)]);
+    } else if (quota && crr > 0 && live.overs) {
+      const ballsLeft = quota * 6 - ballsOf(live.overs);
+      const current = overs.length ? Number(String(overs[overs.length - 1].score).split("/")[0]) : null;
+      if (ballsLeft > 0 && current != null) rows.push(["Projected total at this run rate", Math.round(current + (crr * ballsLeft) / 6)]);
+    }
+    if (live.partnership?.runs != null) rows.push(["Current partnership", `${live.partnership.runs} (${live.partnership.balls} balls)`]);
+  }
+  if (overs.length) {
+    const balls = overs.flatMap(o => o.summary.split(/\s+/).filter(Boolean));
+    const last5 = overs.slice(-5);
+    rows.push([`Runs in the last ${last5.length} overs`, last5.reduce((t, o) => t + o.runs, 0)]);
+    rows.push([`Wickets in the last ${last5.length} overs`, last5.reduce((t, o) => t + o.wickets, 0)]);
+    rows.push([`Fours / sixes in the last ${overs.length} overs`, `${balls.filter(b => b === "4").length} / ${balls.filter(b => b === "6").length}`]);
+    rows.push([`Dot balls in the last ${overs.length} overs`, balls.filter(b => b === "0").length]);
+  }
+
   return (
-    <div className="animate-fade-in" style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: "28px 32px" }}>
-      <h2 style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", marginBottom: 20, lineHeight: 1.3 }}>{analysis.title}</h2>
-      <div style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
-        {analysis.content}
-      </div>
-      <div style={{ marginTop: 24, padding: "16px", borderRadius: 12, background: "rgba(11,99,196,0.05)", border: "1px solid rgba(11,99,196,0.1)", fontSize: 13, color: "var(--text3)" }}>
-        <strong>Note:</strong> This analysis is retrieved from live editorial feeds and professional match reporting services.
-      </div>
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "20px 24px" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+        <tbody>
+          {rows.map(([k, v]) => (
+            <tr key={k} style={{ borderBottom: "1px solid var(--divider)" }}>
+              <td style={{ padding: "10px 0", color: "var(--text2)" }}>{k}</td>
+              <td style={{ padding: "10px 0", textAlign: "right", fontWeight: 700, color: "var(--text)" }}>{v}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p style={{ margin: "14px 0 0", fontSize: 12, color: "var(--text3)", lineHeight: 1.6 }}>
+        Worked out by Live Cricket Zone from the live score and the most recent overs. A projected total assumes the current run rate holds; it is arithmetic, not a prediction.
+      </p>
     </div>
   );
 }
@@ -393,30 +429,36 @@ function MatchInfoTab({ match }) {
   );
 }
 
+// Head-to-head between the two sides in this format, computed from Cricsheet's
+// open ball-by-ball data (api/cricsheet.js). Internationals only.
 function H2HSection({ matchId }) {
   const { data, isLoading } = useQuery({
     queryKey: ["h2h", matchId],
     queryFn: () => fetchMatchH2H(matchId),
+    staleTime: 3600000,
   });
-  const h2h = data?.data || [];
+  const h = data?.data;
+  if (isLoading || !h || !h.matches) return null;
 
-  if (isLoading || !h2h.length) return null;
+  const fmt = { test: "Tests", odi: "ODIs", t20i: "T20 internationals" }[h.format] || "matches";
+  const others = [h.draws ? `${h.draws} drawn` : "", h.ties ? `${h.ties} tied` : "", h.noResults ? `${h.noResults} no result` : ""].filter(Boolean).join(", ");
 
   return (
-    <div style={{ padding: "20px 24px", borderRadius: 18, background: "rgba(11,99,196,0.05)", border: "1px solid rgba(11,99,196,0.12)", marginBottom: 20 }}>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#0b63c4", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Head to Head (Last 5)</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {h2h.map((itm, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: i < h2h.length - 1 ? "1px solid rgba(11,99,196,0.1)" : "none", paddingBottom: 10 }}>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{itm.result}</div>
-              <div style={{ fontSize: 11, color: "var(--text3)" }}>{itm.series} • {itm.date}</div>
-            </div>
-            <div style={{ fontSize: 10, fontWeight: 800, color: "var(--text3)" }}>H2H</div>
-          </div>
+    <section style={{ padding: "18px 22px", borderRadius: 8, background: "var(--card)", border: "1px solid var(--border)", marginBottom: 20 }}>
+      <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", margin: "0 0 6px" }}>Head to head in {fmt}</h3>
+      <p style={{ fontSize: 14, color: "var(--text2)", margin: "0 0 12px" }}>
+        {h.matches} {h.matches === 1 ? "match" : "matches"} since {h.firstDate.slice(0, 4)}: <strong>{h.teamA.name} {h.teamA.wins}</strong>, <strong>{h.teamB.name} {h.teamB.wins}</strong>{others ? `, ${others}` : ""}.
+      </p>
+      <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+        {h.last5.map(r => (
+          <li key={r.matchId || r.date} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "8px 0", borderTop: "1px solid var(--divider)", fontSize: 13 }}>
+            <span style={{ color: "var(--text)", fontWeight: 600 }}>{r.result}</span>
+            <span style={{ color: "var(--text3)", textAlign: "right" }}>{r.venue} · {r.date}</span>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+      <p style={{ fontSize: 11, color: "var(--text3)", lineHeight: 1.6, margin: "10px 0 0" }}>{h.attribution}</p>
+    </section>
   );
 }
 
@@ -572,19 +614,29 @@ function OverSummaryTab({ matchId }) {
     if (runs >= 12) return "#c2410c";
     if (runs >= 8) return "#b45309";
     if (runs <= 3) return "#0b63c4";
-    return "#a3e635";
+    return "var(--text2)";
   };
 
   return (
     <div className="animate-fade-in">
-      <div style={{ fontSize: 12, color: "var(--text3)", marginBottom: 16 }}>Showing {overs.length} completed over{overs.length !== 1 ? "s" : ""}</div>
+      <div style={{ fontSize: 12, color: "var(--text3)", marginBottom: 12 }}>The last {overs.length} over{overs.length !== 1 ? "s" : ""} bowled, newest first.</div>
+      <div style={{ height: 180, marginBottom: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "12px 8px 4px" }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={overs.map(o => ({ over: `${o.batTeam ? o.batTeam + " " : ""}${o.overNum}`, runs: o.runs, wickets: o.wickets }))}>
+            <XAxis dataKey="over" tick={{ fontSize: 11, fill: "var(--text3)" }} />
+            <YAxis allowDecimals={false} width={28} tick={{ fontSize: 11, fill: "var(--text3)" }} />
+            <Tooltip formatter={(v, n) => [v, n === "runs" ? "Runs" : n]} />
+            <Bar dataKey="runs" fill="#0b7a55" radius={[3, 3, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
         {[...overs].reverse().map((ov, i) => (
           <div key={i} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "12px 14px", borderLeft: `3px solid ${runColors(ov.runs)}` }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text3)", textTransform: "uppercase", letterSpacing: 0.5 }}>Over {ov.overNum}</span>
               <div style={{ display: "flex", gap: 6 }}>
-                <span style={{ fontSize: 14, fontWeight: 900, color: runColors(ov.runs), fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{ov.runs} runs</span>
+                <span style={{ fontSize: 14, fontWeight: 900, color: runColors(ov.runs), fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{ov.runs} run{ov.runs === 1 ? "" : "s"}</span>
                 {ov.wickets > 0 && <span style={{ fontSize: 12, fontWeight: 800, color: "#c81e28", background: "rgba(209,32,42,0.1)", padding: "1px 7px", borderRadius: 10 }}>{ov.wickets}W</span>}
               </div>
             </div>
@@ -612,6 +664,24 @@ function OverSummaryTab({ matchId }) {
         ))}
       </div>
     </div>
+  );
+}
+
+/* ── This ground's record in the format (Cricsheet data) ── */
+function VenueRecord({ v }) {
+  const fmt = { test: "Tests", odi: "ODIs", t20i: "T20 internationals" }[v.format] || "matches";
+  const decided = (v.batFirstWins || 0) + (v.batSecondWins || 0);
+  return (
+    <section style={{ marginBottom: 16, padding: "14px 18px", borderRadius: 8, background: "var(--card)", border: "1px solid var(--border)" }}>
+      <h3 style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>{v.name} in {fmt}</h3>
+      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "var(--text2)", lineHeight: 1.8 }}>
+        <li>{v.matches} {v.matches === 1 ? "match" : "matches"} since {String(v.firstDate).slice(0, 4)}</li>
+        {v.avgFirstInnings ? <li>Average first-innings score: {v.avgFirstInnings} (from {v.firstInningsSample} innings)</li> : null}
+        {decided > 0 && <li>Won batting first {v.batFirstWins}, won chasing {v.batSecondWins}</li>}
+        {v.highestTotal && <li>Highest total: {v.highestTotal.score} by {v.highestTotal.team} v {v.highestTotal.opponent} ({v.highestTotal.date})</li>}
+      </ul>
+      <p style={{ fontSize: 11, color: "var(--text3)", lineHeight: 1.6, margin: "8px 0 0" }}>{v.attribution}</p>
+    </section>
   );
 }
 
@@ -647,6 +717,8 @@ function EnhancedMatchInfoTab({ matchId, match }) {
       {isLoading && (
         <div style={{ padding: "20px 0", textAlign: "center" }}><div className="spinner" style={{ margin: "0 auto", width: 24, height: 24 }} /></div>
       )}
+
+      {info?.venueRecord && <VenueRecord v={info.venueRecord} />}
 
       {/* Toss Banner */}
       {toss?.text && (
@@ -980,7 +1052,7 @@ export default function MatchDetail() {
           { id: "overs",       label: "Over Summary" },
           { id: "squad",       label: "Squad" },
           { id: "info",        label: "Match Info" },
-          { id: "analysis",    label: "Analysis" },
+          { id: "analysis",    label: "Match numbers" },
         ].map(t => (
           <button
             key={t.id}
@@ -1000,7 +1072,7 @@ export default function MatchDetail() {
       {tab === "scorecard"  && <ScorecardTab matchId={id} />}
       {tab === "commentary" && <CommentaryTab matchId={id} />}
       {tab === "overs"      && <OverSummaryTab matchId={id} />}
-      {tab === "analysis"   && <AnalysisTab matchId={id} />}
+      {tab === "analysis"   && <MatchNumbersTab matchId={id} match={match} />}
       {tab === "squad"      && <SquadTab matchId={id} />}
       {tab === "info"       && <EnhancedMatchInfoTab matchId={id} match={match} />}
 
